@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using GraphicalPrimitive;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,15 +47,8 @@ public class ETV3DBarChart : AETV3D {
             bar.transform.localPosition = new Vector3((categoryCounter) * 0.15f + 0.1f, 0, 0);
 
             bar.transform.parent = Anchor.transform;
-
-                /*var caption = new GameObject("bar caption");
-                var textMesh = caption.AddComponent<TextMesh>();
-                textMesh.text = category;
-                textMesh.fontSize = 24;
-                caption.transform.localScale = new Vector3(TextScale, TextScale, TextScale);
-                caption.transform.eulerAngles = new Vector3(90, 90, 0);
-                caption.transform.localPosition = new Vector3(categoryCounter * .15f + .1f, 0, -.15f);
-                caption.transform.parent = Anchor.transform;*/
+            bar.GetComponent<Bar3D>().SetLabelCategoryText(category);
+            
             categoryCounter++;
         }
 

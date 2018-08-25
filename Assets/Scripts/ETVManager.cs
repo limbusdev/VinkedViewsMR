@@ -48,6 +48,10 @@ public class ETVManager : MonoBehaviour {
         GameObject EtvBarChart = ServiceLocator.instance.factoryETV3Dservice.Create3DBarChart(barChartValues, 0);
         EtvBarChart.GetComponent<ETV3DBarChart>().ChangeColoringScheme(ETVColorSchemes.GrayZebra);
 
+        GameObject EtvGroupedBarChart = ServiceLocator.instance.factoryETV3Dservice.Create3DGroupedBarChart(barChartValues);
+        EtvGroupedBarChart.GetComponent<ETV3DGroupedBarChart>().ChangeColoringScheme(ETVColorSchemes.Rainbow);
+        EtvGroupedBarChart.GetComponent<ETV3DGroupedBarChart>().SetLegendActive(true);
+
         AGraphicalPrimitiveFactory factory = ServiceLocator.instance.get3DFactory();
         //GameObject axis3D = factory.CreateAxis(Color.red, "", "", new Vector3(1,1,1), 1.5f);
         //axis3D.transform.localPosition = new Vector3(2,0,2);

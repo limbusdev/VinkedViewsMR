@@ -11,5 +11,7 @@ public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
         bool cols = true, int colCount = 10, float colResolution = 0.1f, float yAxisLength = 1f,
         float width = 0.005f);
 
+    public abstract GameObject CreateLabel(string labelText);
+
     public abstract GameObject CreateAxis(Color color, string variableName, string variableEntity, Vector3 direction, float length, bool tipped = true, float width = 0.01f);
 }

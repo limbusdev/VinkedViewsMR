@@ -8,15 +8,18 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
     public GameObject cone;
     public GameObject bar3D;
     public GameObject axis3D;
+    public GameObject label;
 
     public override GameObject CreateAxis(Color color, string variableName, string variableEntity, Vector3 direction, float length, bool tipped = true, float width = 0.01F)
     {
         GameObject axis;
 
         axis = Instantiate(axis3D);
-        axis.GetComponent<Axis>().SetTipped(tipped);
-        axis.GetComponent<Axis>().SetSize(width, length);
-        axis.GetComponent<Axis>().ChangeColor(color);
+        axis.GetComponent<AAxis>().tipped = tipped;
+        axis.GetComponent<AAxis>().diameter = width;
+        axis.GetComponent<AAxis>().length = length;
+        axis.GetComponent<AAxis>().color = color;
+        axis.GetComponent<AAxis>().UpdateAxis();
 
         direction.Normalize();
         Quaternion rotateTo = Quaternion.FromToRotation(Vector3.up, direction);
@@ -36,5 +39,13 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
         bar.GetComponent<Bar3D>().SetSize(width, value / rangeToNormalizeTo, depth);
         
         return bar;
+    }
+   
+
+    public override GameObject CreateLabel(string labelText)
+    {
+        GameObject newLabel = Instantiate(label);
+        newLabel.GetComponent<TextMesh>().text = labelText;
+        return newLabel;
     }
 }

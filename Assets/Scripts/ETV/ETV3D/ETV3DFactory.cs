@@ -5,6 +5,8 @@ using UnityEngine;
 public class ETV3DFactory : MonoBehaviour {
 
     public GameObject etv3DBarChart;
+    public GameObject etv3DGroupedBarChart;
+    public GameObject barChartLegend3D;
 
     public GameObject Create3DBarChart(IDictionary<string, DataObject> data, int attributeID)
     {
@@ -15,8 +17,26 @@ public class ETV3DFactory : MonoBehaviour {
         return barChart;
     }
 
-	// Use this for initialization
-	void Start () {
+    public GameObject Create3DGroupedBarChart(IDictionary<string, DataObject> data)
+    {
+        GameObject barChart = Instantiate(etv3DGroupedBarChart);
+
+        barChart.GetComponent<ETV3DGroupedBarChart>().Init(data);
+
+        return barChart;
+    }
+
+    public GameObject Create3DBarChartLegend(string[] names, Color[] colors)
+    {
+        GameObject legend = Instantiate(barChartLegend3D);
+
+        legend.GetComponent<BarChartLegend3D>().Init(names, colors);
+
+        return legend;
+    }
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	

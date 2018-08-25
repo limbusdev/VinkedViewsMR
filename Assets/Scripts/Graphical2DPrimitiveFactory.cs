@@ -5,6 +5,7 @@ using UnityEngine;
 public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
 {
     public GameObject bar2D;
+    public GameObject label;
 
     public override GameObject CreateAxis(Color color, string variableName, string variableEntity, Vector3 direction, float length, bool tipped = true, float width = 0.01F)
     {
@@ -94,5 +95,12 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         bar.GetComponent<GraphicalPrimitive.Bar2D>().SetSize(width, value/rangeToNormalizeTo);
 
         return bar;
+    }
+
+    public override GameObject CreateLabel(string labelText)
+    {
+        GameObject newLabel = Instantiate(label);
+        newLabel.GetComponent<TextMesh>().text = labelText;
+        return newLabel;
     }
 }

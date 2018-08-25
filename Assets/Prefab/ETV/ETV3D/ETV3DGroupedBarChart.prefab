@@ -80,4 +80,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46d31b23e15d36a49accccfd24f7250d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  barGroup3D: {fileID: 1425409556890294, guid: fdab16a74bcb17a4d9acbc4f8bf25f4a, type: 2}
   Anchor: {fileID: 1246466570018138}

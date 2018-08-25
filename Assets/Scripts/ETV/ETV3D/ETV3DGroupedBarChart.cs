@@ -11,17 +11,23 @@ using UnityEngine;
  * */
 public class ETV3DGroupedBarChart : AETV3D {
 
+    public GameObject barGroup3D;           // Populate in Editor
+
     private IDictionary<string, DataObject> data;
     public GameObject Anchor;
-    private IList<IList<GameObject>> bars;
+    private IList<GameObject> barGroups;
+    private List<Color> colors;
+    private GameObject legend;
     
     private float yRange = 1f;
     private float xRange = 1f;
 
     public void Init(IDictionary<string, DataObject> data)
     {
-        /*AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.get3DFactory();
-        bars = new List<IList<GameObject>>();
+        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.get3DFactory();
+        barGroups = new List<GameObject>();
+        colors = new List<Color>();
+
         IEnumerator<string> keyEnum = data.Keys.GetEnumerator();
         keyEnum.MoveNext();
         float[] attributeRanges = new float[data[keyEnum.Current].attributeValues.Length];
@@ -42,35 +48,20 @@ public class ETV3DGroupedBarChart : AETV3D {
 
         foreach (string category in data.Keys)
         {
-            IList<GameObject> barsOfCurrentCategory = new List<GameObject>();
-            bars.Add(barsOfCurrentCategory);
+            GameObject barGroup = Instantiate(barGroup3D);
+            barGroups.Add(barGroup);
+            BarGroup3D barGroup3Dcomp = barGroup.GetComponent<BarGroup3D>();
             int attributesCount = data[category].attributeValues.Length;
-
-            for (int i = 0; i < data[category].attributeValues.Length; i++)
-            {
-                GameObject bar = CreateBar(category, data[category], i, attributeRanges[i]);
-                barsOfCurrentCategory.Add(bar);
-
-                bar.transform.localPosition = new Vector3(
-                    categoryCounter * 0.15f - AnchorPosition.z + 0.05f * (i - 1), 0, 0);
-
-                bar.transform.parent = Anchor.transform;
-
-                var caption = new GameObject("bar caption");
-                var textMesh = caption.AddComponent<TextMesh>();
-                textMesh.text = category;
-                textMesh.fontSize = 24;
-                caption.transform.localScale = new Vector3(TextScale, TextScale, TextScale);
-                caption.transform.eulerAngles = new Vector3(90, 90, 0);
-                caption.transform.localPosition = new Vector3(categoryCounter * .15f + .1f, 0, -.15f);
-                caption.transform.parent = Anchor.transform;
-            }
-
+            barGroup3Dcomp.Init(attributesCount, data[category].attributeValues, attributeRanges, .1f, .1f);
+            barGroup.transform.parent = Anchor.transform;
+            barGroup.transform.localPosition = new Vector3((categoryCounter) * 0.15f + 0.1f, 0, 0);
+            barGroup3Dcomp.SetLabelCategoryText(category);
+            
             categoryCounter++;
         }
 
 
-        SetUpAxis();*/
+        SetUpAxis();
     }
 
     public override void SetUpAxis()
@@ -91,79 +82,35 @@ public class ETV3DGroupedBarChart : AETV3D {
         grid.transform.parent = Anchor.transform;
     }
 
-    /**
-     * Creates a colored bar. 
-     * @param range         maximum - minimum value of this attribute
-     * @param attributeID   which attribute
-     * */
-    private GameObject CreateBar(string category, DataObject obj, int attributeID, float range)
-    {
-        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.get3DFactory();
-        
-        int dimension = obj.attributeValues.Length;
-        float value = data[category].attributeValues[attributeID];
-        GameObject bar = factory3D.CreateBar(value, range, .1f / dimension, .1f);
-       
-        bar.GetComponent<GraphicalPrimitive.Bar3D>().SetLabelText(data[category].attributeValues[attributeID].ToString());
-
-
-        return bar;
-    }
 
     
 
     public override void ChangeColoringScheme(ETVColorSchemes scheme)
     {
-        int category = 0;
-        int numberOfCategories = bars.Count;
-        switch (scheme)
+        foreach(GameObject go in barGroups)
         {
-            case ETVColorSchemes.Rainbow:
-                foreach(IList<GameObject> barList in bars)
-                {
-                    int attribute = 0;
-                    foreach (GameObject bar in barList)
-                    {
-                        int numberOfAttributes = barList.Count;
-                        Debug.Log("number of attributes: " + numberOfAttributes);
-                        Color color;
+            BarGroup3D comp = go.GetComponent<BarGroup3D>();
+            colors = comp.ChangeColoringScheme(scheme);
+        }
+    }
 
-                        if (numberOfAttributes == 1)
-                        {
-                            color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
-                        }
-                        else
-                        {
-                            color = Color.HSVToRGB(((float)attribute) / numberOfAttributes, 1, 1);
-                            Debug.Log("Color " + attribute + " = " + ((float)attribute) / numberOfAttributes);
-                        }
-                        bar.GetComponent<GraphicalPrimitive.Bar3D>().ChangeColor(color);
-                        attribute++;
-                    }   
-                    category++;
-                }
-                break;
-            case ETVColorSchemes.GrayZebra:
-                bool even = true;
-                foreach (IList<GameObject> barList in bars)
-                {
-                    if(barList.Count > 1)
-                    {
-                        even = true;
-                    }
-                    foreach (GameObject bar in barList)
-                    {
-                        int attribute = 0;
-                        int numberOfAttributes = barList.Count;
-                        even = !even;
-                        bar.GetComponent<GraphicalPrimitive.Bar3D>().ChangeColor((even) ? Color.gray : Color.white);
-                        attribute++;
-                    }
-                    category++;
-                }
-                break;
-            default:
-                break;
+    public void SetLegendActive(bool active)
+    {
+        if(active)
+        {
+            string[] names = new string[data.Count];
+            int i = 0;
+            foreach(string name in data.Keys)
+            {
+                names[i] = name;
+                i++;
+            }
+            legend = ServiceLocator.instance.factoryETV3Dservice.Create3DBarChartLegend(data[names[0]].attributeNames, colors.ToArray());
+            legend.transform.parent = Anchor.transform;
+            legend.transform.position = new Vector3((names.Length+2)*.15f,0,0);
+        } else
+        {
+            Destroy(legend);
         }
     }
 

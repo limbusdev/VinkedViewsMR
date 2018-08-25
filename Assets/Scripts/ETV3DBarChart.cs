@@ -86,7 +86,7 @@ public class ETV3DBarChart : AETV3D {
         float value = data[category].attributeValues[attributeID];
         GameObject bar = factory3D.CreateBar(value, range, .1f, .1f);
        
-        bar.GetComponent<GraphicalPrimitive.Bar3D>().SetLabelText(data[category].attributeValues[attributeID].ToString());
+        bar.GetComponent<Bar3D>().SetLabelText(data[category].attributeValues[attributeID].ToString());
 
 
         return bar;

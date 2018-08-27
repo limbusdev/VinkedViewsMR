@@ -11,11 +11,7 @@ namespace GraphicalPrimitive
         // Use this for initialization
         void Start()
         {
-            length = 2;
-            diameter = 0.01f;
-            labelVariableText = "Meters";
-            labelUnitText = "m";
-            UpdateAxis();
+
         }
 
         // Update is called once per frame
@@ -43,6 +39,7 @@ namespace GraphicalPrimitive
             if (tipped)
             {
                 lr.SetPosition(1, (length - diameter / length * 4) * direction);
+                Tip.SetActive(true);
                 var lrTip = Tip.GetComponent<LineRenderer>();
                 lrTip.startWidth = diameter * 3;
                 lrTip.endWidth = 0;
@@ -52,6 +49,7 @@ namespace GraphicalPrimitive
             else
             {
                 lr.SetPosition(1, length * direction);
+                Tip.SetActive(false);
             }
 
             // Update Ticks
@@ -71,44 +69,47 @@ namespace GraphicalPrimitive
                     break;
             }
 
-            int tickCounter = 0;
-            for (float i = min; i <= max; i += tickResolution)
+            if (ticked)
             {
-                GameObject tick = new GameObject("Tick");
-                var lineRend = tick.AddComponent<LineRenderer>();
-                lineRend.useWorldSpace = false;
-                lineRend.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-                lineRend.startColor = Color.white;
-                lineRend.endColor = Color.white;
-                lineRend.startWidth = diameter;
-                lineRend.endWidth = diameter;
-                lineRend.SetPosition(0, Vector3.zero);
-                lineRend.SetPosition(1, tickDirection * diameter * 4f);
-
-                GameObject tickLabel = ServiceLocator.instance.factory3Dservice.CreateLabel(i.ToString("F" + decimals));
-                var textMesh = tickLabel.GetComponent<TextMesh>();
-                switch (axisDirection)
+                int tickCounter = 0;
+                for (float i = min; i <= max; i += tickResolution)
                 {
-                    case AxisDirection.X:
-                        textMesh.anchor = TextAnchor.UpperCenter;
-                        textMesh.alignment = TextAlignment.Center;
-                        break;
-                    case AxisDirection.Y:
-                        textMesh.anchor = TextAnchor.MiddleRight;
-                        textMesh.alignment = TextAlignment.Right;
-                        break;
-                    default: /* Z */
-                        textMesh.anchor = TextAnchor.MiddleRight;
-                        textMesh.alignment = TextAlignment.Right;
-                        break;
-                }
-                tickLabel.transform.localPosition = tickDirection * diameter * 5;
-                tickLabel.transform.parent = tick.transform;
+                    GameObject tick = new GameObject("Tick");
+                    var lineRend = tick.AddComponent<LineRenderer>();
+                    lineRend.useWorldSpace = false;
+                    lineRend.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+                    lineRend.startColor = Color.white;
+                    lineRend.endColor = Color.white;
+                    lineRend.startWidth = diameter;
+                    lineRend.endWidth = diameter;
+                    lineRend.SetPosition(0, Vector3.zero);
+                    lineRend.SetPosition(1, tickDirection * diameter * 4f);
 
-                tick.transform.parent = Anchor.transform;
-                tick.transform.localPosition = direction * length * ((tickCounter * tickResolution) / (max - min));
-                ticks.Add(tick);
-                tickCounter++;
+                    GameObject tickLabel = ServiceLocator.instance.factory3Dservice.CreateLabel(i.ToString("F" + decimals));
+                    var textMesh = tickLabel.GetComponent<TextMesh>();
+                    switch (axisDirection)
+                    {
+                        case AxisDirection.X:
+                            textMesh.anchor = TextAnchor.UpperCenter;
+                            textMesh.alignment = TextAlignment.Center;
+                            break;
+                        case AxisDirection.Y:
+                            textMesh.anchor = TextAnchor.MiddleRight;
+                            textMesh.alignment = TextAlignment.Right;
+                            break;
+                        default: /* Z */
+                            textMesh.anchor = TextAnchor.MiddleRight;
+                            textMesh.alignment = TextAlignment.Right;
+                            break;
+                    }
+                    tickLabel.transform.localPosition = tickDirection * diameter * 5;
+                    tickLabel.transform.parent = tick.transform;
+
+                    tick.transform.parent = Anchor.transform;
+                    tick.transform.localPosition = direction * length * ((tickCounter * tickResolution) / (max - min));
+                    ticks.Add(tick);
+                    tickCounter++;
+                }
             }
 
             // Update Labels

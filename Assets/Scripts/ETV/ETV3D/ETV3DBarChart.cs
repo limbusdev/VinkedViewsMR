@@ -12,20 +12,26 @@ using UnityEngine;
  * */
 public class ETV3DBarChart : AETV3D {
 
+    private DataSet dataSet;
     private IDictionary<string, DataObject> data;
     public GameObject Anchor;
     private IList<GameObject> bars;
     private int attributeID = 0;
+    private IDictionary<AxisDirection, GameObject> axis;
     
     private float yRange = 1f;
     private float xRange = 1f;
 
-    public void Init(IDictionary<string, DataObject> data, int attributeID)
+    public void Init(DataSet dataSet, int attributeID)
     {
+        this.data = dataSet.dataObjects;
+        this.dataSet = dataSet;
+
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.get3DFactory();
         bars = new List<GameObject>();
         IEnumerator<string> keyEnum = data.Keys.GetEnumerator();
         keyEnum.MoveNext();
+        axis = new Dictionary<AxisDirection, GameObject>();
 
         this.attributeID = attributeID;
         float attributeRange = DataProcessor.CalculateRange(data, attributeID);
@@ -35,7 +41,7 @@ public class ETV3DBarChart : AETV3D {
         scaleY = 1f;
         scaleZ = .01f;
 
-        this.data = data;
+        
 
         int categoryCounter = 0;
 
@@ -61,17 +67,23 @@ public class ETV3DBarChart : AETV3D {
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.get2DFactory();
 
         // x-Axis
-        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", new Vector3(1, 0, 0), data.Count * 0.15f + .1f, false);
+        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, data.Count * 0.15f + .1f, .01f, false, false);
         xAxis.transform.parent = Anchor.transform;
 
         // y-Axis
-        GameObject yAxis = factory2D.CreateAxis(Color.white, "", "", new Vector3(0, 1, 0), 1.1f, true);
+        GameObject yAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.Y, 1.0f, .01f, true, true);
         yAxis.transform.parent = Anchor.transform;
 
         // Grid
-        GameObject grid = factory2D.CreateGrid(Color.gray, new Vector3(1, 0, 0), new Vector3(0, 1, 0),
+        GameObject grid = factory2D.CreateGrid(Color.gray, AxisDirection.X, AxisDirection.Y,
             true, 10, 0.1f, data.Count * 0.15f, false);
         grid.transform.parent = Anchor.transform;
+
+        axis.Add(AxisDirection.X, xAxis);
+        axis.Add(AxisDirection.Y, yAxis);
+
+        SetAxisLabels(AxisDirection.X, "Category", "");
+        SetAxisLabels(AxisDirection.Y, dataSet.Variables[attributeID], dataSet.Units[attributeID]);
     }
 
     /**
@@ -104,7 +116,7 @@ public class ETV3DBarChart : AETV3D {
                 foreach(GameObject bar in bars)
                 {
                     Color color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
-                    bar.GetComponent<GraphicalPrimitive.Bar3D>().ChangeColor(color);
+                    bar.GetComponent<Bar3D>().ChangeColor(color);
                     category++;
                 }
                 break;
@@ -112,7 +124,7 @@ public class ETV3DBarChart : AETV3D {
                 bool even = true;
                 foreach (GameObject bar in bars)
                 {
-                    bar.GetComponent<GraphicalPrimitive.Bar3D>().ChangeColor((even) ? Color.gray : Color.white);
+                    bar.GetComponent<Bar3D>().ChangeColor((even) ? Color.gray : Color.white);
                     even = !even;
                     category++;
                 }
@@ -131,4 +143,16 @@ public class ETV3DBarChart : AETV3D {
 	void Update () {
 		
 	}
+
+    public override void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
+    {
+        axis[axisDirection].GetComponent<Axis2D>().labelUnitText = axisUnit;
+        axis[axisDirection].GetComponent<Axis2D>().labelVariableText = axisVariable;
+        axis[axisDirection].GetComponent<Axis2D>().UpdateAxis();
+    }
+
+    public override void UpdateETV()
+    {
+        throw new System.NotImplementedException();
+    }
 }

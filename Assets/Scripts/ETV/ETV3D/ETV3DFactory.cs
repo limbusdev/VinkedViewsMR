@@ -8,7 +8,7 @@ public class ETV3DFactory : MonoBehaviour {
     public GameObject etv3DGroupedBarChart;
     public GameObject barChartLegend3D;
 
-    public GameObject Create3DBarChart(IDictionary<string, DataObject> data, int attributeID)
+    public GameObject Create3DBarChart(DataSet data, int attributeID)
     {
         GameObject barChart = Instantiate(etv3DBarChart);
 

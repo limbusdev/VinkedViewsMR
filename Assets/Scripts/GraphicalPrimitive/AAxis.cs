@@ -43,8 +43,8 @@ namespace GraphicalPrimitive
         }
 
         protected Vector3 direction = Vector3.up;
-        protected string labelVariableText { get; set; }
-        protected string labelUnitText { get; set; }
+        public string labelVariableText { get; set; }
+        public string labelUnitText { get; set; }
 
         // Abstract Methods
         public abstract void UpdateAxis();

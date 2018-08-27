@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using GraphicalPrimitive;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -72,15 +73,15 @@ public class ETV2DBarChart : MonoBehaviour {
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.get2DFactory();
 
         // x-Axis
-        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", new Vector3(1, 0, 0), data.Count * 0.15f + .1f, false);
+        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, data.Count * 0.15f + .1f, .01f, false, false);
         xAxis.transform.parent = Anchor.transform;
 
         // y-Axis
-        GameObject yAxis = factory2D.CreateAxis(Color.white, "", "", new Vector3(0, 1, 0), 1.1f, true);
+        GameObject yAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.Y, 1.1f, .01f, true, true);
         yAxis.transform.parent = Anchor.transform;
 
         // Grid
-        GameObject grid = factory2D.CreateGrid(Color.gray, new Vector3(1, 0, 0), new Vector3(0, 1, 0),
+        GameObject grid = factory2D.CreateGrid(Color.gray, AxisDirection.X, AxisDirection.Y,
             true, 10, 0.1f, data.Count * 0.15f, false);
         grid.transform.parent = Anchor.transform;
 

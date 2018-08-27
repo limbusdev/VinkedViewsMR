@@ -13,6 +13,8 @@ namespace GraphicalPrimitive
         {
             length = 2;
             diameter = .01f;
+            labelVariableText = "Meters";
+            labelUnitText = "m";
             UpdateAxis();
         }
 
@@ -105,8 +107,35 @@ namespace GraphicalPrimitive
             }
 
             // Update Labels
-            labelUnit.GetComponent<TextMesh>().text = labelUnitText;
-            labelVariable.GetComponent<TextMesh>().text = labelVariableText;
+            TextMesh tmVariable = labelVariable.GetComponent<TextMesh>();
+            tmVariable.text = labelVariableText;
+
+            TextMesh tmUnit = labelUnit.GetComponent<TextMesh>();
+            tmUnit.text = "[" + labelUnitText + "]";
+
+            switch (axisDirection)
+            {
+                case AxisDirection.X:
+                    tmVariable.anchor = TextAnchor.UpperCenter;
+                    tmVariable.alignment = TextAlignment.Center;
+                    tmUnit.anchor = TextAnchor.UpperCenter;
+                    tmUnit.alignment = TextAlignment.Center;
+                    break;
+                case AxisDirection.Y:
+                    tmVariable.anchor = TextAnchor.MiddleRight;
+                    tmVariable.alignment = TextAlignment.Right;
+                    tmUnit.anchor = TextAnchor.MiddleRight;
+                    tmUnit.alignment = TextAlignment.Right;
+                    break;
+                default:
+                    tmVariable.anchor = TextAnchor.MiddleRight;
+                    tmVariable.alignment = TextAlignment.Right;
+                    tmUnit.anchor = TextAnchor.MiddleRight;
+                    tmUnit.alignment = TextAlignment.Right;
+                    break;
+            }
+
+            labelAnchor.transform.localPosition = axisTip.transform.localPosition;
         }
     }
 }

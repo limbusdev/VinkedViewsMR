@@ -19,30 +19,7 @@ public class ETV2DLineChart : AETV2D {
 	// Use this for initialization
 	void Start ()
     {
-        Vector2[] kaninchen = new Vector2[] {
-           new Vector2(1,2),
-           new Vector2(2,4),
-           new Vector2(3,8),
-           new Vector2(4,16),
-           new Vector2(5,32)
-           };
-        LineObject lo = new LineObject("Kaninchen", kaninchen);
         
-
-        Vector2[] wallabees = new Vector2[]
-        {
-           new Vector2(1,30),
-           new Vector2(2,20),
-           new Vector2(3,25),
-           new Vector2(4,10),
-           new Vector2(5,3)
-        };
-        LineObject lo2 = new LineObject("Wallabies", wallabees);
-
-        DataSetLines dsl = new DataSetLines(new LineObject[] { lo, lo2 }, "Zeit", "a", "Tiere", "tausend");
-
-        Init(dsl,0,6,0,40,1,5);
-        UpdateETV();
     }
 	
 	// Update is called once per frame

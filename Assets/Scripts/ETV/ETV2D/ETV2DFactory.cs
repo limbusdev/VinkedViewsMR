@@ -18,11 +18,12 @@ public class ETV2DFactory : AETVFactory
         return barChart;
     }
 
-    public override GameObject CreateETVLineChart(DataSetLines data)
+    public override GameObject CreateETVLineChart(DataSetLines data, float minX, float maxX, float minY, float maxY, float ticksX, float ticksY)
     {
         GameObject lineChart = Instantiate(ETV2DLineChartPrefab);
 
-        lineChart.GetComponent<ETV2DLineChart>().Init(data, 0, 10, 0, 10, 1, 1);
+        lineChart.GetComponent<ETV2DLineChart>().Init(data, minX, maxX, minY, maxY, ticksX, ticksY);
+        lineChart.GetComponent<ETV2DLineChart>().UpdateETV();
 
         return lineChart;
     }

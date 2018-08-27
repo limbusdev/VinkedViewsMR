@@ -83,8 +83,22 @@ public class ETVManager : MonoBehaviour {
            new Vector2(5,32)
            };
         LineObject lo = new LineObject("Kaninchen", kaninchen);
-        DataSetLines dsl = new DataSetLines(new LineObject[] { lo }, "Zeit", "a", "Tiere", "tausend");
-        //GameObject lc = ServiceLocator.instance.ETV2DFactoryService.CreateETVLineChart(dsl);
+
+
+        Vector2[] wallabees = new Vector2[]
+        {
+           new Vector2(1,30),
+           new Vector2(2,20),
+           new Vector2(3,25),
+           new Vector2(4,10),
+           new Vector2(5,3)
+        };
+        LineObject lo2 = new LineObject("Wallabies", wallabees);
+
+        DataSetLines dsl = new DataSetLines(new LineObject[] { lo, lo2 }, "Zeit", "a", "Tiere", "tausend");
+
+        GameObject lc = ServiceLocator.instance.ETV2DFactoryService.CreateETVLineChart(dsl, 0, 6, 0, 40, 1, 5);
+        
 
 
         //GameObject testBar = factory.CreateBar(1,1,1,1);

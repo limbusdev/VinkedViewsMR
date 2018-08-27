@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Model;
 using UnityEngine;
 
 public class ETV3DFactory : AETVFactory {
@@ -44,4 +45,9 @@ public class ETV3DFactory : AETVFactory {
 	void Update () {
 		
 	}
+
+    public override GameObject CreateETVLineChart(DataSetLines data)
+    {
+        throw new System.NotImplementedException();
+    }
 }

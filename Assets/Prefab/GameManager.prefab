@@ -101,6 +101,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ETV2DBarChartPrefab: {fileID: 1651200660064012, guid: b4b68d01b65cd3042b41df4c564f1891,
     type: 2}
+  ETV2DLineChartPrefab: {fileID: 1131613118678104, guid: f8138f01c2156484d9e7acced3e42ec7,
+    type: 2}
+  ETV2DVirtualDevicePrefab: {fileID: 1574644527077756, guid: eb9053d283853c648b2381549d56f630,
+    type: 2}
 --- !u!114 &114515392309124868
 MonoBehaviour:
   m_ObjectHideFlags: 1

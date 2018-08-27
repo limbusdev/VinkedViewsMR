@@ -20,6 +20,11 @@ namespace GraphicalPrimitive
 
         }
 
+        private void Awake()
+        {
+            ticks = new List<GameObject>();
+        }
+
         public GameObject Anchor;
         public GameObject Axis;
         public GameObject Tip;
@@ -29,6 +34,12 @@ namespace GraphicalPrimitive
         // Drawing methods
         public override void UpdateAxis()
         {
+            foreach (GameObject go in ticks)
+            {
+                Destroy(go);
+            }
+            ticks.Clear();
+
             // Update Base Axis
             var lr = Axis.GetComponent<LineRenderer>();
 
@@ -53,7 +64,7 @@ namespace GraphicalPrimitive
             }
 
             // Update Ticks
-            ticks = new List<GameObject>();
+            
 
             Vector3 tickDirection;
             switch (axisDirection)
@@ -78,8 +89,8 @@ namespace GraphicalPrimitive
                     var lineRend = tick.AddComponent<LineRenderer>();
                     lineRend.useWorldSpace = false;
                     lineRend.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-                    lineRend.startColor = Color.white;
-                    lineRend.endColor = Color.white;
+                    lineRend.startColor = color;
+                    lineRend.endColor = color;
                     lineRend.startWidth = diameter;
                     lineRend.endWidth = diameter;
                     lineRend.SetPosition(0, Vector3.zero);
@@ -87,6 +98,7 @@ namespace GraphicalPrimitive
 
                     GameObject tickLabel = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateLabel(i.ToString("F" + decimals));
                     var textMesh = tickLabel.GetComponent<TextMesh>();
+                    textMesh.color = color;
                     switch (axisDirection)
                     {
                         case AxisDirection.X:

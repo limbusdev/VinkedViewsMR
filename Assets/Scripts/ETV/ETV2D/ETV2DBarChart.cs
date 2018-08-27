@@ -10,7 +10,7 @@ public class ETV2DBarChart : AETV2D
     private DataSet data;
     private int attributeID=0;
     private IList<GameObject> bars;
-    private IDictionary<AxisDirection, GameObject> axis;
+    
 
     /**
      * Creates a colored bar. 
@@ -41,7 +41,7 @@ public class ETV2DBarChart : AETV2D
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
         
 
-        axis = new Dictionary<AxisDirection, GameObject>();
+        
 
         this.attributeID = attributeID;
         float attributeRange = DataProcessor.CalculateRange(data.dataObjects, attributeID);
@@ -56,7 +56,8 @@ public class ETV2DBarChart : AETV2D
             bar.transform.localPosition = new Vector3((categoryCounter) * 0.15f + 0.1f, 0, 0);
 
             bar.transform.parent = Anchor.transform;
-            bar.GetComponent<Bar2D>().SetLabelCategoryText(category);
+            string labelString = (category.Length > 10) ? (category.Substring(0, 9) + ".") : category;
+            bar.GetComponent<Bar2D>().SetLabelCategoryText(labelString);
 
             categoryCounter++;
         }
@@ -105,12 +106,7 @@ public class ETV2DBarChart : AETV2D
 		
 	}
 
-    public override void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
-    {
-        axis[axisDirection].GetComponent<Axis2D>().labelUnitText = axisUnit;
-        axis[axisDirection].GetComponent<Axis2D>().labelVariableText = axisVariable;
-        axis[axisDirection].GetComponent<Axis2D>().UpdateAxis();
-    }
+    
 
     public override void SetUpAxis()
     {
@@ -118,17 +114,20 @@ public class ETV2DBarChart : AETV2D
 
         // x-Axis
         GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, data.dataObjects.Count * 0.15f + .1f, .01f, false, false);
+        xAxis.transform.localPosition = new Vector3(0,0,-.001f);
         xAxis.transform.parent = Anchor.transform;
         bounds[0] += data.dataObjects.Count * 0.15f + .5f;
 
         // y-Axis
         GameObject yAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.Y, 1.0f, .01f, true, true);
+        yAxis.transform.localPosition = new Vector3(0, 0, -.001f);
         yAxis.transform.parent = Anchor.transform;
         bounds[1] += 1 + .5f;
 
         // Grid
         GameObject grid = factory2D.CreateGrid(Color.gray, AxisDirection.X, AxisDirection.Y,
             true, 10, 0.1f, data.dataObjects.Count * 0.15f, false);
+        grid.transform.localPosition = new Vector3(0, 0, .001f);
         grid.transform.parent = Anchor.transform;
 
         axis.Add(AxisDirection.X, xAxis);

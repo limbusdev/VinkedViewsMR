@@ -14,7 +14,7 @@ public class ETV2DVirtualDevice : MonoBehaviour {
     {
         SetSize(vis.GetComponent<AETV2D>().bounds[0], vis.GetComponent<AETV2D>().bounds[1]);
         vis.transform.parent = gameObject.transform;
-        DeviceAnchor.transform.localPosition = new Vector3(-.3f, -.3f, .005f);
+        DeviceAnchor.transform.localPosition = new Vector3(-.3f, -.3f, .01f);
     }
 
     public void SetSize(float width, float height)

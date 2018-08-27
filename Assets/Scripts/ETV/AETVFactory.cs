@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Model;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,5 +15,6 @@ public abstract class AETVFactory : MonoBehaviour {
 		
 	}
 
+    public abstract GameObject CreateETVLineChart(DataSetLines data);
     public abstract GameObject CreateETVBarChart(DataSet data, int attributeID);
 }

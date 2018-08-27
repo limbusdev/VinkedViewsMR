@@ -13,6 +13,9 @@ namespace GraphicalPrimitive
 
     public abstract class AAxis : MonoBehaviour
     {
+        public GameObject labelVariable;
+        public GameObject labelUnit;
+
         public float diameter {get; set;} = 0.01f;
         public float min { get; set; } = 0.0f;
         public float max { get; set; } = 1.0f;

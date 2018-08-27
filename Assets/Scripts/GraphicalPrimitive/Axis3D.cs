@@ -26,8 +26,7 @@ namespace GraphicalPrimitive
         public GameObject axisBodyGeometry;
         public GameObject axisTip;
         public GameObject labelAnchor;
-        public GameObject labelVariable;
-        public GameObject labelUnit;
+        
         
         public override void UpdateAxis()
         {

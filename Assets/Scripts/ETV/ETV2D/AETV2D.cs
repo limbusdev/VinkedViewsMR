@@ -5,10 +5,13 @@ using UnityEngine;
 
 public abstract class AETV2D : MonoBehaviour, IEuclideanTransformableView
 {
-    public abstract void ChangeColoringScheme(ETVColorSchemes scheme);
-    public abstract void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit);
-    public abstract void SetUpAxis();
-    public abstract void UpdateETV();
+    public GameObject screen;
+    public float[] bounds { get; set; }
+
+    public virtual void ChangeColoringScheme(ETVColorSchemes scheme) { }
+    public virtual void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit) { }
+    public virtual void SetUpAxis() { }
+    public virtual void UpdateETV() { }
 
     // Use this for initialization
     void Start () {

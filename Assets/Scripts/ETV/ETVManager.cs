@@ -55,14 +55,21 @@ public class ETVManager : MonoBehaviour {
 
 
 
-        GameObject EtvBarChart = ServiceLocator.instance.factoryETV3Dservice.Create3DBarChart(cityDataSet, 0);
+        GameObject EtvBarChart = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarChart(cityDataSet, 0);
         EtvBarChart.GetComponent<ETV3DBarChart>().ChangeColoringScheme(ETVColorSchemes.GrayZebra);
+        EtvBarChart.transform.position = new Vector3(-4, 0, 0);
+
+        GameObject Etv2DBarChart = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(cityDataSet, 0);
+        Etv2DBarChart.GetComponent<ETV2DBarChart>().ChangeColoringScheme(ETVColorSchemes.GrayZebra);
+
+        GameObject virt2Ddevice = ServiceLocator.instance.ETV2DFactoryService.CreateVirtualDevice();
+        virt2Ddevice.GetComponent<ETV2DVirtualDevice>().BindVisualization(Etv2DBarChart);
 
         /*GameObject EtvGroupedBarChart = ServiceLocator.instance.factoryETV3Dservice.Create3DGroupedBarChart(barChartValues);
         EtvGroupedBarChart.GetComponent<ETV3DGroupedBarChart>().ChangeColoringScheme(ETVColorSchemes.Rainbow);
         EtvGroupedBarChart.GetComponent<ETV3DGroupedBarChart>().SetLegendActive(true);*/
 
-        AGraphicalPrimitiveFactory factory = ServiceLocator.instance.get3DFactory();
+        AGraphicalPrimitiveFactory factory = ServiceLocator.instance.PrimitiveFactory3Dservice;
         //GameObject axis3D = factory.CreateAxis(Color.red, "", "", new Vector3(1,1,1), 1.5f);
         //axis3D.transform.localPosition = new Vector3(2,0,2);
 

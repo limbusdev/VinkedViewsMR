@@ -38,6 +38,7 @@ GameObject:
   - component: {fileID: 114515392309124868}
   - component: {fileID: 114876645080609092}
   - component: {fileID: 114945476759806656}
+  - component: {fileID: 114484183617782816}
   m_Layer: 0
   m_Name: Factories
   m_TagString: Untagged
@@ -83,9 +84,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75a0d121bc362c5489b882fd381a4005, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  factory3Dservice: {fileID: 114876645080609092}
-  factory2Dservice: {fileID: 114515392309124868}
-  factoryETV3Dservice: {fileID: 114945476759806656}
+  PrimitiveFactory3Dservice: {fileID: 114876645080609092}
+  PrimitiveFactory2Dservice: {fileID: 114515392309124868}
+  ETV3DFactoryService: {fileID: 114945476759806656}
+  ETV2DFactoryService: {fileID: 114484183617782816}
+--- !u!114 &114484183617782816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1194252209344432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e55a92929e37c184a9f70abd70c2c3d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ETV2DBarChartPrefab: {fileID: 1651200660064012, guid: b4b68d01b65cd3042b41df4c564f1891,
+    type: 2}
 --- !u!114 &114515392309124868
 MonoBehaviour:
   m_ObjectHideFlags: 1

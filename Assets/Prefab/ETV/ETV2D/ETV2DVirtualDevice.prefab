@@ -176,7 +176,7 @@ GameObject:
   - component: {fileID: 4030541349342916}
   - component: {fileID: 114145765388134772}
   m_Layer: 0
-  m_Name: ETV2D
+  m_Name: ETV2DVirtualDevice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -397,7 +397,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: ba762779e2537b840a6ae53379487e89, type: 2}
+  - {fileID: 2100000, guid: 61d6e9279478b274ab57113525d97596, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -831,6 +831,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47ee01b2c6c491c48ab24eba0810c2a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  visualization: {fileID: 0}
+  VisualizationAnchor: {fileID: 1863010443831068}
+  DeviceAnchor: {fileID: 1312132068385126}
   borderT: {fileID: 1641832760920734}
   borderB: {fileID: 1128557395529730}
   borderL: {fileID: 1149677785315786}

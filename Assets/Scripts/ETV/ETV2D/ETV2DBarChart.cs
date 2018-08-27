@@ -3,11 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ETV2DBarChart : MonoBehaviour {
+public class ETV2DBarChart : AETV2D
+{
+    public GameObject Anchor;
 
-    private IDictionary<string, DataObject> data;
-    private GameObject Anchor;
-    private IList<IList<GameObject>> bars;
+    private DataSet data;
+    private int attributeID=0;
+    private IList<GameObject> bars;
+    private IDictionary<AxisDirection, GameObject> axis;
 
     /**
      * Creates a colored bar. 
@@ -16,125 +19,72 @@ public class ETV2DBarChart : MonoBehaviour {
      * */
     private GameObject CreateBar(string category, DataObject obj, int attributeID, float range)
     {
-        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.get2DFactory();
+        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
-        Debug.Log("creating bar: " + data[category].attributeValues[attributeID] + " Height: ");
+        Debug.Log("creating bar: " + data.dataObjects[category].attributeValues[attributeID] + " Height: ");
+        
+        float value = data.dataObjects[category].attributeValues[attributeID];
+        GameObject bar = factory2D.CreateBar(value, range, .1f, .1f);
 
-        int dimension = obj.attributeValues.Length;
-        float value = data[category].attributeValues[attributeID];
-        GameObject bar = factory2D.CreateBar(value, range, .1f / dimension, .1f);
-
-        //bar.GetComponent<GraphicalPrimitive.Bar2D>().SetLabelText(data[category].attributeValues[attributeID].ToString());
-
+        bar.GetComponent<Bar2D>().SetLabelText(data.dataObjects[category].attributeValues[attributeID].ToString());
 
         return bar;
     }
 
-    public void Init(IDictionary<string, DataObject> data)
+    public void Init(DataSet dataSet, int attributeID)
     {
-        this.data = data;
+        this.bounds = new float[] { 0, 0, 0};
+        this.data = dataSet;
+        this.attributeID = attributeID;
+        bars = new List<GameObject>();
 
-        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.get3DFactory();
-        bars = new List<IList<GameObject>>();
-        IEnumerator<string> keyEnum = data.Keys.GetEnumerator();
-        keyEnum.MoveNext();
-        float[] attributeRanges = new float[data[keyEnum.Current].attributeValues.Length];
+        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        
 
-        Anchor = new GameObject("2D Bar Chart");
-        Anchor.transform.parent = gameObject.transform;
-        
-        
-        for (int i = 0; i < attributeRanges.Length; i++)
-        {
-            attributeRanges[i] = DataProcessor.CalculateRange(data, i);
-        }
+        axis = new Dictionary<AxisDirection, GameObject>();
+
+        this.attributeID = attributeID;
+        float attributeRange = DataProcessor.CalculateRange(data.dataObjects, attributeID);
 
         int categoryCounter = 0;
 
-        foreach (string category in data.Keys)
+        foreach (string category in data.dataObjects.Keys)
         {
-            IList<GameObject> barsOfCurrentCategory = new List<GameObject>();
-            bars.Add(barsOfCurrentCategory);
-            int attributesCount = data[category].attributeValues.Length;
+            GameObject bar = CreateBar(category, data.dataObjects[category], attributeID, attributeRange);
+            bars.Add(bar);
 
-            for (int i = 0; i < data[category].attributeValues.Length; i++)
-            {
-                GameObject bar = CreateBar(category, data[category], i, attributeRanges[i]);
-                barsOfCurrentCategory.Add(bar);
+            bar.transform.localPosition = new Vector3((categoryCounter) * 0.15f + 0.1f, 0, 0);
 
-                bar.transform.localPosition = new Vector3((categoryCounter) * 0.15f + 0.05f * (i) + 0.1f, 0, 0);
-
-                bar.transform.parent = Anchor.transform;
-            }
+            bar.transform.parent = Anchor.transform;
+            bar.GetComponent<Bar2D>().SetLabelCategoryText(category);
 
             categoryCounter++;
         }
 
-        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.get2DFactory();
 
-        // x-Axis
-        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, data.Count * 0.15f + .1f, .01f, false, false);
-        xAxis.transform.parent = Anchor.transform;
-
-        // y-Axis
-        GameObject yAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.Y, 1.1f, .01f, true, true);
-        yAxis.transform.parent = Anchor.transform;
-
-        // Grid
-        GameObject grid = factory2D.CreateGrid(Color.gray, AxisDirection.X, AxisDirection.Y,
-            true, 10, 0.1f, data.Count * 0.15f, false);
-        grid.transform.parent = Anchor.transform;
-
-
+        SetUpAxis();
     }
 
-    public void ChangeColoringScheme(ETVColorSchemes scheme)
+    public override void ChangeColoringScheme(ETVColorSchemes scheme)
     {
         int category = 0;
         int numberOfCategories = bars.Count;
         switch (scheme)
         {
             case ETVColorSchemes.Rainbow:
-                foreach (IList<GameObject> barList in bars)
+                foreach (GameObject bar in bars)
                 {
-                    int attribute = 0;
-                    foreach (GameObject bar in barList)
-                    {
-                        int numberOfAttributes = barList.Count;
-                        Debug.Log("number of attributes: " + numberOfAttributes);
-                        Color color;
-
-                        if (numberOfAttributes == 1)
-                        {
-                            color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
-                        }
-                        else
-                        {
-                            color = Color.HSVToRGB(((float)attribute) / numberOfAttributes, 1, 1);
-                            Debug.Log("Color " + attribute + " = " + ((float)attribute) / numberOfAttributes);
-                        }
-                        bar.GetComponent<GraphicalPrimitive.Bar2D>().ChangeColor(color);
-                        attribute++;
-                    }
+                    Color color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
+                    bar.GetComponent<Bar2D>().ChangeColor(color);
                     category++;
                 }
                 break;
             case ETVColorSchemes.GrayZebra:
                 bool even = true;
-                foreach (IList<GameObject> barList in bars)
+                foreach (GameObject bar in bars)
                 {
-                    if (barList.Count > 1)
-                    {
-                        even = true;
-                    }
-                    foreach (GameObject bar in barList)
-                    {
-                        int attribute = 0;
-                        int numberOfAttributes = barList.Count;
-                        even = !even;
-                        bar.GetComponent<GraphicalPrimitive.Bar2D>().ChangeColor((even) ? Color.gray : Color.white);
-                        attribute++;
-                    }
+                    bar.GetComponent<Bar2D>().ChangeColor((even) ? Color.gray : Color.white);
+                    even = !even;
                     category++;
                 }
                 break;
@@ -142,6 +92,8 @@ public class ETV2DBarChart : MonoBehaviour {
                 break;
         }
     }
+
+
 
     // Use this for initialization
     void Start () {
@@ -152,4 +104,42 @@ public class ETV2DBarChart : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public override void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
+    {
+        axis[axisDirection].GetComponent<Axis2D>().labelUnitText = axisUnit;
+        axis[axisDirection].GetComponent<Axis2D>().labelVariableText = axisVariable;
+        axis[axisDirection].GetComponent<Axis2D>().UpdateAxis();
+    }
+
+    public override void SetUpAxis()
+    {
+        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+
+        // x-Axis
+        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, data.dataObjects.Count * 0.15f + .1f, .01f, false, false);
+        xAxis.transform.parent = Anchor.transform;
+        bounds[0] += data.dataObjects.Count * 0.15f + .5f;
+
+        // y-Axis
+        GameObject yAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.Y, 1.0f, .01f, true, true);
+        yAxis.transform.parent = Anchor.transform;
+        bounds[1] += 1 + .5f;
+
+        // Grid
+        GameObject grid = factory2D.CreateGrid(Color.gray, AxisDirection.X, AxisDirection.Y,
+            true, 10, 0.1f, data.dataObjects.Count * 0.15f, false);
+        grid.transform.parent = Anchor.transform;
+
+        axis.Add(AxisDirection.X, xAxis);
+        axis.Add(AxisDirection.Y, yAxis);
+
+        SetAxisLabels(AxisDirection.X, "Category", "");
+        SetAxisLabels(AxisDirection.Y, data.Variables[attributeID], data.Units[attributeID]);
+    }
+
+    public override void UpdateETV()
+    {
+        throw new System.NotImplementedException();
+    }
 }

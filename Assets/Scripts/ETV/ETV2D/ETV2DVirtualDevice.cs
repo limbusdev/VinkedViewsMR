@@ -2,9 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ETV2D : MonoBehaviour {
+public class ETV2DVirtualDevice : MonoBehaviour {
+
+    public GameObject visualization;
+    public GameObject VisualizationAnchor;
+    public GameObject DeviceAnchor;
 
     public GameObject borderT, borderB, borderL, borderR, cornerBL, cornerBR, cornerTL, cornerTR, screen;
+
+    public void BindVisualization(GameObject vis)
+    {
+        SetSize(vis.GetComponent<AETV2D>().bounds[0], vis.GetComponent<AETV2D>().bounds[1]);
+        vis.transform.parent = gameObject.transform;
+        DeviceAnchor.transform.localPosition = new Vector3(-.3f, -.3f, .005f);
+    }
 
     public void SetSize(float width, float height)
     {
@@ -24,7 +35,7 @@ public class ETV2D : MonoBehaviour {
         borderR.transform.localScale = new Vector3(0.02f, height - 0.04f, 0.01f);
 
         screen.transform.localPosition = new Vector3(0.5f*width, 0.5f*height);
-        screen.transform.localScale = new Vector3(width-0.04f, height-0.04f, 0.05f);
+        screen.transform.localScale = new Vector3(width-0.04f, height-0.04f, 0.0025f);
     }
 
 	// Use this for initialization

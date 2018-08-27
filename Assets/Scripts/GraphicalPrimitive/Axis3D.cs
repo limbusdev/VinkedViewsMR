@@ -80,7 +80,7 @@ namespace GraphicalPrimitive
                 lineRend.SetPosition(0, Vector3.zero);
                 lineRend.SetPosition(1, tickDirection * diameter * 4f);
 
-                GameObject tickLabel = ServiceLocator.instance.factory3Dservice.CreateLabel(i.ToString("F" + decimals));
+                GameObject tickLabel = ServiceLocator.instance.PrimitiveFactory3Dservice.CreateLabel(i.ToString("F" + decimals));
                 var textMesh = tickLabel.GetComponent<TextMesh>();
                 switch (axisDirection)
                 {

@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ETV3DFactory : MonoBehaviour {
+public class ETV3DFactory : AETVFactory {
 
     public GameObject etv3DBarChart;
     public GameObject etv3DGroupedBarChart;
     public GameObject barChartLegend3D;
 
-    public GameObject Create3DBarChart(DataSet data, int attributeID)
+    public override GameObject CreateETVBarChart(DataSet data, int attributeID)
     {
         GameObject barChart = Instantiate(etv3DBarChart);
 

@@ -335,6 +335,12 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114484183617782816, guid: 4521923cd81be95449facd799830f5e3,
+        type: 2}
+      propertyPath: ETV2DVirtualDevicePrefab
+      value: 
+      objectReference: {fileID: 1574644527077756, guid: eb9053d283853c648b2381549d56f630,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4521923cd81be95449facd799830f5e3, type: 2}
   m_IsPrefabAsset: 0

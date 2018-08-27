@@ -6,9 +6,10 @@ public class ServiceLocator : MonoBehaviour {
 
     public static ServiceLocator instance = null;
 
-    public Graphical3DPrimitiveFactory factory3Dservice;    // Populate in editor
-    public Graphical2DPrimitiveFactory factory2Dservice;    // Populate in editor
-    public ETV3DFactory factoryETV3Dservice;                // Populate in editor
+    public Graphical3DPrimitiveFactory PrimitiveFactory3Dservice;       // Populate in editor
+    public Graphical2DPrimitiveFactory PrimitiveFactory2Dservice;       // Populate in editor
+    public ETV3DFactory ETV3DFactoryService;                            // Populate in editor
+    public ETV2DFactory ETV2DFactoryService;                            // populate in editor
 
     //Awake is always called before any Start functions
     void Awake()
@@ -30,34 +31,7 @@ public class ServiceLocator : MonoBehaviour {
         DontDestroyOnLoad(gameObject);
     }
 
-    public void provideGraphical2DPrimitiveFactory(Graphical2DPrimitiveFactory factory)
-    {
-        factory2Dservice = factory;
-    }
-
-    public void provideGraphical3DPrimitiveFactory(Graphical3DPrimitiveFactory factory)
-    {
-        factory3Dservice = factory;
-    }
-
-    public Graphical2DPrimitiveFactory get2DFactory()
-    {
-        if(factory2Dservice == null)
-        {
-            //factory2Dservice = new Graphical2DPrimitiveFactory();
-        }
-        return factory2Dservice;
-    }
-
-    public Graphical3DPrimitiveFactory get3DFactory()
-    {
-        if (factory3Dservice == null)
-        {
-            //factory3Dservice = new Graphical3DPrimitiveFactory();
-        }
-        return factory3Dservice;
-    }
-
+    
     // Use this for initialization
     void Start () {
 		

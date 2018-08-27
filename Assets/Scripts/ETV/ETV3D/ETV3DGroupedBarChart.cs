@@ -25,7 +25,7 @@ public class ETV3DGroupedBarChart : AETV3D {
 
     public void Init(IDictionary<string, DataObject> data)
     {
-        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.get3DFactory();
+        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
         barGroups = new List<GameObject>();
         colors = new List<Color>();
 
@@ -67,7 +67,7 @@ public class ETV3DGroupedBarChart : AETV3D {
 
     public override void SetUpAxis()
     {
-        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.get2DFactory();
+        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
         // x-Axis
         GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, data.Count * 0.15f + .1f, .01f, false, false);
@@ -106,7 +106,7 @@ public class ETV3DGroupedBarChart : AETV3D {
                 names[i] = name;
                 i++;
             }
-            legend = ServiceLocator.instance.factoryETV3Dservice.Create3DBarChartLegend(data[names[0]].attributeNames, colors.ToArray());
+            legend = ServiceLocator.instance.ETV3DFactoryService.Create3DBarChartLegend(data[names[0]].attributeNames, colors.ToArray());
             legend.transform.parent = Anchor.transform;
             legend.transform.position = new Vector3((names.Length+2)*.15f,0,0);
         } else

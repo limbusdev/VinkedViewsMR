@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ETVFactory : MonoBehaviour {
+public abstract class AETVFactory : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
@@ -13,4 +13,6 @@ public class ETVFactory : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public abstract GameObject CreateETVBarChart(DataSet data, int attributeID);
 }

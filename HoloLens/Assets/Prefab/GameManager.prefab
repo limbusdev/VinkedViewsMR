@@ -1,0 +1,154 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1084506249481002}
+  m_IsPrefabAsset: 1
+--- !u!1 &1084506249481002
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4362107388968740}
+  - component: {fileID: 114055060894504564}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!1 &1194252209344432
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4626580609372880}
+  - component: {fileID: 114515392309124868}
+  - component: {fileID: 114876645080609092}
+  - component: {fileID: 114945476759806656}
+  - component: {fileID: 114484183617782816}
+  m_Layer: 0
+  m_Name: Factories
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4362107388968740
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1084506249481002}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 4626580609372880}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4626580609372880
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1194252209344432}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4362107388968740}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114055060894504564
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1084506249481002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75a0d121bc362c5489b882fd381a4005, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PrimitiveFactory3Dservice: {fileID: 114876645080609092}
+  PrimitiveFactory2Dservice: {fileID: 114515392309124868}
+  ETV3DFactoryService: {fileID: 114945476759806656}
+  ETV2DFactoryService: {fileID: 114484183617782816}
+--- !u!114 &114484183617782816
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1194252209344432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e55a92929e37c184a9f70abd70c2c3d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ETV2DBarChartPrefab: {fileID: 1651200660064012, guid: b4b68d01b65cd3042b41df4c564f1891,
+    type: 2}
+  ETV2DLineChartPrefab: {fileID: 1131613118678104, guid: f8138f01c2156484d9e7acced3e42ec7,
+    type: 2}
+  ETV2DVirtualDevicePrefab: {fileID: 1574644527077756, guid: eb9053d283853c648b2381549d56f630,
+    type: 2}
+--- !u!114 &114515392309124868
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1194252209344432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 487874d19d4f6ce41a77f333a97b5412, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bar2D: {fileID: 1407780082100994, guid: a247774af56768b40a121d512d42d824, type: 2}
+  label: {fileID: 1340621660906316, guid: a8914cdd4e0184542a0251c684fb596d, type: 2}
+  Axis2DPrefab: {fileID: 1131818127915714, guid: b3c5ed6b532d28e4f92871287f6ff18c,
+    type: 2}
+--- !u!114 &114876645080609092
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1194252209344432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62f4d2ecddff9c542aa796977a891002, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cone: {fileID: 1235091312533442, guid: a7ac7c0156811924185a33f61cda2f6b, type: 2}
+  bar3D: {fileID: 1851467595003564, guid: 77a7171990d32c74688c6f030fc34754, type: 2}
+  axis3D: {fileID: 1213320104624410, guid: d42f4c6b07da3134e9da74c7459174a0, type: 2}
+  label: {fileID: 1340621660906316, guid: a8914cdd4e0184542a0251c684fb596d, type: 2}
+--- !u!114 &114945476759806656
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1194252209344432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 167da45d2e28f284d99dbe80ea601020, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  etv3DBarChart: {fileID: 1609755241933270, guid: 47b892c86c8a58b49a108da03d68cbf5,
+    type: 2}
+  etv3DGroupedBarChart: {fileID: 1060095881637280, guid: a31c6d974c345d446a0f75c60e652783,
+    type: 2}
+  barChartLegend3D: {fileID: 1833554834293496, guid: c6a3dc7c7bbb725468bf4594ff9b5087,
+    type: 2}

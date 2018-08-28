@@ -3,19 +3,26 @@
 <!-- ........................................................................... HEAD -->
 <head>
   <meta charset="utf-8">
+  <title>AR VisTools Client</title>
+  <meta name="description" content="ARVisTools Client">
+  <meta name="author" content="Georg Eckert">
 
-  <title>The HTML5 Herald</title>
-  <meta name="description" content="The HTML5 Herald">
-  <meta name="author" content="SitePoint">
-
-  <link rel="stylesheet" href="css/styles.css?v=1.0">
-
+  <link rel="stylesheet" href="style/main.css">
+  <script src="https://d3js.org/d3.v5.min.js" charset="utf-8"></script>
 </head>
 
 <!-- ........................................................................... BODY -->
 <body>
 
+  <!--<div class="chart"></div>--><!-- Place holder for D3 chart visualization -->
+  <svg class="chart"></svg>
 
-  <script src="https://d3js.org/d3.v5.min.js"></script>
+
+  <!-- ......................................................................... SCRIPTS -->
+
+  <script src="scripts/Main.js"></script>
+    <script>
+    Main.main()
+    </script>
 </body>
 </html>

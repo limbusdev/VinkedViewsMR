@@ -1,3 +1,4 @@
+'use strict';
 <!-- ...........................................................................Imports -->
 // Include System Modules
 const http    = require('http');
@@ -6,6 +7,7 @@ const url     = require('url');
 const mongoDB = require('mongodb'); // NoSQL DataBase MongoDB
 
 // Include Custom Modules
+const DataBase = require('./DataBase')
 var pageProvider = require('./Modules/ModulePageProvider');
 
 <!-- ...........................................................................Main Code -->
@@ -49,20 +51,5 @@ var serverCallbackRequest = (request, response) =>
 server.on('request', serverCallbackRequest);
 server.listen(8080, ()=>console.log("Node.js server created at port 8080"));
 
-/*
-
-# Notes
-
-* Query string: request.url contains trailing address --> for localhost:8080/test it contains /test
-* Parsing the Query string: url.parse(request.url, true).query returns the query-Object, containing all included variables
-
-**Example:**
-
-For 'http://localhost:8080/?year=2017&month=July'
-
-´´´JavaScript
-var q = url.parse(request.url, true).query;
-var txt = q.year + " " + q.month;
-´´´
-
-*/
+// Initiate DataBase
+var DB = new DataBase();

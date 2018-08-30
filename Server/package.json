@@ -17,6 +17,8 @@
   "author": "Georg Eckert",
   "license": "MIT",
   "dependencies": {
-    "mongodb": "^3.1.4"
+    "express": "^4.16.3",
+    "mongodb": "^3.1.4",
+    "mongoose": "^5.2.10"
   }
 }

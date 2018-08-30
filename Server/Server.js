@@ -6,24 +6,18 @@ const fs      = require('fs');          // FileSystem
 const url     = require('url');
 const mongoose= require('mongoose');    // DataBase-Acces for MongoDB
 const express = require('express');     // Web-App-Framework
+const net     = require('net');         // Networking Module
 
 // Include Custom Modules
 const DataBase = require('./DataBase')
 const RoutingCallbacks = require('./RoutingCallbacks');
 const RESTresponses = require('./RESTresponses');
-var pageProvider = require('./Modules/ModulePageProvider');
 const users = require('./Data/users');
 
-<!-- ...........................................................................Main Code -->
 
-class Main
-{
-    static main()
-    {
-        // Set up server
-        var server = new Server();
-    }
-}
+var pageProvider = require('./Modules/ModulePageProvider');
+
+<!-- ...........................................................................Main Code -->
 
 class Server
 {
@@ -35,14 +29,11 @@ class Server
         this.server.get('/about', Server.serverCallbackRequest);
         this.server.get('/users', RESTresponses.getUsers);
 
+        // Static content for the browser to fetch automatically
+        this.server.use(express.static('public'));
+
         // Error handling via Express middleware
-        this.server.use((request, response) =>
-            {
-                response.type('text/plain');
-                response.status('505');
-                response.send('Error page');
-            }
-        );
+        this.server.use(RoutingCallbacks.errorPage);
 
         // Bind server to a port
         this.server.listen(8080, ()=>console.log('Express server started at port 8080'));
@@ -90,5 +81,5 @@ class Server
 Server.server;
 Server.db;
 
-// Run main code
-Main.main();
+// Export Server Class
+module.exports = Server;

@@ -2,8 +2,8 @@ class Main
 {
     static main()
     {
-        var width = 420,
-            barHeight = 20;
+        var width = 420;
+        var barHeight = 20;
 
         var x = d3.scaleLinear()
             .range([0, width]);
@@ -11,11 +11,11 @@ class Main
         var chart = d3.select(".chart")
             .attr("width", width);
 
-        d3.csv("data/exampleData.csv", Main.type, function(error,data)
+        d3.csv("data/exampleData.csv").then(function(data)
         {
-            console.log(data[0]);
             x.domain([0, d3.max(data, function(d) { return d.value; })]);
 
+            console.log(data.length);
             chart.attr("height", barHeight * data.length);
 
             var bar = chart.selectAll("g")
@@ -33,12 +33,6 @@ class Main
                 .attr("dy", ".35em")
                 .text(function(d) { return d.value; });
         });
-    }
-
-    static type(d)
-    {
-        d.value = +d.value;
-        return d;
     }
 }
 

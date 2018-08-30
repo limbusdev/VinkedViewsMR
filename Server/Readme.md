@@ -16,7 +16,7 @@
 
 # Notizen
 
-
+* alles im Ordner **public** kann automatisch vom Browser angefordert werden
 
 
 

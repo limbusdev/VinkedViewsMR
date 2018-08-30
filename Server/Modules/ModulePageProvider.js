@@ -14,5 +14,16 @@ var fs = require('fs');
  */
 exports.createPage = function(pageName, callback)
 {
-    fs.readFile('./Content/index.html', callback);
+    switch(pageName)
+    {
+        case '/error':
+            callback("", "<html><head /><body><h1>404</h1><p>Error</p></body></html>"); break;
+        case '/about':
+            fs.readFile('./Content/about.html', callback);
+            break;
+        default:
+            fs.readFile('./Content/index.html', callback);
+            break;
+    }
+
 };

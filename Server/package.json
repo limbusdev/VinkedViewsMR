@@ -1,0 +1,19 @@
+{
+  "name": "arvistoolsserver",
+  "version": "0.0.1",
+  "description": "Server of the ARVisTools-Suite",
+  "main": "Server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "ar",
+    "visualization",
+    "hololens",
+    "charts",
+    "datavis"
+  ],
+  "author": "Georg Eckert",
+  "license": "MIT"
+}

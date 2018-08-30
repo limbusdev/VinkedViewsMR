@@ -1,7 +1,8 @@
 <!-- ...........................................................................Imports -->
 // Include System Modules
-var http    = require('http');
-var fs      = require('fs');    // FileSystem
+const http    = require('http');
+const fs      = require('fs');    // FileSystem
+const url     = require('url');
 
 // Include Custom Modules
 var pageProvider = require('./Modules/ModulePageProvider');
@@ -9,20 +10,43 @@ var pageProvider = require('./Modules/ModulePageProvider');
 <!-- ...........................................................................Main Code -->
 
 // Set up server
-http.createServer(
+const server = http.createServer();
 
-    function (request, response)
+var serverCallbackRequest = (request, response) =>
+{
+    var callbackOK = function(error, data)
     {
-        var callback = function(error, data)
-        {
-            response.writeHead(200, {'Content-Type': 'text/html'});
-            response.write(data);
-            response.end()
-        };
-        pageProvider.createPage("DefaultPage", callback);
-    }
+        response.writeHead(200, {'Content-Type': 'text/html'});
+        response.write(data);
+        response.end()
+    };
 
-).listen(8080);
+    var callbackERROR = function(error, data)
+    {
+        response.writeHead(404, {'Content-Type': 'text/html'});
+        response.write(data);
+        response.end()
+    };
+
+    // Routing
+    let path = url.parse(request.url).pathname;
+    switch(path)
+    {
+        case '/':
+            pageProvider.createPage("/", callbackOK);
+            break;
+        case '/about':
+            pageProvider.createPage("/about", callbackOK);
+            break;
+        default:
+            pageProvider.createPage("/error", callbackERROR);
+            break;
+    }
+};
+
+// Populate Server Events
+server.on('request', serverCallbackRequest);
+server.listen(8080, ()=>console.log("Node.js server created at port 8080"));
 
 /*
 

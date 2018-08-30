@@ -15,5 +15,8 @@
     "datavis"
   ],
   "author": "Georg Eckert",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "mongodb": "^3.1.4"
+  }
 }

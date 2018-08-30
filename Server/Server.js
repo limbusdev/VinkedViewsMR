@@ -9,7 +9,10 @@ const express = require('express');     // Web-App-Framework
 
 // Include Custom Modules
 const DataBase = require('./DataBase')
+const RoutingCallbacks = require('./RoutingCallbacks');
+const RESTresponses = require('./RESTresponses');
 var pageProvider = require('./Modules/ModulePageProvider');
+const users = require('./Data/users');
 
 <!-- ...........................................................................Main Code -->
 
@@ -28,10 +31,11 @@ class Server
     {
         this.server = express();
         this.server.set('port', process.env.PORT || 8080);
-        this.server.get('/', Server.serverCallbackRequest);
+        this.server.get('/', RoutingCallbacks.defaultPage);
         this.server.get('/about', Server.serverCallbackRequest);
+        this.server.get('/users', RESTresponses.getUsers);
 
-        // Error handling
+        // Error handling via Express middleware
         this.server.use((request, response) =>
             {
                 response.type('text/plain');
@@ -77,7 +81,10 @@ class Server
                 pageProvider.createPage("/error", callbackERROR);
                 break;
         }
-    };
+    }
+
+    // Routes
+
 }
 // Static Properties
 Server.server;

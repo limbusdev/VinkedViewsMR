@@ -9,9 +9,18 @@
     * mongoose
     * express
 
+## Verwendung
+
+1. mangod.exe starten
+2. in anderem Terminal mango.exe starten
+3. node Main.js
+
+Dann sollte alles korrekt laufen.
+
 ## Links
 
 * [NodeJS und MongoDB](https://codeburst.io/the-only-nodejs-introduction-youll-ever-need-d969a47ef219)
+* [MongoDB Schema Beispiel](https://mongoosejs.com/docs/schematypes.html)
 
 
 # Notizen

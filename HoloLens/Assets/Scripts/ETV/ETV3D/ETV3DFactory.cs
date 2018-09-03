@@ -8,6 +8,7 @@ public class ETV3DFactory : AETVFactory {
     public GameObject etv3DBarChart;
     public GameObject etv3DGroupedBarChart;
     public GameObject barChartLegend3D;
+    public GameObject ETV3DScatterPlotPrefab;
 
     public override GameObject CreateETVBarChart(DataSet data, int attributeID)
     {
@@ -49,5 +50,13 @@ public class ETV3DFactory : AETVFactory {
     public override GameObject CreateETVLineChart(DataSetLines data, float minX, float maxX, float minY, float maxY, float ticksX, float ticksY)
     {
         throw new System.NotImplementedException();
+    }
+
+    public override GameObject CreateETVScatterPlot(DataSetPoints data, float[] mins, float[] maxs, float[] ticks)
+    {
+        GameObject scatterPlot3D = Instantiate(ETV3DScatterPlotPrefab);
+        scatterPlot3D.GetComponent<ETV3DScatterPlot>().Init(data, mins, maxs, ticks);
+
+        return scatterPlot3D;
     }
 }

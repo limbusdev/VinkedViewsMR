@@ -17,4 +17,5 @@ public abstract class AETVFactory : MonoBehaviour {
 
     public abstract GameObject CreateETVLineChart(DataSetLines data, float minX, float maxX, float minY, float maxY, float ticksX, float ticksY);
     public abstract GameObject CreateETVBarChart(DataSet data, int attributeID);
+    public abstract GameObject CreateETVScatterPlot(DataSetPoints data, float[] mins, float[] maxs, float[] ticks);
 }

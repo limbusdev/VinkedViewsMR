@@ -97,8 +97,38 @@ public class ETVManager : MonoBehaviour {
 
         DataSetLines dsl = new DataSetLines(new LineObject[] { lo, lo2 }, "Zeit", "a", "Tiere", "tausend");
 
-        GameObject lc = ServiceLocator.instance.ETV2DFactoryService.CreateETVLineChart(dsl, 0, 6, 0, 40, 1, 5);
-        
+        //GameObject lc = ServiceLocator.instance.ETV2DFactoryService.CreateETVLineChart(dsl, 0, 6, 0, 40, 1, 5);
+
+        Vector3[] wallabees2 = new Vector3[]
+        {
+           new Vector3(1,30,0),
+           new Vector3(2,20,0),
+           new Vector3(3,25,0),
+           new Vector3(4,10,0),
+           new Vector3(5,3,0)
+        };
+
+        DataSetPoints dsp = new DataSetPoints(wallabees2, new string[] { "Zeit", "Tiere" }, new string[] { "a", "tausend" });
+
+        //GameObject sp = ServiceLocator.instance.ETV2DFactoryService.CreateETVScatterPlot(dsp, new float[] { 0, 0 }, new float[] { 5, 40 }, new float[] { 1, 5 });
+
+        Vector3[] dummyData = new Vector3[]
+        {
+           new Vector3(1,30,4),
+           new Vector3(2,20,7),
+           new Vector3(3,25,20),
+           new Vector3(4,10,3),
+           new Vector3(5,3,12)
+        };
+
+        DataSetPoints dsp2 = new DataSetPoints(dummyData, new string[] { "A", "B", "C" }, new string[] { "x", "y", "z" });
+
+        GameObject sp2 = ServiceLocator.instance.ETV3DFactoryService.CreateETVScatterPlot(
+            dsp2,
+            new float[] {0, 0, 0},
+            new float[] {6, 40, 25},
+            new float[] {1, 10, 5}
+        );
 
 
         //GameObject testBar = factory.CreateBar(1,1,1,1);

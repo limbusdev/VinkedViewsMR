@@ -42,6 +42,10 @@ namespace GraphicalPrimitive
 
             // Update Base Axis
             var lr = Axis.GetComponent<LineRenderer>();
+            if(axisDirection == AxisDirection.Z)
+            {
+                lr.alignment = LineAlignment.View;
+            }
 
             lr.startWidth = diameter;
             lr.endWidth = diameter;
@@ -56,6 +60,11 @@ namespace GraphicalPrimitive
                 lrTip.endWidth = 0;
                 lrTip.SetPosition(0, lr.GetPosition(1));
                 lrTip.SetPosition(1, length * direction);
+
+                if (axisDirection == AxisDirection.Z)
+                {
+                    lrTip.alignment = LineAlignment.View;
+                }
             }
             else
             {

@@ -8,6 +8,7 @@ public class ETV2DFactory : AETVFactory
     public GameObject ETV2DBarChartPrefab;
     public GameObject ETV2DLineChartPrefab;
     public GameObject ETV2DVirtualDevicePrefab;
+    public GameObject ETV2DScatterPlotPrefab;
 
     public override GameObject CreateETVBarChart(DataSet data, int attributeID)
     {
@@ -26,6 +27,16 @@ public class ETV2DFactory : AETVFactory
         lineChart.GetComponent<ETV2DLineChart>().UpdateETV();
 
         return lineChart;
+    }
+
+    public override GameObject CreateETVScatterPlot(DataSetPoints data, float[] mins, float[] maxs, float[] ticks)
+    {
+        GameObject scatterPlot = Instantiate(ETV2DScatterPlotPrefab);
+
+        scatterPlot.GetComponent<ETV2DScatterPlot>().Init(data, mins[0], maxs[0], mins[1], maxs[1], ticks[0], ticks[1]);
+        scatterPlot.GetComponent<ETV2DScatterPlot>().UpdateETV();
+
+        return scatterPlot;
     }
 
     public GameObject CreateVirtualDevice()

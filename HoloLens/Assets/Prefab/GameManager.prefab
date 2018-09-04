@@ -105,6 +105,10 @@ MonoBehaviour:
     type: 2}
   ETV2DVirtualDevicePrefab: {fileID: 1574644527077756, guid: eb9053d283853c648b2381549d56f630,
     type: 2}
+  ETV2DScatterPlotPrefab: {fileID: 1752467886236462, guid: 888d14bbc4cf14d4586f0fcf5832dfe6,
+    type: 2}
+  ETV2DParallelCoordinatesPlotPrefab: {fileID: 1193521869361126, guid: 26c1067c4e899784fadc65afb8d107c5,
+    type: 2}
 --- !u!114 &114515392309124868
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -151,4 +155,6 @@ MonoBehaviour:
   etv3DGroupedBarChart: {fileID: 1060095881637280, guid: a31c6d974c345d446a0f75c60e652783,
     type: 2}
   barChartLegend3D: {fileID: 1833554834293496, guid: c6a3dc7c7bbb725468bf4594ff9b5087,
+    type: 2}
+  ETV3DScatterPlotPrefab: {fileID: 1671202286137060, guid: 136568680d8318a43a8d61beaf7282c1,
     type: 2}

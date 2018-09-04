@@ -123,12 +123,12 @@ public class ETVManager : MonoBehaviour {
 
         DataSetPoints dsp2 = new DataSetPoints(dummyData, new string[] { "A", "B", "C" }, new string[] { "x", "y", "z" });
 
-        GameObject sp2 = ServiceLocator.instance.ETV3DFactoryService.CreateETVScatterPlot(
+        /*GameObject sp2 = ServiceLocator.instance.ETV3DFactoryService.CreateETVScatterPlot(
             dsp2,
             new float[] {0, 0, 0},
             new float[] {6, 40, 25},
             new float[] {1, 10, 5}
-        );
+        );*/
 
 
         //GameObject testBar = factory.CreateBar(1,1,1,1);
@@ -170,6 +170,16 @@ public class ETVManager : MonoBehaviour {
         barChart2D.transform.localPosition = new Vector3(-5,0,0);
 
         barChart2D.GetComponent<ETV2DBarChart>().ChangeColoringScheme(ETVColorSchemes.Rainbow);*/
+
+
+        float[][] nDpoints = new float[4][];
+        nDpoints[0] = new float[] { 0.0f, 0.1f, 0.2f };
+        nDpoints[1] = new float[] { 0.0f, 0.2f, 0.4f };
+        nDpoints[2] = new float[] { 0.0f, 0.4f, 0.4f };
+        nDpoints[3] = new float[] { 20, 21, 19 };
+        DataSetMultiDimensionalPoints dataX = new DataSetMultiDimensionalPoints(nDpoints, new string[] { "x", "y", "z", "T" }, new string[] { "m", "m", "m", "°C" });
+        ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(dataX, new float[] { .1f, .1f, .1f, 5f });
+
     }
 
     // Update is called once per frame

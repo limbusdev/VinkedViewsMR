@@ -9,6 +9,7 @@ public class ETV2DFactory : AETVFactory
     public GameObject ETV2DLineChartPrefab;
     public GameObject ETV2DVirtualDevicePrefab;
     public GameObject ETV2DScatterPlotPrefab;
+    public GameObject ETV2DParallelCoordinatesPlotPrefab;
 
     public override GameObject CreateETVBarChart(DataSet data, int attributeID)
     {
@@ -27,6 +28,16 @@ public class ETV2DFactory : AETVFactory
         lineChart.GetComponent<ETV2DLineChart>().UpdateETV();
 
         return lineChart;
+    }
+
+    public override GameObject CreateETVParallelCoordinatesPlot(DataSetMultiDimensionalPoints data, float[] ticks)
+    {
+        GameObject pcp = Instantiate(ETV2DParallelCoordinatesPlotPrefab);
+
+        pcp.GetComponent<ETV2DParallelCoordinatesPlot>().Init(data, ticks);
+        pcp.GetComponent<ETV2DParallelCoordinatesPlot>().UpdateETV();
+
+        return pcp;
     }
 
     public override GameObject CreateETVScatterPlot(DataSetPoints data, float[] mins, float[] maxs, float[] ticks)

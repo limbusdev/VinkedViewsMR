@@ -59,4 +59,9 @@ public class ETV3DFactory : AETVFactory {
 
         return scatterPlot3D;
     }
+
+    public override GameObject CreateETVParallelCoordinatesPlot(DataSetMultiDimensionalPoints data, float[] ticks)
+    {
+        throw new System.NotImplementedException();
+    }
 }

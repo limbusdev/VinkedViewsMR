@@ -22,7 +22,7 @@ namespace GraphicalPrimitive
 
         private void Awake()
         {
-            ticks = new List<GameObject>();
+            if(ticks == null) ticks = new List<GameObject>();
         }
 
         public GameObject Anchor;

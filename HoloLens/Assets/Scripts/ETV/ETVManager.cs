@@ -178,8 +178,11 @@ public class ETVManager : MonoBehaviour {
         nDpoints[2] = new float[] { 0.0f, 0.4f, 0.4f };
         nDpoints[3] = new float[] { 20, 21, 19 };
         DataSetMultiDimensionalPoints dataX = new DataSetMultiDimensionalPoints(nDpoints, new string[] { "x", "y", "z", "T" }, new string[] { "m", "m", "m", "°C" });
-        ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(dataX, new float[] { .1f, .1f, .1f, 5f });
+        GameObject pcp2D = ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(dataX, new float[] { .1f, .1f, .1f, 5f });
+        pcp2D.transform.position = new Vector3(-4,0,0);
 
+        GameObject pcp3D = ServiceLocator.instance.ETV3DFactoryService.CreateETVParallelCoordinatesPlot(dataX, new float[] { .1f, .1f, .1f, 5f });
+        pcp3D.transform.position = new Vector3(4, 0, 0);
     }
 
     // Update is called once per frame

@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using ETV.ETV3D;
 using Model;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class ETV3DFactory : AETVFactory {
     public GameObject etv3DGroupedBarChart;
     public GameObject barChartLegend3D;
     public GameObject ETV3DScatterPlotPrefab;
+    public GameObject ETV3DParallelCoordinatesPlotPrefab;
 
     public override GameObject CreateETVBarChart(DataSet data, int attributeID)
     {
@@ -62,6 +64,11 @@ public class ETV3DFactory : AETVFactory {
 
     public override GameObject CreateETVParallelCoordinatesPlot(DataSetMultiDimensionalPoints data, float[] ticks)
     {
-        throw new System.NotImplementedException();
+        GameObject pcp = Instantiate(ETV3DParallelCoordinatesPlotPrefab);
+
+        pcp.GetComponent<ETV3DParallelCoordinatesPlot>().Init(data, ticks);
+        pcp.GetComponent<ETV3DParallelCoordinatesPlot>().UpdateETV();
+
+        return pcp;
     }
 }

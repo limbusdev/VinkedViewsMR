@@ -158,3 +158,5 @@ MonoBehaviour:
     type: 2}
   ETV3DScatterPlotPrefab: {fileID: 1671202286137060, guid: 136568680d8318a43a8d61beaf7282c1,
     type: 2}
+  ETV3DParallelCoordinatesPlotPrefab: {fileID: 1624213207364540, guid: 1ea11e69e61ebb347adfcd37b485156e,
+    type: 2}

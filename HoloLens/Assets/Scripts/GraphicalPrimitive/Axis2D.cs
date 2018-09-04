@@ -138,7 +138,14 @@ namespace GraphicalPrimitive
             tmVariable.text = labelVariableText;
 
             TextMesh tmUnit = labelUnit.GetComponent<TextMesh>();
-            tmUnit.text = "[" + labelUnitText + "]";
+            if (labelUnitText.Length == 0)
+            {
+                tmUnit.text = "";
+            }
+            else
+            {
+                tmUnit.text = "[" + labelUnitText + "]";
+            }
 
             switch (axisDirection)
             {

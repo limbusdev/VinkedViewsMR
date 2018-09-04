@@ -397,6 +397,12 @@ Prefab:
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114945476759806656, guid: 4521923cd81be95449facd799830f5e3,
+        type: 2}
+      propertyPath: ETV3DBarMapPrefab
+      value: 
+      objectReference: {fileID: 1719707709088542, guid: 4db5577ed2b42ea47ab9aaf79d7d313d,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4521923cd81be95449facd799830f5e3, type: 2}
   m_IsPrefabAsset: 0

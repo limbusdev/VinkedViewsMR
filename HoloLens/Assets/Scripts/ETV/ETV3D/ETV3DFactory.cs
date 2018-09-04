@@ -11,6 +11,7 @@ public class ETV3DFactory : AETVFactory {
     public GameObject barChartLegend3D;
     public GameObject ETV3DScatterPlotPrefab;
     public GameObject ETV3DParallelCoordinatesPlotPrefab;
+    public GameObject ETV3DBarMapPrefab;
 
     public override GameObject CreateETVBarChart(DataSet data, int attributeID)
     {
@@ -70,5 +71,14 @@ public class ETV3DFactory : AETVFactory {
         pcp.GetComponent<ETV3DParallelCoordinatesPlot>().UpdateETV();
 
         return pcp;
+    }
+
+    public GameObject CreateETVBarMap(DataSetMatrix2x2Nominal data, float ticks)
+    {
+        GameObject bm = Instantiate(ETV3DBarMapPrefab);
+
+        bm.GetComponent<ETV3DBarMap>().Init(data, ticks);
+
+        return bm;
     }
 }

@@ -13,6 +13,8 @@ public class ETVAnchorTools : MonoBehaviour {
     public GameObject GadgetRotate;
     public GameObject GadgetScale;
 
+    public GameObject ToolAnchorSphere;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -26,6 +28,7 @@ public class ETVAnchorTools : MonoBehaviour {
     public void EnableTool(Tools tool)
     {
         DisableAllTools();
+        ToolAnchorSphere.SetActive(true);
 
         switch (tool)
         {
@@ -41,5 +44,6 @@ public class ETVAnchorTools : MonoBehaviour {
         GadgetTranslate.SetActive(false);
         GadgetScale.SetActive(false);
         GadgetRotate.SetActive(false);
+        ToolAnchorSphere.SetActive(false);
     }
 }

@@ -187,16 +187,7 @@ public class ETVManager : MonoBehaviour {
 
         anchoredPCP3D.transform.position = new Vector3(4, 0, 0);
 
-        DataSetMatrix2x2Nominal dataSet = new DataSetMatrix2x2Nominal(
-            new string[] { "male", "female", "other" },
-            new string[] { "ungraduated", "Highschool", "University" },
-            new float[,] { { 20, 40, 40 }, { 18, 30, 52 }, { 10, 50, 40 } },
-            "Fraction", "%");
-
-        GameObject bm = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarMap(dataSet, 10);
-        bm.GetComponent<ETV3DBarMap>().ChangeColoringScheme(ETVColorSchemes.Rainbow);
-
-        ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(bm);
+        
     }
 
     // Update is called once per frame

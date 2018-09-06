@@ -182,7 +182,10 @@ public class ETVManager : MonoBehaviour {
         pcp2D.transform.position = new Vector3(-4,0,0);
 
         GameObject pcp3D = ServiceLocator.instance.ETV3DFactoryService.CreateETVParallelCoordinatesPlot(dataX, new float[] { .1f, .1f, .1f, 5f });
-        pcp3D.transform.position = new Vector3(4, 0, 0);
+
+        GameObject anchoredPCP3D = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(pcp3D);
+
+        anchoredPCP3D.transform.position = new Vector3(4, 0, 0);
 
         DataSetMatrix2x2Nominal dataSet = new DataSetMatrix2x2Nominal(
             new string[] { "male", "female", "other" },

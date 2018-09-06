@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class ToolBarInteractionReceiver : InteractionReceiver
 {
+    public GameObject Rotatable;
+
     protected override void InputDown(GameObject obj, InputEventData eventData)
     {
         Debug.Log(obj.name + " : InputDown");
@@ -61,6 +63,20 @@ public class ToolBarInteractionReceiver : InteractionReceiver
                     GameObject tools = Targets[1];
                     ETVAnchorTools etvAT = tools.GetComponent<ETVAnchorTools>();
                     etvAT.EnableTool(Tools.SCALE);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e);
+                }
+                break;
+            case "HolographicButtonReset":
+                Targets[0].SetActive(false); // Disable Toolbar
+                try
+                {
+                    GameObject tools = Targets[1];
+                    ETVAnchorTools etvAT = tools.GetComponent<ETVAnchorTools>();
+                    etvAT.DisableAllTools();
+                    Rotatable.transform.localRotation = Quaternion.Euler(0,0,0);
                 }
                 catch (Exception e)
                 {

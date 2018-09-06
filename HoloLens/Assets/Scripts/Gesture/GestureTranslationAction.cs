@@ -4,12 +4,7 @@ using UnityEngine;
 
 namespace Gestures
 {
-    public enum AxisAndPlaneConstraint
-    {
-        NONE, X_AXIS_ONLY, Y_AXIS_ONLY, Z_AXIS_ONLY, XY_PLANE_ONLY, XZ_PLANE_ONLY, YZ_PLANE_ONLY
-    }
-
-    public class GestureTranslationAction : MonoBehaviour, IManipulationHandler
+    public class GestureTranslationAction : AConstrainedGesture, IManipulationHandler
     {
         [SerializeField]
         [Tooltip("Transform that will be dragged. Default is the components GameObject.")]

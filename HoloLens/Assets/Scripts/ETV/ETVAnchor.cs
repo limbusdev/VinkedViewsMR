@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class ETVAnchor : MonoBehaviour {
 
+    public GameObject VisAnchor;
+
+    public void PutETVintoAnchor(GameObject ETV)
+    {
+        ETV.transform.parent = VisAnchor.transform;
+    }
+
 	// Use this for initialization
 	void Start () {
 		

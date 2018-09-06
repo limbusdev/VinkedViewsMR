@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum Tools
 {
-    ROTATE, SCALE, TRANSLATE
+    ROTATE, SCALE, TRANSLATE, TRANSLATEFREELY
 }
 
 public class ETVAnchorTools : MonoBehaviour {
@@ -12,6 +12,7 @@ public class ETVAnchorTools : MonoBehaviour {
     public GameObject GadgetTranslate;
     public GameObject GadgetRotate;
     public GameObject GadgetScale;
+    public GameObject GadgetTranslateFreely;
 
     public GameObject ToolAnchorSphere;
 
@@ -34,6 +35,7 @@ public class ETVAnchorTools : MonoBehaviour {
         {
             case Tools.ROTATE: GadgetRotate.SetActive(true); break;
             case Tools.SCALE: GadgetScale.SetActive(true); break;
+            case Tools.TRANSLATEFREELY: GadgetTranslateFreely.SetActive(true); break;
             default: GadgetTranslate.SetActive(true); break;
                 
         }
@@ -44,6 +46,7 @@ public class ETVAnchorTools : MonoBehaviour {
         GadgetTranslate.SetActive(false);
         GadgetScale.SetActive(false);
         GadgetRotate.SetActive(false);
+        GadgetTranslateFreely.SetActive(false);
         ToolAnchorSphere.SetActive(false);
     }
 }

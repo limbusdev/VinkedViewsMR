@@ -192,6 +192,8 @@ public class ETVManager : MonoBehaviour {
 
         GameObject bm = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarMap(dataSet, 10);
         bm.GetComponent<ETV3DBarMap>().ChangeColoringScheme(ETVColorSchemes.Rainbow);
+
+        ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(bm);
     }
 
     // Update is called once per frame

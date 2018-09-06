@@ -4,7 +4,9 @@ using ETV.ETV3D;
 using Model;
 using UnityEngine;
 
-public class ETV3DFactory : AETVFactory {
+public class ETV3DFactory : AETVFactory
+{
+    public GameObject ETVAnchor;
 
     public GameObject etv3DBarChart;
     public GameObject etv3DGroupedBarChart;
@@ -80,5 +82,12 @@ public class ETV3DFactory : AETVFactory {
         bm.GetComponent<ETV3DBarMap>().Init(data, ticks);
 
         return bm;
+    }
+
+    public override GameObject PutETVOnAnchor(GameObject ETV)
+    {
+        GameObject Anchor = Instantiate(ETVAnchor);
+        Anchor.GetComponent<ETVAnchor>().PutETVintoAnchor(ETV);
+        return Anchor;
     }
 }

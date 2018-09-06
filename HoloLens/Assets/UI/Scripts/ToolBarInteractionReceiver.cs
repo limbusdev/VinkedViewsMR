@@ -16,6 +16,19 @@ public class ToolBarInteractionReceiver : InteractionReceiver
             case "HolographicButtonSwitchMode":
                 Targets[0].SetActive(!Targets[0].activeSelf); // Toggle Toolbar
                 break;
+            case "HolographicButtonTranslateFreely":
+                Targets[0].SetActive(false); // Disable Toolbar
+                try
+                {
+                    GameObject tools = Targets[1];
+                    ETVAnchorTools etvAT = tools.GetComponent<ETVAnchorTools>();
+                    etvAT.EnableTool(Tools.TRANSLATEFREELY);
+                }
+                catch (Exception e)
+                {
+                    Debug.Log(e);
+                }
+                break;
             case "HolographicButtonTranslate":
                 Targets[0].SetActive(false); // Disable Toolbar
                 try
@@ -54,7 +67,7 @@ public class ToolBarInteractionReceiver : InteractionReceiver
                     Debug.Log(e);
                 }
                 break;
-            case "HolographicButtonQuit":
+            case "HolographicButtonClose":
                 Targets[0].SetActive(false); // Disable Toolbar
                 try
                 {

@@ -55,6 +55,11 @@ public class ETV2DFactory : AETVFactory
         return Instantiate(ETV2DVirtualDevicePrefab);
     }
 
+    public override GameObject PutETVOnAnchor(GameObject ETV)
+    {
+        throw new System.NotImplementedException();
+    }
+
     // Use this for initialization
     void Start () {
 		

@@ -150,6 +150,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167da45d2e28f284d99dbe80ea601020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ETVAnchor: {fileID: 1626009144967710, guid: 1fd7ca43b384af645b20e838dc0aef49, type: 2}
   etv3DBarChart: {fileID: 1609755241933270, guid: 47b892c86c8a58b49a108da03d68cbf5,
     type: 2}
   etv3DGroupedBarChart: {fileID: 1060095881637280, guid: a31c6d974c345d446a0f75c60e652783,
@@ -159,4 +160,6 @@ MonoBehaviour:
   ETV3DScatterPlotPrefab: {fileID: 1671202286137060, guid: 136568680d8318a43a8d61beaf7282c1,
     type: 2}
   ETV3DParallelCoordinatesPlotPrefab: {fileID: 1624213207364540, guid: 1ea11e69e61ebb347adfcd37b485156e,
+    type: 2}
+  ETV3DBarMapPrefab: {fileID: 1719707709088542, guid: 4db5577ed2b42ea47ab9aaf79d7d313d,
     type: 2}

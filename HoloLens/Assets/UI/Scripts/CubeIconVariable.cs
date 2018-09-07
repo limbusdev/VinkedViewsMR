@@ -9,6 +9,7 @@ public enum VariableType
 
 public class CubeIconVariable : MonoBehaviour
 {
+    public TextMesh text;
 
     [SerializeField]
     public Transform IconPosition;
@@ -69,6 +70,15 @@ public class CubeIconVariable : MonoBehaviour
 
         GameObject icon = Instantiate(IconValues[iconNum]);
         icon.transform.parent = IconPosition;
+
+        string name = "";
+
+        foreach(string v in variableNames)
+        {
+            name += (v + "\n");
+        }
+
+        text.text = name;
     }
 
 	// Use this for initialization

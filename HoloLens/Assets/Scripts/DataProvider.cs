@@ -45,11 +45,7 @@ public class DataProvider : MonoBehaviour
         nominalDatasets = new Dictionary<string, string[]>();
         ordinalDatasets = new Dictionary<string, float[]>();
         datasetTypes = new Dictionary<string, DataType>();
-    }
 
-    // Use this for initialization
-    void Start ()
-    {
         string[][] grid = CSVReader.SplitCsvGrid(csvFile.text);
         variables = new string[grid.Length];
         units = new string[grid.Length];
@@ -69,7 +65,7 @@ public class DataProvider : MonoBehaviour
             datasetTypes.Add(currentVariableName, type);
 
 
-            
+
 
             if (type == DataType.ORDINAL)
             {
@@ -113,8 +109,14 @@ public class DataProvider : MonoBehaviour
                 Debug.Log(ds);
             }
 
-            
+
         }
+    }
+
+    // Use this for initialization
+    void Start ()
+    {
+        
     }
 	
 	// Update is called once per frame

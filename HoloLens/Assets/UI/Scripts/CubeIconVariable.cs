@@ -2,11 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum VariableType
-{
-    NOMINAL, ORDINAL
-}
-
 public class CubeIconVariable : MonoBehaviour
 {
     public TextMesh text;
@@ -22,10 +17,10 @@ public class CubeIconVariable : MonoBehaviour
     public int IconType = 0;
     public string[] VariableNames;
     public string[] UnitNames;
-    public VariableType[] VariableTypes;
+    public DataType[] VariableTypes;
     public int dimension;
 
-    public void Init(string[] variableNames, string[] unitNames, VariableType[] variableTypes)
+    public void Init(string[] variableNames, string[] unitNames, DataType[] variableTypes)
     {
         VariableNames = variableNames;
         UnitNames = unitNames;
@@ -36,9 +31,9 @@ public class CubeIconVariable : MonoBehaviour
         int countOrdinalVars = 0;
         int countNominalVars = 0;
 
-        foreach(VariableType t in variableTypes)
+        foreach(DataType t in variableTypes)
         {
-            if (t == VariableType.ORDINAL) countOrdinalVars++;
+            if (t == DataType.ORDINAL) countOrdinalVars++;
             else                           countNominalVars++;
         }
 
@@ -49,7 +44,7 @@ public class CubeIconVariable : MonoBehaviour
         switch (dimension)
         {
             case 1:
-                iconNum = (variableTypes[0] == VariableType.ORDINAL) ? 0 : 1;
+                iconNum = (variableTypes[0] == DataType.ORDINAL) ? 0 : 1;
                 break;
             case 2:
                 if      (allVariablesOrdinal) iconNum = 2;
@@ -70,12 +65,20 @@ public class CubeIconVariable : MonoBehaviour
 
         GameObject icon = Instantiate(IconValues[iconNum]);
         icon.transform.parent = IconPosition;
+        icon.transform.localPosition = new Vector3();
 
         string name = "";
 
-        foreach(string v in variableNames)
+        if (variableNames.Length == 1)
         {
-            name += (v + "\n");
+            name = variableNames[0];
+        }
+        else
+        {
+            foreach (string v in variableNames)
+            {
+                name += (v + "\n");
+            }
         }
 
         text.text = name;

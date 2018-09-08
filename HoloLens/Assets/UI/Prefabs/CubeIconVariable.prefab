@@ -454,6 +454,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e61781abedc21104481ee63150030a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  text: {fileID: 102682090323168544}
   IconPosition: {fileID: 4419101882427134}
   IconValues:
   - {fileID: 1304317774392646, guid: 9f24c83d23b7092478687a10fc3c9762, type: 2}

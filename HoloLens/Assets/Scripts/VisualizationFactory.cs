@@ -7,9 +7,13 @@ public class VisualizationFactory : MonoBehaviour {
 
     public GameObject NewETVPosition;
 
-	// Use this for initialization
-	void Start ()
+
+    // Use this for initialization
+    void Start ()
     {
+        
+
+
         DataSetMatrix2x2Nominal dataSet = new DataSetMatrix2x2Nominal(
             new string[] { "male", "female", "other" },
             new string[] { "ungraduated", "Highschool", "University" },

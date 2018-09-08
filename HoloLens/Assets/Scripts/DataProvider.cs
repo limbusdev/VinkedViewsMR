@@ -20,6 +20,26 @@ public class DataProvider : MonoBehaviour
     private Dictionary<string, float[]> ordinalDatasets;
     private Dictionary<string, DataType> datasetTypes;
 
+    public string[] GetAvailableVariables()
+    {
+        return variables;
+    }
+
+    public string[] GetNominalDataSet(string key)
+    {
+        return nominalDatasets[key];
+    }
+
+    public float[] GetOrdinalDataSet(string key)
+    {
+        return ordinalDatasets[key];
+    }
+
+    public DataType GetTypeOfVariable(string key)
+    {
+        return datasetTypes[key];
+    }
+
     private void Awake()
     {
         nominalDatasets = new Dictionary<string, string[]>();

@@ -1,5 +1,4 @@
-﻿using SODA;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
@@ -113,8 +112,6 @@ public class DataProvider : MonoBehaviour
 
 
         }
-
-        var client = new SodaClient("","");
         
     }
 

@@ -11,11 +11,7 @@ namespace GraphicalPrimitive
         // Use this for initialization
         void Start()
         {
-            length = 2;
-            diameter = .01f;
-            labelVariableText = "Meters";
-            labelUnitText = "m";
-            UpdateAxis();
+
         }
 
         // Update is called once per frame
@@ -23,7 +19,13 @@ namespace GraphicalPrimitive
         {
 
         }
-        
+
+        private void Awake()
+        {
+            if(ticks == null)
+                ticks = new List<GameObject>();
+        }
+
         public GameObject axisBody;
         public GameObject axisBodyGeometry;
         public GameObject axisTip;
@@ -38,7 +40,6 @@ namespace GraphicalPrimitive
                 axisBody.transform.localScale = new Vector3(diameter, length - diameter * 4f, diameter);
                 axisTip.transform.localScale = new Vector3(diameter * 3f, diameter * 4f, diameter * 3f);
                 axisTip.transform.localPosition = new Vector3(0, length - diameter * 4f, 0);
-                labelVariable.transform.localPosition = labelAnchor.transform.position;
             }
             else
             {
@@ -50,7 +51,11 @@ namespace GraphicalPrimitive
             axisTip.GetComponent<Renderer>().material.color = color;
 
             // Update Ticks
-            ticks = new List<GameObject>();
+            foreach(GameObject go in ticks)
+            {
+                Destroy(go);
+            }
+            ticks.Clear();
 
             Vector3 tickDirection;
             switch (axisDirection)
@@ -111,7 +116,13 @@ namespace GraphicalPrimitive
             tmVariable.text = labelVariableText;
 
             TextMesh tmUnit = labelUnit.GetComponent<TextMesh>();
-            tmUnit.text = "[" + labelUnitText + "]";
+            if(labelUnitText.Length == 0)
+            {
+                tmUnit.text = "";
+            } else
+            {
+                tmUnit.text = "[" + labelUnitText + "]";
+            }
 
             switch (axisDirection)
             {

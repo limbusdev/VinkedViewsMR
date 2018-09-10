@@ -163,3 +163,5 @@ MonoBehaviour:
     type: 2}
   ETV3DBarMapPrefab: {fileID: 1719707709088542, guid: 4db5577ed2b42ea47ab9aaf79d7d313d,
     type: 2}
+  ETV3DSingleAxisPrefab: {fileID: 1839437423778656, guid: edf08bf8f25b6b64eb5a745a1bcca232,
+    type: 2}

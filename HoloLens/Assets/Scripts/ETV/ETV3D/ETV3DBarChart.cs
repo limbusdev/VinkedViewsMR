@@ -13,7 +13,7 @@ using UnityEngine;
 public class ETV3DBarChart : AETV3D {
 
     private DataSet dataSet;
-    private IDictionary<string, DataObject> data;
+    private IDictionary<string, InformationObject> data;
     public GameObject Anchor;
     private IList<GameObject> bars;
     private int attributeID = 0;
@@ -91,7 +91,7 @@ public class ETV3DBarChart : AETV3D {
      * @param range         maximum - minimum value of this attribute
      * @param attributeID   which attribute
      * */
-    private GameObject CreateBar(string category, DataObject obj, int attributeID, float range)
+    private GameObject CreateBar(string category, InformationObject obj, int attributeID, float range)
     {
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
         

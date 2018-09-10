@@ -42,6 +42,12 @@ namespace GraphicalPrimitive
             }
         }
 
+        public void CalculateTickResolution()
+        {
+            float range = Mathf.Abs(max - min);
+            tickResolution = range / 10f;
+        }
+
         protected Vector3 direction = Vector3.up;
         public string labelVariableText { get; set; }
         public string labelUnitText { get; set; }

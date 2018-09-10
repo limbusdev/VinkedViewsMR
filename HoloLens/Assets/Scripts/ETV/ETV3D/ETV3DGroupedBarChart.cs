@@ -14,7 +14,7 @@ public class ETV3DGroupedBarChart : AETV3D {
 
     public GameObject barGroup3D;           // Populate in Editor
 
-    private IDictionary<string, DataObject> data;
+    private IDictionary<string, InformationObject> data;
     public GameObject Anchor;
     private IList<GameObject> barGroups;
     private List<Color> colors;
@@ -23,7 +23,7 @@ public class ETV3DGroupedBarChart : AETV3D {
     private float yRange = 1f;
     private float xRange = 1f;
 
-    public void Init(IDictionary<string, DataObject> data)
+    public void Init(IDictionary<string, InformationObject> data)
     {
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
         barGroups = new List<GameObject>();

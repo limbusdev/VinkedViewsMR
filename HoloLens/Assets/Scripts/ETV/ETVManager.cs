@@ -11,38 +11,38 @@ public class ETVManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        IDictionary<string, DataObject> barChartValues = new Dictionary<string,DataObject>();
-        barChartValues.Add("Baden-Württemberg",     new DataObject(
+        IDictionary<string, InformationObject> barChartValues = new Dictionary<string,InformationObject>();
+        barChartValues.Add("Baden-Württemberg",     new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 10880000f, 35751.65f }));
-        barChartValues.Add("Bayern",                new DataObject(
+        barChartValues.Add("Bayern",                new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 12843500f, 70549.19f }));
-        barChartValues.Add("Berlin",                new DataObject(
+        barChartValues.Add("Berlin",                new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 3520000f, 891.75f }));
-        barChartValues.Add("Brandenburg",           new DataObject(
+        barChartValues.Add("Brandenburg",           new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 2484800f, 29477.16f }));
-        barChartValues.Add("Bremem",                new DataObject(
+        barChartValues.Add("Bremem",                new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 671500f, 404.23f }));
-        barChartValues.Add("Hamburg",               new DataObject(
+        barChartValues.Add("Hamburg",               new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 1860800f, 755.16f }));
-        barChartValues.Add("Hessen",                new DataObject(
+        barChartValues.Add("Hessen",                new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 6176000f, 21114.72f }));
-        barChartValues.Add("Mecklenurg-Vorpommern", new DataObject(
+        barChartValues.Add("Mecklenurg-Vorpommern", new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 1612300f, 23174.17f }));
-        barChartValues.Add("Niedersachsen",         new DataObject(
+        barChartValues.Add("Niedersachsen",         new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 7927000f, 47618.24f }));
-        barChartValues.Add("Nordrhein-Westfalen",   new DataObject(
+        barChartValues.Add("Nordrhein-Westfalen",   new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 17865000f, 34083.52f }));
-        barChartValues.Add("Rheinland-Pfalz",       new DataObject(
+        barChartValues.Add("Rheinland-Pfalz",       new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 4073300f, 19847.39f }));
-        barChartValues.Add("Saarland",              new DataObject(
+        barChartValues.Add("Saarland",              new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 995600f, 2568.65f }));
-        barChartValues.Add("Sachsen",               new DataObject(
+        barChartValues.Add("Sachsen",               new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 4084000f, 18414.82f }));
-        barChartValues.Add("Sachsen-Anhalt",        new DataObject(
+        barChartValues.Add("Sachsen-Anhalt",        new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 2245500f, 20445.26f }));
-        barChartValues.Add("Schleswig-Holstein",    new DataObject(
+        barChartValues.Add("Schleswig-Holstein",    new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 2865000f, -15763.18f }));
-        barChartValues.Add("Thüringen",             new DataObject(
+        barChartValues.Add("Thüringen",             new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 2170700f, 16172.14f }));
 
 

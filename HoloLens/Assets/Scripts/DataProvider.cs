@@ -1,7 +1,9 @@
-﻿using System.Collections;
+﻿using SODA;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+
 
 public enum DataType
 {
@@ -111,6 +113,9 @@ public class DataProvider : MonoBehaviour
 
 
         }
+
+        var client = new SodaClient("","");
+        
     }
 
     // Use this for initialization

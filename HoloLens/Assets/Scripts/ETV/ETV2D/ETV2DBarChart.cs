@@ -17,7 +17,7 @@ public class ETV2DBarChart : AETV2D
      * @param range         maximum - minimum value of this attribute
      * @param attributeID   which attribute
      * */
-    private GameObject CreateBar(string category, DataObject obj, int attributeID, float range)
+    private GameObject CreateBar(string category, InformationObject obj, int attributeID, float range)
     {
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 

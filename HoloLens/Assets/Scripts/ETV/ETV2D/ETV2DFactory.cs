@@ -50,6 +50,11 @@ public class ETV2DFactory : AETVFactory
         return scatterPlot;
     }
 
+    public override GameObject CreateSingleAxis(DataSet data, int attributeID)
+    {
+        throw new System.NotImplementedException();
+    }
+
     public GameObject CreateVirtualDevice()
     {
         return Instantiate(ETV2DVirtualDevicePrefab);

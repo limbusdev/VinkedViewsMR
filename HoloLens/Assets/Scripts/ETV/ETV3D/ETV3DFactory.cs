@@ -14,6 +14,7 @@ public class ETV3DFactory : AETVFactory
     public GameObject ETV3DScatterPlotPrefab;
     public GameObject ETV3DParallelCoordinatesPlotPrefab;
     public GameObject ETV3DBarMapPrefab;
+    public GameObject ETV3DSingleAxisPrefab;
 
     public override GameObject CreateETVBarChart(DataSet data, int attributeID)
     {
@@ -24,7 +25,7 @@ public class ETV3DFactory : AETVFactory
         return barChart;
     }
 
-    public GameObject Create3DGroupedBarChart(IDictionary<string, DataObject> data)
+    public GameObject Create3DGroupedBarChart(IDictionary<string, InformationObject> data)
     {
         GameObject barChart = Instantiate(etv3DGroupedBarChart);
 
@@ -51,6 +52,14 @@ public class ETV3DFactory : AETVFactory
 	void Update () {
 		
 	}
+
+    public override GameObject CreateSingleAxis(DataSet data, int attributeID)
+    {
+        GameObject singleAxis3D = Instantiate(ETV3DSingleAxisPrefab);
+        singleAxis3D.GetComponent<ETV3DSingleAxis>().Init(data, attributeID);
+
+        return singleAxis3D;
+    }
 
     public override GameObject CreateETVLineChart(DataSetLines data, float minX, float maxX, float minY, float maxY, float ticksX, float ticksY)
     {

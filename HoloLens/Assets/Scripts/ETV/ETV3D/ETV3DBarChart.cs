@@ -23,7 +23,7 @@ public class ETV3DBarChart : AETV3D {
     private float xRange = 1f;
 
     public void Init(DataSet dataSet, int attributeID)
-    {
+    {/*
         this.data = dataSet.dataObjects;
         this.dataSet = dataSet;
 
@@ -59,7 +59,7 @@ public class ETV3DBarChart : AETV3D {
         }
 
 
-        SetUpAxis();
+        SetUpAxis();*/
     }
 
     public override void SetUpAxis()
@@ -94,11 +94,12 @@ public class ETV3DBarChart : AETV3D {
     private GameObject CreateBar(string category, InformationObject obj, int attributeID, float range)
     {
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
-        
-        float value = data[category].attributeValues[attributeID];
+
+        //float value = data[category].attributeValues[attributeID];
+        float value = 0;
         GameObject bar = factory3D.CreateBar(value, range, .1f, .1f);
        
-        bar.GetComponent<Bar3D>().SetLabelText(data[category].attributeValues[attributeID].ToString());
+        //bar.GetComponent<Bar3D>().SetLabelText(data[category].attributeValues[attributeID].ToString());
 
 
         return bar;

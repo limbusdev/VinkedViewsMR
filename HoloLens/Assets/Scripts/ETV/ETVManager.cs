@@ -10,7 +10,7 @@ public class ETVManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+        /*
         IDictionary<string, InformationObject> barChartValues = new Dictionary<string,InformationObject>();
         barChartValues.Add("Baden-Württemberg",     new InformationObject(
             new string[] { "Population", "Area" }, new float[] { 10880000f, 35751.65f }));
@@ -53,7 +53,7 @@ public class ETVManager : MonoBehaviour {
             new string[] { "People", "km^2" },
             barChartValues
             );
-
+            */
 
 
         /*GameObject EtvBarChart = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarChart(cityDataSet, 0);

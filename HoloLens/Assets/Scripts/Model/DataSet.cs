@@ -1,17 +1,18 @@
-﻿using System.Collections;
+﻿using Model.Attributes;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DataDimensionMeasures
 {
-    public DataType type;
+    public LevelOfMeasurement type;
     public float range, zeroBoundRange;
     public float min, zeroBoundMin;
     public float max, zeroBoundMax;
     public string variableName;
     public string variableUnit;
 
-    public DataDimensionMeasures(string variableName, float range, float zeroBoundRange, float min, float zeroBoundMin, float max, float zeroBoundMax, string variableUnit = "", DataType type = DataType.ORDINAL)
+    public DataDimensionMeasures(string variableName, float range, float zeroBoundRange, float min, float zeroBoundMin, float max, float zeroBoundMax, string variableUnit = "", LevelOfMeasurement type = LevelOfMeasurement.NOMINAL)
     {
         this.type = type;
         this.range = range;
@@ -31,49 +32,39 @@ public class DataSet
     public string Description { get; set; }
     public string[] Variables { get; set; }
     public string[] Units { get; set; }
-    public IDictionary<string, InformationObject> dataObjects {get; set;}
+    public IList<InformationObject> dataObjects {get; set;}
     public IDictionary<string, DataDimensionMeasures> dataMeasures { get; set; }
     
-
-    
-
-    public DataSet(string title, string description, string[] variables, string[] units, IDictionary<string, InformationObject> dataObjects)
+    public DataSet(string title, string description, IList<InformationObject> dataObjects)
     {
         Title = title;
         Description = description;
-        Variables = variables;
-        Units = units;
         this.dataObjects = dataObjects;
+        this.dataMeasures = new Dictionary<string, DataDimensionMeasures>();
 
-        // Calculate Data Measures
-        foreach(string variable in dataObjects.Keys)
+        // Calculate Data Measures for Float Attributes
+        int floatAttCounter = 0;
+        foreach(GenericAttribute<float> attribute in dataObjects[0].attributesFloat)
         {
-            string varName = variable;
-            InformationObject dataObj = dataObjects[variable];
+            DataDimensionMeasures measure;
+            measure = DataProcessor.FloatAttribute.CalculateMeasures(dataObjects, floatAttCounter);
+            dataMeasures.Add(attribute.name, measure);
+            floatAttCounter++;
         }
 
-        /*
-        this.min = ordinalValues[0, 0];
-        this.max = ordinalValues[0, 0];
-        for(int row = 0; row < ordinalValues.Rank; row++)
+    }
+
+    public override string ToString()
+    {
+        string outString = "";
+
+        outString += "DataSet: " + Title + "\n\n";
+
+        foreach(InformationObject o in dataObjects)
         {
-            for(int col = 0; col < ordinalValues.GetLength(row); col++)
-            {
-                float value = ordinalValues[row, col];
-                if(value < this.min)
-                {
-                    this.min = value;
-                }
-                if(value > this.max)
-                {
-                    this.max = value;
-                }
-            }
+            outString += o.ToString() + "\n";
         }
 
-        this.range = this.max - this.min;
-        this.zeroBoundMin = (this.min > 0) ? 0 : this.min;
-        this.zeroBoundMax = (this.max < 0) ? 0 : this.max;
-        this.zeroBoundRange = this.zeroBoundMax - this.zeroBoundMin;*/
+        return outString;
     }
 }

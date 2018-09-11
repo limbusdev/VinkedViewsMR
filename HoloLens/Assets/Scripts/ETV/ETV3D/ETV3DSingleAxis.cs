@@ -12,7 +12,7 @@ public class ETV3DSingleAxis : AETV3D
 
     // ........................................................................ Private Variables
     private DataSet data;
-    private DataType type;
+    private LevelOfMeasurement type;
     private int attributeID;
     private GameObject axis;
 
@@ -23,7 +23,7 @@ public class ETV3DSingleAxis : AETV3D
         this.data = data;
         this.attributeID = attributeID;
 
-        float attributeRange = DataProcessor.CalculateRange(data.dataObjects, attributeID);
+        float attributeRange = DataProcessor.FloatAttribute.CalculateRange(data.dataObjects, attributeID);
 
         
         SetUpAxis();

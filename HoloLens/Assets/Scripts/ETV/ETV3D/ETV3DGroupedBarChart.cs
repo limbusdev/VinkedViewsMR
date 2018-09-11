@@ -23,15 +23,15 @@ public class ETV3DGroupedBarChart : AETV3D {
     private float yRange = 1f;
     private float xRange = 1f;
 
-    public void Init(IDictionary<string, InformationObject> data)
-    {
+    public void Init(DataSet data)
+    {/*
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
         barGroups = new List<GameObject>();
         colors = new List<Color>();
 
         IEnumerator<string> keyEnum = data.Keys.GetEnumerator();
         keyEnum.MoveNext();
-        float[] attributeRanges = new float[data[keyEnum.Current].attributeValues.Length];
+        float[] attributeRanges = new float[data[keyEnum.Current].attributes.Length];
 
         float scaleX, scaleY, scaleZ;
         scaleX = .015f * data.Count;
@@ -62,7 +62,7 @@ public class ETV3DGroupedBarChart : AETV3D {
         }
 
 
-        SetUpAxis();
+        SetUpAxis();*/
     }
 
     public override void SetUpAxis()
@@ -96,7 +96,7 @@ public class ETV3DGroupedBarChart : AETV3D {
     }
 
     public void SetLegendActive(bool active)
-    {
+    {/*
         if(active)
         {
             string[] names = new string[data.Count];
@@ -112,7 +112,7 @@ public class ETV3DGroupedBarChart : AETV3D {
         } else
         {
             Destroy(legend);
-        }
+        }*/
     }
 
 	// Use this for initialization

@@ -20,15 +20,15 @@ public class ETV2DBarChart : AETV2D
     private GameObject CreateBar(string category, InformationObject obj, int attributeID, float range)
     {
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
-
+        /*
         Debug.Log("creating bar: " + data.dataObjects[category].attributeValues[attributeID] + " Height: ");
         
         float value = data.dataObjects[category].attributeValues[attributeID];
         GameObject bar = factory2D.CreateBar(value, range, .1f, .1f);
 
-        bar.GetComponent<Bar2D>().SetLabelText(data.dataObjects[category].attributeValues[attributeID].ToString());
+        bar.GetComponent<Bar2D>().SetLabelText(data.dataObjects[category].attributeValues[attributeID].ToString());*/
 
-        return bar;
+        return null; // bar;
     }
 
     public void Init(DataSet dataSet, int attributeID)
@@ -44,10 +44,10 @@ public class ETV2DBarChart : AETV2D
         
 
         this.attributeID = attributeID;
-        float attributeRange = DataProcessor.CalculateRange(data.dataObjects, attributeID);
+        float attributeRange = DataProcessor.FloatAttribute.CalculateRange(data.dataObjects, attributeID);
 
         int categoryCounter = 0;
-
+        /*
         foreach (string category in data.dataObjects.Keys)
         {
             GameObject bar = CreateBar(category, data.dataObjects[category], attributeID, attributeRange);
@@ -60,7 +60,7 @@ public class ETV2DBarChart : AETV2D
             bar.GetComponent<Bar2D>().SetLabelCategoryText(labelString);
 
             categoryCounter++;
-        }
+        }*/
 
 
         SetUpAxis();

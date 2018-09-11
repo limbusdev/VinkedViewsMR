@@ -29,7 +29,7 @@ public class ETV3DFactory : AETVFactory
     {
         GameObject barChart = Instantiate(etv3DGroupedBarChart);
 
-        barChart.GetComponent<ETV3DGroupedBarChart>().Init(data);
+        //barChart.GetComponent<ETV3DGroupedBarChart>().Init(data);
 
         return barChart;
     }

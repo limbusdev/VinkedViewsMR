@@ -1,5 +1,6 @@
 ﻿using HoloToolkit.Unity.Collections;
 using Model;
+using Model.Attributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,9 +15,8 @@ public class VisualizationFactory : MonoBehaviour {
 
     // Use this for initialization
     void Start ()
-    {
-        
-
+    {   
+        /*
 
         DataSetMatrix2x2Nominal dataSet = new DataSetMatrix2x2Nominal(
             new string[] { "male", "female", "other" },
@@ -89,7 +89,7 @@ public class VisualizationFactory : MonoBehaviour {
 
         GameObject singleAxis3D = ServiceLocator.instance.ETV3DFactoryService.CreateSingleAxis(cityDataSet, 0);
         GameObject anchoredAxis = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(singleAxis3D);
-        anchoredAxis.transform.Translate(new Vector3(-1, 0, 0));
+        anchoredAxis.transform.Translate(new Vector3(-1, 0, 0));*/
     }
 	
 	// Update is called once per frame

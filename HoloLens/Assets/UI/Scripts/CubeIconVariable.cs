@@ -17,10 +17,10 @@ public class CubeIconVariable : MonoBehaviour
     public int IconType = 0;
     public string[] VariableNames;
     public string[] UnitNames;
-    public DataType[] VariableTypes;
+    public LevelOfMeasurement[] VariableTypes;
     public int dimension;
 
-    public void Init(string[] variableNames, string[] unitNames, DataType[] variableTypes)
+    public void Init(string[] variableNames, string[] unitNames, LevelOfMeasurement[] variableTypes)
     {
         VariableNames = variableNames;
         UnitNames = unitNames;
@@ -31,9 +31,9 @@ public class CubeIconVariable : MonoBehaviour
         int countOrdinalVars = 0;
         int countNominalVars = 0;
 
-        foreach(DataType t in variableTypes)
+        foreach(LevelOfMeasurement t in variableTypes)
         {
-            if (t == DataType.ORDINAL) countOrdinalVars++;
+            if (t == LevelOfMeasurement.ORDINAL) countOrdinalVars++;
             else                           countNominalVars++;
         }
 
@@ -44,7 +44,7 @@ public class CubeIconVariable : MonoBehaviour
         switch (dimension)
         {
             case 1:
-                iconNum = (variableTypes[0] == DataType.ORDINAL) ? 0 : 1;
+                iconNum = (variableTypes[0] == LevelOfMeasurement.ORDINAL) ? 0 : 1;
                 break;
             case 2:
                 if      (allVariablesOrdinal) iconNum = 2;

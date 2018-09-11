@@ -1,25 +1,23 @@
-﻿using System.Collections;
+﻿using Model.Attributes;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
+using System.Linq;
 
-
-public enum DataType
-{
-    ORDINAL, NOMINAL
-}
 
 public class DataProvider : MonoBehaviour
 {
     
 
-    public TextAsset csvFile;
+    public TextAsset[] csvFile;
+    public DataSet[] dataSets;
 
     private string[] variables;
     private string[] units;
-    private Dictionary<string, string[]> nominalDatasets;
-    private Dictionary<string, float[]> ordinalDatasets;
-    private Dictionary<string, DataType> datasetTypes;
+    private Dictionary<string, string[]> stringDatasets;
+    private Dictionary<string, float[]> floatDatasets;
+    private Dictionary<string, LevelOfMeasurement> variableTypes;
 
     public string[] GetAvailableVariables()
     {
@@ -28,32 +26,37 @@ public class DataProvider : MonoBehaviour
 
     public string[] GetNominalDataSet(string key)
     {
-        return nominalDatasets[key];
+        return stringDatasets[key];
     }
 
     public float[] GetOrdinalDataSet(string key)
     {
-        return ordinalDatasets[key];
+        return floatDatasets[key];
     }
 
-    public DataType GetTypeOfVariable(string key)
+    public LevelOfMeasurement GetTypeOfVariable(string key)
     {
-        return datasetTypes[key];
+        return variableTypes[key];
     }
 
     private void Awake()
     {
-        nominalDatasets = new Dictionary<string, string[]>();
-        ordinalDatasets = new Dictionary<string, float[]>();
-        datasetTypes = new Dictionary<string, DataType>();
+        dataSets = new DataSet[csvFile.Length];
 
-        string[][] grid = CSVReader.SplitCsvGrid(csvFile.text);
+        // Initialize Sets
+        stringDatasets = new Dictionary<string, string[]>();
+        floatDatasets = new Dictionary<string, float[]>();
+        variableTypes = new Dictionary<string, LevelOfMeasurement>();
+
+        // Initialize Grid to store values
+        string[][] grid = CSVReader.SplitCsvGrid(csvFile[0].text);
         variables = new string[grid.Length];
         units = new string[grid.Length];
 
-        DataType type = DataType.NOMINAL;
+        LevelOfMeasurement type = LevelOfMeasurement.NOMINAL;
         float parseResult = 0;
 
+        // Iterate over Grid
         for (int variable = 0; variable < grid.Length; variable++)
         {
             string currentVariableName = grid[variable][0];
@@ -61,17 +64,15 @@ public class DataProvider : MonoBehaviour
 
             if (float.TryParse(grid[variable][1], out parseResult))
             {
-                type = DataType.ORDINAL;
+                type = LevelOfMeasurement.RATIO;
             }
-            datasetTypes.Add(currentVariableName, type);
+            variableTypes.Add(currentVariableName, type);
+            
 
-
-
-
-            if (type == DataType.ORDINAL)
+            if (type == LevelOfMeasurement.RATIO)
             {
                 float[] newDataSet = new float[grid[variable].Length - 1];
-                ordinalDatasets.Add(currentVariableName, newDataSet);
+                floatDatasets.Add(currentVariableName, newDataSet);
 
                 for (int i = 1; i < grid[variable].Length; i++)
                 {
@@ -92,10 +93,10 @@ public class DataProvider : MonoBehaviour
                 }
                 Debug.Log(ds);
             }
-            else /* DataType.NOMINAL */
+            else /* LevelOfMeasurement.NOMINAL */
             {
                 string[] newDataSet = new string[grid[variable].Length - 1];
-                nominalDatasets.Add(currentVariableName, newDataSet);
+                stringDatasets.Add(currentVariableName, newDataSet);
 
                 for (int i = 1; i < grid[variable].Length; i++)
                 {
@@ -109,10 +110,67 @@ public class DataProvider : MonoBehaviour
                 }
                 Debug.Log(ds);
             }
-
-
         }
-        
+
+        dataSets[0] = AssembleDataSet(variables, stringDatasets, floatDatasets, null, null, null);
+
+        Debug.Log(dataSets[0]);
+    }
+
+    private static DataSet AssembleDataSet(
+        string[] variables, 
+        IDictionary<string,string[]> stringVars, 
+        IDictionary<string, float[]> floatVars,
+        IDictionary<string, int[]> intVars,
+        IDictionary<string, Vector2[]> vec2Vars,
+        IDictionary<string, Vector3[]> vec3Vars)
+    {
+        int sampleCount = floatVars.First().Value.Length;
+        int stringVarsCount = stringVars.Count;
+        int floatVarsCount = floatVars.Count;
+        int intVarsCount = 0;
+        int vector2VarsCount = 0;
+        int vector3VarsCount = 0;
+
+        var infoObjs = new List<InformationObject>();
+
+        for(int sample = 0; sample < sampleCount; sample++)
+        {
+            // Create new information object
+            InformationObject obj = new InformationObject(
+                new GenericAttribute<string>[stringVarsCount],
+                new GenericAttribute<float>[floatVarsCount],
+                new GenericAttribute<int>[intVarsCount],
+                new GenericAttribute<Vector2>[vector2VarsCount],
+                new GenericAttribute<Vector3>[vector3VarsCount]
+                );
+
+            // Fill new information object's float attributes
+            int variable = 0;
+            foreach(string variableName in floatVars.Keys)
+            {
+                var newFloatAttribute = new GenericAttribute<float>(
+                    variableName, floatVars[variableName][sample], LevelOfMeasurement.RATIO);
+                obj.attributesFloat[variable] = newFloatAttribute;
+                variable++;
+            }
+
+            // Fill new information object's string attributes
+            variable = 0;
+            foreach(string variableName in stringVars.Keys)
+            {
+                var newAttribute = new GenericAttribute<string>(
+                    variableName, stringVars[variableName][sample], LevelOfMeasurement.NOMINAL);
+                obj.attributesString[variable] = newAttribute;
+                variable++;
+            }
+
+            infoObjs.Add(obj);
+        }
+
+        DataSet dataSet0 = new DataSet("DataSet0", "", infoObjs);
+
+        return dataSet0;
     }
 
     // Use this for initialization

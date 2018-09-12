@@ -196,51 +196,50 @@ public class VisualizationFactory : MonoBehaviour {
                 {
                     if(!other.Equals(go))
                     {
-                        GameObject visBridge = new GameObject("VisBridge");
+                        var visBridge = CreateEmptyVisBridge();
 
-                        CurvedLineRenderer clr = visBridge.AddComponent<CurvedLineRenderer>();
-                        clr.lineWidth = 0.01f;
-                        clr.lineSegmentSize = 0.01f;
-                        clr.showGizmos = false;
+                        GameObject startPort = go.GetComponent<AGraphicalPrimitive>().visBridgePort;
+                        GameObject endPort = other.GetComponent<AGraphicalPrimitive>().visBridgePort;
+
+                        AddCurvedLinePoint(visBridge, startPort.transform.position);
+
+                        Vector3 optPad = GetOptimalPaddingPosition(endPort, go.GetComponent<AGraphicalPrimitive>());
+                        AddCurvedLinePoint(visBridge, optPad);
+
+                        optPad = GetOptimalPaddingPosition(startPort, other.GetComponent<AGraphicalPrimitive>());
+                        AddCurvedLinePoint(visBridge, optPad);
                         
-                        LineRenderer lr = visBridge.GetComponent<LineRenderer>();
-                        lr.startColor = Color.green;
-                        lr.endColor = Color.yellow;
-                        lr.material = lineMaterial;
-                        lr.startWidth = 0.01f;
-                        lr.endWidth = 0.01f;
-
-                        GameObject visBridgePort = go.GetComponent<AGraphicalPrimitive>().visBridgePort;
-                        GameObject otherVisBridgePort = other.GetComponent<AGraphicalPrimitive>().visBridgePort;
-                        
-                        var clp = new GameObject("LinePoint");
-                        clp.AddComponent<CurvedLinePoint>();
-                        clp.transform.position = visBridgePort.transform.position;
-                        clp.transform.parent = visBridge.transform;
-
-                        Vector3 optPad = GetOptimalPaddingPosition(otherVisBridgePort, go.GetComponent<AGraphicalPrimitive>());
-                        
-                        clp = new GameObject("LinePoint");
-                        clp.AddComponent<CurvedLinePoint>();
-                        clp.transform.position = optPad;
-                        clp.transform.parent = visBridge.transform;
-
-                        optPad = GetOptimalPaddingPosition(visBridgePort, other.GetComponent<AGraphicalPrimitive>());
-                        
-                        clp = new GameObject("LinePoint");
-                        clp.AddComponent<CurvedLinePoint>();
-                        clp.transform.position = optPad;
-                        clp.transform.parent = visBridge.transform;
-
-                        clp = new GameObject("LinePoint");
-                        clp.AddComponent<CurvedLinePoint>();
-                        clp.transform.position = otherVisBridgePort.transform.position;
-                        clp.transform.parent = visBridge.transform;
-
-                        //objCounter++;
+                        AddCurvedLinePoint(visBridge, endPort.transform.position);
                     }
                 }
             }
         }
+    }
+
+    private static void AddCurvedLinePoint(GameObject line, Vector3 point)
+    {
+        var clp = new GameObject("Line Point");
+        clp.AddComponent<CurvedLinePoint>();
+        clp.transform.position = point;
+        clp.transform.parent = line.transform;
+    }
+
+    private GameObject CreateEmptyVisBridge()
+    {
+        GameObject visBridge = new GameObject("VisBridge");
+
+        CurvedLineRenderer clr = visBridge.AddComponent<CurvedLineRenderer>();
+        clr.lineWidth = 0.01f;
+        clr.lineSegmentSize = 0.01f;
+        clr.showGizmos = false;
+
+        LineRenderer lr = visBridge.GetComponent<LineRenderer>();
+        lr.startColor = Color.green;
+        lr.endColor = Color.yellow;
+        lr.material = lineMaterial;
+        lr.startWidth = 0.01f;
+        lr.endWidth = 0.01f;
+
+        return visBridge;
     }
 }

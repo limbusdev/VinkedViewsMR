@@ -75,16 +75,16 @@ public class DataProcessor
          * */
         public static float CalculateRange(IList<InformationObject> os, int aID)
         {
-            float Maximum = CalculateMin(os, aID);
-            float Minimum = CalculateMax(os, aID);
+            float Maximum = CalculateMax(os, aID);
+            float Minimum = CalculateMin(os, aID);
 
             return Maximum - Minimum;
         }
 
         public static float CalculateZeroBoundRange(IList<InformationObject> os, int aID)
         {
-            float Maximum = CalculateZeroBoundMin(os, aID);
-            float Minimum = CalculateZeroBoundMax(os, aID);
+            float Maximum = CalculateZeroBoundMax(os, aID);
+            float Minimum = CalculateZeroBoundMin(os, aID);
 
             return Maximum - Minimum;
         }

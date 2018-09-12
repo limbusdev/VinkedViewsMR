@@ -22,7 +22,7 @@ public class ETV3DBarChart : AETV3D {
     private float yRange = 1f;
     private float xRange = 1f;
 
-    public void Init(DataSet dataSet, int attributeID)
+    public void Init(DataSet data, int nominalAttributeID, int numericAttributeID)
     {/*
         this.data = dataSet.dataObjects;
         this.dataSet = dataSet;

@@ -8,7 +8,8 @@ public class ETV2DBarChart : AETV2D
     public GameObject Anchor;
 
     private DataSet data;
-    private int attributeID=0;
+    private int floatAttributeID=0;
+    private int stringAttributeID = 0;
     private IList<GameObject> bars;
     
 
@@ -17,50 +18,48 @@ public class ETV2DBarChart : AETV2D
      * @param range         maximum - minimum value of this attribute
      * @param attributeID   which attribute
      * */
-    private GameObject CreateBar(string category, InformationObject obj, int attributeID, float range)
+    private GameObject CreateBar(InformationObject obj, int stringAttributeID, int floatAttributeID, float range)
     {
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
-        /*
-        Debug.Log("creating bar: " + data.dataObjects[category].attributeValues[attributeID] + " Height: ");
+
+        Debug.Log("creating bar: " + obj.attributesFloat[floatAttributeID].name + " Height: " + obj.attributesFloat[floatAttributeID].value);
         
-        float value = data.dataObjects[category].attributeValues[attributeID];
+        float value = obj.attributesFloat[floatAttributeID].value;
         GameObject bar = factory2D.CreateBar(value, range, .1f, .1f);
 
-        bar.GetComponent<Bar2D>().SetLabelText(data.dataObjects[category].attributeValues[attributeID].ToString());*/
+        bar.GetComponent<Bar2D>().SetLabelText(obj.attributesFloat[floatAttributeID].value.ToString());
 
-        return null; // bar;
+        return bar;
     }
 
-    public void Init(DataSet dataSet, int attributeID)
+    public void Init(DataSet dataSet, int stringAttributeID, int floatAttributeID)
     {
         this.bounds = new float[] { 0, 0, 0};
         this.data = dataSet;
-        this.attributeID = attributeID;
+        this.floatAttributeID = floatAttributeID;
+        this.stringAttributeID = stringAttributeID;
         bars = new List<GameObject>();
 
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
         
-
-        
-
-        this.attributeID = attributeID;
-        float attributeRange = DataProcessor.FloatAttribute.CalculateRange(data.dataObjects, attributeID);
+        float attributeRange = DataProcessor.FloatAttribute.CalculateZeroBoundRange(data.dataObjects, floatAttributeID);
 
         int categoryCounter = 0;
-        /*
-        foreach (string category in data.dataObjects.Keys)
+        
+        foreach (InformationObject o in data.dataObjects)
         {
-            GameObject bar = CreateBar(category, data.dataObjects[category], attributeID, attributeRange);
+            GameObject bar = CreateBar(o, stringAttributeID, floatAttributeID, attributeRange);
             bars.Add(bar);
 
             bar.transform.localPosition = new Vector3((categoryCounter) * 0.15f + 0.1f, 0, 0);
 
             bar.transform.parent = Anchor.transform;
+            string category = o.attributesString[stringAttributeID].value;
             string labelString = (category.Length > 10) ? (category.Substring(0, 9) + ".") : category;
             bar.GetComponent<Bar2D>().SetLabelCategoryText(labelString);
 
             categoryCounter++;
-        }*/
+        }
 
 
         SetUpAxis();
@@ -133,8 +132,8 @@ public class ETV2DBarChart : AETV2D
         axis.Add(AxisDirection.X, xAxis);
         axis.Add(AxisDirection.Y, yAxis);
 
-        SetAxisLabels(AxisDirection.X, "Category", "");
-        SetAxisLabels(AxisDirection.Y, data.Variables[attributeID], data.Units[attributeID]);
+        SetAxisLabels(AxisDirection.X, data.dataObjects[0].attributesString[stringAttributeID].name, "");
+        SetAxisLabels(AxisDirection.Y, data.dataObjects[0].attributesFloat[floatAttributeID].name, "");
     }
 
     public override void UpdateETV()

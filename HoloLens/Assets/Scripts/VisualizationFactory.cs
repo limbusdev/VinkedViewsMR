@@ -15,8 +15,53 @@ public class VisualizationFactory : MonoBehaviour {
 
     // Use this for initialization
     void Start ()
-    {   
+    {
+        DataSet fbiData = dataProvider.dataSets[0];
+
+        var educationObjects = new List<InformationObject>();
+        educationObjects.Add(new InformationObject(
+            new GenericAttribute<string>[] {
+                new GenericAttribute<string>("Sex", "male", LevelOfMeasurement.NOMINAL),
+                new GenericAttribute<string>("Level of Education", "ungraduated", LevelOfMeasurement.ORDINAL)
+                },
+            new GenericAttribute<float>[] {
+                new GenericAttribute<float>("Fraction [%]", 20, LevelOfMeasurement.RATIO)
+            },
+            new GenericAttribute<int>[] {},
+            new GenericAttribute<Vector2>[] {},
+            new GenericAttribute<Vector3>[] {}
+            ));
+        educationObjects.Add(new InformationObject(
+            new GenericAttribute<string>[] {
+                new GenericAttribute<string>("Sex", "male", LevelOfMeasurement.NOMINAL),
+                new GenericAttribute<string>("Level of Education", "Highschool", LevelOfMeasurement.ORDINAL)
+                },
+            new GenericAttribute<float>[] {
+                new GenericAttribute<float>("Fraction [%]", 40, LevelOfMeasurement.RATIO)
+            },
+            new GenericAttribute<int>[] { },
+            new GenericAttribute<Vector2>[] { },
+            new GenericAttribute<Vector3>[] { }
+            ));
+        educationObjects.Add(new InformationObject(
+            new GenericAttribute<string>[] {
+                new GenericAttribute<string>("Sex", "male", LevelOfMeasurement.NOMINAL),
+                new GenericAttribute<string>("Level of Education", "University", LevelOfMeasurement.ORDINAL)
+                },
+            new GenericAttribute<float>[] {
+                new GenericAttribute<float>("Fraction [%]", 40, LevelOfMeasurement.RATIO)
+            },
+            new GenericAttribute<int>[] { },
+            new GenericAttribute<Vector2>[] { },
+            new GenericAttribute<Vector3>[] { }
+            ));
+        var educationalData = new DataSet("Educational Data", "", educationObjects);
+
+        GameObject new2DBarChart = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(educationalData, 1, 0);
+        GameObject newETV2DBarChart = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart);
+
         /*
+        DataSet educationData = new DataSet("Educational Data", "", null);
 
         DataSetMatrix2x2Nominal dataSet = new DataSetMatrix2x2Nominal(
             new string[] { "male", "female", "other" },
@@ -96,4 +141,19 @@ public class VisualizationFactory : MonoBehaviour {
 	void Update () {
 		
 	}
+
+    public void DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(InformationObject obj)
+    {
+        GameObject visBridge = new GameObject("VisBridge");
+        LineRenderer lr = visBridge.AddComponent<LineRenderer>();
+        lr.startColor = Color.green;
+        lr.endColor = Color.yellow;
+
+        int objCounter = 0;
+        foreach(GameObject go in obj.representativeGameObjectsByAttributeName.Values)
+        {
+            lr.SetPosition(objCounter, go.transform.position);
+            objCounter++;
+        }
+    }
 }

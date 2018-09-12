@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e55a92929e37c184a9f70abd70c2c3d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ETVAnchor: {fileID: 1626009144967710, guid: 1fd7ca43b384af645b20e838dc0aef49, type: 2}
   ETV2DBarChartPrefab: {fileID: 1651200660064012, guid: b4b68d01b65cd3042b41df4c564f1891,
     type: 2}
   ETV2DLineChartPrefab: {fileID: 1131613118678104, guid: f8138f01c2156484d9e7acced3e42ec7,

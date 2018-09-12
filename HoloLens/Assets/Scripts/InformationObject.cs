@@ -1,4 +1,5 @@
 ﻿using Model.Attributes;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum LevelOfMeasurement
@@ -8,6 +9,8 @@ public enum LevelOfMeasurement
 
 public class InformationObject
 {
+    public IDictionary<string, GameObject> representativeGameObjectsByAttributeName { get; }
+
     public GenericAttribute<string>[] attributesString;
     public GenericAttribute<float>[] attributesFloat;
     public GenericAttribute<int>[] attributesInt;

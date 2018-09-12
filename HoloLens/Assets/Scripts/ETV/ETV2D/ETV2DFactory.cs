@@ -5,17 +5,19 @@ using UnityEngine;
 
 public class ETV2DFactory : AETVFactory
 {
+    public GameObject ETVAnchor;
     public GameObject ETV2DBarChartPrefab;
     public GameObject ETV2DLineChartPrefab;
     public GameObject ETV2DVirtualDevicePrefab;
     public GameObject ETV2DScatterPlotPrefab;
     public GameObject ETV2DParallelCoordinatesPlotPrefab;
 
-    public override GameObject CreateETVBarChart(DataSet data, int attributeID)
+    public override GameObject CreateETVBarChart(DataSet data, int nominalAttributeID, int numericAttributeID)
     {
         GameObject barChart = Instantiate(ETV2DBarChartPrefab);
 
-        barChart.GetComponent<ETV2DBarChart>().Init(data, attributeID);
+        barChart.GetComponent<ETV2DBarChart>().Init(data, nominalAttributeID, numericAttributeID);
+        barChart.GetComponent<ETV2DBarChart>().ChangeColoringScheme(ETVColorSchemes.Rainbow);
 
         return barChart;
     }
@@ -62,7 +64,9 @@ public class ETV2DFactory : AETVFactory
 
     public override GameObject PutETVOnAnchor(GameObject ETV)
     {
-        throw new System.NotImplementedException();
+        GameObject Anchor = Instantiate(ETVAnchor);
+        Anchor.GetComponent<ETVAnchor>().PutETVintoAnchor(ETV);
+        return Anchor;
     }
 
     // Use this for initialization

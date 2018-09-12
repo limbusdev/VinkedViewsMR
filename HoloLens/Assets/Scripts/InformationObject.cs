@@ -9,7 +9,7 @@ public enum LevelOfMeasurement
 
 public class InformationObject
 {
-    public IDictionary<string, GameObject> representativeGameObjectsByAttributeName { get; }
+    public IDictionary<string, IList<GameObject>> representativeGameObjectsByAttributeName { get; }
 
     public GenericAttribute<string>[] attributesString;
     public GenericAttribute<float>[] attributesFloat;
@@ -24,6 +24,7 @@ public class InformationObject
         GenericAttribute<Vector2>[] attributesVector2, 
         GenericAttribute<Vector3>[] attributesVector3)
     {
+        this.representativeGameObjectsByAttributeName = new Dictionary<string, IList<GameObject>>();
         this.attributesString = attributesString;
         this.attributesFloat = attributesFloat;
         this.attributesInt = attributesInt;
@@ -48,5 +49,14 @@ public class InformationObject
         outString += "\n";
 
         return outString;
+    }
+
+    public void AddRepresentativeObject(string attributeName, GameObject o)
+    {
+        if(!representativeGameObjectsByAttributeName.ContainsKey(attributeName))
+        {
+            representativeGameObjectsByAttributeName.Add(attributeName, new List<GameObject>());
+        }
+        representativeGameObjectsByAttributeName[attributeName].Add(o);
     }
 }

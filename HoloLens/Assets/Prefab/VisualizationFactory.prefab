@@ -2363,7 +2363,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62288e4235d7e6d419482d4e6c044b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvFile: {fileID: 4900000, guid: be361341d24760640b5298eab962fae4, type: 3}
+  csvFile:
+  - {fileID: 4900000, guid: be361341d24760640b5298eab962fae4, type: 3}
 --- !u!114 &114281658072433982
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2412,6 +2413,7 @@ MonoBehaviour:
   CubeIconVariable: {fileID: 1035978343418650, guid: 4f98e3a4eeb8a5d41846060d6b7189f0,
     type: 2}
   dataProvider: {fileID: 114257951694079500}
+  lineMaterial: {fileID: 2100000, guid: e7b8d8b54700d454aa635da9f950cdab, type: 2}
 --- !u!114 &114338724560588764
 MonoBehaviour:
   m_ObjectHideFlags: 1

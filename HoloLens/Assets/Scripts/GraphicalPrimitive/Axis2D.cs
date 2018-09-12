@@ -73,8 +73,6 @@ namespace GraphicalPrimitive
             }
 
             // Update Ticks
-            
-
             Vector3 tickDirection;
             switch (axisDirection)
             {
@@ -150,10 +148,10 @@ namespace GraphicalPrimitive
             switch (axisDirection)
             {
                 case AxisDirection.X:
-                    tmVariable.anchor = TextAnchor.UpperCenter;
-                    tmVariable.alignment = TextAlignment.Center;
-                    tmUnit.anchor = TextAnchor.UpperCenter;
-                    tmUnit.alignment = TextAlignment.Center;
+                    tmVariable.anchor = TextAnchor.MiddleLeft;
+                    tmVariable.alignment = TextAlignment.Left;
+                    tmUnit.anchor = TextAnchor.MiddleLeft;
+                    tmUnit.alignment = TextAlignment.Left;
                     break;
                 case AxisDirection.Y:
                     tmVariable.anchor = TextAnchor.MiddleRight;

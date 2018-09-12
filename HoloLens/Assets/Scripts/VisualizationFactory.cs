@@ -1,4 +1,5 @@
-﻿using HoloToolkit.Unity.Collections;
+﻿using GraphicalPrimitive;
+using HoloToolkit.Unity.Collections;
 using Model;
 using Model.Attributes;
 using System.Collections;
@@ -11,6 +12,8 @@ public class VisualizationFactory : MonoBehaviour {
     public GameObject ObjectCollection;
     public GameObject CubeIconVariable;
     public DataProvider dataProvider;
+
+    public Material lineMaterial;
 
 
     // Use this for initialization
@@ -59,6 +62,16 @@ public class VisualizationFactory : MonoBehaviour {
 
         GameObject new2DBarChart = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(educationalData, 1, 0);
         GameObject newETV2DBarChart = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart);
+
+        GameObject new2DBarChart2 = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(educationalData, 1, 0);
+        GameObject newETV2DBarChart2 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart2);
+        newETV2DBarChart.transform.Translate(new Vector3(1, 1, 1));
+
+        foreach(InformationObject o in educationalData.dataObjects)
+        {
+            DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(o);
+        }
+        
 
         /*
         DataSet educationData = new DataSet("Educational Data", "", null);
@@ -148,12 +161,31 @@ public class VisualizationFactory : MonoBehaviour {
         LineRenderer lr = visBridge.AddComponent<LineRenderer>();
         lr.startColor = Color.green;
         lr.endColor = Color.yellow;
+        lr.material = lineMaterial;
+        lr.startWidth = 0.01f;
+        lr.endWidth = 0.01f;
 
         int objCounter = 0;
-        foreach(GameObject go in obj.representativeGameObjectsByAttributeName.Values)
+        
+        foreach(IList<GameObject> list in obj.representativeGameObjectsByAttributeName.Values)
         {
-            lr.SetPosition(objCounter, go.transform.position);
-            objCounter++;
+            foreach(GameObject go in list)
+            {
+                objCounter++;
+            }
+        }
+        lr.positionCount = objCounter;
+        objCounter = 0;
+
+
+        foreach(IList<GameObject> list in obj.representativeGameObjectsByAttributeName.Values)
+        {
+            foreach(GameObject go in list)
+            {
+                GameObject visBridgePort = go.GetComponent<AGraphicalPrimitive>().visBridgePort;
+                lr.SetPosition(objCounter, visBridgePort.transform.position);
+                objCounter++;
+            }
         }
     }
 }

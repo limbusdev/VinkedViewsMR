@@ -29,6 +29,9 @@ public class ETV2DBarChart : AETV2D
 
         bar.GetComponent<Bar2D>().SetLabelText(obj.attributesFloat[floatAttributeID].value.ToString());
 
+        obj.AddRepresentativeObject(obj.attributesString[stringAttributeID].name, bar);
+        obj.AddRepresentativeObject(obj.attributesFloat[floatAttributeID].name, bar);
+
         return bar;
     }
 

@@ -11,5 +11,6 @@ namespace GraphicalPrimitive
         public GameObject pivot;
         public GameObject label;
         public GameObject visBridgePort;
+        public GameObject[] visBridgePortPadding;
     }
 }

@@ -157,34 +157,102 @@ public class VisualizationFactory : MonoBehaviour {
 
     public void DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(InformationObject obj)
     {
-        GameObject visBridge = new GameObject("VisBridge");
-        LineRenderer lr = visBridge.AddComponent<LineRenderer>();
-        lr.startColor = Color.green;
-        lr.endColor = Color.yellow;
-        lr.material = lineMaterial;
-        lr.startWidth = 0.01f;
-        lr.endWidth = 0.01f;
-
-        int objCounter = 0;
         
-        foreach(IList<GameObject> list in obj.representativeGameObjectsByAttributeName.Values)
-        {
-            foreach(GameObject go in list)
-            {
-                objCounter++;
-            }
-        }
-        lr.positionCount = objCounter;
-        objCounter = 0;
-
 
         foreach(IList<GameObject> list in obj.representativeGameObjectsByAttributeName.Values)
         {
             foreach(GameObject go in list)
             {
-                GameObject visBridgePort = go.GetComponent<AGraphicalPrimitive>().visBridgePort;
-                lr.SetPosition(objCounter, visBridgePort.transform.position);
-                objCounter++;
+                foreach(GameObject other in list)
+                {
+                    if(!other.Equals(go))
+                    {
+                        GameObject visBridge = new GameObject("VisBridge");
+
+                        CurvedLineRenderer clr = visBridge.AddComponent<CurvedLineRenderer>();
+                        clr.lineWidth = 0.01f;
+                        clr.lineSegmentSize = 0.01f;
+                        clr.showGizmos = false;
+                        
+                        LineRenderer lr = visBridge.GetComponent<LineRenderer>();
+                        lr.startColor = Color.green;
+                        lr.endColor = Color.yellow;
+                        lr.material = lineMaterial;
+                        lr.startWidth = 0.01f;
+                        lr.endWidth = 0.01f;
+
+                        GameObject visBridgePort = go.GetComponent<AGraphicalPrimitive>().visBridgePort;
+                        GameObject otherVisBridgePort = other.GetComponent<AGraphicalPrimitive>().visBridgePort;
+                        
+                        var clp = new GameObject("LinePoint");
+                        clp.AddComponent<CurvedLinePoint>();
+                        clp.transform.position = visBridgePort.transform.position;
+                        clp.transform.parent = visBridge.transform;
+
+                        // Set the first padding object as default
+                        GameObject paddingObject = go.GetComponent<AGraphicalPrimitive>().visBridgePortPadding[0];
+
+                        // If there are more than 1 padding objects
+                        if(go.GetComponent<AGraphicalPrimitive>().visBridgePortPadding.Length > 1)
+                        {
+                            // Lookup all but the first padding objects
+                            for(int i = 1; i < go.GetComponent<AGraphicalPrimitive>().visBridgePortPadding.Length; i++)
+                            {
+                                GameObject pad = go.GetComponent<AGraphicalPrimitive>().visBridgePortPadding[i];
+
+                                // Look if it is nearer to the other representative object than the currently set padding
+                                float oldDistance, newDistance;
+                                oldDistance = Vector3.Distance(paddingObject.transform.position, otherVisBridgePort.transform.position);
+                                newDistance = Vector3.Distance(pad.transform.position, otherVisBridgePort.transform.position);
+
+                                if(newDistance < oldDistance)
+                                {
+                                    paddingObject = pad;
+                                }
+                            }
+                        }
+
+                        clp = new GameObject("LinePoint");
+                        clp.AddComponent<CurvedLinePoint>();
+                        clp.transform.position = paddingObject.transform.position;
+                        clp.transform.parent = visBridge.transform;
+
+                        // Set the first padding object as default
+                        paddingObject = other.GetComponent<AGraphicalPrimitive>().visBridgePortPadding[0];
+
+                        // If there are more than 1 padding objects
+                        if(other.GetComponent<AGraphicalPrimitive>().visBridgePortPadding.Length > 1)
+                        {
+                            // Lookup all but the first padding objects
+                            for(int i = 1; i < other.GetComponent<AGraphicalPrimitive>().visBridgePortPadding.Length; i++)
+                            {
+                                GameObject pad = other.GetComponent<AGraphicalPrimitive>().visBridgePortPadding[i];
+
+                                // Look if it is nearer to the other representative object than the currently set padding
+                                float oldDistance, newDistance;
+                                oldDistance = Vector3.Distance(paddingObject.transform.position, visBridgePort.transform.position);
+                                newDistance = Vector3.Distance(pad.transform.position, visBridgePort.transform.position);
+
+                                if(newDistance < oldDistance)
+                                {
+                                    paddingObject = pad;
+                                }
+                            }
+                        }
+
+                        clp = new GameObject("LinePoint");
+                        clp.AddComponent<CurvedLinePoint>();
+                        clp.transform.position = paddingObject.transform.position;
+                        clp.transform.parent = visBridge.transform;
+
+                        clp = new GameObject("LinePoint");
+                        clp.AddComponent<CurvedLinePoint>();
+                        clp.transform.position = otherVisBridgePort.transform.position;
+                        clp.transform.parent = visBridge.transform;
+
+                        //objCounter++;
+                    }
+                }
             }
         }
     }

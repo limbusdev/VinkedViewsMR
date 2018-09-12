@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GraphicalPrimitive
 {
-    class AGraphicalPrimitive : MonoBehaviour
+    public class AGraphicalPrimitive : MonoBehaviour
     {
         public GameObject pivot;
         public GameObject label;

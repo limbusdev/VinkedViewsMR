@@ -155,6 +155,35 @@ public class VisualizationFactory : MonoBehaviour {
 		
 	}
 
+    public static Vector3 GetOptimalPaddingPosition(GameObject visBridgeAnchor, AGraphicalPrimitive primitive)
+    {
+        // Set the first padding object as default
+        Vector3 optimum = primitive.visBridgePortPadding[0].transform.position;
+        
+        // If there are more than 1 padding objects
+        if(primitive.visBridgePortPadding.Length > 1)
+        {
+            // Lookup all but the first padding objects
+            for(int i = 1; i < primitive.visBridgePortPadding.Length; i++)
+            {
+                Vector3 pad = primitive.visBridgePortPadding[i].transform.position;
+
+                // Look if it is nearer to the other representative object than the currently set padding
+                float oldDistance, newDistance;
+                oldDistance = Vector3.Distance(optimum, visBridgeAnchor.transform.position);
+                newDistance = Vector3.Distance(pad, visBridgeAnchor.transform.position);
+
+                if(newDistance < oldDistance)
+                {
+                    optimum = pad;
+                }
+            }
+        }
+
+        return optimum;
+    }
+
+
     public void DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(InformationObject obj)
     {
         
@@ -189,60 +218,18 @@ public class VisualizationFactory : MonoBehaviour {
                         clp.transform.position = visBridgePort.transform.position;
                         clp.transform.parent = visBridge.transform;
 
-                        // Set the first padding object as default
-                        GameObject paddingObject = go.GetComponent<AGraphicalPrimitive>().visBridgePortPadding[0];
-
-                        // If there are more than 1 padding objects
-                        if(go.GetComponent<AGraphicalPrimitive>().visBridgePortPadding.Length > 1)
-                        {
-                            // Lookup all but the first padding objects
-                            for(int i = 1; i < go.GetComponent<AGraphicalPrimitive>().visBridgePortPadding.Length; i++)
-                            {
-                                GameObject pad = go.GetComponent<AGraphicalPrimitive>().visBridgePortPadding[i];
-
-                                // Look if it is nearer to the other representative object than the currently set padding
-                                float oldDistance, newDistance;
-                                oldDistance = Vector3.Distance(paddingObject.transform.position, otherVisBridgePort.transform.position);
-                                newDistance = Vector3.Distance(pad.transform.position, otherVisBridgePort.transform.position);
-
-                                if(newDistance < oldDistance)
-                                {
-                                    paddingObject = pad;
-                                }
-                            }
-                        }
-
+                        Vector3 optPad = GetOptimalPaddingPosition(otherVisBridgePort, go.GetComponent<AGraphicalPrimitive>());
+                        
                         clp = new GameObject("LinePoint");
                         clp.AddComponent<CurvedLinePoint>();
-                        clp.transform.position = paddingObject.transform.position;
+                        clp.transform.position = optPad;
                         clp.transform.parent = visBridge.transform;
 
-                        // Set the first padding object as default
-                        paddingObject = other.GetComponent<AGraphicalPrimitive>().visBridgePortPadding[0];
-
-                        // If there are more than 1 padding objects
-                        if(other.GetComponent<AGraphicalPrimitive>().visBridgePortPadding.Length > 1)
-                        {
-                            // Lookup all but the first padding objects
-                            for(int i = 1; i < other.GetComponent<AGraphicalPrimitive>().visBridgePortPadding.Length; i++)
-                            {
-                                GameObject pad = other.GetComponent<AGraphicalPrimitive>().visBridgePortPadding[i];
-
-                                // Look if it is nearer to the other representative object than the currently set padding
-                                float oldDistance, newDistance;
-                                oldDistance = Vector3.Distance(paddingObject.transform.position, visBridgePort.transform.position);
-                                newDistance = Vector3.Distance(pad.transform.position, visBridgePort.transform.position);
-
-                                if(newDistance < oldDistance)
-                                {
-                                    paddingObject = pad;
-                                }
-                            }
-                        }
-
+                        optPad = GetOptimalPaddingPosition(visBridgePort, other.GetComponent<AGraphicalPrimitive>());
+                        
                         clp = new GameObject("LinePoint");
                         clp.AddComponent<CurvedLinePoint>();
-                        clp.transform.position = paddingObject.transform.position;
+                        clp.transform.position = optPad;
                         clp.transform.parent = visBridge.transform;
 
                         clp = new GameObject("LinePoint");

@@ -2408,6 +2408,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49f1168a70109a745bc5a6787d633ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ObjectBasedVisBridgePrefab: {fileID: 1735373077562916, guid: 98a88dda044fca740b4e24a346788676,
+    type: 2}
   NewETVPosition: {fileID: 1682145877895716}
   ObjectCollection: {fileID: 1584293225478342}
   CubeIconVariable: {fileID: 1035978343418650, guid: 4f98e3a4eeb8a5d41846060d6b7189f0,

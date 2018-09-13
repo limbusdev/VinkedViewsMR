@@ -5,9 +5,11 @@ using Model.Attributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VisBridge;
 
 public class VisualizationFactory : MonoBehaviour {
 
+    public GameObject ObjectBasedVisBridgePrefab;
     public GameObject NewETVPosition;
     public GameObject ObjectCollection;
     public GameObject CubeIconVariable;
@@ -15,6 +17,16 @@ public class VisualizationFactory : MonoBehaviour {
 
     public Material lineMaterial;
 
+    private IList<GameObject> activeVisualizations;
+    private IList<GameObject> activeVisBridges;
+
+    
+
+    private void Awake()
+    {
+        activeVisualizations = new List<GameObject>();
+        activeVisBridges = new List<GameObject>();
+    }
 
     // Use this for initialization
     void Start ()
@@ -155,91 +167,67 @@ public class VisualizationFactory : MonoBehaviour {
 		
 	}
 
-    public static Vector3 GetOptimalPaddingPosition(GameObject visBridgeAnchor, AGraphicalPrimitive primitive)
-    {
-        // Set the first padding object as default
-        Vector3 optimum = primitive.visBridgePortPadding[0].transform.position;
-        
-        // If there are more than 1 padding objects
-        if(primitive.visBridgePortPadding.Length > 1)
-        {
-            // Lookup all but the first padding objects
-            for(int i = 1; i < primitive.visBridgePortPadding.Length; i++)
-            {
-                Vector3 pad = primitive.visBridgePortPadding[i].transform.position;
+    
 
-                // Look if it is nearer to the other representative object than the currently set padding
-                float oldDistance, newDistance;
-                oldDistance = Vector3.Distance(optimum, visBridgeAnchor.transform.position);
-                newDistance = Vector3.Distance(pad, visBridgeAnchor.transform.position);
-
-                if(newDistance < oldDistance)
-                {
-                    optimum = pad;
-                }
-            }
-        }
-
-        return optimum;
-    }
-
-
+    /// <summary>
+    /// Generates VisBridge-GameObjects that connect all graphical primitives in all
+    /// active visualizations that represent the given InformationObject to each other.
+    /// </summary>
+    /// <param name="obj">InformationObject in question</param>
     public void DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(InformationObject obj)
     {
-        
-
+        // For each list of GameObjects, that represent the same attribute of the given InformationObject 
         foreach(IList<GameObject> list in obj.representativeGameObjectsByAttributeName.Values)
         {
-            foreach(GameObject go in list)
+            // For each GameObject in that list
+            foreach(GameObject origin in list)
             {
-                foreach(GameObject other in list)
+                // For every other GameObject in that list
+                foreach(GameObject target in list)
                 {
-                    if(!other.Equals(go))
+                    if(!target.Equals(origin))
                     {
-                        var visBridge = CreateEmptyVisBridge();
-
-                        GameObject startPort = go.GetComponent<AGraphicalPrimitive>().visBridgePort;
-                        GameObject endPort = other.GetComponent<AGraphicalPrimitive>().visBridgePort;
-
-                        AddCurvedLinePoint(visBridge, startPort.transform.position);
-
-                        Vector3 optPad = GetOptimalPaddingPosition(endPort, go.GetComponent<AGraphicalPrimitive>());
-                        AddCurvedLinePoint(visBridge, optPad);
-
-                        optPad = GetOptimalPaddingPosition(startPort, other.GetComponent<AGraphicalPrimitive>());
-                        AddCurvedLinePoint(visBridge, optPad);
-                        
-                        AddCurvedLinePoint(visBridge, endPort.transform.position);
+                        // Create a VisBridge between them
+                        var visBridge = CreateObjectBasedVisBridge(
+                            origin.GetComponent<AGraphicalPrimitive>(), 
+                            target.GetComponent<AGraphicalPrimitive>());
+                        // Add it to a list to update the bridges, when the visualizations move
+                        activeVisBridges.Add(visBridge);
                     }
                 }
             }
         }
     }
-
-    private static void AddCurvedLinePoint(GameObject line, Vector3 point)
+    
+    private GameObject CreateObjectBasedVisBridge(AGraphicalPrimitive origin, AGraphicalPrimitive target)
     {
-        var clp = new GameObject("Line Point");
-        clp.AddComponent<CurvedLinePoint>();
-        clp.transform.position = point;
-        clp.transform.parent = line.transform;
-    }
-
-    private GameObject CreateEmptyVisBridge()
-    {
-        GameObject visBridge = new GameObject("VisBridge");
-
-        CurvedLineRenderer clr = visBridge.AddComponent<CurvedLineRenderer>();
-        clr.lineWidth = 0.01f;
-        clr.lineSegmentSize = 0.01f;
-        clr.showGizmos = false;
-
-        LineRenderer lr = visBridge.GetComponent<LineRenderer>();
-        lr.startColor = Color.green;
-        lr.endColor = Color.yellow;
-        lr.material = lineMaterial;
-        lr.startWidth = 0.01f;
-        lr.endWidth = 0.01f;
+        var visBridge = Instantiate(ObjectBasedVisBridgePrefab);
+        visBridge.GetComponent<ObjectBasedVisBridge>().Init(origin, target);
 
         return visBridge;
     }
+
+    public void AddNewVisualization(GameObject visualization)
+    {
+        if(visualization.GetComponent<ETVAnchor>() != null)
+        {
+            activeVisualizations.Add(visualization);
+        } 
+        else
+        {
+            Debug.LogWarning("Given GameObject ist not an anchored visualization!");
+        }
+    }
+
+    private void UpdateVisualizationConnections()
+    {
+
+    }
+
+    private void UpdateVisBridges()
+    {
+
+    }
+
+    
 }

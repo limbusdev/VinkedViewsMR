@@ -25,6 +25,12 @@ namespace VisBridge
             
         }
 
+        public ObjectBasedVisBridge(AGraphicalPrimitive origin, AGraphicalPrimitive target)
+        {
+            this.origin = origin;
+            this.target = target;
+        }
+
         void Awake()
         {
             CurvedLineRenderer clr = gameObject.AddComponent<CurvedLineRenderer>();
@@ -125,5 +131,17 @@ namespace VisBridge
             return optimum;
         }
 
+        public override bool Equals(object other)
+        {
+            if(other is ObjectBasedVisBridge)
+            {
+                ObjectBasedVisBridge otherBridge = (other as ObjectBasedVisBridge);
+                return ((otherBridge.origin.Equals(origin) && otherBridge.target.Equals(target)) ||
+                        (otherBridge.origin.Equals(target) && otherBridge.target.Equals(origin)));
+            } else
+            {
+                return false;
+            }
+        }
     }
 }

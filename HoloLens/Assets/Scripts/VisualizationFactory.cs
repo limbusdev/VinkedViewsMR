@@ -18,14 +18,14 @@ public class VisualizationFactory : MonoBehaviour {
     public Material lineMaterial;
 
     private IList<GameObject> activeVisualizations;
-    private IList<GameObject> activeVisBridges;
+    private IList<ObjectBasedVisBridge> activeVisBridges;
 
     
 
     private void Awake()
     {
         activeVisualizations = new List<GameObject>();
-        activeVisBridges = new List<GameObject>();
+        activeVisBridges = new List<ObjectBasedVisBridge>();
     }
 
     // Use this for initialization
@@ -185,14 +185,18 @@ public class VisualizationFactory : MonoBehaviour {
                 // For every other GameObject in that list
                 foreach(GameObject target in list)
                 {
-                    if(!target.Equals(origin))
+                    AGraphicalPrimitive 
+                        primOrigin = origin.GetComponent<AGraphicalPrimitive>(),
+                        primTarget = target.GetComponent<AGraphicalPrimitive>();
+
+                    if(!target.Equals(origin) && !(activeVisBridges.Contains(new ObjectBasedVisBridge(primOrigin, primTarget))))
                     {
                         // Create a VisBridge between them
                         var visBridge = CreateObjectBasedVisBridge(
                             origin.GetComponent<AGraphicalPrimitive>(), 
                             target.GetComponent<AGraphicalPrimitive>());
                         // Add it to a list to update the bridges, when the visualizations move
-                        activeVisBridges.Add(visBridge);
+                        activeVisBridges.Add(visBridge.GetComponent<ObjectBasedVisBridge>());
                     }
                 }
             }

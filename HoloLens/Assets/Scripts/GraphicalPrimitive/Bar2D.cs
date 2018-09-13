@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GraphicalPrimitive
 {
-    class Bar2D : ABar
+    public class Bar2D : ABar
     {
         public GameObject barFront;
         public GameObject barBack;
@@ -32,6 +32,5 @@ namespace GraphicalPrimitive
             var textMeshCategory = labelCategory.GetComponent<TextMesh>();
             textMeshCategory.anchor = (height < 0) ? TextAnchor.MiddleRight : TextAnchor.MiddleLeft;
         }
-        
     }
 }

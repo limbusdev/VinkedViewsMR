@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VisBridge;
+using System.Linq;
 
 public class VisualizationFactory : MonoBehaviour {
 
@@ -40,7 +41,8 @@ public class VisualizationFactory : MonoBehaviour {
                 new GenericAttribute<string>("Level of Education", "ungraduated", LevelOfMeasurement.ORDINAL)
                 },
             new GenericAttribute<float>[] {
-                new GenericAttribute<float>("Fraction [%]", 20, LevelOfMeasurement.RATIO)
+                new GenericAttribute<float>("Fraction [%]", 20, LevelOfMeasurement.RATIO),
+                new GenericAttribute<float>("Mean Age [a]", 25, LevelOfMeasurement.RATIO)
             },
             new GenericAttribute<int>[] {},
             new GenericAttribute<Vector2>[] {},
@@ -52,7 +54,8 @@ public class VisualizationFactory : MonoBehaviour {
                 new GenericAttribute<string>("Level of Education", "Highschool", LevelOfMeasurement.ORDINAL)
                 },
             new GenericAttribute<float>[] {
-                new GenericAttribute<float>("Fraction [%]", 40, LevelOfMeasurement.RATIO)
+                new GenericAttribute<float>("Fraction [%]", 40, LevelOfMeasurement.RATIO),
+                new GenericAttribute<float>("Mean Age [a]", 27, LevelOfMeasurement.RATIO)
             },
             new GenericAttribute<int>[] { },
             new GenericAttribute<Vector2>[] { },
@@ -64,7 +67,8 @@ public class VisualizationFactory : MonoBehaviour {
                 new GenericAttribute<string>("Level of Education", "University", LevelOfMeasurement.ORDINAL)
                 },
             new GenericAttribute<float>[] {
-                new GenericAttribute<float>("Fraction [%]", 40, LevelOfMeasurement.RATIO)
+                new GenericAttribute<float>("Fraction [%]", 40, LevelOfMeasurement.RATIO),
+                new GenericAttribute<float>("Mean Age [a]", 31, LevelOfMeasurement.RATIO)
             },
             new GenericAttribute<int>[] { },
             new GenericAttribute<Vector2>[] { },
@@ -79,10 +83,21 @@ public class VisualizationFactory : MonoBehaviour {
         GameObject newETV2DBarChart2 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart2);
         newETV2DBarChart.transform.Translate(new Vector3(1, 1, 1));
 
-        foreach(InformationObject o in educationalData.dataObjects)
-        {
-            DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(o);
-        }
+        GameObject new2DBarChart3 = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(educationalData, 1, 0);
+        GameObject newETV2DBarChart3 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart3);
+        newETV2DBarChart3.transform.Translate(new Vector3(-1, 1, -2));
+
+        GameObject new2DPCP = ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(educationalData, new int[] { 0, 1 }, new int[] { });
+        GameObject newETV2DPCP = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DPCP);
+        newETV2DPCP.transform.Translate(new Vector3(-2, 0, 0));
+
+
+        //foreach(InformationObject o in educationalData.dataObjects)
+        //{
+        //    DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(o);
+        //}
+
+        DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(educationalData.dataObjects.First());
         
 
         /*
@@ -176,25 +191,24 @@ public class VisualizationFactory : MonoBehaviour {
     /// <param name="obj">InformationObject in question</param>
     public void DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(InformationObject obj)
     {
+        AGraphicalPrimitive primOrigin, primTarget;
         // For each list of GameObjects, that represent the same attribute of the given InformationObject 
         foreach(IList<GameObject> list in obj.representativeGameObjectsByAttributeName.Values)
         {
             // For each GameObject in that list
             foreach(GameObject origin in list)
             {
+                primOrigin = origin.GetComponent<AGraphicalPrimitive>();
+
                 // For every other GameObject in that list
                 foreach(GameObject target in list)
                 {
-                    AGraphicalPrimitive 
-                        primOrigin = origin.GetComponent<AGraphicalPrimitive>(),
-                        primTarget = target.GetComponent<AGraphicalPrimitive>();
+                    primTarget = target.GetComponent<AGraphicalPrimitive>();
 
                     if(!target.Equals(origin) && !(activeVisBridges.Contains(new ObjectBasedVisBridge(primOrigin, primTarget))))
                     {
                         // Create a VisBridge between them
-                        var visBridge = CreateObjectBasedVisBridge(
-                            origin.GetComponent<AGraphicalPrimitive>(), 
-                            target.GetComponent<AGraphicalPrimitive>());
+                        var visBridge = CreateObjectBasedVisBridge(primOrigin, primTarget);
                         // Add it to a list to update the bridges, when the visualizations move
                         activeVisBridges.Add(visBridge.GetComponent<ObjectBasedVisBridge>());
                     }

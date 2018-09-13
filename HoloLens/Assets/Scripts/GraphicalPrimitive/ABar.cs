@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace GraphicalPrimitive
 {
-    abstract class ABar : AGraphicalPrimitive
+    public abstract class ABar : AGraphicalPrimitive
     {
         public GameObject bar;
         public GameObject labelCategory;

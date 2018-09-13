@@ -32,11 +32,11 @@ public class ETV2DFactory : AETVFactory
         return lineChart;
     }
 
-    public override GameObject CreateETVParallelCoordinatesPlot(DataSetMultiDimensionalPoints data, float[] ticks)
+    public override GameObject CreateETVParallelCoordinatesPlot(DataSet data, int[] floatAttributeIDs, int[] stringAttributeIDs)
     {
         GameObject pcp = Instantiate(ETV2DParallelCoordinatesPlotPrefab);
 
-        pcp.GetComponent<ETV2DParallelCoordinatesPlot>().Init(data, ticks);
+        pcp.GetComponent<ETV2DParallelCoordinatesPlot>().Init(data, floatAttributeIDs, stringAttributeIDs);
         pcp.GetComponent<ETV2DParallelCoordinatesPlot>().UpdateETV();
 
         return pcp;

@@ -74,12 +74,12 @@ public class ETV3DFactory : AETVFactory
         return scatterPlot3D;
     }
 
-    public override GameObject CreateETVParallelCoordinatesPlot(DataSetMultiDimensionalPoints data, float[] ticks)
+    public override GameObject CreateETVParallelCoordinatesPlot(DataSet data, int[] floatAttributeIDs, int[] stringAttributeIDs)
     {
         GameObject pcp = Instantiate(ETV3DParallelCoordinatesPlotPrefab);
 
-        pcp.GetComponent<ETV3DParallelCoordinatesPlot>().Init(data, ticks);
-        pcp.GetComponent<ETV3DParallelCoordinatesPlot>().UpdateETV();
+        //pcp.GetComponent<ETV3DParallelCoordinatesPlot>().Init(data, ticks);
+        //pcp.GetComponent<ETV3DParallelCoordinatesPlot>().UpdateETV();
 
         return pcp;
     }

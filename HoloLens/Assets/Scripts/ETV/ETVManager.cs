@@ -172,20 +172,20 @@ public class ETVManager : MonoBehaviour {
         barChart2D.GetComponent<ETV2DBarChart>().ChangeColoringScheme(ETVColorSchemes.Rainbow);*/
 
 
-        float[][] nDpoints = new float[4][];
-        nDpoints[0] = new float[] { 0.0f, 0.1f, 0.2f };
-        nDpoints[1] = new float[] { 0.0f, 0.2f, 0.4f };
-        nDpoints[2] = new float[] { 0.0f, 0.4f, 0.4f };
-        nDpoints[3] = new float[] { 20, 21, 19 };
-        DataSetMultiDimensionalPoints dataX = new DataSetMultiDimensionalPoints(nDpoints, new string[] { "x", "y", "z", "T" }, new string[] { "m", "m", "m", "°C" });
-        GameObject pcp2D = ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(dataX, new float[] { .1f, .1f, .1f, 5f });
-        pcp2D.transform.position = new Vector3(-4,0,0);
+        //float[][] nDpoints = new float[4][];
+        //nDpoints[0] = new float[] { 0.0f, 0.1f, 0.2f };
+        //nDpoints[1] = new float[] { 0.0f, 0.2f, 0.4f };
+        //nDpoints[2] = new float[] { 0.0f, 0.4f, 0.4f };
+        //nDpoints[3] = new float[] { 20, 21, 19 };
+        //DataSetMultiDimensionalPoints dataX = new DataSetMultiDimensionalPoints(nDpoints, new string[] { "x", "y", "z", "T" }, new string[] { "m", "m", "m", "°C" });
+        //GameObject pcp2D = ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(dataX, new float[] { .1f, .1f, .1f, 5f });
+        //pcp2D.transform.position = new Vector3(-4,0,0);
 
-        GameObject pcp3D = ServiceLocator.instance.ETV3DFactoryService.CreateETVParallelCoordinatesPlot(dataX, new float[] { .1f, .1f, .1f, 5f });
+        //GameObject pcp3D = ServiceLocator.instance.ETV3DFactoryService.CreateETVParallelCoordinatesPlot(dataX, new float[] { .1f, .1f, .1f, 5f });
 
-        GameObject anchoredPCP3D = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(pcp3D);
+        //GameObject anchoredPCP3D = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(pcp3D);
 
-        anchoredPCP3D.transform.position = new Vector3(4, 0, 0);
+        //anchoredPCP3D.transform.position = new Vector3(4, 0, 0);
 
         
     }

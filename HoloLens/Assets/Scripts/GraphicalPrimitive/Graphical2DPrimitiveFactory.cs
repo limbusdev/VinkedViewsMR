@@ -8,6 +8,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     public GameObject bar2D;
     public GameObject label;
     public GameObject Axis2DPrefab;
+    public GameObject PCPLine2DPrefab;
 
     public override GameObject CreateAxis(Color color, string variableName, string variableEntity, 
         AxisDirection axisDirection, float length, float width = 0.01F, bool tipped = true, bool ticked = false)
@@ -69,9 +70,14 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     public override GameObject CreateBar(float value, float rangeToNormalizeTo, float width, float depth)
     {
         GameObject bar = Instantiate(bar2D);
-        bar.GetComponent<GraphicalPrimitive.Bar2D>().SetSize(width, value/rangeToNormalizeTo);
+        bar.GetComponent<Bar2D>().SetSize(width, value/rangeToNormalizeTo);
 
         return bar;
+    }
+
+    public GameObject CreatePCPLine()
+    {
+        return Instantiate(PCPLine2DPrefab);
     }
 
     public override GameObject CreateLabel(string labelText)

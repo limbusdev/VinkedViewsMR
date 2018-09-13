@@ -33,14 +33,14 @@ public class DataSet
     public string[] Variables { get; set; }
     public string[] Units { get; set; }
     public IList<InformationObject> dataObjects {get; set;}
-    public IDictionary<string, DataDimensionMeasures> dataMeasures { get; set; }
+    public IDictionary<string, DataDimensionMeasures> dataMeasuresFloat { get; set; }
     
     public DataSet(string title, string description, IList<InformationObject> dataObjects)
     {
         Title = title;
         Description = description;
         this.dataObjects = dataObjects;
-        this.dataMeasures = new Dictionary<string, DataDimensionMeasures>();
+        this.dataMeasuresFloat = new Dictionary<string, DataDimensionMeasures>();
 
         // Calculate Data Measures for Float Attributes
         int floatAttCounter = 0;
@@ -48,7 +48,7 @@ public class DataSet
         {
             DataDimensionMeasures measure;
             measure = DataProcessor.FloatAttribute.CalculateMeasures(dataObjects, floatAttCounter);
-            dataMeasures.Add(attribute.name, measure);
+            dataMeasuresFloat.Add(attribute.name, measure);
             floatAttCounter++;
         }
 

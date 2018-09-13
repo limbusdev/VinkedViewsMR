@@ -95,6 +95,8 @@ namespace VisBridge
         {
             // Set the first padding object as default
             Vector3 optimum = primitive.visBridgePortPadding[0].transform.position;
+            int optimalPort = 0;
+            float oldDistance, newDistance;
 
             // If there are more than 1 padding objects
             if(primitive.visBridgePortPadding.Length > 1)
@@ -105,17 +107,21 @@ namespace VisBridge
                     Vector3 pad = primitive.visBridgePortPadding[i].transform.position;
 
                     // Look if it is nearer to the other representative object than the currently set padding
-                    float oldDistance, newDistance;
                     oldDistance = Vector3.Distance(optimum, visBridgeAnchor.transform.position);
                     newDistance = Vector3.Distance(pad, visBridgeAnchor.transform.position);
-
+                    
                     if(newDistance < oldDistance)
                     {
+                        optimalPort = i;
                         optimum = pad;
                     }
                 }
             }
 
+            float anchorDistance = Vector3.Distance(primitive.visBridgePortPadding[optimalPort].transform.position, visBridgeAnchor.transform.position);
+            optimum = primitive.visBridgePortPadding[optimalPort].transform.localPosition * anchorDistance;
+            optimum = primitive.visBridgePort.transform.TransformPoint(optimum);
+            
             return optimum;
         }
 

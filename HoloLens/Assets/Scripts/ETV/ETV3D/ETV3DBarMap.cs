@@ -4,19 +4,8 @@ using GraphicalPrimitive;
 using Model;
 using UnityEngine;
 
-public class ETV3DBarMap : AETV3D {
-
-    // Use this for initialization
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
-
+public class ETV3DBarMap : AETV3D
+{
     public GameObject Anchor;
 
     private DataSetMatrix2x2Nominal data;

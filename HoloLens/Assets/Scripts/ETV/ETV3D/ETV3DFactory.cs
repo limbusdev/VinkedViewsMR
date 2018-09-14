@@ -16,11 +16,11 @@ public class ETV3DFactory : AETVFactory
     public GameObject ETV3DBarMapPrefab;
     public GameObject ETV3DSingleAxisPrefab;
 
-    public override GameObject CreateETVBarChart(DataSet data, int nominalAttributeID, int numericAttributeID)
+    public override GameObject CreateETVBarChart(DataSet data, int nominalAttributeID)
     {
         GameObject barChart = Instantiate(etv3DBarChart);
 
-        barChart.GetComponent<ETV3DBarChart>().Init(data, nominalAttributeID, numericAttributeID);
+        barChart.GetComponent<ETV3DBarChart>().Init(data, nominalAttributeID);
         barChart.GetComponent<ETV3DBarChart>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
         return barChart;

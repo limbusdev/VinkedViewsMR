@@ -43,13 +43,27 @@ public class DataProvider : MonoBehaviour
     {
         dataSets = new DataSet[csvFile.Length];
 
+        
+        for(int i=0; i<csvFile.Length; i++)
+        {
+            dataSets[i] = ImportDataSet(csvFile[i]);
+        }
+        
+
+        //Debug.Log(dataSets[0]);
+
+        //Debug.Log(dataSets[1]);
+    }
+
+    private DataSet ImportDataSet(TextAsset csvFile)
+    {
         // Initialize Sets
         stringDatasets = new Dictionary<string, string[]>();
         floatDatasets = new Dictionary<string, float[]>();
         variableTypes = new Dictionary<string, LevelOfMeasurement>();
 
         // Initialize Grid to store values
-        string[][] grid = CSVReader.SplitCsvGrid(csvFile[0].text);
+        string[][] grid = CSVReader.SplitCsvGrid(csvFile.text);
         variables = new string[grid.Length];
         units = new string[grid.Length];
 
@@ -57,64 +71,60 @@ public class DataProvider : MonoBehaviour
         float parseResult = 0;
 
         // Iterate over Grid
-        for (int variable = 0; variable < grid.Length; variable++)
+        for(int variable = 0; variable < grid.Length; variable++)
         {
             string currentVariableName = grid[variable][0];
             variables[variable] = currentVariableName;
 
-            if (float.TryParse(grid[variable][1], out parseResult))
+            if(float.TryParse(grid[variable][1], out parseResult))
             {
                 type = LevelOfMeasurement.RATIO;
             }
             variableTypes.Add(currentVariableName, type);
-            
 
-            if (type == LevelOfMeasurement.RATIO)
+
+            if(type == LevelOfMeasurement.RATIO)
             {
                 float[] newDataSet = new float[grid[variable].Length - 1];
                 floatDatasets.Add(currentVariableName, newDataSet);
 
-                for (int i = 1; i < grid[variable].Length; i++)
+                for(int i = 1; i < grid[variable].Length; i++)
                 {
-                    if (float.TryParse(grid[variable][i], NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out parseResult))
+                    if(float.TryParse(grid[variable][i], NumberStyles.Any, CultureInfo.InvariantCulture.NumberFormat, out parseResult))
                     {
                         newDataSet[i - 1] = parseResult;
-                    }
-                    else
+                    } else
                     {
                         newDataSet[i - 1] = float.NaN;
                     }
                 }
 
                 string ds = currentVariableName;
-                for (int i = 0; i < newDataSet.Length; i++)
+                for(int i = 0; i < newDataSet.Length; i++)
                 {
                     ds += "\n" + newDataSet[i];
                 }
-                Debug.Log(ds);
-            }
-            else /* LevelOfMeasurement.NOMINAL */
+                //Debug.Log(ds);
+            } else /* LevelOfMeasurement.NOMINAL */
             {
                 string[] newDataSet = new string[grid[variable].Length - 1];
                 stringDatasets.Add(currentVariableName, newDataSet);
 
-                for (int i = 1; i < grid[variable].Length; i++)
+                for(int i = 1; i < grid[variable].Length; i++)
                 {
                     newDataSet[i - 1] = grid[variable][i];
                 }
 
                 string ds = currentVariableName;
-                for (int i = 0; i < newDataSet.Length; i++)
+                for(int i = 0; i < newDataSet.Length; i++)
                 {
                     ds += "\n" + newDataSet[i];
                 }
-                Debug.Log(ds);
+                //Debug.Log(ds);
             }
         }
 
-        dataSets[0] = AssembleDataSet(variables, stringDatasets, floatDatasets, null, null, null);
-
-        Debug.Log(dataSets[0]);
+        return AssembleDataSet(variables, stringDatasets, floatDatasets, null, null, null);
     }
 
     private static DataSet AssembleDataSet(
@@ -172,15 +182,5 @@ public class DataProvider : MonoBehaviour
 
         return dataSet0;
     }
-
-    // Use this for initialization
-    void Start ()
-    {
-        
-    }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    
 }

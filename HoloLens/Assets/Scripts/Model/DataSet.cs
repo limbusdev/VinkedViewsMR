@@ -2,8 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
-public class DataDimensionMeasures
+public class FloatDataDimensionMeasures
 {
     public LevelOfMeasurement type;
     public float range, zeroBoundRange;
@@ -12,7 +13,7 @@ public class DataDimensionMeasures
     public string variableName;
     public string variableUnit;
 
-    public DataDimensionMeasures(string variableName, float range, float zeroBoundRange, float min, float zeroBoundMin, float max, float zeroBoundMax, string variableUnit = "", LevelOfMeasurement type = LevelOfMeasurement.NOMINAL)
+    public FloatDataDimensionMeasures(string variableName, float range, float zeroBoundRange, float min, float zeroBoundMin, float max, float zeroBoundMax, string variableUnit = "", LevelOfMeasurement type = LevelOfMeasurement.NOMINAL)
     {
         this.type = type;
         this.range = range;
@@ -36,6 +37,32 @@ public class DataDimensionMeasures
     }
 }
 
+public class StringDataDimensionMeasures
+{
+    public LevelOfMeasurement type;
+    public IDictionary<string, int> distribution;
+    public string variableName;
+    public string variableUnit;
+    public int minimum, zBoundMin;
+    public int maximum, zBoundMax;
+    public int range, zBoundRange;
+
+    public StringDataDimensionMeasures(LevelOfMeasurement type, IDictionary<string,int> distribution, string variableName, string variableUnit)
+    {
+        this.type = type;
+        this.variableName = variableName;
+        this.variableUnit = variableUnit;
+        this.distribution = distribution;
+
+        this.minimum = distribution.Values.Min();
+        this.maximum = distribution.Values.Max();
+        this.zBoundMin = 0;
+        this.zBoundMax = (maximum == 0) ? 0 : maximum;
+        this.range = maximum - minimum;
+        this.zBoundRange = zBoundMax - zBoundMin;
+    }
+}
+
 public class DataSet
 {
     public string Title { get; set; }
@@ -43,7 +70,8 @@ public class DataSet
     public string[] Variables { get; set; }
     public string[] Units { get; set; }
     public IList<InformationObject> informationObjects {get; set;}
-    public IDictionary<string, DataDimensionMeasures> dataMeasuresFloat { get; set; }
+    public IDictionary<string, FloatDataDimensionMeasures> dataMeasuresFloat { get; set; }
+    public IDictionary<string, StringDataDimensionMeasures> dataMeasuresString { get; set; }
 
     public string[] attributesFloat { get; set; }
     public string[] attributesInt { get; set; }
@@ -56,16 +84,27 @@ public class DataSet
         Title = title;
         Description = description;
         this.informationObjects = dataObjects;
-        this.dataMeasuresFloat = new Dictionary<string, DataDimensionMeasures>();
+        this.dataMeasuresFloat = new Dictionary<string, FloatDataDimensionMeasures>();
+        this.dataMeasuresString = new Dictionary<string, StringDataDimensionMeasures>();
 
         // Calculate Data Measures for Float Attributes
         int floatAttCounter = 0;
         foreach(GenericAttribute<float> attribute in dataObjects[0].attributesFloat)
         {
-            DataDimensionMeasures measure;
+            FloatDataDimensionMeasures measure;
             measure = DataProcessor.FloatAttribute.CalculateMeasures(dataObjects, floatAttCounter);
             dataMeasuresFloat.Add(attribute.name, measure);
             floatAttCounter++;
+        }
+
+        // Calculate Data Measures for String Attributes
+        int stringAttCounter = 0;
+        foreach(GenericAttribute<string> attribute in dataObjects[0].attributesString)
+        {
+            StringDataDimensionMeasures measure;
+            measure = DataProcessor.StringAttribute.CalculateMeasures(dataObjects, stringAttCounter);
+            dataMeasuresString.Add(attribute.name, measure);
+            stringAttCounter++;
         }
 
         // Fill variable names

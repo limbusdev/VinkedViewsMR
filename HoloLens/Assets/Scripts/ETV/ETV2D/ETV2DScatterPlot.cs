@@ -70,8 +70,8 @@ public class ETV2DScatterPlot : AETV2D
     {
         dots = new ScatterDot2D[data.informationObjects.Count];
 
-        DataDimensionMeasures measuresX = data.dataMeasuresFloat[data.attributesFloat[floatAttIDs.x]];
-        DataDimensionMeasures measuresY = data.dataMeasuresFloat[data.attributesFloat[floatAttIDs.y]];
+        FloatDataDimensionMeasures measuresX = data.dataMeasuresFloat[data.attributesFloat[floatAttIDs.x]];
+        FloatDataDimensionMeasures measuresY = data.dataMeasuresFloat[data.attributesFloat[floatAttIDs.y]];
 
         for(int i = 0; i < data.informationObjects.Count; i++)
         {

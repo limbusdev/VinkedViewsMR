@@ -5,4 +5,4 @@
 	+ der H-Bereich 60-120 gehört den VisBridges
 	+ 180-360 gehört den Visualisierungen
 	+ die Bereiche 0-60 und 120-180 dienen als visueller Puffer
-	+ das entsprechende Farbeschema (ETVColorSchemes) für Visualisierungen heißt "SplitHSV"
+	+ das entsprechende Farbschema (ETVColorSchemes) für Visualisierungen heißt "SplitHSV"

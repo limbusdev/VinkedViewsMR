@@ -96,8 +96,8 @@ public class ETV2DLineChart : AETV2D
         xyLineComp.lineRenderer.startWidth = 0.02f;
         xyLineComp.lineRenderer.endWidth = 0.02f;
 
-        DataDimensionMeasures measuresX = data.dataMeasuresFloat[data.attributesFloat[floatAttributeX]];
-        DataDimensionMeasures measuresY = data.dataMeasuresFloat[data.attributesFloat[floatAttributeY]];
+        FloatDataDimensionMeasures measuresX = data.dataMeasuresFloat[data.attributesFloat[floatAttributeX]];
+        FloatDataDimensionMeasures measuresY = data.dataMeasuresFloat[data.attributesFloat[floatAttributeY]];
 
         for(int i = 0; i < data.informationObjects.Count; i++)
         {

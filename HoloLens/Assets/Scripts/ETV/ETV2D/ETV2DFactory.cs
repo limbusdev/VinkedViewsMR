@@ -12,11 +12,11 @@ public class ETV2DFactory : AETVFactory
     public GameObject ETV2DScatterPlotPrefab;
     public GameObject ETV2DParallelCoordinatesPlotPrefab;
 
-    public override GameObject CreateETVBarChart(DataSet data, int nominalAttributeID, int numericAttributeID)
+    public override GameObject CreateETVBarChart(DataSet data, int nominalAttributeID)
     {
         GameObject barChart = Instantiate(ETV2DBarChartPrefab);
 
-        barChart.GetComponent<ETV2DBarChart>().Init(data, nominalAttributeID, numericAttributeID);
+        barChart.GetComponent<ETV2DBarChart>().Init(data, nominalAttributeID);
         barChart.GetComponent<ETV2DBarChart>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
         return barChart;

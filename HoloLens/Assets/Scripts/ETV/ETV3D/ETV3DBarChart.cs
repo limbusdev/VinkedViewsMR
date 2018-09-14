@@ -16,43 +16,50 @@ public class ETV3DBarChart : AETV3D
 
     private DataSet data;
 
-    private IList<Bar3D> bars;
+    private IDictionary<string, Bar3D> bars;
     private IDictionary<AxisDirection, GameObject> axis;
 
     private int stringAttributeID;
-    private int floatAttributeID;
 
-    public void Init(DataSet data, int nominalAttributeID, int numericAttributeID)
+    public void Init(DataSet data, int nominalAttributeID)
     {
         this.data = data;
         this.stringAttributeID = nominalAttributeID;
-        this.floatAttributeID = numericAttributeID;
 
-        bars = new List<Bar3D>();
+        bars = new Dictionary<string, Bar3D>();
         axis = new Dictionary<AxisDirection, GameObject>();
+
+        string attName = data.attributesString[stringAttributeID];
+        var measures = data.dataMeasuresString[attName];
 
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
 
-        float attributeRange = DataProcessor.FloatAttribute.CalculateZeroBoundRange(data.informationObjects, floatAttributeID);
+        float range = data.dataMeasuresString[data.attributesString[stringAttributeID]].zBoundRange;
 
         int categoryCounter = 0;
 
-        foreach(InformationObject o in data.informationObjects)
+
+        foreach(var cat in measures.distribution.Keys)
         {
-            GameObject bar = CreateBar(o, stringAttributeID, floatAttributeID, attributeRange);
-            bars.Add(bar.GetComponent<Bar3D>());
+            GameObject bar = CreateBar(stringAttributeID, cat, measures.zBoundRange);
+            bars.Add(cat, bar.GetComponent<Bar3D>());
 
             bar.transform.localPosition = new Vector3((categoryCounter) * 0.15f + 0.1f, 0, 0);
 
             bar.transform.parent = Anchor.transform;
-            string category = o.attributesString[stringAttributeID].value;
-            string labelString = (category.Length > 10) ? (category.Substring(0, 9) + ".") : category;
+            string labelString = (cat.Length > 10) ? (cat.Substring(0, 9) + ".") : cat;
             bar.GetComponent<Bar3D>().SetLabelCategoryText(labelString);
 
             categoryCounter++;
         }
 
-
+        foreach(var o in data.informationObjects)
+        {
+            var bar = bars[o.attributesString[stringAttributeID].value];
+            o.AddRepresentativeObject(attName, bar.gameObject);
+        }
+        
+        
         SetUpAxis();
     }
 
@@ -60,8 +67,10 @@ public class ETV3DBarChart : AETV3D
     {
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
+        float xAxisLength = data.dataMeasuresString[data.attributesString[stringAttributeID]].distribution.Keys.Count * 0.15f;
+
         // x-Axis
-        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, data.informationObjects.Count * 0.15f + .1f, .01f, false, false);
+        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, xAxisLength + .1f, .01f, false, false);
         xAxis.transform.parent = Anchor.transform;
 
         // y-Axis
@@ -69,8 +78,8 @@ public class ETV3DBarChart : AETV3D
         Axis2D axis2D = yAxis.GetComponent<Axis2D>();
 
         axis2D.ticked = true;
-        axis2D.min = data.dataMeasuresFloat[data.attributesFloat[floatAttributeID]].zeroBoundMin;
-        axis2D.max = data.dataMeasuresFloat[data.attributesFloat[floatAttributeID]].zeroBoundMax;
+        axis2D.min = data.dataMeasuresString[data.attributesString[stringAttributeID]].zBoundMin;
+        axis2D.max = data.dataMeasuresString[data.attributesString[stringAttributeID]].zBoundMax;
 
         axis2D.CalculateTickResolution();
         
@@ -78,14 +87,14 @@ public class ETV3DBarChart : AETV3D
 
         // Grid
         GameObject grid = factory2D.CreateGrid(Color.gray, AxisDirection.X, AxisDirection.Y,
-            true, 10, 0.1f, data.informationObjects.Count * 0.15f, false);
+            true, 10, 0.1f, xAxisLength, false);
         grid.transform.parent = Anchor.transform;
 
         axis.Add(AxisDirection.X, xAxis);
         axis.Add(AxisDirection.Y, yAxis);
 
         SetAxisLabels(AxisDirection.X, data.informationObjects[0].attributesString[stringAttributeID].name, "");
-        SetAxisLabels(AxisDirection.Y, data.informationObjects[0].attributesFloat[floatAttributeID].name, "");
+        SetAxisLabels(AxisDirection.Y, "Amount", "");
     }
 
     /**
@@ -93,19 +102,14 @@ public class ETV3DBarChart : AETV3D
      * @param range         maximum - minimum value of this attribute
      * @param attributeID   which attribute
      * */
-    private GameObject CreateBar(InformationObject obj, int stringAttributeID, int floatAttributeID, float range)
+    private GameObject CreateBar(int stringAttributeID, string category, float range)
     {
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
-
-        Debug.Log("creating bar: " + obj.attributesFloat[floatAttributeID].name + " Height: " + obj.attributesFloat[floatAttributeID].value);
-
-        float value = obj.attributesFloat[floatAttributeID].value;
+        
+        float value = data.dataMeasuresString[data.attributesString[stringAttributeID]].distribution[category];
         GameObject bar = factory3D.CreateBar(value, range, .1f, .1f);
 
-        bar.GetComponent<Bar3D>().SetLabelText(obj.attributesFloat[floatAttributeID].value.ToString());
-
-        obj.AddRepresentativeObject(obj.attributesString[stringAttributeID].name, bar);
-        obj.AddRepresentativeObject(obj.attributesFloat[floatAttributeID].name, bar);
+        bar.GetComponent<Bar3D>().SetLabelText(value.ToString());
 
         return bar;
     }
@@ -116,34 +120,34 @@ public class ETV3DBarChart : AETV3D
     {
         int category = 0;
         int numberOfCategories = bars.Count;
-        switch (scheme)
+        switch(scheme)
         {
             case ETVColorSchemes.Rainbow:
-                foreach(var bar in bars)
+                foreach(Bar3D bar in bars.Values)
                 {
                     Color color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
-                    bar.GetComponent<Bar3D>().SetColor(color);
-                    bar.GetComponent<Bar3D>().ApplyColor(color);
+                    bar.SetColor(color);
+                    bar.ApplyColor(color);
                     category++;
                 }
                 break;
             case ETVColorSchemes.GrayZebra:
                 bool even = true;
-                foreach (var bar in bars)
+                foreach(Bar3D bar in bars.Values)
                 {
                     Color color = (even) ? Color.gray : Color.white;
-                    bar.GetComponent<Bar3D>().SetColor(color);
-                    bar.GetComponent<Bar3D>().ApplyColor(color);
+                    bar.SetColor(color);
+                    bar.ApplyColor(color);
                     even = !even;
                     category++;
                 }
                 break;
             case ETVColorSchemes.SplitHSV:
-                foreach(var bar in bars)
+                foreach(Bar3D bar in bars.Values)
                 {
-                    Color color = Color.HSVToRGB((((float)category) / numberOfCategories)/2f+.5f, 1, 1);
-                    bar.GetComponent<Bar3D>().SetColor(color);
-                    bar.GetComponent<Bar3D>().ApplyColor(color);
+                    Color color = Color.HSVToRGB((((float)category) / numberOfCategories) / 2f + .5f, 1, 1);
+                    bar.SetColor(color);
+                    bar.ApplyColor(color);
                     category++;
                 }
                 break;

@@ -12,5 +12,24 @@ namespace GraphicalPrimitive
         public GameObject label;
         public GameObject visBridgePort;
         public GameObject[] visBridgePortPadding;
+
+        private Color primitiveColor = Color.white;
+
+        public void SetColor(Color color)
+        {
+            primitiveColor = color;
+        }
+
+        public void Brush(Color color)
+        {
+            ApplyColor(color);
+        }
+
+        public void Unbrush()
+        {
+            ApplyColor(primitiveColor);
+        }
+
+        public virtual void ApplyColor(Color color) { }
     }
 }

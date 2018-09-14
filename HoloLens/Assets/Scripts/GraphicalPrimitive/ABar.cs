@@ -12,7 +12,6 @@ namespace GraphicalPrimitive
         public GameObject labelCategory;
 
         public abstract void SetSize(float width, float height, float depth);
-        public abstract void ChangeColor(Color color);
 
         public void SetLabelText(string newText)
         {

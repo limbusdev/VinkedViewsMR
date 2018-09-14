@@ -150,7 +150,8 @@ public class ETV3DBarMap : AETV3D {
                         color = Color.HSVToRGB(0, 0, data.ordinalValues[row, col] / data.zeroBoundRange);
                         break;
                 }
-                bar.GetComponent<Bar3D>().ChangeColor(color);
+                bar.GetComponent<Bar3D>().SetColor(color);
+                bar.GetComponent<Bar3D>().ApplyColor(color);
             }
         }
     }

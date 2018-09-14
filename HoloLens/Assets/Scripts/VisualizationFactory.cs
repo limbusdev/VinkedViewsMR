@@ -203,14 +203,20 @@ public class VisualizationFactory : MonoBehaviour {
                 // For every other GameObject in that list
                 foreach(GameObject target in list)
                 {
-                    primTarget = target.GetComponent<AGraphicalPrimitive>();
-
-                    if(!target.Equals(origin) && !(activeVisBridges.Contains(new ObjectBasedVisBridge(primOrigin, primTarget))))
+                    if(origin != target)
                     {
-                        // Create a VisBridge between them
-                        var visBridge = CreateObjectBasedVisBridge(primOrigin, primTarget);
-                        // Add it to a list to update the bridges, when the visualizations move
-                        activeVisBridges.Add(visBridge.GetComponent<ObjectBasedVisBridge>());
+                        primTarget = target.GetComponent<AGraphicalPrimitive>();
+
+                        if(!(activeVisBridges.Contains(new ObjectBasedVisBridge(primOrigin, primTarget))))
+                        {
+                            if(primOrigin != primTarget)
+                            {
+                                // Create a VisBridge between them
+                                var visBridge = CreateObjectBasedVisBridge(primOrigin, primTarget);
+                                // Add it to a list to update the bridges, when the visualizations move
+                                activeVisBridges.Add(visBridge.GetComponent<ObjectBasedVisBridge>());
+                            }
+                        }
                     }
                 }
             }
@@ -221,6 +227,8 @@ public class VisualizationFactory : MonoBehaviour {
     {
         var visBridge = Instantiate(ObjectBasedVisBridgePrefab);
         visBridge.GetComponent<ObjectBasedVisBridge>().Init(origin, target);
+        origin.Brush(Color.yellow);
+        target.Brush(Color.yellow);
 
         return visBridge;
     }

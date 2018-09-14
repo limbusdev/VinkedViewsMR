@@ -13,6 +13,8 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
     private int[] floatAttributeIDs;
     private int[] stringAttributeIDs;
 
+    private PCPLine2D[] linePrimitives;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -30,12 +32,8 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         this.floatAttributeIDs = floatAttributeIDs;
         this.stringAttributeIDs = stringAttributeIDs;
         this.data = data;
+        this.linePrimitives = new PCPLine2D[data.dataObjects.Count];
         UpdateETV();
-    }
-
-    public override void ChangeColoringScheme(ETVColorSchemes scheme)
-    {
-        base.ChangeColoringScheme(scheme);
     }
 
     public override void SetUpAxis()
@@ -67,11 +65,11 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         }
     }
 
-    private void CreateLine(InformationObject o, Color color)
+    private PCPLine2D CreateLine(InformationObject o, Color color)
     {
         Graphical2DPrimitiveFactory factory = ServiceLocator.instance.PrimitiveFactory2Dservice;
         var pcpLine = factory.CreatePCPLine();
-        PCPLine2D pcpComp = pcpLine.GetComponent<PCPLine2D>();
+        var pcpComp = pcpLine.GetComponent<PCPLine2D>();
         pcpComp.lineRenderer.startColor = color;
         pcpComp.lineRenderer.endColor = color;
         pcpComp.lineRenderer.startWidth = 0.02f;
@@ -96,7 +94,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         pcpComp.lineRenderer.SetPositions(polyline);
         pcpLine.transform.parent = Anchor.transform;
 
-        
+        return pcpComp;
     }
 
     public void DrawGraph()
@@ -106,10 +104,35 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         int i = 0;
         foreach(InformationObject o in data.dataObjects)
         {
-            Color color = Color.HSVToRGB(((float)i) / data.dataObjects.Count, 1, 1);
-
-            CreateLine(o, color);
+            linePrimitives[i] = CreateLine(o, Color.white);
             i++;
+        }
+    }
+
+    public override void ChangeColoringScheme(ETVColorSchemes scheme)
+    {
+        switch(scheme)
+        {
+            case ETVColorSchemes.Rainbow:
+                for(int i=0; i<linePrimitives.Length; i++)
+                {
+                    Color color = Color.HSVToRGB(((float)i) / linePrimitives.Length, 1, 1);
+                    LineRenderer lr = linePrimitives[i].lineRenderer;
+                    lr.startColor = color;
+                    lr.endColor = color;
+                }
+                break;
+            case ETVColorSchemes.SplitHSV:
+                for(int i = 0; i < linePrimitives.Length; i++)
+                {
+                    Color color = Color.HSVToRGB((((float)i) / linePrimitives.Length)/2f+.5f, 1, 1);
+                    LineRenderer lr = linePrimitives[i].lineRenderer;
+                    lr.startColor = color;
+                    lr.endColor = color;
+                }
+                break;
+            default:
+                break;
         }
     }
 

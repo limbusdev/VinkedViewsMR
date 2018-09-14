@@ -154,9 +154,9 @@ namespace GraphicalPrimitive
                     tmUnit.alignment = TextAlignment.Left;
                     break;
                 case AxisDirection.Y:
-                    tmVariable.anchor = TextAnchor.MiddleRight;
+                    tmVariable.anchor = TextAnchor.LowerRight;
                     tmVariable.alignment = TextAlignment.Right;
-                    tmUnit.anchor = TextAnchor.MiddleRight;
+                    tmUnit.anchor = TextAnchor.UpperRight;
                     tmUnit.alignment = TextAlignment.Right;
                     break;
                 default:
@@ -167,7 +167,14 @@ namespace GraphicalPrimitive
                     break;
             }
 
-            labelAnchor.transform.localPosition = lr.GetPosition(1);
+            if(tipped)
+            {
+                var lrTip = Tip.GetComponent<LineRenderer>();
+                labelAnchor.transform.localPosition = lrTip.GetPosition(1);
+            } else
+            {
+                labelAnchor.transform.localPosition = lr.GetPosition(1);
+            }
         }
     }
 }

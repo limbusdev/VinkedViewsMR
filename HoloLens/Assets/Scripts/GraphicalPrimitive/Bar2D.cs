@@ -11,7 +11,7 @@ namespace GraphicalPrimitive
         public GameObject barFront;
         public GameObject barBack;
 
-        override public void ChangeColor(Color color)
+        public override void ApplyColor(Color color)
         {
             Renderer rend = barBack.GetComponent<Renderer>();
             rend.material = new Material(Shader.Find("Specular"));
@@ -21,7 +21,7 @@ namespace GraphicalPrimitive
             rend.material = new Material(Shader.Find("Specular"));
             rend.material.color = color;
         }
-
+       
         override public void SetSize(float width, float height, float depth=1)
         {
             bar.transform.localScale = new Vector3(width, height, 1);

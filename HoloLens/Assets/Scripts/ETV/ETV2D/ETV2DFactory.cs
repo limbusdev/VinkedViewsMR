@@ -17,7 +17,7 @@ public class ETV2DFactory : AETVFactory
         GameObject barChart = Instantiate(ETV2DBarChartPrefab);
 
         barChart.GetComponent<ETV2DBarChart>().Init(data, nominalAttributeID, numericAttributeID);
-        barChart.GetComponent<ETV2DBarChart>().ChangeColoringScheme(ETVColorSchemes.Rainbow);
+        barChart.GetComponent<ETV2DBarChart>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
         return barChart;
     }
@@ -37,6 +37,7 @@ public class ETV2DFactory : AETVFactory
         GameObject pcp = Instantiate(ETV2DParallelCoordinatesPlotPrefab);
 
         pcp.GetComponent<ETV2DParallelCoordinatesPlot>().Init(data, floatAttributeIDs, stringAttributeIDs);
+        pcp.GetComponent<ETV2DParallelCoordinatesPlot>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
         pcp.GetComponent<ETV2DParallelCoordinatesPlot>().UpdateETV();
 
         return pcp;

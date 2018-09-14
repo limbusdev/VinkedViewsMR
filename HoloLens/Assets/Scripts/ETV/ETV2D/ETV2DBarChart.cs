@@ -78,7 +78,8 @@ public class ETV2DBarChart : AETV2D
                 foreach (GameObject bar in bars)
                 {
                     Color color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
-                    bar.GetComponent<Bar2D>().ChangeColor(color);
+                    bar.GetComponent<Bar2D>().SetColor(color);
+                    bar.GetComponent<Bar2D>().ApplyColor(color);
                     category++;
                 }
                 break;
@@ -86,8 +87,19 @@ public class ETV2DBarChart : AETV2D
                 bool even = true;
                 foreach (GameObject bar in bars)
                 {
-                    bar.GetComponent<Bar2D>().ChangeColor((even) ? Color.gray : Color.white);
+                    Color color = (even) ? Color.gray : Color.white;
+                    bar.GetComponent<Bar2D>().SetColor(color);
+                    bar.GetComponent<Bar2D>().ApplyColor(color);
                     even = !even;
+                    category++;
+                }
+                break;
+            case ETVColorSchemes.SplitHSV:
+                foreach(GameObject bar in bars)
+                {
+                    Color color = Color.HSVToRGB((((float)category) / numberOfCategories)/2f+.5f, 1, 1);
+                    bar.GetComponent<Bar2D>().SetColor(color);
+                    bar.GetComponent<Bar2D>().ApplyColor(color);
                     category++;
                 }
                 break;

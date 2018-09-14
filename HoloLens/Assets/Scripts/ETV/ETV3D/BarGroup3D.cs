@@ -57,7 +57,8 @@ public class BarGroup3D : MonoBehaviour {
                 foreach (GameObject bar in bars)
                 {
                     Color color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
-                    bar.GetComponent<Bar3D>().ChangeColor(color);
+                    bar.GetComponent<Bar3D>().SetColor(color);
+                    bar.GetComponent<Bar3D>().ApplyColor(color);
                     category++;
                     colors.Add(color);
                 }
@@ -67,7 +68,8 @@ public class BarGroup3D : MonoBehaviour {
                 foreach (GameObject bar in bars)
                 {
                     Color color = (even) ? Color.gray : Color.white;
-                    bar.GetComponent<Bar3D>().ChangeColor(color);
+                    bar.GetComponent<Bar3D>().SetColor(color);
+                    bar.GetComponent<Bar3D>().ApplyColor(color);
                     even = !even;
                     category++;
                     colors.Add(color);

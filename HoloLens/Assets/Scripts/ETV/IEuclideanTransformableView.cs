@@ -18,5 +18,6 @@ public enum ETVColorSchemes
     GrayZebra,
     Rainbow,
     LightRainbow,
-    DarkRainbow
+    DarkRainbow,
+    SplitHSV
 }

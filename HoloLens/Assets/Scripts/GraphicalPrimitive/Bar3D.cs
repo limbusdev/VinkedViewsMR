@@ -10,7 +10,7 @@ namespace GraphicalPrimitive
     {
         public GameObject geometry;
 
-        public override void ChangeColor(Color newColor)
+        public override void ApplyColor(Color newColor)
         {
             geometry.GetComponent<Renderer>().material.color = newColor;
         }

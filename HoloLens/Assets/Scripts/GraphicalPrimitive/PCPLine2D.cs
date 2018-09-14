@@ -19,5 +19,11 @@ namespace GraphicalPrimitive
         {
 
         }
+
+        public override void ApplyColor(Color color)
+        {
+            lineRenderer.startColor = color;
+            lineRenderer.endColor = color;
+        }
     }
 }

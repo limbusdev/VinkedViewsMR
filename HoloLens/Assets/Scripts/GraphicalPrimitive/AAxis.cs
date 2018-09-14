@@ -45,7 +45,15 @@ namespace GraphicalPrimitive
         public void CalculateTickResolution()
         {
             float range = Mathf.Abs(max - min);
-            tickResolution = range / 10f;
+            int tickCount = 11;
+            float unroundedTickSize = range / (tickCount - 1);
+            float x = Mathf.Ceil(Mathf.Log10(unroundedTickSize) - 1);
+            float pow10x = Mathf.Pow(10, x);
+            tickResolution = Mathf.Ceil(unroundedTickSize / pow10x) * pow10x;
+
+            
+            //float range = Mathf.Abs(max - min);
+            //tickResolution = range / 10f;
         }
 
         protected Vector3 direction = Vector3.up;

@@ -27,13 +27,11 @@ public class DataDimensionMeasures
 
     public float NormalizeToRange(float value)
     {
-        Debug.Log(value + " normalized by r " + range + " to " + ((value-min) / range));
         return (value-min) / range;
     }
 
     public float NormalizeToZeroBoundRange(float value)
     {
-        Debug.Log(value + " normalized by zbr " + zeroBoundRange + " to " + ((value - zeroBoundMin) / zeroBoundRange));
         return (value-zeroBoundMin) / zeroBoundRange;
     }
 }

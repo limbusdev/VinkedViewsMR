@@ -83,9 +83,7 @@ public class ETV2DLineChart : AETV2D
         }
         yAxis2D.CalculateTickResolution();
         yAxis2D.UpdateAxis();
-
-
-        //bounds[1] += 1f + .5f;
+        
 
     }
 

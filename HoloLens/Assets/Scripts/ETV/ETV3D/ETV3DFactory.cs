@@ -21,6 +21,7 @@ public class ETV3DFactory : AETVFactory
         GameObject barChart = Instantiate(etv3DBarChart);
 
         barChart.GetComponent<ETV3DBarChart>().Init(data, nominalAttributeID, numericAttributeID);
+        barChart.GetComponent<ETV3DBarChart>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
         return barChart;
     }

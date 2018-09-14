@@ -22,12 +22,14 @@ public class ETV2DFactory : AETVFactory
         return barChart;
     }
 
-    public override GameObject CreateETVLineChart(DataSetLines data, float minX, float maxX, float minY, float maxY, float ticksX, float ticksY)
+    public override GameObject CreateETVLineChart(DataSet data, int floatAttributeX, int floatAttributeY, bool xAxisBoundToZero, bool yAxisBoundToZero)
     {
         GameObject lineChart = Instantiate(ETV2DLineChartPrefab);
 
-        lineChart.GetComponent<ETV2DLineChart>().Init(data, minX, maxX, minY, maxY, ticksX, ticksY);
+        lineChart.GetComponent<ETV2DLineChart>().Init(data, floatAttributeX, floatAttributeY, xAxisBoundToZero, yAxisBoundToZero);
+        lineChart.GetComponent<ETV2DLineChart>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
         lineChart.GetComponent<ETV2DLineChart>().UpdateETV();
+        
 
         return lineChart;
     }

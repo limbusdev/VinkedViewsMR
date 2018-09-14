@@ -27,7 +27,7 @@ public class DataProcessor
 
         public static float CalculateMin(IList<InformationObject> os, int attributeID)
         {
-            float minimum = 0;
+            float minimum = float.MaxValue;
             foreach(InformationObject dataObject in os)
             {
                 var attribute = dataObject.attributesFloat[attributeID];
@@ -49,7 +49,7 @@ public class DataProcessor
 
         public static float CalculateMax(IList<InformationObject> os, int attributeID)
         {
-            float max = 0;
+            float max = float.MinValue;
             foreach(InformationObject dataObject in os)
             {
                 var attribute = dataObject.attributesFloat[attributeID];

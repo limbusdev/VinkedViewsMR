@@ -4,43 +4,38 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ETV2DLineChart : AETV2D {
-
+public class ETV2DLineChart : AETV2D
+{
     public GameObject Anchor;
-    private DataSetLines data;
-    private float rangeX, rangeY;
-    private float minX = 0;
-    private float maxX = 1;
-    private float minY = 0;
-    private float maxY = 1;
-    private float ticksX = 1;
-    private float ticksY = 1;
 
-	// Use this for initialization
-	void Start ()
-    {
-        
-    }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public DataSet data;
+    int floatAttributeX, floatAttributeY;
+    bool xBoundToZero, yBoundToZero;
 
-    public void Init(DataSetLines data, float minX, float maxX, float minY, float maxY, float ticksX, float ticksY)
+    private XYLine2D primitive;
+
+    
+    public void Init(DataSet data, int floatAttributeIDx, int floatAttributeIDy, bool xAxisBoundToZero, bool yAxisBoundToZero)
     {
         this.data = data;
-        this.minX = minX;
-        this.maxX = maxX;
-        this.minY = minY;
-        this.maxY = maxY;
-        rangeX = maxX - minX;
-        rangeY = maxY - minY;
-        this.ticksX = ticksX;
-        this.ticksY = ticksY;
+        this.floatAttributeX = floatAttributeIDx;
+        this.floatAttributeY = floatAttributeIDy;
+        this.xBoundToZero = xAxisBoundToZero;
+        this.yBoundToZero = yAxisBoundToZero;
+        UpdateETV();
     }
 
-    public override void ChangeColoringScheme(ETVColorSchemes scheme) { }
+    public override void ChangeColoringScheme(ETVColorSchemes scheme)
+    {
+        switch(scheme)
+        {
+            default:
+                Color color = Color.HSVToRGB(.5f, 1, 1);
+                primitive.SetColor(color);
+                primitive.ApplyColor(color);
+                break;
+        }
+    }
 
     public override void UpdateETV()
     {
@@ -53,68 +48,93 @@ public class ETV2DLineChart : AETV2D {
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
         // x-Axis
-        GameObject xAxis = factory2D.CreateAxis(Color.white, data.variableX, data.unitX, AxisDirection.X, 1f, .01f, true, true);
+        GameObject xAxis = factory2D.CreateAxis(Color.white, data.attributesFloat[floatAttributeX], "", AxisDirection.X, 1f, .01f, true, true);
         xAxis.transform.localPosition = new Vector3(0, 0, -.001f);
         xAxis.transform.parent = Anchor.transform;
         Axis2D xAxis2D = xAxis.GetComponent<Axis2D>();
         xAxis2D.ticked = true;
-        xAxis2D.tickResolution = ticksX;
-        xAxis2D.min = minX;
-        xAxis2D.max = maxX;
+        if(xBoundToZero)
+        {
+            xAxis2D.min = data.dataMeasuresFloat[data.attributesFloat[floatAttributeX]].zeroBoundMin;
+            xAxis2D.max = data.dataMeasuresFloat[data.attributesFloat[floatAttributeX]].zeroBoundMax;
+        } else
+        {
+            xAxis2D.min = data.dataMeasuresFloat[data.attributesFloat[floatAttributeX]].min;
+            xAxis2D.max = data.dataMeasuresFloat[data.attributesFloat[floatAttributeX]].max;
+        }
+        xAxis2D.CalculateTickResolution();
         xAxis2D.UpdateAxis();
         bounds[0] += 1f + .5f;
 
         // y-Axis
-        GameObject yAxis = factory2D.CreateAxis(Color.white, data.variableY, data.unitY, AxisDirection.Y, 1f, .01f, true, true);
+        GameObject yAxis = factory2D.CreateAxis(Color.white, data.attributesFloat[floatAttributeY], "", AxisDirection.Y, 1f, .01f, true, true);
         yAxis.transform.localPosition = new Vector3(0, 0, -.001f);
         yAxis.transform.parent = Anchor.transform;
         Axis2D yAxis2D = yAxis.GetComponent<Axis2D>();
         yAxis2D.ticked = true;
-        yAxis2D.tickResolution = ticksY;
-        yAxis2D.min = minY;
-        yAxis2D.max = maxY;
+        if(yBoundToZero)
+        {
+            yAxis2D.min = data.dataMeasuresFloat[data.attributesFloat[floatAttributeY]].zeroBoundMin;
+            yAxis2D.max = data.dataMeasuresFloat[data.attributesFloat[floatAttributeY]].zeroBoundMax;
+        } else
+        {
+            yAxis2D.min = data.dataMeasuresFloat[data.attributesFloat[floatAttributeY]].min;
+            yAxis2D.max = data.dataMeasuresFloat[data.attributesFloat[floatAttributeY]].max;
+        }
+        yAxis2D.CalculateTickResolution();
         yAxis2D.UpdateAxis();
 
 
-        bounds[1] += 1f + .5f;
-        
+        //bounds[1] += 1f + .5f;
+
     }
 
     public void DrawGraph()
     {
-        int counter = 0;
-        foreach (LineObject lo in data.lineObjects)
+        var line = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateXYLine();
+        var xyLineComp = line.GetComponent<XYLine2D>();
+        var polyline = new Vector3[data.informationObjects.Count];
+        
+        xyLineComp.lineRenderer.startWidth = 0.02f;
+        xyLineComp.lineRenderer.endWidth = 0.02f;
+
+        DataDimensionMeasures measuresX = data.dataMeasuresFloat[data.attributesFloat[floatAttributeX]];
+        DataDimensionMeasures measuresY = data.dataMeasuresFloat[data.attributesFloat[floatAttributeY]];
+
+        for(int i = 0; i < data.informationObjects.Count; i++)
         {
-            Color color = Color.HSVToRGB(((float)counter) / data.lineObjects.Length, 1, 1);
+            InformationObject o = data.informationObjects[i];
 
-            GameObject renderedLine = new GameObject(lo.nominalValue);
-            var lineRend = renderedLine.AddComponent<LineRenderer>();
-            lineRend.useWorldSpace = false;
-            lineRend.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-            lineRend.startColor = color;
-            lineRend.endColor = color;
-            lineRend.startWidth = .02f;
-            lineRend.endWidth = .02f;
-            lineRend.positionCount = lo.values.Length;
-            lineRend.alignment = LineAlignment.TransformZ;
-
-            // Assemble Polyline
-            Vector3[] polyline = new Vector3[lo.values.Length];
-            for(int i=0; i<lo.values.Length; i++)
+            float x=0, y=0;
+            if(xBoundToZero && yBoundToZero)
             {
-                polyline[i] = new Vector3(lo.values[i].x/rangeX, lo.values[i].y/rangeY, 0);
+                x = measuresX.NormalizeToZeroBoundRange(o.attributesFloat[floatAttributeX].value);
+                y = measuresY.NormalizeToZeroBoundRange(o.attributesFloat[floatAttributeY].value);
+            } else if(xBoundToZero && !yBoundToZero)
+            {
+                x = measuresX.NormalizeToZeroBoundRange(o.attributesFloat[floatAttributeX].value);
+                y = measuresY.NormalizeToRange(o.attributesFloat[floatAttributeY].value);
+            } else if(!xBoundToZero && yBoundToZero)
+            {
+                x = measuresX.NormalizeToRange(o.attributesFloat[floatAttributeX].value);
+                y = measuresY.NormalizeToZeroBoundRange(o.attributesFloat[floatAttributeY].value);
+            } else if(!xBoundToZero && !yBoundToZero)
+            {
+                x = measuresX.NormalizeToRange(o.attributesFloat[floatAttributeX].value);
+                y = measuresY.NormalizeToRange(o.attributesFloat[floatAttributeY].value);
             }
 
-            lineRend.SetPositions(polyline);
+            polyline[i] = new Vector3(x,y,0);
 
-            renderedLine.transform.parent = Anchor.transform;
-
-            GameObject label = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateLabel(lo.nominalValue);
-            label.GetComponent<TextMesh>().color = color;
-            label.transform.localPosition = polyline[0];
-            label.transform.parent = Anchor.transform;
-
-            counter++;
+            o.AddRepresentativeObject(data.attributesFloat[floatAttributeX], line);
+            o.AddRepresentativeObject(data.attributesFloat[floatAttributeY], line);
         }
+
+        xyLineComp.visBridgePort.transform.localPosition = polyline[0];
+        xyLineComp.lineRenderer.positionCount = polyline.Length;
+        xyLineComp.lineRenderer.SetPositions(polyline);
+        line.transform.parent = Anchor.transform;
+
+        primitive = xyLineComp;
     }
 }

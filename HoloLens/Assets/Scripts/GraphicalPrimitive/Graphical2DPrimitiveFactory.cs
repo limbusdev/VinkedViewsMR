@@ -9,6 +9,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     public GameObject label;
     public GameObject Axis2DPrefab;
     public GameObject PCPLine2DPrefab;
+    public GameObject XYLine2DPrefab;
 
     public override GameObject CreateAxis(Color color, string variableName, string variableEntity, 
         AxisDirection axisDirection, float length, float width = 0.01F, bool tipped = true, bool ticked = false)
@@ -78,6 +79,11 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     public GameObject CreatePCPLine()
     {
         return Instantiate(PCPLine2DPrefab);
+    }
+
+    public GameObject CreateXYLine()
+    {
+        return Instantiate(XYLine2DPrefab);
     }
 
     public override GameObject CreateLabel(string labelText)

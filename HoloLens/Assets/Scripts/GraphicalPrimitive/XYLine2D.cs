@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace GraphicalPrimitive
 {
-    public class PCPLine2D : AGraphicalPrimitive
+    public class XYLine2D : AGraphicalPrimitive
     {
         public LineRenderer lineRenderer;
-        
+
         public override void ApplyColor(Color color)
         {
             lineRenderer.startColor = color;

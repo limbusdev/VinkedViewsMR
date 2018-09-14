@@ -15,24 +15,12 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
     private PCPLine2D[] linePrimitives;
 
-	// Use this for initialization
-	void Start ()
-    {
-        
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		
-	}
-
     public void Init(DataSet data, int[] floatAttributeIDs, int[] stringAttributeIDs)
     {
         this.floatAttributeIDs = floatAttributeIDs;
         this.stringAttributeIDs = stringAttributeIDs;
         this.data = data;
-        this.linePrimitives = new PCPLine2D[data.dataObjects.Count];
+        this.linePrimitives = new PCPLine2D[data.informationObjects.Count];
         UpdateETV();
     }
 
@@ -45,7 +33,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
         for(int i=0; i<floatAttributeIDs.Length; i++)
         {
-            string attributeName = data.dataObjects[0].attributesFloat[floatAttributeIDs[i]].name;
+            string attributeName = data.informationObjects[0].attributesFloat[floatAttributeIDs[i]].name;
             string attributeUnit = "";
             GameObject axis = factory2D.CreateAxis(
                 Color.white, attributeName, attributeUnit, 
@@ -84,13 +72,10 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
             GenericAttribute<float> attribute = o.attributesFloat[variable];
             polyline[variable] = new Vector3(.5f * variable, attribute.value / data.dataMeasuresFloat[attribute.name].zeroBoundRange, 0);
             o.AddRepresentativeObject(attribute.name, pcpLine);
-
-            if(variable == 0)
-            {
-                pcpComp.visBridgePort.transform.localPosition = polyline[variable];
-            }
+            
         }
 
+        pcpComp.visBridgePort.transform.localPosition = polyline[0];
         pcpComp.lineRenderer.SetPositions(polyline);
         pcpLine.transform.parent = Anchor.transform;
 
@@ -102,7 +87,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         int dimension = floatAttributeIDs.Length + stringAttributeIDs.Length;
 
         int i = 0;
-        foreach(InformationObject o in data.dataObjects)
+        foreach(InformationObject o in data.informationObjects)
         {
             linePrimitives[i] = CreateLine(o, Color.white);
             i++;

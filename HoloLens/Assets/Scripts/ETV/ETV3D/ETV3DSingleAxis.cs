@@ -23,7 +23,7 @@ public class ETV3DSingleAxis : AETV3D
         this.data = data;
         this.attributeID = attributeID;
 
-        float attributeRange = DataProcessor.FloatAttribute.CalculateRange(data.dataObjects, attributeID);
+        float attributeRange = DataProcessor.FloatAttribute.CalculateRange(data.informationObjects, attributeID);
 
         
         SetUpAxis();

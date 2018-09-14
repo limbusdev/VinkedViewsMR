@@ -91,13 +91,21 @@ public class VisualizationFactory : MonoBehaviour {
         GameObject newETV2DPCP = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DPCP);
         newETV2DPCP.transform.Translate(new Vector3(-2, 0, 0));
 
+        GameObject new2DXY = ServiceLocator.instance.ETV2DFactoryService.CreateETVLineChart(educationalData, 0, 1, false, true);
+        GameObject newETV2DXY = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DXY);
+        newETV2DXY.transform.Translate(new Vector3(-2, 0, 2));
+
+        GameObject new2DXY2 = ServiceLocator.instance.ETV2DFactoryService.CreateETVLineChart(fbiData, 0, 1, false, true);
+        GameObject newETV2DXY2 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DXY2);
+        newETV2DXY2.transform.Translate(new Vector3(-3, 0, 1));
+
 
         //foreach(InformationObject o in educationalData.dataObjects)
         //{
         //    DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(o);
         //}
 
-        DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(educationalData.dataObjects.First());
+        DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(educationalData.informationObjects.First());
         
 
         /*

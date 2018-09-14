@@ -45,11 +45,11 @@ public class ETV2DBarChart : AETV2D
 
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
         
-        float attributeRange = DataProcessor.FloatAttribute.CalculateZeroBoundRange(data.dataObjects, floatAttributeID);
+        float attributeRange = DataProcessor.FloatAttribute.CalculateZeroBoundRange(data.informationObjects, floatAttributeID);
 
         int categoryCounter = 0;
         
-        foreach (InformationObject o in data.dataObjects)
+        foreach (InformationObject o in data.informationObjects)
         {
             GameObject bar = CreateBar(o, stringAttributeID, floatAttributeID, attributeRange);
             bars.Add(bar);
@@ -127,10 +127,10 @@ public class ETV2DBarChart : AETV2D
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
         // x-Axis
-        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, data.dataObjects.Count * 0.15f + .1f, .01f, false, false);
+        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, data.informationObjects.Count * 0.15f + .1f, .01f, false, false);
         xAxis.transform.localPosition = new Vector3(0,0,-.001f);
         xAxis.transform.parent = Anchor.transform;
-        bounds[0] += data.dataObjects.Count * 0.15f + .5f;
+        bounds[0] += data.informationObjects.Count * 0.15f + .5f;
 
         // y-Axis
         GameObject yAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.Y, 1.0f, .01f, true, true);
@@ -140,15 +140,15 @@ public class ETV2DBarChart : AETV2D
 
         // Grid
         GameObject grid = factory2D.CreateGrid(Color.gray, AxisDirection.X, AxisDirection.Y,
-            true, 10, 0.1f, data.dataObjects.Count * 0.15f, false);
+            true, 10, 0.1f, data.informationObjects.Count * 0.15f, false);
         grid.transform.localPosition = new Vector3(0, 0, .001f);
         grid.transform.parent = Anchor.transform;
 
         axis.Add(AxisDirection.X, xAxis);
         axis.Add(AxisDirection.Y, yAxis);
 
-        SetAxisLabels(AxisDirection.X, data.dataObjects[0].attributesString[stringAttributeID].name, "");
-        SetAxisLabels(AxisDirection.Y, data.dataObjects[0].attributesFloat[floatAttributeID].name, "");
+        SetAxisLabels(AxisDirection.X, data.informationObjects[0].attributesString[stringAttributeID].name, "");
+        SetAxisLabels(AxisDirection.Y, data.informationObjects[0].attributesFloat[floatAttributeID].name, "");
     }
 
     public override void UpdateETV()

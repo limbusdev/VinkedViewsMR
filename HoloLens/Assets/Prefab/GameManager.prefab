@@ -127,6 +127,8 @@ MonoBehaviour:
     type: 2}
   PCPLine2DPrefab: {fileID: 1216460618247502, guid: ed887ec68ec8bbf448693605a4bd8558,
     type: 2}
+  XYLine2DPrefab: {fileID: 1946303620594004, guid: b708eac9b556220449bbb4a602d530cf,
+    type: 2}
 --- !u!114 &114876645080609092
 MonoBehaviour:
   m_ObjectHideFlags: 1

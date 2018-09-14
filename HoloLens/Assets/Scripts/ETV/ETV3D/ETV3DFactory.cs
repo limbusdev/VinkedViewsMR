@@ -61,7 +61,7 @@ public class ETV3DFactory : AETVFactory
         return singleAxis3D;
     }
 
-    public override GameObject CreateETVLineChart(DataSetLines data, float minX, float maxX, float minY, float maxY, float ticksX, float ticksY)
+    public override GameObject CreateETVLineChart(DataSet data, int floatAttributeX, int floatAttributeY, bool xAxisBoundToZero, bool yAxisBoundToZero)
     {
         throw new System.NotImplementedException();
     }

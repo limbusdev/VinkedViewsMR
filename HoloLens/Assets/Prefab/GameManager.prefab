@@ -129,6 +129,8 @@ MonoBehaviour:
     type: 2}
   XYLine2DPrefab: {fileID: 1946303620594004, guid: b708eac9b556220449bbb4a602d530cf,
     type: 2}
+  ScatterDot2DPrefab: {fileID: 1304509300456040, guid: 58364d502df45bb478ef6870ff9fb9e9,
+    type: 2}
 --- !u!114 &114876645080609092
 MonoBehaviour:
   m_ObjectHideFlags: 1

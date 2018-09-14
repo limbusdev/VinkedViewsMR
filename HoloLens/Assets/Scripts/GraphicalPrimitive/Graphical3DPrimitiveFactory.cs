@@ -50,4 +50,9 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
         newLabel.GetComponent<TextMesh>().text = labelText;
         return newLabel;
     }
+
+    public override GameObject CreateScatterDot()
+    {
+        throw new System.NotImplementedException();
+    }
 }

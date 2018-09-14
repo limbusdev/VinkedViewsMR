@@ -10,6 +10,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     public GameObject Axis2DPrefab;
     public GameObject PCPLine2DPrefab;
     public GameObject XYLine2DPrefab;
+    public GameObject ScatterDot2DPrefab;
 
     public override GameObject CreateAxis(Color color, string variableName, string variableEntity, 
         AxisDirection axisDirection, float length, float width = 0.01F, bool tipped = true, bool ticked = false)
@@ -91,5 +92,10 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         GameObject newLabel = Instantiate(label);
         newLabel.GetComponent<TextMesh>().text = labelText;
         return newLabel;
+    }
+
+    public override GameObject CreateScatterDot()
+    {
+        return Instantiate(ScatterDot2DPrefab);
     }
 }

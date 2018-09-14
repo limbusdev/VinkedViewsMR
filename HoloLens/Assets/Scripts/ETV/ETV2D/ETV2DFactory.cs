@@ -45,12 +45,12 @@ public class ETV2DFactory : AETVFactory
         return pcp;
     }
 
-    public override GameObject CreateETVScatterPlot(DataSetPoints data, float[] mins, float[] maxs, float[] ticks)
+    public override GameObject CreateETVScatterPlot(DataSet data, int[] floatAttributeIDs)
     {
         GameObject scatterPlot = Instantiate(ETV2DScatterPlotPrefab);
 
-        scatterPlot.GetComponent<ETV2DScatterPlot>().Init(data, mins[0], maxs[0], mins[1], maxs[1], ticks[0], ticks[1]);
-        scatterPlot.GetComponent<ETV2DScatterPlot>().UpdateETV();
+        scatterPlot.GetComponent<ETV2DScatterPlot>().Init(data, floatAttributeIDs[0], floatAttributeIDs[1]);
+        scatterPlot.GetComponent<ETV2DScatterPlot>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
         return scatterPlot;
     }

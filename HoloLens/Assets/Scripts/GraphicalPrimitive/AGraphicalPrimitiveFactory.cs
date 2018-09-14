@@ -14,5 +14,7 @@ public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
 
     public abstract GameObject CreateLabel(string labelText);
 
+    public abstract GameObject CreateScatterDot();
+
     public abstract GameObject CreateAxis(Color color, string variableName, string variableUnit, AxisDirection axisDirection, float length, float width = 0.01f, bool tipped = true, bool ticked = false);
 }

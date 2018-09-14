@@ -99,6 +99,10 @@ public class VisualizationFactory : MonoBehaviour {
         GameObject newETV2DXY2 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DXY2);
         newETV2DXY2.transform.Translate(new Vector3(-3, 0, 1));
 
+        GameObject new2DScatter = ServiceLocator.instance.ETV2DFactoryService.CreateETVScatterPlot(fbiData, new int[] { 3, 5 });
+        GameObject newETV2DScatter = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DScatter);
+        newETV2DScatter.transform.Translate(new Vector3(-3, 0, -3));
+
 
         //foreach(InformationObject o in educationalData.dataObjects)
         //{

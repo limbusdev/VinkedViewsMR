@@ -66,10 +66,10 @@ public class ETV3DFactory : AETVFactory
         throw new System.NotImplementedException();
     }
 
-    public override GameObject CreateETVScatterPlot(DataSetPoints data, float[] mins, float[] maxs, float[] ticks)
+    public override GameObject CreateETVScatterPlot(DataSet data, int[] floatAttributeIDs)
     {
         GameObject scatterPlot3D = Instantiate(ETV3DScatterPlotPrefab);
-        scatterPlot3D.GetComponent<ETV3DScatterPlot>().Init(data, mins, maxs, ticks);
+        //scatterPlot3D.GetComponent<ETV3DScatterPlot>().Init(data, mins, maxs, ticks);
 
         return scatterPlot3D;
     }

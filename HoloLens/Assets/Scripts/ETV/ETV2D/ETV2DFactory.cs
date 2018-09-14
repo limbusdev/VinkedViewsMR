@@ -40,7 +40,7 @@ public class ETV2DFactory : AETVFactory
 
         pcp.GetComponent<ETV2DParallelCoordinatesPlot>().Init(data, floatAttributeIDs, stringAttributeIDs);
         pcp.GetComponent<ETV2DParallelCoordinatesPlot>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
-        pcp.GetComponent<ETV2DParallelCoordinatesPlot>().UpdateETV();
+        
 
         return pcp;
     }

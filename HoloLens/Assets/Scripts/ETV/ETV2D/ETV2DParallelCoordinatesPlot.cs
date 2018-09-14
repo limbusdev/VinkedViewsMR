@@ -102,18 +102,16 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
                 for(int i=0; i<linePrimitives.Length; i++)
                 {
                     Color color = Color.HSVToRGB(((float)i) / linePrimitives.Length, 1, 1);
-                    LineRenderer lr = linePrimitives[i].lineRenderer;
-                    lr.startColor = color;
-                    lr.endColor = color;
+                    linePrimitives[i].SetColor(color);
+                    linePrimitives[i].ApplyColor(color);
                 }
                 break;
             case ETVColorSchemes.SplitHSV:
                 for(int i = 0; i < linePrimitives.Length; i++)
                 {
                     Color color = Color.HSVToRGB((((float)i) / linePrimitives.Length)/2f+.5f, 1, 1);
-                    LineRenderer lr = linePrimitives[i].lineRenderer;
-                    lr.startColor = color;
-                    lr.endColor = color;
+                    linePrimitives[i].SetColor(color);
+                    linePrimitives[i].ApplyColor(color);
                 }
                 break;
             default:

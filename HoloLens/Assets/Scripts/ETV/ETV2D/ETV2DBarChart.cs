@@ -134,6 +134,14 @@ public class ETV2DBarChart : AETV2D
 
         // y-Axis
         GameObject yAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.Y, 1.0f, .01f, true, true);
+        Axis2D axis2D = yAxis.GetComponent<Axis2D>();
+
+        axis2D.ticked = true;
+        axis2D.min = data.dataMeasuresFloat[data.attributesFloat[floatAttributeID]].zeroBoundMin;
+        axis2D.max = data.dataMeasuresFloat[data.attributesFloat[floatAttributeID]].zeroBoundMax;
+
+        axis2D.CalculateTickResolution();
+
         yAxis.transform.localPosition = new Vector3(0, 0, -.001f);
         yAxis.transform.parent = Anchor.transform;
         bounds[1] += 1 + .5f;

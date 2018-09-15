@@ -1,3 +1,7 @@
 Easy Curved Line Renderer
 
 https://forum.unity.com/threads/easy-curved-line-renderer-free-utility.391219/
+
+Algorithmus zur Achsenunterteilung
+
+https://stackoverflow.com/questions/326679/choosing-an-attractive-linear-scale-for-a-graphs-y-axis

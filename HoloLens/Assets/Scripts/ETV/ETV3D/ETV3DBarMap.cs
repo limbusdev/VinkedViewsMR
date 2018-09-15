@@ -3,59 +3,138 @@ using System.Collections.Generic;
 using GraphicalPrimitive;
 using Model;
 using UnityEngine;
+using System.Linq;
+using System;
 
+/// <summary>
+/// 3D Euclidean transformable view: 3D Bar Map
+/// 
+/// A 3D bar chart, which visualizes two nominal attributes and their
+/// distribution.
+/// </summary>
 public class ETV3DBarMap : AETV3D
 {
     public GameObject Anchor;
 
-    private DataSetMatrix2x2Nominal data;
-    private GameObject[,] bars;
-    private IDictionary<AxisDirection, GameObject> axis;
-    private float ticksY;
+    private DataSet data;
+    private Bar3D[,] bars;
 
-    public void Init(DataSetMatrix2x2Nominal data, float ticks)
+    private int[,] absMapValues;
+    private float[,] barHeights;
+
+    int attributeX;
+    int attributeY;
+
+    float max;
+
+    private StringDataDimensionMeasures measuresX, measuresY;
+
+    private IDictionary<AxisDirection, GameObject> axis;
+
+    
+    /// <summary>
+    /// Initializes the visualization with a dataset and which
+    /// attributes to use.
+    /// </summary>
+    /// <param name="data">DataSet containing the attribute distribution.</param>
+    /// <param name="sAtt1">First nominal string attribute to use.</param>
+    /// <param name="sAtt2">Second nominal string attribute to use.</param>
+    public void Init(DataSet data, int sAtt1, int sAtt2)
     {
         this.data = data;
-        this.ticksY = ticks;
+        max = 0;
+
+        attributeX = sAtt1;
+        attributeY = sAtt2;
+        var nameX = data.attributesString[sAtt1];
+        var nameY = data.attributesString[sAtt2];
+        measuresX = data.dataMeasuresString[nameX];
+        measuresY = data.dataMeasuresString[nameY];
+        var keysX = measuresX.distribution.Keys.ToArray();
+        var keysY = measuresY.distribution.Keys.ToArray();
 
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
-        bars = new GameObject[data.categoriesX.Length, data.categoriesY.Length];
         axis = new Dictionary<AxisDirection, GameObject>();
         
-        UpdateETV();
-    }
+        absMapValues = new int[keysX.Length, keysY.Length];
+        barHeights = new float[keysX.Length, keysY.Length];
 
-    public void DrawGraph()
-    {
-        int catCounterX = 0;
-        int catCounterY = 0;
-
-        bars = new GameObject[data.categoriesX.Length, data.categoriesY.Length];
-
-        foreach (string categoryX in data.categoriesX)
+        // For every possible value of attribute 1
+        for(int vID1 = 0; vID1 < keysX.Length; vID1++)
         {
-            foreach(string categoryY in data.categoriesY)
+            string v1 = keysX[vID1];
+
+            // For every possible value of attribute 2
+            for(int vID2 = 0; vID2 < keysY.Length; vID2++)
             {
-                GameObject bar = CreateBar(data.ordinalValues[catCounterX, catCounterY], data.zeroBoundRange);
-                bars[catCounterX, catCounterY] = bar;
+                string v2 =keysY[vID2];
 
-                bar.transform.localPosition = new Vector3(catCounterX * 0.15f + 0.1f, 0, catCounterY * 0.15f + 0.1f);
+                // Count how many object match both values
+                var count = DataProcessor.StringAttribute
+                    .CountObjectsMatchingTwoCattegories(
+                    data.informationObjects, sAtt1, sAtt2, v1, v2);
 
-                bar.transform.parent = Anchor.transform;
+                if(count > max)
+                    max = count;
 
-                catCounterY++;
+                absMapValues[vID1, vID2] = count;
             }
-            catCounterX++;
-            catCounterY = 0;
+        }
+
+        for(int vID1 = 0; vID1 < keysX.Length; vID1++)
+        {
+            for(int vID2 = 0; vID2 < keysY.Length; vID2++)
+            {
+                barHeights[vID1, vID2] = absMapValues[vID1, vID2] / max;
+            }
+        }
+
+        if(max > 0)
+        {
+            SetUpAxis();
+            DrawGraph();
+
+            foreach(var o in data.informationObjects)
+            {
+                var bar = bars[
+                    Array.IndexOf(measuresX.uniqueValues, o.attributesString[attributeX].value),
+                    Array.IndexOf(measuresY.uniqueValues, o.attributesString[attributeY].value)
+                    ];
+                o.AddRepresentativeObject(o.attributesString[attributeX].name, bar.gameObject);
+                o.AddRepresentativeObject(o.attributesString[attributeY].name, bar.gameObject);
+            }
         }
     }
 
+    /// <summary>
+    /// Draws the graph by using values calculated in the Init() method
+    /// </summary>
+    public void DrawGraph()
+    {
+        bars = new Bar3D[measuresX.numberOfUniqueValues, measuresY.numberOfUniqueValues];
+
+        for(int i = 0; i < measuresX.numberOfUniqueValues; i++)
+        {
+            for(int ii = 0; ii < measuresY.numberOfUniqueValues; ii++)
+            {
+                bars[i, ii] = CreateBar(absMapValues[i,ii], max);
+                GameObject barGO = bars[i, ii].gameObject;
+                barGO.transform.localPosition = new Vector3(i * .15f + .1f, 0, ii * .15f + .1f);
+                barGO.transform.parent = Anchor.transform;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Generates axes from the calculated values.
+    /// </summary>
     public override void SetUpAxis()
     {
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
         // x-Axis
-        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, data.categoriesX.Length * 0.15f + .1f, .01f, false, false);
+        float xAxisLength = measuresX.distribution.Count * 0.15f;
+        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, xAxisLength + .1f, .01f, false, false);
         xAxis.transform.parent = Anchor.transform;
 
         // y-Axis
@@ -63,26 +142,31 @@ public class ETV3DBarMap : AETV3D
         yAxis.transform.parent = Anchor.transform;
 
         // z-Axis
-        GameObject zAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.Z, data.categoriesY.Length * 0.15f + .1f, .01f, false, false);
+        float yAxisLength = measuresY.distribution.Count * 0.15f;
+        GameObject zAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.Z, yAxisLength + .1f, .01f, false, false);
         zAxis.transform.parent = Anchor.transform;
 
+        // Configure Axes
         Axis2D axis2DY = yAxis.GetComponent<Axis2D>();
-        axis2DY.min = data.zeroBoundMin;
-        axis2DY.max = data.zeroBoundMax;
-        axis2DY.tickResolution = ticksY;
+        axis2DY.ticked = true;
+        axis2DY.min = 0;
+        axis2DY.max = this.max;
+        Debug.Log(max);
+        axis2DY.CalculateTickResolution();
 
         axis.Add(AxisDirection.X, xAxis);
         axis.Add(AxisDirection.Y, yAxis);
         axis.Add(AxisDirection.Z, zAxis);
 
-        SetAxisLabels(AxisDirection.X, "", "");
-        SetAxisLabels(AxisDirection.Z, "", "");
-        SetAxisLabels(AxisDirection.Y, data.ordinalVariable, data.ordinalUnit);
+        SetAxisLabels(AxisDirection.X, measuresX.variableName, "");
+        SetAxisLabels(AxisDirection.Z, measuresY.variableName, "");
+        SetAxisLabels(AxisDirection.Y, "Amount", "");
 
         // Write Categories next to Axes
-        for(int catX = 0; catX < data.categoriesX.Length; catX++)
+        var catsX = measuresX.distribution.Keys.ToArray();
+        for(int catX = 0; catX < catsX.Length; catX++)
         {
-            GameObject label = ServiceLocator.instance.PrimitiveFactory3Dservice.CreateLabel(data.categoriesX[catX]);
+            GameObject label = ServiceLocator.instance.PrimitiveFactory3Dservice.CreateLabel(catsX[catX]);
             TextMesh textMesh = label.GetComponent<TextMesh>();
             textMesh.anchor = TextAnchor.MiddleLeft;
             textMesh.alignment = TextAlignment.Left;
@@ -91,9 +175,10 @@ public class ETV3DBarMap : AETV3D
             label.transform.parent = xAxis.transform;
         }
 
-        for (int catY = 0; catY < data.categoriesY.Length; catY++)
+        var catsY = measuresY.distribution.Keys.ToArray();
+        for (int catY = 0; catY < catsY.Length; catY++)
         {
-            GameObject label = ServiceLocator.instance.PrimitiveFactory3Dservice.CreateLabel(data.categoriesY[catY]);
+            GameObject label = ServiceLocator.instance.PrimitiveFactory3Dservice.CreateLabel(catsY[catY]);
             TextMesh textMesh = label.GetComponent<TextMesh>();
             textMesh.anchor = TextAnchor.MiddleRight;
             textMesh.alignment = TextAlignment.Left;
@@ -108,14 +193,14 @@ public class ETV3DBarMap : AETV3D
      * @param range         maximum - minimum value of this attribute
      * @param attributeID   which attribute
      * */
-    private GameObject CreateBar(float value, float range)
+    private Bar3D CreateBar(float value, float range)
     {
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
         
-        GameObject bar = factory3D.CreateBar(value, range, .1f, .1f);
+        Bar3D bar = factory3D.CreateBar(value, range, .1f, .1f).GetComponent<Bar3D>();
 
-        bar.GetComponent<Bar3D>().SetLabelText(value.ToString());
-        bar.GetComponent<Bar3D>().SetLabelCategoryText("");
+        bar.SetLabelText(value.ToString());
+        bar.SetLabelCategoryText("");
 
         return bar;
     }
@@ -124,24 +209,26 @@ public class ETV3DBarMap : AETV3D
 
     public override void ChangeColoringScheme(ETVColorSchemes scheme)
     {
-        for(int row = 0; row < data.ordinalValues.GetLength(0); row++)
+        switch(scheme)
         {
-            for(int col = 0; col < data.ordinalValues.GetLength(1); col++)
-            {
-                GameObject bar = bars[row, col];
-                Color color;
-                switch (scheme)
+            default: // case SplitHSV
+                float H = 0f;
+                for(int row=0; row<measuresX.numberOfUniqueValues; row++)
                 {
-                    case ETVColorSchemes.Rainbow:
-                        color = Color.HSVToRGB(data.ordinalValues[row, col] / data.zeroBoundRange, 1, 1);
-                        break;
-                    default:
-                        color = Color.HSVToRGB(0, 0, data.ordinalValues[row, col] / data.zeroBoundRange);
-                        break;
+                    float S = 0f;
+                    for(int col=0; col<measuresY.numberOfUniqueValues; col++)
+                    {
+                        var color = Color.HSVToRGB(
+                            (H/measuresX.numberOfUniqueValues)/2f+.5f, 
+                            (S/measuresY.numberOfUniqueValues)/2f+.5f, 
+                            1);
+                        bars[row, col].SetColor(color);
+                        bars[row, col].ApplyColor(color);
+                        S++;
+                    }
+                    H++;
                 }
-                bar.GetComponent<Bar3D>().SetColor(color);
-                bar.GetComponent<Bar3D>().ApplyColor(color);
-            }
+                break;
         }
     }
 
@@ -154,7 +241,6 @@ public class ETV3DBarMap : AETV3D
 
     public override void UpdateETV()
     {
-        SetUpAxis();
-        DrawGraph();
+
     }
 }

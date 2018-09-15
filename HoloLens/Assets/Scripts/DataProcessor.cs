@@ -60,9 +60,10 @@ public class DataProcessor
             int counter = 0;
             foreach(var o in os)
             {
-                var a1 = o.attributesString[aID1];
-                var a2 = o.attributesString[aID2];
-                if(a1.value.Equals(value1) && a2.value.Equals(value2))
+                var v1 = o.attributesString[aID1].value;
+                var v2 = o.attributesString[aID2].value;
+                
+                if(v1.Equals(value1) && v2.Equals(value2))
                 {
                     counter++;
                 }

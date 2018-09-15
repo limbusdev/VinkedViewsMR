@@ -107,6 +107,10 @@ public class VisualizationFactory : MonoBehaviour {
         GameObject newETV3DBarChart = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DBarChart);
         newETV3DBarChart.transform.Translate(new Vector3(-3, 0, -5));
 
+        GameObject new3DBarMap = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarMap(dataProvider.dataSets[1], 4,6);
+        GameObject newETV3DBarMap = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DBarMap);
+        newETV3DBarMap.transform.Translate(new Vector3(6, 0, 4));
+
 
         //foreach(InformationObject o in educationalData.dataObjects)
         //{

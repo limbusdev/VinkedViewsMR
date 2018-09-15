@@ -85,11 +85,12 @@ public class ETV3DFactory : AETVFactory
         return pcp;
     }
 
-    public GameObject CreateETVBarMap(DataSetMatrix2x2Nominal data, float ticks)
+    public GameObject CreateETVBarMap(DataSet data, int a1, int a2)
     {
         GameObject bm = Instantiate(ETV3DBarMapPrefab);
 
-        bm.GetComponent<ETV3DBarMap>().Init(data, ticks);
+        bm.GetComponent<ETV3DBarMap>().Init(data, a1, a2);
+        bm.GetComponent<ETV3DBarMap>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
         return bm;
     }

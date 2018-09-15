@@ -41,11 +41,13 @@ public class StringDataDimensionMeasures
 {
     public LevelOfMeasurement type;
     public IDictionary<string, int> distribution;
+    public string[] uniqueValues;
     public string variableName;
     public string variableUnit;
     public int minimum, zBoundMin;
     public int maximum, zBoundMax;
     public int range, zBoundRange;
+    public int numberOfUniqueValues;
 
     public StringDataDimensionMeasures(LevelOfMeasurement type, IDictionary<string,int> distribution, string variableName, string variableUnit)
     {
@@ -60,6 +62,15 @@ public class StringDataDimensionMeasures
         this.zBoundMax = (maximum == 0) ? 0 : maximum;
         this.range = maximum - minimum;
         this.zBoundRange = zBoundMax - zBoundMin;
+        this.numberOfUniqueValues = distribution.Keys.Count;
+        this.uniqueValues = new string[distribution.Keys.Count];
+
+        int counter = 0;
+        foreach(string key in distribution.Keys)
+        {
+            uniqueValues[counter] = key;
+            counter++;
+        }
     }
 }
 

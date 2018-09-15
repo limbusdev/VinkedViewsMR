@@ -151,7 +151,6 @@ public class ETV3DBarMap : AETV3D
         axis2DY.ticked = true;
         axis2DY.min = 0;
         axis2DY.max = this.max;
-        Debug.Log(max);
         axis2DY.CalculateTickResolution();
 
         axis.Add(AxisDirection.X, xAxis);

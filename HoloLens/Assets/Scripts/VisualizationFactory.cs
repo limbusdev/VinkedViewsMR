@@ -83,7 +83,7 @@ public class VisualizationFactory : MonoBehaviour {
         GameObject newETV2DBarChart2 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart2);
         newETV2DBarChart.transform.Translate(new Vector3(1, 1, 1));
 
-        GameObject new2DBarChart3 = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 3);
+        GameObject new2DBarChart3 = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 2);
         GameObject newETV2DBarChart3 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart3);
         newETV2DBarChart3.transform.Translate(new Vector3(-1, 1, -2));
 

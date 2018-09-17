@@ -86,8 +86,14 @@ public class ETV3DBarChart : AETV3D
         yAxis.transform.parent = Anchor.transform;
 
         // Grid
-        GameObject grid = factory2D.CreateGrid(Color.gray, AxisDirection.X, AxisDirection.Y,
-            true, 10, 0.1f, xAxisLength, false);
+        GameObject grid = factory2D.CreateGrid(
+                    new Color(1, 1, 1, .7f),
+                    Vector3.right,
+                    Vector3.up,
+                    1,
+                    .005f,
+                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMin,
+                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMax);
         grid.transform.parent = Anchor.transform;
 
         axis.Add(AxisDirection.X, xAxis);

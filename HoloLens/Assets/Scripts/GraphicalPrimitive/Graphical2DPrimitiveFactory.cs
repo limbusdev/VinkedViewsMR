@@ -31,39 +31,39 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         return axis;
     }
 
-    public override GameObject CreateGrid(Color color, AxisDirection rowDirection, AxisDirection colDir,
-        bool rows = true, int rowCount = 10, float rowResolution = 0.1f, float xAxisLength = 1f,
-        bool cols = true, int colCount = 10, float colResolution = 0.1f, float yAxisLength = 1f,
-        float width = 0.005f)
+    public override GameObject CreateGrid(Color color, Vector3 axisDir, Vector3 expansionDir, float length, float width, float min, float max)
     {
         GameObject grid = new GameObject("grid");
 
-        Vector3 start = new Vector3();
+        var ticks = new List<GameObject>();
 
-        if (rows)
+        float range = Mathf.Abs(max - min);
+        int tickCount = 11;
+        float unroundedTickSize = range / (tickCount - 1);
+        float x = Mathf.Ceil(Mathf.Log10(unroundedTickSize) - 1);
+        float pow10x = Mathf.Pow(10, x);
+        float tickResolution = Mathf.Ceil(unroundedTickSize / pow10x) * pow10x;
+
+        float diameter = .005f;
+
+        int tickCounter = 0;
+        for(float i = min; i <= max; i += tickResolution)
         {
-            for (int row = 1; row <= rowCount; row++)
-            {
-                float rowValue = row * rowResolution;
-                start.y = rowValue;
-
-                GameObject gridRow = CreateAxis(color, "", "", rowDirection, xAxisLength, width, false, false);
-                gridRow.transform.localPosition = start;
-                gridRow.transform.parent = grid.transform;
-            }
-        }
-
-        if (cols)
-        {
-            for (int col = 1; col <= colCount; col++)
-            {
-                float colValue = col * colResolution;
-                start.x = colValue;
-
-                GameObject gridCol = CreateAxis(color, "", "", rowDirection, yAxisLength, width, false, false);
-                gridCol.transform.localPosition = start;
-                gridCol.transform.parent = grid.transform;
-            }
+            GameObject tick = new GameObject("Tick");
+            var lineRend = tick.AddComponent<LineRenderer>();
+            lineRend.useWorldSpace = false;
+            lineRend.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+            lineRend.startColor = color;
+            lineRend.endColor = color;
+            lineRend.startWidth = diameter;
+            lineRend.endWidth = diameter;
+            lineRend.SetPosition(0, Vector3.zero);
+            lineRend.SetPosition(1, axisDir * length);
+            
+            tick.transform.parent = grid.transform;
+            tick.transform.localPosition = expansionDir * (tickCounter * tickResolution) / (max-min);
+            ticks.Add(tick);
+            tickCounter++;
         }
 
         return grid;

@@ -152,8 +152,14 @@ public class ETV2DBarChart : AETV2D
         bounds[1] += 1 + .5f;
 
         // Grid
-        GameObject grid = factory2D.CreateGrid(Color.gray, AxisDirection.X, AxisDirection.Y,
-            true, 10, 0.1f, xAxisLength, false);
+        GameObject grid = factory2D.CreateGrid(
+                    new Color(1, 1, 1, .7f),
+                    Vector3.right,
+                    Vector3.up,
+                    1,
+                    .005f,
+                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMin,
+                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMax);
         grid.transform.localPosition = new Vector3(0, 0, .001f);
         grid.transform.parent = Anchor.transform;
 

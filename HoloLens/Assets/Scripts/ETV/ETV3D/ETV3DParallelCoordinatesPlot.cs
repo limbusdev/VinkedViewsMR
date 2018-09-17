@@ -20,8 +20,7 @@ namespace ETV.ETV3D
             ordinalIDs,
             intervalIDs,
             ratioIDs;
-
-        private GameObject allAxesGO;
+        
 
         private PCPLine2D[] linePrimitives;
 
@@ -71,11 +70,37 @@ namespace ETV.ETV3D
 
         public override void SetUpAxis()
         {
+            GameObject axesFront = GenerateAxes(true);
+            axesFront.transform.parent = Anchor.transform;
+
+            GameObject axesBack = GenerateAxes(false);
+            axesBack.transform.parent = Anchor.transform;
+            axesBack.transform.localPosition = new Vector3(0,0, data.informationObjects.Count * .1f);
+        }
+
+        public void DrawGraph()
+        {
+            int i = 0;
+            foreach(InformationObject o in data.informationObjects)
+            {
+                //GameObject newAxes = Instantiate(allAxesGO);
+                //newAxes.transform.localPosition = new Vector3(0, 0, i * .25f - .002f);
+                linePrimitives[i] = CreateLine(o, Color.white);
+                linePrimitives[i].transform.parent = Anchor.transform;
+                linePrimitives[i].transform.localPosition = new Vector3(0,0,i*.1f-.002f);
+                //newAxes.transform.parent = Anchor.transform;
+                //newAxes.SetActive(true);
+                i++;
+            }
+        }
+
+        private GameObject GenerateAxes(bool withGrid)
+        {
             AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
             int counter = 0;
-            allAxesGO = new GameObject("Axes-Set");
-            allAxesGO.SetActive(false);
+            GameObject allAxesGO = new GameObject("Axes-Set");
+            //allAxesGO.SetActive(false);
 
             // Setup nominal axes
             for(int i = 0; i < nominalIDs.Length; i++)
@@ -92,6 +117,14 @@ namespace ETV.ETV3D
 
                 axis2D.CalculateTickResolution();
                 axis2D.UpdateAxis();
+
+                if(withGrid)
+                {
+                    var grid = GenerateGrid(axis2D.min, axis2D.max);
+                    grid.transform.parent = axis.transform;
+                    grid.transform.localPosition = Vector3.zero;
+                }
+
 
                 counter++;
             }
@@ -112,6 +145,13 @@ namespace ETV.ETV3D
                 axis2D.CalculateTickResolution();
                 axis2D.UpdateAxis();
 
+                if(withGrid)
+                {
+                    var grid = GenerateGrid(axis2D.min, axis2D.max);
+                    grid.transform.parent = axis.transform;
+                    grid.transform.localPosition = Vector3.zero;
+                }
+
                 counter++;
             }
 
@@ -130,6 +170,13 @@ namespace ETV.ETV3D
 
                 axis2D.CalculateTickResolution();
                 axis2D.UpdateAxis();
+
+                if(withGrid)
+                {
+                    var grid = GenerateGrid(axis2D.min, axis2D.max);
+                    grid.transform.parent = axis.transform;
+                    grid.transform.localPosition = Vector3.zero;
+                }
 
                 counter++;
             }
@@ -154,29 +201,37 @@ namespace ETV.ETV3D
                 axis2D.CalculateTickResolution();
                 axis2D.UpdateAxis();
 
+                if(withGrid)
+                {
+                    var grid = GenerateGrid(axis2D.min, axis2D.max);
+                    grid.transform.parent = axis.transform;
+                    grid.transform.localPosition = Vector3.zero;
+                }
+
                 counter++;
             }
 
             allAxesGO.transform.localPosition = new Vector3(0, 0, -.002f);
-            allAxesGO.transform.parent = Anchor.transform;
+
+            return allAxesGO;
         }
 
-        public void DrawGraph()
+        private GameObject GenerateGrid(float min, float max)
         {
-            int dimension = ratioIDs.Length + ratioIDs.Length;
+            AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
-            int i = 0;
-            foreach(InformationObject o in data.informationObjects)
-            {
-                GameObject newAxes = Instantiate(allAxesGO);
-                newAxes.transform.localPosition = new Vector3(0, 0, i * .25f - .002f);
-                linePrimitives[i] = CreateLine(o, Color.white);
-                linePrimitives[i].transform.parent = newAxes.transform;
-                linePrimitives[i].transform.localPosition = Vector3.zero;
-                newAxes.transform.parent = Anchor.transform;
-                newAxes.SetActive(true);
-                i++;
-            }
+                GameObject grid = factory2D.CreateGrid(
+                    new Color(1, 1, 1, .5f),
+                    Vector3.forward,
+                    Vector3.up,
+                    data.informationObjects.Count * .1f,
+                    .005f,
+                    min,
+                    max
+                    );
+                grid.transform.localPosition = Vector3.zero;
+
+            return grid;
         }
 
         public override void UpdateETV()

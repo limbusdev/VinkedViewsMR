@@ -31,8 +31,8 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
         return axis;
     }
 
-    public override GameObject CreateGrid(Color color, AxisDirection rowDir, AxisDirection colDir, bool rows = true, int rowCount = 10, float rowResolution = 0.1F, float xAxisLength = 1, bool cols = true, int colCount = 10, float colResolution = 0.1F, float yAxisLength = 1, float width = 0.005F)
-    {
+    public override GameObject CreateGrid(Color color, Vector3 axisDir, Vector3 expansionDir, float length, float width, float min, float max)
+    { 
         throw new System.NotImplementedException();
     }
 

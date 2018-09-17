@@ -34,92 +34,61 @@ public class VisualizationFactory : MonoBehaviour {
     {
         DataSet fbiData = dataProvider.dataSets[0];
 
-        var educationObjects = new List<InformationObject>();
-        educationObjects.Add(new InformationObject(
-            new GenericAttribute<string>[] {
-                new GenericAttribute<string>("Sex", "male", LevelOfMeasurement.NOMINAL),
-                new GenericAttribute<string>("Level of Education", "ungraduated", LevelOfMeasurement.ORDINAL)
-                },
-            new GenericAttribute<float>[] {
-                new GenericAttribute<float>("Fraction [%]", 20, LevelOfMeasurement.RATIO),
-                new GenericAttribute<float>("Mean Age [a]", 25, LevelOfMeasurement.RATIO)
-            },
-            new GenericAttribute<int>[] { },
-            new GenericAttribute<Vector2>[] { },
-            new GenericAttribute<Vector3>[] { }
-            ));
-        educationObjects.Add(new InformationObject(
-            new GenericAttribute<string>[] {
-                new GenericAttribute<string>("Sex", "male", LevelOfMeasurement.NOMINAL),
-                new GenericAttribute<string>("Level of Education", "Highschool", LevelOfMeasurement.ORDINAL)
-                },
-            new GenericAttribute<float>[] {
-                new GenericAttribute<float>("Fraction [%]", 40, LevelOfMeasurement.RATIO),
-                new GenericAttribute<float>("Mean Age [a]", 27, LevelOfMeasurement.RATIO)
-            },
-            new GenericAttribute<int>[] { },
-            new GenericAttribute<Vector2>[] { },
-            new GenericAttribute<Vector3>[] { }
-            ));
-        educationObjects.Add(new InformationObject(
-            new GenericAttribute<string>[] {
-                new GenericAttribute<string>("Sex", "male", LevelOfMeasurement.NOMINAL),
-                new GenericAttribute<string>("Level of Education", "University", LevelOfMeasurement.ORDINAL)
-                },
-            new GenericAttribute<float>[] {
-                new GenericAttribute<float>("Fraction [%]", 40, LevelOfMeasurement.RATIO),
-                new GenericAttribute<float>("Mean Age [a]", 31, LevelOfMeasurement.RATIO)
-            },
-            new GenericAttribute<int>[] { },
-            new GenericAttribute<Vector2>[] { },
-            new GenericAttribute<Vector3>[] { }
-            ));
-        var educationalData = new DataSet("Educational Data", "", educationObjects);
-
-        GameObject new2DBarChart = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(educationalData, 1);
+        GameObject new2DBarChart = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 2);
         GameObject newETV2DBarChart = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart);
-        newETV2DBarChart.transform.Translate(new Vector3(1.98f*2, 0, -.39f*2));
+        newETV2DBarChart.transform.Translate(new Vector3(1.98f * 2, 0, -.39f * 2));
         newETV2DBarChart.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
-        GameObject new2DBarChart2 = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 6);
+        GameObject new2DBarChart2 = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 4);
         GameObject newETV2DBarChart2 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart2);
-        newETV2DBarChart2.transform.Translate(new Vector3(-.12f*2, 0, -1.97f*2));
+        newETV2DBarChart2.transform.Translate(new Vector3(-.12f * 2, 0, -1.97f * 2));
         newETV2DBarChart2.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
-        GameObject new2DBarChart3 = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 2);
+        GameObject new2DBarChart3 = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 6);
         GameObject newETV2DBarChart3 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart3);
-        newETV2DBarChart3.transform.Translate(new Vector3(-1.22f*2, 0, -1.53f*2));
+        newETV2DBarChart3.transform.Translate(new Vector3(-1.22f * 2, 0, -1.53f * 2));
         newETV2DBarChart3.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
-        GameObject new2DPCP = ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(educationalData, new int[] { 0, 1 }, new int[] { });
+        GameObject new2DPCP = ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(fbiData, new int[] { 0, 1, 2, 3 }, new int[] { });
         GameObject newETV2DPCP = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DPCP);
-        newETV2DPCP.transform.Translate(new Vector3(-1.84f*2, 0, -.72f*2));
+        newETV2DPCP.transform.Translate(new Vector3(-1.84f * 2, 0, -.72f * 2));
         newETV2DPCP.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
-        GameObject new2DXY = ServiceLocator.instance.ETV2DFactoryService.CreateETVLineChart(educationalData, 0, 1, false, true);
+        GameObject new2DXY = ServiceLocator.instance.ETV2DFactoryService.CreateETVLineChart(fbiData, 0, 2, false, true);
         GameObject newETV2DXY = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DXY);
-        newETV2DXY.transform.Translate(new Vector3(-1.97f*2, 0, .22f*2));
+        newETV2DXY.transform.Translate(new Vector3(-1.97f * 2, 0, .22f * 2));
         newETV2DXY.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
         GameObject new2DXY2 = ServiceLocator.instance.ETV2DFactoryService.CreateETVLineChart(fbiData, 0, 1, false, true);
         GameObject newETV2DXY2 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DXY2);
-        newETV2DXY2.transform.Translate(new Vector3(-1.67f*2, 0, 1*2));
+        newETV2DXY2.transform.Translate(new Vector3(-1.67f * 2, 0, 1 * 2));
         newETV2DXY2.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
         GameObject new2DScatter = ServiceLocator.instance.ETV2DFactoryService.CreateETVScatterPlot(fbiData, new int[] { 3, 5 });
         GameObject newETV2DScatter = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DScatter);
-        newETV2DScatter.transform.Translate(new Vector3(-.92f*2, 0, 1.73f*2));
+        newETV2DScatter.transform.Translate(new Vector3(-.92f * 2, 0, 1.73f * 2));
         newETV2DScatter.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
-        GameObject new3DBarChart = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 4);
+        GameObject new3DBarChart = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 9);
         GameObject newETV3DBarChart = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DBarChart);
-        newETV3DBarChart.transform.Translate(new Vector3(1*2, 0, 1.71f*2));
+        newETV3DBarChart.transform.Translate(new Vector3(1 * 2, 0, 1.71f * 2));
         newETV3DBarChart.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
-        GameObject new3DBarMap = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarMap(dataProvider.dataSets[1], 4,6);
+        GameObject new3DBarMap = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarMap(dataProvider.dataSets[1], 2, 4);
         GameObject newETV3DBarMap = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DBarMap);
-        newETV3DBarMap.transform.Translate(new Vector3(1.86f*2, 0, .71f*2));
+        newETV3DBarMap.transform.Translate(new Vector3(1.86f * 2, 0, .71f * 2));
         newETV3DBarMap.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
+
+        GameObject new3DScatter = ServiceLocator.instance.ETV3DFactoryService.CreateETVScatterPlot(fbiData, new int[] { 1, 0, 2 });
+        GameObject newETV3DScatter = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DScatter);
+        newETV3DScatter.transform.Translate(new Vector3(.94f * 2, 0, -1.74f * 2));
+        newETV3DScatter.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
+
+        // Exoplanets
+        GameObject ex1 = ServiceLocator.instance.ETV3DFactoryService.CreateETVScatterPlot(dataProvider.dataSets[2], new int[] { 0,1,2 });
+        GameObject exETV1 = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(ex1);
+        exETV1.transform.Translate(new Vector3(1.98f * 2, 0, -.39f * 2-10));
+        exETV1.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(new Vector3(0,0,-10));
 
 
         //foreach(InformationObject o in educationalData.dataObjects)
@@ -127,7 +96,7 @@ public class VisualizationFactory : MonoBehaviour {
         //    DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(o);
         //}
 
-        DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(educationalData.informationObjects.First());
+        DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(fbiData.informationObjects[0]);
 
         DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[1].informationObjects[0]);
 

@@ -48,38 +48,38 @@ public class ETV2DLineChart : AETV2D
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
         // x-Axis
-        GameObject xAxis = factory2D.CreateAxis(Color.white, data.attributesFloat[floatAttributeX], "", AxisDirection.X, 1f, .01f, true, true);
+        GameObject xAxis = factory2D.CreateAxis(Color.white, data.ratAttributes[floatAttributeX], "", AxisDirection.X, 1f, .01f, true, true);
         xAxis.transform.localPosition = new Vector3(0, 0, -.001f);
         xAxis.transform.parent = Anchor.transform;
         Axis2D xAxis2D = xAxis.GetComponent<Axis2D>();
         xAxis2D.ticked = true;
         if(xBoundToZero)
         {
-            xAxis2D.min = data.dataMeasuresFloat[data.attributesFloat[floatAttributeX]].zeroBoundMin;
-            xAxis2D.max = data.dataMeasuresFloat[data.attributesFloat[floatAttributeX]].zeroBoundMax;
+            xAxis2D.min = data.dataMeasuresRatio[data.ratAttributes[floatAttributeX]].zeroBoundMin;
+            xAxis2D.max = data.dataMeasuresRatio[data.ratAttributes[floatAttributeX]].zeroBoundMax;
         } else
         {
-            xAxis2D.min = data.dataMeasuresFloat[data.attributesFloat[floatAttributeX]].min;
-            xAxis2D.max = data.dataMeasuresFloat[data.attributesFloat[floatAttributeX]].max;
+            xAxis2D.min = data.dataMeasuresRatio[data.ratAttributes[floatAttributeX]].min;
+            xAxis2D.max = data.dataMeasuresRatio[data.ratAttributes[floatAttributeX]].max;
         }
         xAxis2D.CalculateTickResolution();
         xAxis2D.UpdateAxis();
         bounds[0] += 1f + .5f;
 
         // y-Axis
-        GameObject yAxis = factory2D.CreateAxis(Color.white, data.attributesFloat[floatAttributeY], "", AxisDirection.Y, 1f, .01f, true, true);
+        GameObject yAxis = factory2D.CreateAxis(Color.white, data.ratAttributes[floatAttributeY], "", AxisDirection.Y, 1f, .01f, true, true);
         yAxis.transform.localPosition = new Vector3(0, 0, -.001f);
         yAxis.transform.parent = Anchor.transform;
         Axis2D yAxis2D = yAxis.GetComponent<Axis2D>();
         yAxis2D.ticked = true;
         if(yBoundToZero)
         {
-            yAxis2D.min = data.dataMeasuresFloat[data.attributesFloat[floatAttributeY]].zeroBoundMin;
-            yAxis2D.max = data.dataMeasuresFloat[data.attributesFloat[floatAttributeY]].zeroBoundMax;
+            yAxis2D.min = data.dataMeasuresRatio[data.ratAttributes[floatAttributeY]].zeroBoundMin;
+            yAxis2D.max = data.dataMeasuresRatio[data.ratAttributes[floatAttributeY]].zeroBoundMax;
         } else
         {
-            yAxis2D.min = data.dataMeasuresFloat[data.attributesFloat[floatAttributeY]].min;
-            yAxis2D.max = data.dataMeasuresFloat[data.attributesFloat[floatAttributeY]].max;
+            yAxis2D.min = data.dataMeasuresRatio[data.ratAttributes[floatAttributeY]].min;
+            yAxis2D.max = data.dataMeasuresRatio[data.ratAttributes[floatAttributeY]].max;
         }
         yAxis2D.CalculateTickResolution();
         yAxis2D.UpdateAxis();
@@ -96,8 +96,8 @@ public class ETV2DLineChart : AETV2D
         xyLineComp.lineRenderer.startWidth = 0.02f;
         xyLineComp.lineRenderer.endWidth = 0.02f;
 
-        FloatDataDimensionMeasures measuresX = data.dataMeasuresFloat[data.attributesFloat[floatAttributeX]];
-        FloatDataDimensionMeasures measuresY = data.dataMeasuresFloat[data.attributesFloat[floatAttributeY]];
+        RatioDataDimensionMeasures measuresX = data.dataMeasuresRatio[data.ratAttributes[floatAttributeX]];
+        RatioDataDimensionMeasures measuresY = data.dataMeasuresRatio[data.ratAttributes[floatAttributeY]];
 
         for(int i = 0; i < data.informationObjects.Count; i++)
         {
@@ -106,26 +106,26 @@ public class ETV2DLineChart : AETV2D
             float x=0, y=0;
             if(xBoundToZero && yBoundToZero)
             {
-                x = measuresX.NormalizeToZeroBoundRange(o.attributesFloat[floatAttributeX].value);
-                y = measuresY.NormalizeToZeroBoundRange(o.attributesFloat[floatAttributeY].value);
+                x = measuresX.NormalizeToZeroBoundRange(o.ratioAtt[floatAttributeX].value);
+                y = measuresY.NormalizeToZeroBoundRange(o.ratioAtt[floatAttributeY].value);
             } else if(xBoundToZero && !yBoundToZero)
             {
-                x = measuresX.NormalizeToZeroBoundRange(o.attributesFloat[floatAttributeX].value);
-                y = measuresY.NormalizeToRange(o.attributesFloat[floatAttributeY].value);
+                x = measuresX.NormalizeToZeroBoundRange(o.ratioAtt[floatAttributeX].value);
+                y = measuresY.NormalizeToRange(o.ratioAtt[floatAttributeY].value);
             } else if(!xBoundToZero && yBoundToZero)
             {
-                x = measuresX.NormalizeToRange(o.attributesFloat[floatAttributeX].value);
-                y = measuresY.NormalizeToZeroBoundRange(o.attributesFloat[floatAttributeY].value);
+                x = measuresX.NormalizeToRange(o.ratioAtt[floatAttributeX].value);
+                y = measuresY.NormalizeToZeroBoundRange(o.ratioAtt[floatAttributeY].value);
             } else if(!xBoundToZero && !yBoundToZero)
             {
-                x = measuresX.NormalizeToRange(o.attributesFloat[floatAttributeX].value);
-                y = measuresY.NormalizeToRange(o.attributesFloat[floatAttributeY].value);
+                x = measuresX.NormalizeToRange(o.ratioAtt[floatAttributeX].value);
+                y = measuresY.NormalizeToRange(o.ratioAtt[floatAttributeY].value);
             }
 
             polyline[i] = new Vector3(x,y,0);
 
-            o.AddRepresentativeObject(data.attributesFloat[floatAttributeX], line);
-            o.AddRepresentativeObject(data.attributesFloat[floatAttributeY], line);
+            o.AddRepresentativeObject(data.ratAttributes[floatAttributeX], line);
+            o.AddRepresentativeObject(data.ratAttributes[floatAttributeY], line);
         }
 
         xyLineComp.visBridgePort.transform.localPosition = polyline[0];

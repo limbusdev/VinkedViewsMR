@@ -18,8 +18,8 @@ public class ETV2DBarChart : AETV2D
         this.stringAttributeID = stringAttributeID;
         bars = new Dictionary<string, Bar2D>();
 
-        string attName = dataSet.attributesString[stringAttributeID];
-        var measures = data.dataMeasuresString[attName];
+        string attName = dataSet.nomAttributes[stringAttributeID];
+        var measures = data.dataMeasuresNominal[attName];
         
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
@@ -43,7 +43,7 @@ public class ETV2DBarChart : AETV2D
 
         foreach(var o in dataSet.informationObjects)
         {
-            string value = o.attributesString[stringAttributeID].value;
+            string value = o.nominalAtt[stringAttributeID].value;
             Bar2D bar = bars[value];
             o.AddRepresentativeObject(attName, bar.gameObject);
         }
@@ -62,7 +62,7 @@ public class ETV2DBarChart : AETV2D
     {
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
         
-        float value = data.dataMeasuresString[data.attributesString[stringAttributeID]].distribution[category];
+        float value = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].distribution[category];
         GameObject bar = factory2D.CreateBar(value, range, .1f, .1f);
 
         bar.GetComponent<Bar2D>().SetLabelText(value.ToString());
@@ -128,7 +128,7 @@ public class ETV2DBarChart : AETV2D
     {
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
-        float xAxisLength = data.dataMeasuresString[data.attributesString[stringAttributeID]].distribution.Keys.Count * 0.15f;
+        float xAxisLength = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].distribution.Keys.Count * 0.15f;
 
         // x-Axis
         GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, xAxisLength + .1f, .01f, false, false);
@@ -142,8 +142,8 @@ public class ETV2DBarChart : AETV2D
         Axis2D axis2D = yAxis.GetComponent<Axis2D>();
 
         axis2D.ticked = true;
-        axis2D.min = data.dataMeasuresString[data.attributesString[stringAttributeID]].zBoundMin;
-        axis2D.max = data.dataMeasuresString[data.attributesString[stringAttributeID]].zBoundMax;
+        axis2D.min = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMin;
+        axis2D.max = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMax;
 
         axis2D.CalculateTickResolution();
 
@@ -160,7 +160,7 @@ public class ETV2DBarChart : AETV2D
         axis.Add(AxisDirection.X, xAxis);
         axis.Add(AxisDirection.Y, yAxis);
 
-        SetAxisLabels(AxisDirection.X, data.informationObjects[0].attributesString[stringAttributeID].name, "");
+        SetAxisLabels(AxisDirection.X, data.informationObjects[0].nominalAtt[stringAttributeID].name, "");
         SetAxisLabels(AxisDirection.Y, "Amount", "");
     }
 

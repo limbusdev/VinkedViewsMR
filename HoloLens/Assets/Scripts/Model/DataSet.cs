@@ -4,7 +4,51 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class FloatDataDimensionMeasures
+public class IntervalDataDimensionMeasures
+{
+    public LevelOfMeasurement type = LevelOfMeasurement.INTERVAL;
+    public float range;
+    public float min;
+    public float max;
+    public string variableName;
+
+    public IntervalDataDimensionMeasures(float min, float max, string variableName)
+    {
+        this.range = max - min;
+        this.min = min;
+        this.max = max;
+        this.variableName = variableName;
+    }
+
+    public float NormalizeToRange(int value)
+    {
+        return (((float)value) / range);
+    }
+}
+
+public class OrdinalDataDimensionMeasures
+{
+    public LevelOfMeasurement type = LevelOfMeasurement.ORDINAL;
+    public float range;
+    public float min;
+    public float max;
+    public string variableName;
+
+    public OrdinalDataDimensionMeasures(float min, float max, string variableName)
+    {
+        this.range = max-min;
+        this.min = min;
+        this.max = max;
+        this.variableName = variableName;
+    }
+
+    public float NormalizeToRange(int value)
+    {
+        return (((float)value) / range);
+    }
+}
+
+public class RatioDataDimensionMeasures
 {
     public LevelOfMeasurement type;
     public float range, zeroBoundRange;
@@ -13,7 +57,7 @@ public class FloatDataDimensionMeasures
     public string variableName;
     public string variableUnit;
 
-    public FloatDataDimensionMeasures(string variableName, float range, float zeroBoundRange, float min, float zeroBoundMin, float max, float zeroBoundMax, string variableUnit = "", LevelOfMeasurement type = LevelOfMeasurement.NOMINAL)
+    public RatioDataDimensionMeasures(string variableName, float range, float zeroBoundRange, float min, float zeroBoundMin, float max, float zeroBoundMax, string variableUnit = "", LevelOfMeasurement type = LevelOfMeasurement.NOMINAL)
     {
         this.type = type;
         this.range = range;
@@ -37,7 +81,7 @@ public class FloatDataDimensionMeasures
     }
 }
 
-public class StringDataDimensionMeasures
+public class NominalDataDimensionMeasures
 {
     public LevelOfMeasurement type;
     public IDictionary<string, int> distribution;
@@ -49,7 +93,7 @@ public class StringDataDimensionMeasures
     public int range, zBoundRange;
     public int numberOfUniqueValues;
 
-    public StringDataDimensionMeasures(LevelOfMeasurement type, IDictionary<string,int> distribution, string variableName, string variableUnit)
+    public NominalDataDimensionMeasures(LevelOfMeasurement type, IDictionary<string,int> distribution, string variableName, string variableUnit)
     {
         this.type = type;
         this.variableName = variableName;
@@ -80,66 +124,101 @@ public class DataSet
     public string Description { get; set; }
     public string[] Variables { get; set; }
     public string[] Units { get; set; }
-    public IList<InformationObject> informationObjects {get; set;}
-    public IDictionary<string, FloatDataDimensionMeasures> dataMeasuresFloat { get; set; }
-    public IDictionary<string, StringDataDimensionMeasures> dataMeasuresString { get; set; }
 
-    public string[] attributesFloat { get; set; }
-    public string[] attributesInt { get; set; }
-    public string[] attributesString { get; set; }
-    public string[] attributesVector2 { get; set; }
-    public string[] attributesVector3 { get; set; }
+    public IList<InformationObject> informationObjects {get; set;}
+    public IDictionary<string, NominalDataDimensionMeasures> dataMeasuresNominal { get; set; }
+    public IDictionary<string, OrdinalDataDimensionMeasures> dataMeasuresOrdinal { get; set; }
+    public IDictionary<string, IntervalDataDimensionMeasures> dataMeasuresInterval { get; set; }
+    public IDictionary<string, RatioDataDimensionMeasures> dataMeasuresRatio { get; set; }
+
+    public string[] nomAttributes { get; set; }
+    public string[] ordAttributes { get; set; }
+    public string[] ivlAttributes { get; set; }
+    public string[] ratAttributes { get; set; }
+    public string[] ratioQuadAttributes { get; set; }
+    public string[] ratioCubeAttributes { get; set; }
     
     public DataSet(string title, string description, IList<InformationObject> dataObjects)
     {
         Title = title;
         Description = description;
         this.informationObjects = dataObjects;
-        this.dataMeasuresFloat = new Dictionary<string, FloatDataDimensionMeasures>();
-        this.dataMeasuresString = new Dictionary<string, StringDataDimensionMeasures>();
 
-        // Calculate Data Measures for Float Attributes
-        int floatAttCounter = 0;
-        foreach(GenericAttribute<float> attribute in dataObjects[0].attributesFloat)
+        this.dataMeasuresNominal = new Dictionary<string, NominalDataDimensionMeasures>();
+        this.dataMeasuresOrdinal = new Dictionary<string, OrdinalDataDimensionMeasures>();
+        this.dataMeasuresInterval = new Dictionary<string, IntervalDataDimensionMeasures>();
+        this.dataMeasuresRatio = new Dictionary<string, RatioDataDimensionMeasures>();
+        
+        // CALCULATE
+
+        // Calculate Data Measures for nominal attributes
+        int nominalCounter = 0;
+        foreach(GenericAttribute<string> attribute in dataObjects[0].nominalAtt)
         {
-            FloatDataDimensionMeasures measure;
-            measure = DataProcessor.FloatAttribute.CalculateMeasures(dataObjects, floatAttCounter);
-            dataMeasuresFloat.Add(attribute.name, measure);
-            floatAttCounter++;
+            NominalDataDimensionMeasures measure;
+            measure = DataProcessor.NominalAttribute.CalculateMeasures(dataObjects, nominalCounter);
+            dataMeasuresNominal.Add(attribute.name, measure);
+            nominalCounter++;
         }
 
-        // Calculate Data Measures for String Attributes
-        int stringAttCounter = 0;
-        foreach(GenericAttribute<string> attribute in dataObjects[0].attributesString)
+        // Calculate Data Measures for ordinal attributes
+        int ordinalCounter = 0;
+        foreach(GenericAttribute<int> attribute in dataObjects[0].ordinalAtt)
         {
-            StringDataDimensionMeasures measure;
-            measure = DataProcessor.StringAttribute.CalculateMeasures(dataObjects, stringAttCounter);
-            dataMeasuresString.Add(attribute.name, measure);
-            stringAttCounter++;
+            OrdinalDataDimensionMeasures measure;
+            measure = DataProcessor.OrdinalAttribute.CalculateMeasures(dataObjects, ordinalCounter);
+            dataMeasuresOrdinal.Add(attribute.name, measure);
+            nominalCounter++;
+        }
+
+
+
+        // Calculate Data Measures for interval Attributes
+        int intervalCounter = 0;
+        foreach(GenericAttribute<int> attribute in dataObjects[0].intervalAtt)
+        {
+            IntervalDataDimensionMeasures measure;
+            measure = DataProcessor.IntervalAttribute.CalculateMeasures(dataObjects, intervalCounter);
+            dataMeasuresInterval.Add(attribute.name, measure);
+            intervalCounter++;
+        }
+
+        // Calculate Data Measures for ratio Attributes
+        int ratioCounter = 0;
+        foreach(GenericAttribute<float> attribute in dataObjects[0].ratioAtt)
+        {
+            RatioDataDimensionMeasures measure;
+            measure = DataProcessor.RatioAttribute.CalculateMeasures(dataObjects, ratioCounter);
+            dataMeasuresRatio.Add(attribute.name, measure);
+            ratioCounter++;
         }
 
         // Fill variable names
         InformationObject infoObj = dataObjects[0];
 
-        attributesInt = new string[infoObj.attributesInt.Length];
-        for(int i = 0; i < dataObjects[0].attributesInt.Length; i++)
-            attributesInt[i] = infoObj.attributesInt[i].name;
+        ordAttributes = new string[infoObj.ordinalAtt.Length];
+        for(int i = 0; i < dataObjects[0].ordinalAtt.Length; i++)
+            ordAttributes[i] = infoObj.ordinalAtt[i].name;
 
-        attributesFloat = new string[infoObj.attributesFloat.Length];
-        for(int i = 0; i < dataObjects[0].attributesFloat.Length; i++)
-            attributesFloat[i] = infoObj.attributesFloat[i].name;
+        ratAttributes = new string[infoObj.ratioAtt.Length];
+        for(int i = 0; i < dataObjects[0].ratioAtt.Length; i++)
+            ratAttributes[i] = infoObj.ratioAtt[i].name;
 
-        attributesString = new string[infoObj.attributesString.Length];
-        for(int i = 0; i < dataObjects[0].attributesString.Length; i++)
-            attributesString[i] = infoObj.attributesString[i].name;
+        nomAttributes = new string[infoObj.nominalAtt.Length];
+        for(int i = 0; i < dataObjects[0].nominalAtt.Length; i++)
+            nomAttributes[i] = infoObj.nominalAtt[i].name;
 
-        attributesVector2 = new string[infoObj.attributesVector2.Length];
+        ivlAttributes = new string[infoObj.intervalAtt.Length];
+        for(int i = 0; i < dataObjects[0].intervalAtt.Length; i++)
+            ivlAttributes[i] = infoObj.intervalAtt[i].name;
+
+        ratioQuadAttributes = new string[infoObj.attributesVector2.Length];
         for(int i = 0; i < dataObjects[0].attributesVector2.Length; i++)
-            attributesVector2[i] = infoObj.attributesVector2[i].name;
+            ratioQuadAttributes[i] = infoObj.attributesVector2[i].name;
 
-        attributesVector3 = new string[infoObj.attributesVector3.Length];
+        ratioCubeAttributes = new string[infoObj.attributesVector3.Length];
         for(int i = 0; i < dataObjects[0].attributesVector3.Length; i++)
-            attributesVector3[i] = infoObj.attributesVector3[i].name;
+            ratioCubeAttributes[i] = infoObj.attributesVector3[i].name;
 
     }
 

@@ -1,72 +1,51 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using GraphicalPrimitive;
 using UnityEngine;
 
-/**
- * 3D Euclidean transformable View: 3D Bar Chart
- * 
- * A Bar chart which normalizes linearily to 1,
- * calculated from the maximum of the provided
- * values.
- * */
-public class ETV3DGroupedBarChart : AETV3D {
-
+[Obsolete("ETV3DGroupedBarChart is not supported right now. It might get support at some point in time.")]
+public class ETV3DGroupedBarChart : AETV3D
+{
+    public GameObject Anchor;
     public GameObject barGroup3D;           // Populate in Editor
 
-    private IDictionary<string, InformationObject> data;
-    public GameObject Anchor;
-    private IList<GameObject> barGroups;
+    private DataSet data;
+    private int[] stringAttributeIDs;
+
+    private IDictionary<int, IDictionary<string, Bar3D>> bars;
     private List<Color> colors;
     private GameObject legend;
-    
-    private float yRange = 1f;
-    private float xRange = 1f;
 
-    public void Init(DataSet data)
-    {/*
+    private IDictionary<AxisDirection, GameObject> axis;
+
+    
+    public void Init(DataSet data, int[] stringAttributeIDs)
+    {
+        this.data = data;
+        this.stringAttributeIDs = stringAttributeIDs;
+
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
-        barGroups = new List<GameObject>();
+        bars = new Dictionary<int, IDictionary<string, Bar3D>>();
         colors = new List<Color>();
 
-        IEnumerator<string> keyEnum = data.Keys.GetEnumerator();
-        keyEnum.MoveNext();
-        float[] attributeRanges = new float[data[keyEnum.Current].attributes.Length];
-
-        float scaleX, scaleY, scaleZ;
-        scaleX = .015f * data.Count;
-        scaleY = 1f;
-        scaleZ = .01f;
-
-        this.data = data;
-
-        for (int i = 0; i < attributeRanges.Length; i++)
+        float max = 0;
+        for(int i=0; i<stringAttributeIDs.Length; i++)
         {
-            attributeRanges[i] = DataProcessor.CalculateRange(data, i);
+            int key = stringAttributeIDs[i];
+            string sKey = data.nomAttributes[key];
+            float newMax = data.dataMeasuresNominal[sKey].zBoundMax;
+            if(max < newMax)
+            {
+                max = newMax; // Get value for scaling
+            }
         }
 
-        int categoryCounter = 0;
-
-        foreach (string category in data.Keys)
-        {
-            GameObject barGroup = Instantiate(barGroup3D);
-            barGroups.Add(barGroup);
-            BarGroup3D barGroup3Dcomp = barGroup.GetComponent<BarGroup3D>();
-            int attributesCount = data[category].attributeValues.Length;
-            barGroup3Dcomp.Init(attributesCount, data[category].attributeValues, attributeRanges, .1f, .1f);
-            barGroup.transform.parent = Anchor.transform;
-            barGroup.transform.localPosition = new Vector3((categoryCounter) * 0.15f + 0.1f, 0, 0);
-            barGroup3Dcomp.SetLabelCategoryText(category);
-            
-            categoryCounter++;
-        }
-
-
-        SetUpAxis();*/
+        SetUpAxis();
     }
 
     public override void SetUpAxis()
     {
+        /*
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
         // x-Axis
@@ -81,6 +60,7 @@ public class ETV3DGroupedBarChart : AETV3D {
         GameObject grid = factory2D.CreateGrid(Color.gray, AxisDirection.X, AxisDirection.Y,
             true, 10, 0.1f, data.Count * 0.15f, false);
         grid.transform.parent = Anchor.transform;
+        */
     }
 
 
@@ -88,11 +68,13 @@ public class ETV3DGroupedBarChart : AETV3D {
 
     public override void ChangeColoringScheme(ETVColorSchemes scheme)
     {
+        /*
         foreach(GameObject go in barGroups)
         {
             BarGroup3D comp = go.GetComponent<BarGroup3D>();
             colors = comp.ChangeColoringScheme(scheme);
         }
+        */
     }
 
     public void SetLegendActive(bool active)

@@ -6,3 +6,6 @@
 	+ 180-360 gehört den Visualisierungen
 	+ die Bereiche 0-60 und 120-180 dienen als visueller Puffer
 	+ das entsprechende Farbschema (ETVColorSchemes) für Visualisierungen heißt "SplitHSV"
+* Intervallwerte werden vorerst immer mit Integern angegeben (z.B. Jahreszahlen, Temperatur in Grad Celsius)
+* Ordinalwerte werden vorerst ebenfalls mit Integern angeben (z.B. sehr gut > gut > befriedigend > ausreichend > mangelhaft > ungenügend, kodiert als 5 > 4 > 3 > 2 > 1 > 0)
+* int.MinValue wird für Ordinal- und Intervallskala als NaN verwendet (fehlender Wert)

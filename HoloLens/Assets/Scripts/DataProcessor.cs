@@ -6,14 +6,14 @@ using UnityEngine;
 
 public class DataProcessor
 {
-    public static class StringAttribute
+    public static class NominalAttribute
     {
-        public static StringDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID)
+        public static NominalDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID)
         {
-            var measures = new StringDataDimensionMeasures(
-                os[0].attributesString[aID].levelOfMeasurement,
+            var measures = new NominalDataDimensionMeasures(
+                os[0].nominalAtt[aID].levelOfMeasurement,
                 CalculateDistribution(os, aID),
-                os[0].attributesString[aID].name,
+                os[0].nominalAtt[aID].name,
                 "");
 
             return measures;
@@ -25,7 +25,7 @@ public class DataProcessor
 
             foreach(var o in os)
             {
-                var a = o.attributesString[aID];
+                var a = o.nominalAtt[aID];
                 if(!uniqueList.Contains(a.value))
                 {
                     uniqueList.Add(a.value);
@@ -48,7 +48,7 @@ public class DataProcessor
 
             foreach(var o in os)
             {
-                var a = o.attributesString[aID];
+                var a = o.nominalAtt[aID];
                 distribution[a.value] = distribution[a.value] + 1;
             }
 
@@ -60,8 +60,8 @@ public class DataProcessor
             int counter = 0;
             foreach(var o in os)
             {
-                var v1 = o.attributesString[aID1].value;
-                var v2 = o.attributesString[aID2].value;
+                var v1 = o.nominalAtt[aID1].value;
+                var v2 = o.nominalAtt[aID2].value;
                 
                 if(v1.Equals(value1) && v2.Equals(value2))
                 {
@@ -72,12 +72,99 @@ public class DataProcessor
         }
     }
 
-    public static class FloatAttribute
+    public static class OrdinalAttribute
     {
-        public static FloatDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID)
+        public static OrdinalDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID)
         {
-            var measures = new FloatDataDimensionMeasures(
-                os[0].attributesFloat[aID].name,
+            var measures = new OrdinalDataDimensionMeasures(
+                CalculateMin(os, aID),
+                CalculateMax(os, aID),
+                os[0].ordinalAtt[aID].name);
+
+            return measures;
+        }
+
+        public static int CalculateMin(IList<InformationObject> os, int attributeID)
+        {
+            int minimum = int.MaxValue;
+            foreach(InformationObject dataObject in os)
+            {
+                var attribute = dataObject.ordinalAtt[attributeID];
+                int attributeValue = attribute.value;
+                if(attributeValue < minimum)
+                {
+                    minimum = attributeValue;
+                }
+            }
+            return minimum;
+        }
+
+        public static int CalculateMax(IList<InformationObject> os, int attributeID)
+        {
+            int maximum = int.MinValue;
+            foreach(InformationObject dataObject in os)
+            {
+                var attribute = dataObject.ordinalAtt[attributeID];
+                int attributeValue = attribute.value;
+                if(attributeValue > maximum)
+                {
+                    maximum = attributeValue;
+                }
+            }
+            return maximum;
+        }
+    }
+
+    public static class IntervalAttribute
+    {
+        public static IntervalDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID)
+        {
+            var measures = new IntervalDataDimensionMeasures(
+                CalculateMin(os, aID),
+                CalculateMax(os, aID),
+                os[0].intervalAtt[aID].name);
+
+            return measures;
+        }
+
+        public static int CalculateMin(IList<InformationObject> os, int attributeID)
+        {
+            int minimum = int.MaxValue;
+            foreach(InformationObject dataObject in os)
+            {
+                var attribute = dataObject.intervalAtt[attributeID];
+                int attributeValue = attribute.value;
+                if(attributeValue < minimum)
+                {
+                    minimum = attributeValue;
+                }
+            }
+            return minimum;
+        }
+
+        public static int CalculateMax(IList<InformationObject> os, int attributeID)
+        {
+            int maximum = int.MinValue;
+            foreach(InformationObject dataObject in os)
+            {
+                var attribute = dataObject.intervalAtt[attributeID];
+                int attributeValue = attribute.value;
+                if(attributeValue > maximum)
+                {
+                    maximum = attributeValue;
+                }
+            }
+            return maximum;
+        }
+    }
+
+
+    public static class RatioAttribute
+    {
+        public static RatioDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID)
+        {
+            var measures = new RatioDataDimensionMeasures(
+                os[0].ratioAtt[aID].name,
                 CalculateRange(os, aID),
                 CalculateZeroBoundRange(os, aID),
                 CalculateMin(os, aID),
@@ -85,7 +172,7 @@ public class DataProcessor
                 CalculateMax(os, aID),
                 CalculateZeroBoundMax(os, aID),
                 "",
-                os[0].attributesFloat[aID].levelOfMeasurement
+                os[0].ratioAtt[aID].levelOfMeasurement
                 );
 
             return measures;
@@ -96,7 +183,7 @@ public class DataProcessor
             float minimum = float.MaxValue;
             foreach(InformationObject dataObject in os)
             {
-                var attribute = dataObject.attributesFloat[attributeID];
+                var attribute = dataObject.ratioAtt[attributeID];
                 float attributeValue = attribute.value;
                 if(attributeValue < minimum)
                 {
@@ -118,7 +205,7 @@ public class DataProcessor
             float max = float.MinValue;
             foreach(InformationObject dataObject in os)
             {
-                var attribute = dataObject.attributesFloat[attributeID];
+                var attribute = dataObject.ratioAtt[attributeID];
                 float attributeValue = attribute.value;
                 if(attributeValue > max)
                 {

@@ -9,6 +9,7 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
     public GameObject bar3D;
     public GameObject axis3D;
     public GameObject label;
+    public GameObject ScatterDot3DPrefab;
 
     public override GameObject CreateAxis(Color color, string variableName, string variableEntity,
         AxisDirection axisDirection, float length, float width = 0.01F, bool tipped = true, bool ticked = false)
@@ -53,6 +54,6 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
 
     public override GameObject CreateScatterDot()
     {
-        throw new System.NotImplementedException();
+        return Instantiate(ScatterDot3DPrefab);
     }
 }

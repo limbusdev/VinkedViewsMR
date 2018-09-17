@@ -27,7 +27,7 @@ public class ETV3DBarMap : AETV3D
 
     float max;
 
-    private StringDataDimensionMeasures measuresX, measuresY;
+    private NominalDataDimensionMeasures measuresX, measuresY;
 
     private IDictionary<AxisDirection, GameObject> axis;
 
@@ -46,10 +46,10 @@ public class ETV3DBarMap : AETV3D
 
         attributeX = sAtt1;
         attributeY = sAtt2;
-        var nameX = data.attributesString[sAtt1];
-        var nameY = data.attributesString[sAtt2];
-        measuresX = data.dataMeasuresString[nameX];
-        measuresY = data.dataMeasuresString[nameY];
+        var nameX = data.nomAttributes[sAtt1];
+        var nameY = data.nomAttributes[sAtt2];
+        measuresX = data.dataMeasuresNominal[nameX];
+        measuresY = data.dataMeasuresNominal[nameY];
         var keysX = measuresX.distribution.Keys.ToArray();
         var keysY = measuresY.distribution.Keys.ToArray();
 
@@ -70,7 +70,7 @@ public class ETV3DBarMap : AETV3D
                 string v2 =keysY[vID2];
 
                 // Count how many object match both values
-                var count = DataProcessor.StringAttribute
+                var count = DataProcessor.NominalAttribute
                     .CountObjectsMatchingTwoCattegories(
                     data.informationObjects, sAtt1, sAtt2, v1, v2);
 
@@ -97,11 +97,11 @@ public class ETV3DBarMap : AETV3D
             foreach(var o in data.informationObjects)
             {
                 var bar = bars[
-                    Array.IndexOf(measuresX.uniqueValues, o.attributesString[attributeX].value),
-                    Array.IndexOf(measuresY.uniqueValues, o.attributesString[attributeY].value)
+                    Array.IndexOf(measuresX.uniqueValues, o.nominalAtt[attributeX].value),
+                    Array.IndexOf(measuresY.uniqueValues, o.nominalAtt[attributeY].value)
                     ];
-                o.AddRepresentativeObject(o.attributesString[attributeX].name, bar.gameObject);
-                o.AddRepresentativeObject(o.attributesString[attributeY].name, bar.gameObject);
+                o.AddRepresentativeObject(o.nominalAtt[attributeX].name, bar.gameObject);
+                o.AddRepresentativeObject(o.nominalAtt[attributeY].name, bar.gameObject);
             }
         }
     }

@@ -4,30 +4,34 @@ using UnityEngine;
 
 public enum LevelOfMeasurement
 {
-    ORDINAL, NOMINAL, INTERVAL, RATIO
+     NOMINAL, ORDINAL, INTERVAL, RATIO
 }
 
 public class InformationObject
 {
     public IDictionary<string, IList<GameObject>> representativeGameObjectsByAttributeName { get; }
 
-    public GenericAttribute<string>[] attributesString;
-    public GenericAttribute<float>[] attributesFloat;
-    public GenericAttribute<int>[] attributesInt;
+    public GenericAttribute<string>[] nominalAtt;
+    public GenericAttribute<int>[] ordinalAtt;
+    public GenericAttribute<int>[] intervalAtt;
+    public GenericAttribute<float>[] ratioAtt;
+    
     public GenericAttribute<Vector2>[] attributesVector2;
     public GenericAttribute<Vector3>[] attributesVector3;
 
     public InformationObject(
-        GenericAttribute<string>[] attributesString, 
-        GenericAttribute<float>[] attributesFloat, 
-        GenericAttribute<int>[] attributesInt, 
+        GenericAttribute<string>[] attributesNom,
+        GenericAttribute<int>[] attributesOrd,
+        GenericAttribute<int>[] attributesIvl,
+        GenericAttribute<float>[] attributesRat,
         GenericAttribute<Vector2>[] attributesVector2, 
         GenericAttribute<Vector3>[] attributesVector3)
     {
         this.representativeGameObjectsByAttributeName = new Dictionary<string, IList<GameObject>>();
-        this.attributesString = attributesString;
-        this.attributesFloat = attributesFloat;
-        this.attributesInt = attributesInt;
+        this.nominalAtt = attributesNom;
+        this.ordinalAtt = attributesOrd;
+        this.intervalAtt = attributesIvl;
+        this.ratioAtt = attributesRat;
         this.attributesVector2 = attributesVector2;
         this.attributesVector3 = attributesVector3;
     }
@@ -36,12 +40,12 @@ public class InformationObject
     {
         string outString = "";
 
-        foreach(GenericAttribute<string> a in attributesString)
+        foreach(GenericAttribute<string> a in nominalAtt)
         {
             outString += a.name + ": " + a.value + "\t|";
         }
 
-        foreach(GenericAttribute<float> a in attributesFloat)
+        foreach(GenericAttribute<float> a in ratioAtt)
         {
             outString += a.name + ": " + a.value + "\t|";
         }

@@ -1,4 +1,5 @@
 CrimeDate,CrimeTime,CrimeCode,Location,Description,Inside/Outside,Weapon,Post,District,Neighborhood,Longitude,Latitude,Location 1,Premise,crimeCaseNumber,Total Incidents
+ordinal,ordinal,nominal,nominal,nominal,nominal,nominal,nominal,nominal,nominal,nominal,ratio,ratio,vector2,nominal,ratio,ratio
 07/07/2018,23:53:00,1F,1600 PENTWOOD RD,HOMICIDE,,FIREARM,413,NORTHEASTERN,Stonewood-Pentwood-Winsto,-76.58727,39.34782,"(39.34782, -76.58727)",Alley,,1
 07/07/2018,23:50:00,4E,ST & DIVISION ST,COMMON ASSAULT,O,,131,CENTRAL,Druid Heights,-76.63936,39.30903,"(39.30903, -76.63936)",STREET,,1
 07/07/2018,23:18:00,4C,2500 PERRING MANOR RD,AGG. ASSAULT,I,OTHER,423,NORTHEASTERN,Hamilton Hills,-76.56094,39.37189,"(39.37189, -76.56094)",ROW/TOWNHO,,1

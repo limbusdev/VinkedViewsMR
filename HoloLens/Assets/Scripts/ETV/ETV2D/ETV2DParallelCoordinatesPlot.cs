@@ -33,7 +33,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
         for(int i=0; i<floatAttributeIDs.Length; i++)
         {
-            string attributeName = data.informationObjects[0].attributesFloat[floatAttributeIDs[i]].name;
+            string attributeName = data.informationObjects[0].ratioAtt[floatAttributeIDs[i]].name;
             string attributeUnit = "";
             GameObject axis = factory2D.CreateAxis(
                 Color.white, attributeName, attributeUnit, 
@@ -43,8 +43,8 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
             axis.transform.parent = Anchor.transform;
             Axis2D axis2D = axis.GetComponent<Axis2D>();
             axis2D.ticked = true;
-            axis2D.min = data.dataMeasuresFloat[attributeName].zeroBoundMin;
-            axis2D.max = data.dataMeasuresFloat[attributeName].zeroBoundMax;
+            axis2D.min = data.dataMeasuresRatio[attributeName].zeroBoundMin;
+            axis2D.max = data.dataMeasuresRatio[attributeName].zeroBoundMax;
 
             axis2D.CalculateTickResolution();
             axis2D.UpdateAxis();
@@ -69,8 +69,8 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         Vector3[] polyline = new Vector3[dimension];
         for(int variable = 0; variable < floatAttributeIDs.Length; variable++)
         {
-            GenericAttribute<float> attribute = o.attributesFloat[variable];
-            polyline[variable] = new Vector3(.5f * variable, attribute.value / data.dataMeasuresFloat[attribute.name].zeroBoundRange, 0);
+            GenericAttribute<float> attribute = o.ratioAtt[variable];
+            polyline[variable] = new Vector3(.5f * variable, attribute.value / data.dataMeasuresRatio[attribute.name].zeroBoundRange, 0);
             o.AddRepresentativeObject(attribute.name, pcpLine);
             
         }

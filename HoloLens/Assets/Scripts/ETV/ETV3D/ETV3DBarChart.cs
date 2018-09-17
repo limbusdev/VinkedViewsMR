@@ -29,12 +29,12 @@ public class ETV3DBarChart : AETV3D
         bars = new Dictionary<string, Bar3D>();
         axis = new Dictionary<AxisDirection, GameObject>();
 
-        string attName = data.attributesString[stringAttributeID];
-        var measures = data.dataMeasuresString[attName];
+        string attName = data.nomAttributes[stringAttributeID];
+        var measures = data.dataMeasuresNominal[attName];
 
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
 
-        float range = data.dataMeasuresString[data.attributesString[stringAttributeID]].zBoundRange;
+        float range = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundRange;
 
         int categoryCounter = 0;
 
@@ -55,7 +55,7 @@ public class ETV3DBarChart : AETV3D
 
         foreach(var o in data.informationObjects)
         {
-            var bar = bars[o.attributesString[stringAttributeID].value];
+            var bar = bars[o.nominalAtt[stringAttributeID].value];
             o.AddRepresentativeObject(attName, bar.gameObject);
         }
         
@@ -67,7 +67,7 @@ public class ETV3DBarChart : AETV3D
     {
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
-        float xAxisLength = data.dataMeasuresString[data.attributesString[stringAttributeID]].distribution.Keys.Count * 0.15f;
+        float xAxisLength = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].distribution.Keys.Count * 0.15f;
 
         // x-Axis
         GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, xAxisLength + .1f, .01f, false, false);
@@ -78,8 +78,8 @@ public class ETV3DBarChart : AETV3D
         Axis2D axis2D = yAxis.GetComponent<Axis2D>();
 
         axis2D.ticked = true;
-        axis2D.min = data.dataMeasuresString[data.attributesString[stringAttributeID]].zBoundMin;
-        axis2D.max = data.dataMeasuresString[data.attributesString[stringAttributeID]].zBoundMax;
+        axis2D.min = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMin;
+        axis2D.max = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMax;
 
         axis2D.CalculateTickResolution();
         
@@ -93,7 +93,7 @@ public class ETV3DBarChart : AETV3D
         axis.Add(AxisDirection.X, xAxis);
         axis.Add(AxisDirection.Y, yAxis);
 
-        SetAxisLabels(AxisDirection.X, data.informationObjects[0].attributesString[stringAttributeID].name, "");
+        SetAxisLabels(AxisDirection.X, data.informationObjects[0].nominalAtt[stringAttributeID].name, "");
         SetAxisLabels(AxisDirection.Y, "Amount", "");
     }
 
@@ -106,7 +106,7 @@ public class ETV3DBarChart : AETV3D
     {
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
         
-        float value = data.dataMeasuresString[data.attributesString[stringAttributeID]].distribution[category];
+        float value = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].distribution[category];
         GameObject bar = factory3D.CreateBar(value, range, .1f, .1f);
 
         bar.GetComponent<Bar3D>().SetLabelText(value.ToString());

@@ -90,6 +90,16 @@ public class VisualizationFactory : MonoBehaviour {
         exETV1.transform.Translate(new Vector3(1.98f * 2, 0, -.39f * 2-10));
         exETV1.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(new Vector3(0,0,-10));
 
+        GameObject ex2 = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarChart(dataProvider.dataSets[2], 1);
+        GameObject exETV2 = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(ex2);
+        exETV2.transform.Translate(new Vector3(-.12f * 2, 0, -1.97f * 2-10));
+        exETV2.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(new Vector3(0, 0, -10));
+
+        GameObject ex3 = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarMap(dataProvider.dataSets[2], 1, 2);
+        GameObject exETV3 = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(ex3);
+        exETV3.transform.Translate(new Vector3(-1.22f * 2, 0, -1.53f * 2-10));
+        exETV3.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(new Vector3(0, 0, -10));
+
 
         //foreach(InformationObject o in educationalData.dataObjects)
         //{

@@ -49,7 +49,7 @@ public class VisualizationFactory : MonoBehaviour {
         newETV2DBarChart3.transform.Translate(new Vector3(-1.22f * 2, 0, -1.53f * 2));
         newETV2DBarChart3.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
-        GameObject new2DPCP = ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(fbiData, new int[] { 0, 1, 2, 3 }, new int[] { });
+        GameObject new2DPCP = ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(fbiData, new int[] { }, new int[] { }, new int[] {0 }, new int[] { 0,1,3,5 });
         GameObject newETV2DPCP = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DPCP);
         newETV2DPCP.transform.Translate(new Vector3(-1.84f * 2, 0, -.72f * 2));
         newETV2DPCP.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
@@ -83,6 +83,11 @@ public class VisualizationFactory : MonoBehaviour {
         GameObject newETV3DScatter = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DScatter);
         newETV3DScatter.transform.Translate(new Vector3(.94f * 2, 0, -1.74f * 2));
         newETV3DScatter.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
+
+        GameObject new3DScatter2 = ServiceLocator.instance.ETV3DFactoryService.CreateETVParallelCoordinatesPlot(fbiData, new int[] { }, new int[] { }, new int[] { 0 }, new int[] { 0, 1, 3, 5 });
+        GameObject newETV3DScatter2 = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DScatter2);
+        newETV3DScatter2.transform.Translate(new Vector3(.94f * 4, 0, -1.74f * 4));
+        newETV3DScatter2.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
         // Exoplanets
         GameObject ex1 = ServiceLocator.instance.ETV3DFactoryService.CreateETVScatterPlot(dataProvider.dataSets[2], new int[] { 0,1,2 });

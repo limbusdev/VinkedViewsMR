@@ -16,7 +16,7 @@ public abstract class AETVFactory : MonoBehaviour {
 	}
 
     public abstract GameObject CreateSingleAxis(DataSet data, int attributeID);
-    public abstract GameObject CreateETVParallelCoordinatesPlot(DataSet data, int[] floatAttributeIDs, int[] stringAttributeIDs);
+    public abstract GameObject CreateETVParallelCoordinatesPlot(DataSet data, int[] nomIDs, int[] ordIDs, int[] ivlIDs, int[] ratIDs);
     public abstract GameObject CreateETVLineChart(DataSet data, int floatAttributeX, int floatAttributeY, bool xAxisBoundToZero, bool yAxisBoundToZero);
     public abstract GameObject CreateETVBarChart(DataSet data, int nominalAttributeID);
     public abstract GameObject CreateETVScatterPlot(DataSet data, int[] floatAttributeIDs);

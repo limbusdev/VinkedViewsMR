@@ -86,6 +86,7 @@ public class NominalDataDimensionMeasures
     public LevelOfMeasurement type;
     public IDictionary<string, int> distribution;
     public string[] uniqueValues;
+    public IDictionary<string, int> valueIDs;
     public string variableName;
     public string variableUnit;
     public int minimum, zBoundMin;
@@ -99,6 +100,7 @@ public class NominalDataDimensionMeasures
         this.variableName = variableName;
         this.variableUnit = variableUnit;
         this.distribution = distribution;
+        valueIDs = new Dictionary<string, int>();
 
         this.minimum = distribution.Values.Min();
         this.maximum = distribution.Values.Max();
@@ -112,6 +114,7 @@ public class NominalDataDimensionMeasures
         int counter = 0;
         foreach(string key in distribution.Keys)
         {
+            valueIDs.Add(key, counter);
             uniqueValues[counter] = key;
             counter++;
         }

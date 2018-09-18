@@ -105,7 +105,9 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     {
         for(int i = 0; i < ObjectCollection.transform.childCount; i++)
         {
+            
             var g = ObjectCollection.transform.GetChild(i);
+            interactables.Remove(g.gameObject);
             Destroy(g.gameObject);
         }
     }
@@ -114,7 +116,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     {
         foreach(GameObject g in interactables)
         {
-            g.SetActive(false);
+            if(g != null) g.SetActive(false);
         }
     }
 
@@ -176,7 +178,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
                 if(!keys.Contains(key) && !m1.Equals(m2))
                 {
                     keys.Add(key);
-                    Create2DIconAndInsert(m1.variableName, m2.variableName, m1.type, m2.type);
+                    interactables.Add(Create2DIconAndInsert(m1.variableName, m2.variableName, m1.type, m2.type));
                 }
             }
         }
@@ -206,7 +208,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
                     if(!keys.Contains(key) && !(m1.Equals(m2) || m2.Equals(m3) || m3.Equals(m1)))
                     {
                         keys.Add(key);
-                        Create3DIconAndInsert(m1.variableName, m2.variableName, m3.variableName, m1.type, m2.type, m3.type);
+                        interactables.Add(Create3DIconAndInsert(m1.variableName, m2.variableName, m3.variableName, m1.type, m2.type, m3.type));
                     }
                 }
             }

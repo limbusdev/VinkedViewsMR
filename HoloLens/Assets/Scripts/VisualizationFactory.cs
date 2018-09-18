@@ -275,6 +275,65 @@ public class VisualizationFactory : MonoBehaviour {
         return null;
     }
 
+
+    // SingleAxis3D, BarChart2D, BarChart3D, BarMap3D, PCP2D, PCP3D, ScatterXY2D, ScatterXYZ3D, LineXY2D
+
+    public GameObject GenerateSingle3DAxisFrom(int dataSetID, string variable)
+    {
+        var ds = dataProvider.dataSets[dataSetID];
+        var type = ds.GetTypeOf(variable);
+
+        var vis = ServiceLocator.instance.ETV3DFactoryService.CreateSingleAxis(ds, ds.GetIDOf(variable), type);
+        vis = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(vis);
+
+        vis.transform.position = NewETVPosition.transform.position;
+
+        return vis;
+    }
+
+    public GameObject GenerateBarChart2DFrom(int dataSetID, string variable)
+    {
+        var ds = dataProvider.dataSets[dataSetID];
+        var type = ds.GetTypeOf(variable);
+
+        var factory = ServiceLocator.instance.ETV2DFactoryService;
+        var vis = factory.CreateETVBarChart(ds, ds.GetIDOf(variable));
+        vis = factory.PutETVOnAnchor(vis);
+
+        vis.transform.position = NewETVPosition.transform.position;
+
+        return vis;
+    }
+
+    public GameObject GenerateBarChart3DFrom(int dataSetID, string variable)
+    {
+        var ds = dataProvider.dataSets[dataSetID];
+        var type = ds.GetTypeOf(variable);
+
+        var factory = ServiceLocator.instance.ETV3DFactoryService;
+        var vis = factory.CreateETVBarChart(ds, ds.GetIDOf(variable));
+        vis = factory.PutETVOnAnchor(vis);
+
+        vis.transform.position = NewETVPosition.transform.position;
+
+        return vis;
+    }
+
+    public GameObject GenerateBarMap3DFrom(int dataSetID, string[] variables)
+    {
+        var ds = dataProvider.dataSets[dataSetID];
+        var type1 = ds.GetTypeOf(variables[0]);
+        var type2 = ds.GetTypeOf(variables[1]);
+
+        var factory = ServiceLocator.instance.ETV3DFactoryService;
+        var vis = factory.CreateETVBarMap(ds, ds.GetIDOf(variables[0]), ds.GetIDOf(variables[1]));
+        vis = factory.PutETVOnAnchor(vis);
+
+        vis.transform.position = NewETVPosition.transform.position;
+
+        return vis;
+    }
+
     public string[] ListPossibleVisualizations(int dataSetID, string[] attNames)
     {
         int[] nomIDs, ordIDs, ivlIDs, ratIDs;

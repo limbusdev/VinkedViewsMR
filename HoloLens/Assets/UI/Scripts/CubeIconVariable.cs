@@ -145,10 +145,30 @@ public class CubeIconVariable : InteractionReceiver
     {
         Debug.Log(obj.name + " : InputDown");
 
+        // SingleAxis3D, BarChart2D, BarChart3D, BarMap3D, PCP2D, PCP3D, ScatterXY2D, ScatterXYZ3D, LineXY2D
         switch(obj.name)
         {
             case "SingleAxis3D":
-                Debug.Log("Creating Single Axis 2D for Variable.");
+                ServiceLocator.instance.visualizationFactory.GenerateSingle3DAxisFrom(dataSetID, VariableNames[0]);
+                break;
+            case "BarChart2D":
+                ServiceLocator.instance.visualizationFactory.GenerateBarChart2DFrom(dataSetID, VariableNames[0]);
+                break;
+            case "BarChart3D":
+                ServiceLocator.instance.visualizationFactory.GenerateBarChart3DFrom(dataSetID, VariableNames[0]);
+                break;
+            case "BarMap3D":
+                ServiceLocator.instance.visualizationFactory.GenerateBarMap3DFrom(dataSetID, VariableNames);
+                break;
+            case "PCP2D":
+                break;
+            case "PCP3D":
+                break;
+            case "ScatterXY2D":
+                break;
+            case "ScatterXYZ3D":
+                break;
+            case "LineXY2D":
                 break;
             default:
                 break;

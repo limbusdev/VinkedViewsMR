@@ -171,8 +171,7 @@ public class DataProcessor
                 CalculateZeroBoundMin(os, aID),
                 CalculateMax(os, aID),
                 CalculateZeroBoundMax(os, aID),
-                "",
-                os[0].ratioAtt[aID].levelOfMeasurement
+                ""
                 );
 
             return measures;

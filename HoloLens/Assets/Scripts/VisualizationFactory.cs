@@ -84,7 +84,8 @@ public class VisualizationFactory : MonoBehaviour {
         newETV3DScatter.transform.Translate(new Vector3(.94f * 2, 0, -1.74f * 2));
         newETV3DScatter.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
-        GameObject new3DScatter2 = ServiceLocator.instance.ETV3DFactoryService.CreateETVParallelCoordinatesPlot(fbiData, new int[] { }, new int[] { }, new int[] { 0 }, new int[] { 0, 1, 3, 5 });
+        GameObject new3DScatter2 = ServiceLocator.instance.ETV3DFactoryService.CreateETVParallelCoordinatesPlot(
+            fbiData, new int[] { }, new int[] { }, new int[] { 0 }, new int[] { 0, 1, 3, 5 });
         GameObject newETV3DScatter2 = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DScatter2);
         newETV3DScatter2.transform.Translate(new Vector3(.94f * 4, 0, -1.74f * 4));
         newETV3DScatter2.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);

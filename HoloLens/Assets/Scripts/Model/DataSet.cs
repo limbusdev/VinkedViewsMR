@@ -4,20 +4,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class IntervalDataDimensionMeasures
+public class DataDimensionMeasures
 {
-    public LevelOfMeasurement type = LevelOfMeasurement.INTERVAL;
+    public LevelOfMeasurement type;
+    public string variableName;
+
+    public DataDimensionMeasures(LevelOfMeasurement type, string variableName)
+    {
+        this.type = type;
+        this.variableName = variableName;
+    }
+}
+
+public class IntervalDataDimensionMeasures : DataDimensionMeasures
+{
     public float range;
     public float min;
     public float max;
-    public string variableName;
 
-    public IntervalDataDimensionMeasures(float min, float max, string variableName)
+    public IntervalDataDimensionMeasures(float min, float max, string variableName) : base(LevelOfMeasurement.INTERVAL, variableName)
     {
         this.range = max - min;
         this.min = min;
         this.max = max;
-        this.variableName = variableName;
     }
 
     public float NormalizeToRange(int value)
@@ -26,20 +35,17 @@ public class IntervalDataDimensionMeasures
     }
 }
 
-public class OrdinalDataDimensionMeasures
+public class OrdinalDataDimensionMeasures : DataDimensionMeasures
 {
-    public LevelOfMeasurement type = LevelOfMeasurement.ORDINAL;
     public float range;
     public float min;
     public float max;
-    public string variableName;
 
-    public OrdinalDataDimensionMeasures(float min, float max, string variableName)
+    public OrdinalDataDimensionMeasures(float min, float max, string variableName) : base(LevelOfMeasurement.ORDINAL, variableName)
     {
         this.range = max-min;
         this.min = min;
         this.max = max;
-        this.variableName = variableName;
     }
 
     public float NormalizeToRange(int value)
@@ -48,18 +54,20 @@ public class OrdinalDataDimensionMeasures
     }
 }
 
-public class RatioDataDimensionMeasures
+public class RatioDataDimensionMeasures : DataDimensionMeasures
 {
-    public LevelOfMeasurement type;
     public float range, zeroBoundRange;
     public float min, zeroBoundMin;
     public float max, zeroBoundMax;
-    public string variableName;
     public string variableUnit;
 
-    public RatioDataDimensionMeasures(string variableName, float range, float zeroBoundRange, float min, float zeroBoundMin, float max, float zeroBoundMax, string variableUnit = "", LevelOfMeasurement type = LevelOfMeasurement.NOMINAL)
+    public RatioDataDimensionMeasures(
+        string variableName, 
+        float range, float zeroBoundRange, 
+        float min, float zeroBoundMin, 
+        float max, float zeroBoundMax, 
+        string variableUnit = "") : base(LevelOfMeasurement.RATIO, variableName)
     {
-        this.type = type;
         this.range = range;
         this.zeroBoundRange = zeroBoundRange;
         this.min = min;
@@ -81,13 +89,11 @@ public class RatioDataDimensionMeasures
     }
 }
 
-public class NominalDataDimensionMeasures
+public class NominalDataDimensionMeasures : DataDimensionMeasures
 {
-    public LevelOfMeasurement type;
     public IDictionary<string, int> distribution;
     public string[] uniqueValues;
     public IDictionary<string, int> valueIDs;
-    public string variableName;
     public string variableUnit;
     public int minimum, zBoundMin;
     public int maximum, zBoundMax;
@@ -95,9 +101,8 @@ public class NominalDataDimensionMeasures
     public int numberOfUniqueValues;
 
     public NominalDataDimensionMeasures(LevelOfMeasurement type, IDictionary<string,int> distribution, string variableName, string variableUnit)
+         : base(LevelOfMeasurement.NOMINAL, variableName)
     {
-        this.type = type;
-        this.variableName = variableName;
         this.variableUnit = variableUnit;
         this.distribution = distribution;
         valueIDs = new Dictionary<string, int>();
@@ -125,8 +130,9 @@ public class DataSet
 {
     public string Title { get; set; }
     public string Description { get; set; }
-    public string[] Variables { get; set; }
-    public string[] Units { get; set; }
+    //public string[] Variables { get; set; }
+    //public string[] Units { get; set; }
+    //public string[] LOMs { get; set; }
 
     public IList<InformationObject> informationObjects {get; set;}
     public IDictionary<string, NominalDataDimensionMeasures> dataMeasuresNominal { get; set; }

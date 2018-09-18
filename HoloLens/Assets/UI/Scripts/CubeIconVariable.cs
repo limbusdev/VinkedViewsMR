@@ -28,34 +28,34 @@ public class CubeIconVariable : MonoBehaviour
 
         dimension = variableNames.Length;
         int iconNum = 0;
-        int countOrdinalVars = 0;
-        int countNominalVars = 0;
+        int counterNumericVars = 0;
+        int counterCategoricalVars = 0;
 
         foreach(LevelOfMeasurement t in variableTypes)
         {
-            if (t == LevelOfMeasurement.ORDINAL) countOrdinalVars++;
-            else                           countNominalVars++;
+            if (t == LevelOfMeasurement.RATIO || t == LevelOfMeasurement.INTERVAL) counterNumericVars++;
+            else counterCategoricalVars++;
         }
 
-        bool allVariablesOrdinal = (countOrdinalVars == dimension);
-        bool allVariablesNominal = (countNominalVars == dimension);
+        bool allVarsNumeric = (counterNumericVars == dimension);
+        bool allVarsCategoric = (counterCategoricalVars == dimension);
 
         // Chose 3D Icon
         switch (dimension)
         {
             case 1:
-                iconNum = (variableTypes[0] == LevelOfMeasurement.ORDINAL) ? 0 : 1;
+                iconNum = (variableTypes[0] == LevelOfMeasurement.RATIO || variableTypes[0] == LevelOfMeasurement.INTERVAL) ? 0 : 1;
                 break;
             case 2:
-                if      (allVariablesOrdinal) iconNum = 2;
-                else if (allVariablesNominal) iconNum = 3;
+                if      (allVarsNumeric) iconNum = 2;
+                else if (allVarsCategoric) iconNum = 3;
                 else                          iconNum = 4;
                 break;
             case 3:
-                if (allVariablesOrdinal) iconNum = 5;
-                else if (allVariablesNominal) iconNum = 6;
-                else if (countOrdinalVars == 2 && countNominalVars == 1) iconNum = 7;
-                else if (countOrdinalVars == 1 && countNominalVars == 2) iconNum = 8;
+                if (allVarsNumeric) iconNum = 5;
+                else if (allVarsCategoric) iconNum = 6;
+                else if (counterNumericVars == 2 && counterCategoricalVars == 1) iconNum = 7;
+                else if (counterNumericVars == 1 && counterCategoricalVars == 2) iconNum = 8;
                 else iconNum = 0;
                 break;
             default: // case n:

@@ -54,10 +54,10 @@ public class ETV3DFactory : AETVFactory
 		
 	}
 
-    public override GameObject CreateSingleAxis(DataSet data, int attributeID)
+    public override GameObject CreateSingleAxis(DataSet data, int attributeID, LevelOfMeasurement lom)
     {
         GameObject singleAxis3D = Instantiate(ETV3DSingleAxisPrefab);
-        singleAxis3D.GetComponent<ETV3DSingleAxis>().Init(data, attributeID);
+        singleAxis3D.GetComponent<ETV3DSingleAxis>().Init(data, attributeID, lom);
 
         return singleAxis3D;
     }

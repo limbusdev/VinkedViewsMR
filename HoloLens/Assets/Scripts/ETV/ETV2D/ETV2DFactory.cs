@@ -55,7 +55,7 @@ public class ETV2DFactory : AETVFactory
         return scatterPlot;
     }
 
-    public override GameObject CreateSingleAxis(DataSet data, int attributeID)
+    public override GameObject CreateSingleAxis(DataSet data, int attributeID, LevelOfMeasurement lom)
     {
         throw new System.NotImplementedException();
     }

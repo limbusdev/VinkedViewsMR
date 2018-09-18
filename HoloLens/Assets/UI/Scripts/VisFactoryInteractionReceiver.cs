@@ -57,23 +57,57 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
             case "Button3D":
                 SetupGalery(currentlyChosenDataBase, 3);
                 break;
+            case "ButtonND":
+                SetupGalery(currentlyChosenDataBase, 4);
+                break;
             case "Back2":
                 DeactivateAllInteractibles();
                 ActivateInteractables(new int[] { 1,2,3,4 });
 
-                for(int i = 0; i < ObjectCollection.transform.childCount; i++)
+                ClearGalery();
+                break;
+            case "CubeIconVariable":
+                HideAllIconSubButtons();
+                if(obj.GetComponent<CubeIconVariable>() != null)
                 {
-                    var g = ObjectCollection.transform.GetChild(i);
-                    Destroy(g.gameObject);
+                    obj.GetComponent<CubeIconVariable>().ShowButtons();
                 }
                 break;
-
 
             default:
                 break;
         }
+    }
 
-        
+    private void HideAllIconSubButtons()
+    {
+        for(int i = 0; i < ObjectCollection.transform.childCount; i++)
+        {
+            var g = ObjectCollection.transform.GetChild(i);
+            if(g.gameObject.GetComponent<CubeIconVariable>() != null)
+            {
+                g.gameObject.GetComponent<CubeIconVariable>().HideButtons();
+            }
+        }
+    }
+
+    public void ClearAllBut(GameObject exception)
+    {
+        for(int i = 0; i < ObjectCollection.transform.childCount; i++)
+        {
+            var g = ObjectCollection.transform.GetChild(i);
+            if(!g.gameObject.Equals(exception))
+                Destroy(g.gameObject);
+        }
+    }
+
+    private void ClearGalery()
+    {
+        for(int i = 0; i < ObjectCollection.transform.childCount; i++)
+        {
+            var g = ObjectCollection.transform.GetChild(i);
+            Destroy(g.gameObject);
+        }
     }
 
     private void DeactivateAllInteractibles()
@@ -118,7 +152,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
 
         foreach(DataDimensionMeasures m in ms)
         {
-            Create1DIconAndInsert(m.variableName, m.type);
+            interactables.Add(Create1DIconAndInsert(m.variableName, m.type));
         }
     }
     
@@ -198,7 +232,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     {
         GameObject etvIcon = Instantiate(CubeIconVariablePrefab);
         CubeIconVariable civ = etvIcon.GetComponent<CubeIconVariable>();
-        civ.Init(names, new string[0], loms);
+        civ.Init(names, loms, currentlyChosenDataBase);
         etvIcon.transform.parent = ObjectCollection.transform;
 
         return etvIcon;

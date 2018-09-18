@@ -34,9 +34,13 @@ public class ETV2DFactory : AETVFactory
         return lineChart;
     }
 
-    public override GameObject CreateETVParallelCoordinatesPlot(DataSet data, int[] nomIDs, int[] ordIDs, int[] ivlIDs, int[] ratIDs)
+    public override GameObject CreateETVParallelCoordinatesPlot(DataSet data, string[] attIDs)
     {
         GameObject pcp = Instantiate(ETV2DParallelCoordinatesPlotPrefab);
+
+        int[] nomIDs, ordIDs, ivlIDs, ratIDs;
+
+        DataProcessor.ExtractAttributeIDs(data, attIDs, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
 
         pcp.GetComponent<ETV2DParallelCoordinatesPlot>().Init(data, nomIDs, ordIDs, ivlIDs, ratIDs);
         pcp.GetComponent<ETV2DParallelCoordinatesPlot>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);

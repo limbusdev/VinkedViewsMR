@@ -88,6 +88,7 @@ MonoBehaviour:
   PrimitiveFactory2Dservice: {fileID: 114515392309124868}
   ETV3DFactoryService: {fileID: 114945476759806656}
   ETV2DFactoryService: {fileID: 114484183617782816}
+  visualizationFactory: {fileID: 0}
 --- !u!114 &114484183617782816
 MonoBehaviour:
   m_ObjectHideFlags: 1

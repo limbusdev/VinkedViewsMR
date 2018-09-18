@@ -130,15 +130,14 @@ public class DataSet
 {
     public string Title { get; set; }
     public string Description { get; set; }
-    //public string[] Variables { get; set; }
-    //public string[] Units { get; set; }
-    //public string[] LOMs { get; set; }
 
     public IList<InformationObject> informationObjects {get; set;}
     public IDictionary<string, NominalDataDimensionMeasures> dataMeasuresNominal { get; set; }
     public IDictionary<string, OrdinalDataDimensionMeasures> dataMeasuresOrdinal { get; set; }
     public IDictionary<string, IntervalDataDimensionMeasures> dataMeasuresInterval { get; set; }
     public IDictionary<string, RatioDataDimensionMeasures> dataMeasuresRatio { get; set; }
+
+    public IDictionary<string, int> attributeIDs { get; set; }
 
     public string[] nomAttributes { get; set; }
     public string[] ordAttributes { get; set; }
@@ -157,6 +156,8 @@ public class DataSet
         this.dataMeasuresOrdinal = new Dictionary<string, OrdinalDataDimensionMeasures>();
         this.dataMeasuresInterval = new Dictionary<string, IntervalDataDimensionMeasures>();
         this.dataMeasuresRatio = new Dictionary<string, RatioDataDimensionMeasures>();
+
+        this.attributeIDs = new Dictionary<string, int>();
         
         // CALCULATE
 
@@ -205,21 +206,37 @@ public class DataSet
         // Fill variable names
         InformationObject infoObj = dataObjects[0];
 
-        ordAttributes = new string[infoObj.ordinalAtt.Length];
-        for(int i = 0; i < dataObjects[0].ordinalAtt.Length; i++)
-            ordAttributes[i] = infoObj.ordinalAtt[i].name;
-
-        ratAttributes = new string[infoObj.ratioAtt.Length];
-        for(int i = 0; i < dataObjects[0].ratioAtt.Length; i++)
-            ratAttributes[i] = infoObj.ratioAtt[i].name;
-
         nomAttributes = new string[infoObj.nominalAtt.Length];
         for(int i = 0; i < dataObjects[0].nominalAtt.Length; i++)
+        {
             nomAttributes[i] = infoObj.nominalAtt[i].name;
+            attributeIDs.Add(nomAttributes[i], i);
+        }
+
+        ordAttributes = new string[infoObj.ordinalAtt.Length];
+        for(int i = 0; i < dataObjects[0].ordinalAtt.Length; i++)
+        {
+            ordAttributes[i] = infoObj.ordinalAtt[i].name;
+            attributeIDs.Add(ordAttributes[i], i);
+        }
 
         ivlAttributes = new string[infoObj.intervalAtt.Length];
         for(int i = 0; i < dataObjects[0].intervalAtt.Length; i++)
+        {
             ivlAttributes[i] = infoObj.intervalAtt[i].name;
+            attributeIDs.Add(ivlAttributes[i], i);
+        }
+
+        ratAttributes = new string[infoObj.ratioAtt.Length];
+        for(int i = 0; i < dataObjects[0].ratioAtt.Length; i++)
+        {
+            ratAttributes[i] = infoObj.ratioAtt[i].name;
+            attributeIDs.Add(ratAttributes[i], i);
+        }
+
+        
+
+        
 
         ratioQuadAttributes = new string[infoObj.attributesVector2.Length];
         for(int i = 0; i < dataObjects[0].attributesVector2.Length; i++)
@@ -229,6 +246,24 @@ public class DataSet
         for(int i = 0; i < dataObjects[0].attributesVector3.Length; i++)
             ratioCubeAttributes[i] = infoObj.attributesVector3[i].name;
 
+    }
+
+    public LevelOfMeasurement GetTypeOf(string varName)
+    {
+        if(dataMeasuresNominal.ContainsKey(varName))
+            return LevelOfMeasurement.NOMINAL;
+        if(dataMeasuresOrdinal.ContainsKey(varName))
+            return LevelOfMeasurement.ORDINAL;
+        if(dataMeasuresInterval.ContainsKey(varName))
+            return LevelOfMeasurement.INTERVAL;
+        else
+            return LevelOfMeasurement.RATIO;
+
+    }
+
+    public int GetIDOf(string varName)
+    {
+        return attributeIDs[varName];
     }
 
     public override string ToString()

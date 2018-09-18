@@ -1,31 +1,42 @@
-﻿using System.Collections;
+﻿using HoloToolkit.Unity.Buttons;
+using HoloToolkit.Unity.InputModule;
+using HoloToolkit.Unity.Receivers;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CubeIconVariable : MonoBehaviour
+public class CubeIconVariable : InteractionReceiver
 {
     public TextMesh text;
 
     [SerializeField]
     public Transform IconPosition;
+    public Transform BasePlatform;
 
     [SerializeField]
     public GameObject[] IconValues;
+
+    public GameObject HoloButtonPrefab;
+    public GameObject visButtonsAnchor;
     
     private string[] IconKeys = {"1DOrdinal", "1DNominal", "2DOrdinal", "2DNominal", "2DMixed", "3DOrdinal", "3DNominal", "3D2Ord1Nom", "3D1Ord2Nom", "MultiD" };
 
     public int IconType = 0;
     public string[] VariableNames;
-    public string[] UnitNames;
     public LevelOfMeasurement[] VariableTypes;
     public int dimension;
+    public int dataSetID { get; private set; }
+    private bool clicked = false;
+    private bool initialized = false;
 
-    public void Init(string[] variableNames, string[] unitNames, LevelOfMeasurement[] variableTypes)
+    public void Init(string[] variableNames, LevelOfMeasurement[] variableTypes, int dataSetID)
     {
+        this.gameObject.name = "CubeIconVariable";
+
         VariableNames = variableNames;
-        UnitNames = unitNames;
         VariableTypes = variableTypes;
 
+        this.dataSetID = dataSetID;
         dimension = variableNames.Length;
         int iconNum = 0;
         int counterNumericVars = 0;
@@ -84,8 +95,68 @@ public class CubeIconVariable : MonoBehaviour
         text.text = name;
     }
 
-	// Use this for initialization
-	void Start () {
+    public void ShowButtons()
+    {
+        if(!clicked && !initialized)
+        {
+            var lr = visButtonsAnchor.GetComponent<LineRenderer>();
+
+            lr.startWidth = .01f;
+            lr.endWidth = .01f;
+            
+            visButtonsAnchor.SetActive(true);
+            string[] viss = ServiceLocator.instance.visualizationFactory.ListPossibleVisualizations(dataSetID, VariableNames);
+
+            lr.positionCount = viss.Length * 2;
+            var poss = new List<Vector3>();
+
+            for(int i = 0; i < viss.Length; i++)
+            {
+                var key = viss[i];
+                var button = Instantiate(HoloButtonPrefab);
+                button.transform.parent = visButtonsAnchor.transform;
+                button.name = key;
+                button.GetComponent<CompoundButtonText>().Text = key;
+                button.transform.localPosition = new Vector3(.15f * i, 0, 0);
+                button.transform.localRotation = Quaternion.Euler(Vector3.zero);
+                interactables.Add(button);
+
+                poss.Add(button.transform.position);
+                poss.Add(BasePlatform.position);
+            }
+
+            lr.SetPositions(poss.ToArray());
+
+            clicked = true;
+            initialized = true;
+        } else if(!clicked && initialized)
+        {
+            visButtonsAnchor.SetActive(true);
+        }
+    }
+
+    public void HideButtons()
+    {
+        clicked = false;
+        visButtonsAnchor.SetActive(false);
+    }
+
+    protected override void InputDown(GameObject obj, InputEventData eventData)
+    {
+        Debug.Log(obj.name + " : InputDown");
+
+        switch(obj.name)
+        {
+            case "SingleAxis3D":
+                Debug.Log("Creating Single Axis 2D for Variable.");
+                break;
+            default:
+                break;
+        }
+    }
+
+    // Use this for initialization
+    void Start () {
 		
 	}
 	

@@ -10,6 +10,7 @@ public class ServiceLocator : MonoBehaviour {
     public Graphical2DPrimitiveFactory PrimitiveFactory2Dservice;       // Populate in editor
     public ETV3DFactory ETV3DFactoryService;                            // Populate in editor
     public ETV2DFactory ETV2DFactoryService;                            // populate in editor
+    public VisualizationFactory visualizationFactory;                   // Populate in editor
 
     //Awake is always called before any Start functions
     void Awake()

@@ -15,6 +15,7 @@ public class VisualizationFactory : MonoBehaviour {
     public GameObject ObjectCollection;
     public GameObject CubeIconVariable;
     public DataProvider dataProvider;
+    public VisFactoryInteractionReceiver interactionReceiver;
 
     public Material lineMaterial;
 
@@ -49,10 +50,10 @@ public class VisualizationFactory : MonoBehaviour {
         newETV2DBarChart3.transform.Translate(new Vector3(-1.22f * 2, 0, -1.53f * 2));
         newETV2DBarChart3.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
-        GameObject new2DPCP = ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(fbiData, new int[] { }, new int[] { }, new int[] {0 }, new int[] { 0,1,3,5 });
-        GameObject newETV2DPCP = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DPCP);
-        newETV2DPCP.transform.Translate(new Vector3(-1.84f * 2, 0, -.72f * 2));
-        newETV2DPCP.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
+        //GameObject new2DPCP = ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(fbiData, new int[] { }, new int[] { }, new int[] {0 }, new int[] { 0,1,3,5 });
+        //GameObject newETV2DPCP = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DPCP);
+        //newETV2DPCP.transform.Translate(new Vector3(-1.84f * 2, 0, -.72f * 2));
+        //newETV2DPCP.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
         GameObject new2DXY = ServiceLocator.instance.ETV2DFactoryService.CreateETVLineChart(fbiData, 0, 2, false, true);
         GameObject newETV2DXY = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DXY);
@@ -84,11 +85,11 @@ public class VisualizationFactory : MonoBehaviour {
         newETV3DScatter.transform.Translate(new Vector3(.94f * 2, 0, -1.74f * 2));
         newETV3DScatter.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
-        GameObject new3DScatter2 = ServiceLocator.instance.ETV3DFactoryService.CreateETVParallelCoordinatesPlot(
-            fbiData, new int[] { }, new int[] { }, new int[] { 0 }, new int[] { 0, 1, 3, 5 });
-        GameObject newETV3DScatter2 = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DScatter2);
-        newETV3DScatter2.transform.Translate(new Vector3(.94f * 4, 0, -1.74f * 4));
-        newETV3DScatter2.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
+        //GameObject new3DScatter2 = ServiceLocator.instance.ETV3DFactoryService.CreateETVParallelCoordinatesPlot(
+        //    fbiData, new int[] { }, new int[] { }, new int[] { 0 }, new int[] { 0, 1, 3, 5 });
+        //GameObject newETV3DScatter2 = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DScatter2);
+        //newETV3DScatter2.transform.Translate(new Vector3(.94f * 4, 0, -1.74f * 4));
+        //newETV3DScatter2.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
 
         // Exoplanets
         GameObject ex1 = ServiceLocator.instance.ETV3DFactoryService.CreateETVScatterPlot(dataProvider.dataSets[2], new int[] { 0,1,2 });
@@ -179,6 +180,140 @@ public class VisualizationFactory : MonoBehaviour {
         target.Brush(Color.yellow);
 
         return visBridge;
+    }
+
+    /// <summary>
+    /// Automatically generates a visualization for the given variables
+    /// </summary>
+    /// <param name="data">DataSet to use</param>
+    /// <param name="variables">variables to visualize</param>
+    /// <returns>ETV on ETVAnchor</returns>
+    public GameObject AutoGenerateAnchoredVisualization(DataSet data, string[] variables, int dimension)
+    {
+        GameObject vis;
+        
+        switch(variables.Length)
+        {
+            case 3:
+                vis = AutoGenerate1VarVis(data, variables[0], dimension);
+                break;
+            case 2:
+                vis = AutoGenerate2VarVis(data, variables[0], variables[1], dimension);
+                break;
+            default:
+                vis = AutoGenerate3VarVis(data, variables[0], variables[1], variables[2], dimension);
+                break;
+        }
+
+        if(dimension == 1 || dimension == 3)
+        {
+            return ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(vis);
+        }else
+        {
+            return ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(vis);
+        }
+    }
+
+    private GameObject AutoGenerate1VarVis(DataSet data, string variable, int dim)
+    {
+        var type = data.GetTypeOf(variable);
+        var ID = data.GetIDOf(variable);
+
+        if(dim == 2)
+        {
+            return ServiceLocator.instance.ETV2DFactoryService.CreateSingleAxis(data, ID, type);
+        } else
+        {
+            return ServiceLocator.instance.ETV3DFactoryService.CreateSingleAxis(data, ID, type);
+        }
+    }
+
+    private GameObject AutoGenerate2VarVis(DataSet data, string variable1, string variable2, int dim)
+    {
+        GameObject vis;
+
+        var type1 = data.GetTypeOf(variable1);
+        var ID1 = data.GetIDOf(variable1);
+
+        var type2 = data.GetTypeOf(variable2);
+        var ID2 = data.GetIDOf(variable2);
+
+        bool type1categorical = type1 == LevelOfMeasurement.NOMINAL || type1 == LevelOfMeasurement.ORDINAL || type1 == LevelOfMeasurement.INTERVAL;
+        bool type2categorical = type2 == LevelOfMeasurement.NOMINAL || type2 == LevelOfMeasurement.ORDINAL || type2 == LevelOfMeasurement.INTERVAL;
+
+        AETVFactory factory;
+
+        if(dim == 2) factory = ServiceLocator.instance.ETV2DFactoryService;
+        else factory = ServiceLocator.instance.ETV3DFactoryService;
+
+        if(type1categorical && type2categorical)
+        {
+
+        } 
+        else if((type1categorical && !type2categorical) || (!type1categorical && type2categorical))
+        {
+
+        } else
+        {
+
+        }
+
+        return null;
+    }
+
+    private GameObject AutoGenerate3VarVis(DataSet data, string variable1, string variable2, string variable3, int dim)
+    {
+        var type1 = data.GetTypeOf(variable1);
+        var ID1 = data.GetIDOf(variable1);
+
+        var type2 = data.GetTypeOf(variable2);
+        var ID2 = data.GetIDOf(variable2);
+
+        var type3 = data.GetTypeOf(variable3);
+        var ID3 = data.GetIDOf(variable3);
+
+        return null;
+    }
+
+    public string[] ListPossibleVisualizations(int dataSetID, string[] attNames)
+    {
+        int[] nomIDs, ordIDs, ivlIDs, ratIDs;
+
+        DataProcessor.ExtractAttributeIDs(dataProvider.dataSets[dataSetID], attNames, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
+
+        var count = new Vector4(nomIDs.Length, ordIDs.Length, ivlIDs.Length, ratIDs.Length);
+
+        if(count == new Vector4(1,0,0,0))
+        {
+            return new string[] { "SingleAxis3D", "BarChart2D", "BarChart3D" };
+        } else if(count == new Vector4(2, 0, 0, 0))
+        {
+            return new string[] { "BarMap3D", "PCP2D", "PCP3D" };
+        } else if(count == new Vector4(0, 1, 0, 0))
+        {
+            return new string[] { "SingleAxis3D", "BarChart2D", "BarChart3D" };
+        } else if(count == new Vector4(0, 2, 0, 0))
+        {
+            return new string[] { "BarMap3D", "PCP2D", "PCP3D" };
+        } else if(count == new Vector4(0, 0, 1, 0))
+        {
+            return new string[] { "SingleAxis3D", "BarChart2D", "BarChart3D" };
+        } else if(count == new Vector4(0, 0, 2, 0))
+        {
+            return new string[] { "BarMap3D", "PCP2D", "PCP3D" };
+        } else if(count == new Vector4(0, 0, 0, 1))
+        {
+            return new string[] { "SingleAxis3D" };
+        } else if(count == new Vector4(0, 0, 0, 2))
+        {
+            return new string[] { "PCP2D", "PCP3D", "LineXY2D", "ScatterXY2D" };
+        } else if(count == new Vector4(0, 0, 0, 3))
+        {
+            return new string[] { "PCP2D", "PCP3D", "ScatterXYZ3D" };
+        } else
+        {
+            return new string[] { "PCP2D", "PCP3D" };
+        }
     }
 
     public void AddNewVisualization(GameObject visualization)

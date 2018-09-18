@@ -241,5 +241,40 @@ public class DataProcessor
             return Maximum - Minimum;
         }
     }
-    
+
+    public static void ExtractAttributeIDs(DataSet data, string[] attIDs, out int[] nomIDs, out int[] ordIDs, out int[] ivlIDs, out int[] ratIDs)
+    {
+        var nomIDsL = new List<int>();
+        var ordIDsL = new List<int>();
+        var ivlIDsL = new List<int>();
+        var ratIDsL = new List<int>();
+
+        foreach(string key in attIDs)
+        {
+            var type = data.GetTypeOf(key);
+            switch(type)
+            {
+                case LevelOfMeasurement.NOMINAL:
+                    nomIDsL.Add(data.GetIDOf(key));
+                    break;
+                case LevelOfMeasurement.ORDINAL:
+                    ordIDsL.Add(data.GetIDOf(key));
+                    break;
+                case LevelOfMeasurement.INTERVAL:
+                    ivlIDsL.Add(data.GetIDOf(key));
+                    break;
+                case LevelOfMeasurement.RATIO:
+                    ratIDsL.Add(data.GetIDOf(key));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        nomIDs = nomIDsL.ToArray();
+        ordIDs = ordIDsL.ToArray();
+        ivlIDs = ivlIDsL.ToArray();
+        ratIDs = ratIDsL.ToArray();
+    }
+
 }

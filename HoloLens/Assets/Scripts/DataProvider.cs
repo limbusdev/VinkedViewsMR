@@ -1,27 +1,40 @@
 ﻿using Model.Attributes;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using UnityEngine;
 using System.Linq;
-
+using Model;
 
 public class DataProvider : MonoBehaviour
 {
-    
+    [System.Serializable]
+    public class DictFile { public string name; public TextAsset file; }
 
+    [SerializeField]
     public TextAsset[] csvFile;
+    public DictFile[] ordinalDictionaries;
     public DataSet[] dataSets;
     
     private void Awake()
     {
         dataSets = new DataSet[csvFile.Length];
-
         
         for(int i=0; i<csvFile.Length; i++)
         {
             dataSets[i] = ImportDataSet(csvFile[i]);
         }
+    }
+
+    private IDictionary<string, IDictionary<int, string>> ParseDictionaries()
+    {
+        var dictionaries = new Dictionary<string, IDictionary<int, string>>();
+        foreach(var d in ordinalDictionaries)
+        {
+            var dict = OrdinalValueTranslator.CreateDictionary(d.file.text);
+            dictionaries.Add(d.name, dict);
+        }
+
+        return dictionaries;
     }
 
     private DataSet ImportDataSet(TextAsset csvFile)
@@ -33,15 +46,15 @@ public class DataProvider : MonoBehaviour
         var ratioDataSets = new Dictionary<string, float[]>();
         
         var variableTypes = new Dictionary<string, LevelOfMeasurement>();
+        var intervalTranslators = new Dictionary<string, string>();
 
         // Initialize Grid to store values
         var grid = CSVReader.SplitCsvGrid(csvFile.text);
         var variables = new string[grid.Length];
         var units = new string[grid.Length];
         var loms = new LevelOfMeasurement[grid.Length];
-
-
-        LevelOfMeasurement type = LevelOfMeasurement.NOMINAL;
+        
+        LevelOfMeasurement type;
 
         // For every column / variable in grid
         for(int variable = 0; variable < grid.Length; variable++)
@@ -52,6 +65,9 @@ public class DataProvider : MonoBehaviour
 
             // Extract Level of Measurement from second row
             var lom = grid[variable][1];
+
+            
+            // Detect level of measurement
             switch(lom)
             {
                 case "ordinal":
@@ -68,8 +84,17 @@ public class DataProvider : MonoBehaviour
                     break;
             }
 
+            // If interval, get translator name
+            if(lom.Split("+"[0]).Length > 1)
+            {
+                string[] intv = lom.Split("+"[0]);
+                intervalTranslators.Add(currentVariableName, intv[1]);
+                type = LevelOfMeasurement.INTERVAL;
+            }
+
             loms[variable] = type;
             variableTypes.Add(currentVariableName, type);
+
 
             switch(type)
             {
@@ -130,21 +155,15 @@ public class DataProvider : MonoBehaviour
 
                     for(int i = 2; i < grid[variable].Length; i++)
                     {
-                        if(grid[variable][i] == null)
-                        {
-                            bool x = true;
-                            object iu = grid[variable][i];
-                        }
-
                         string value = grid[variable][i];
-                        newDataSetString[i - 2] = (value.Length > 0) ? value : "unknown";
+                        newDataSetString[i - 2] = (value == null || value.Length == 0) ? "unknown" : value;
                     }
                     break;
             }
             
         }
 
-        return AssembleDataSet(variables, nominalDataSets, ordinalDataSets, intervalDataSets, ratioDataSets, null, null);
+        return AssembleDataSet(variables, nominalDataSets, ordinalDataSets, intervalDataSets, ratioDataSets, null, null, ParseDictionaries(), intervalTranslators);
     }
 
     private static DataSet AssembleDataSet(
@@ -154,7 +173,9 @@ public class DataProvider : MonoBehaviour
         IDictionary<string, int[]> ivlVars,
         IDictionary<string, float[]> ratioVars,
         IDictionary<string, Vector2[]> vec2Vars,
-        IDictionary<string, Vector3[]> vec3Vars)
+        IDictionary<string, Vector3[]> vec3Vars,
+        IDictionary<string, IDictionary<int, string>> dicts,
+        IDictionary<string, string> intervalTranslators)
     {
         int sampleCount = ratioVars.First().Value.Length;
         int nomVarsCount = nomVars.Count;
@@ -180,7 +201,7 @@ public class DataProvider : MonoBehaviour
                 );
 
 
-            // Fill new information object's string attributes
+            // Fill new information object's nominal attributes
             int variable = 0;
             foreach(string variableName in nomVars.Keys)
             {
@@ -190,7 +211,7 @@ public class DataProvider : MonoBehaviour
                 variable++;
             }
 
-            // Fill new information object's string attributes
+            // Fill new information object's ordinal attributes
             variable = 0;
             foreach(string variableName in ordVars.Keys)
             {
@@ -210,7 +231,7 @@ public class DataProvider : MonoBehaviour
                 variable++;
             }
 
-            // Fill new information object's float attributes
+            // Fill new information object's ratio attributes
             variable = 0;
             foreach(string variableName in ratioVars.Keys)
             {
@@ -223,7 +244,7 @@ public class DataProvider : MonoBehaviour
             infoObjs.Add(obj);
         }
 
-        DataSet dataSet = new DataSet("DataSet", "", infoObjs);
+        DataSet dataSet = new DataSet("DataSet", infoObjs, dicts, intervalTranslators);
 
         return dataSet;
     }

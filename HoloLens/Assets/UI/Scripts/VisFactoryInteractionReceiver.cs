@@ -7,7 +7,11 @@ using UnityEngine;
 using HoloToolkit.Unity.Buttons;
 using HoloToolkit.Unity.Collections;
 using System.Linq;
+using Model;
 
+/// <summary>
+/// Handles interaction of the VisualizationFactory's buttons.
+/// </summary>
 public class VisFactoryInteractionReceiver : InteractionReceiver
 {
     public GameObject HoloButtonPrefab;
@@ -36,17 +40,17 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
             case "ButtonDataSet1":
                 currentlyChosenDataBase = 0;
                 DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 5,6,7,8 });
+                ActivateInteractables(new int[] { 5,6,7,8,9 });
                 break;
             case "ButtonDataSet2":
                 currentlyChosenDataBase = 1;
                 DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 5, 6, 7, 8 });
+                ActivateInteractables(new int[] { 5, 6, 7, 8, 9 });
                 break;
             case "ButtonDataSet3":
                 currentlyChosenDataBase = 2;
                 DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 5, 6, 7, 8 });
+                ActivateInteractables(new int[] { 5, 6, 7, 8, 9 });
                 break;
             case "Button1D":
                 SetupGalery(currentlyChosenDataBase, 1);
@@ -63,7 +67,6 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
             case "Back2":
                 DeactivateAllInteractibles();
                 ActivateInteractables(new int[] { 1,2,3,4 });
-
                 ClearGalery();
                 break;
             case "CubeIconVariable":
@@ -79,6 +82,9 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         }
     }
 
+    /// <summary>
+    /// Hides sub buttons of the shelf items.
+    /// </summary>
     private void HideAllIconSubButtons()
     {
         for(int i = 0; i < ObjectCollection.transform.childCount; i++)
@@ -91,6 +97,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         }
     }
 
+    /// <summary>
+    /// Hides all shelf items except the given one.
+    /// </summary>
+    /// <param name="exception"></param>
     public void ClearAllBut(GameObject exception)
     {
         for(int i = 0; i < ObjectCollection.transform.childCount; i++)
@@ -101,6 +111,9 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         }
     }
 
+    /// <summary>
+    /// Removes all shelf items from the galery.
+    /// </summary>
     private void ClearGalery()
     {
         for(int i = 0; i < ObjectCollection.transform.childCount; i++)
@@ -112,6 +125,9 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         }
     }
 
+    /// <summary>
+    /// Deactivates all interactables of this receiver.
+    /// </summary>
     private void DeactivateAllInteractibles()
     {
         foreach(GameObject g in interactables)
@@ -120,6 +136,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         }
     }
 
+    /// <summary>
+    /// Activates the interactables with the given IDs.
+    /// </summary>
+    /// <param name="IDs"></param>
     private void ActivateInteractables(int[] IDs)
     {
         foreach(var id in IDs)
@@ -128,6 +148,12 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         }
     }
 
+    /// <summary>
+    /// Assembles a variable galery from the DataBase of the given ID and provides all
+    /// combinations of the given dimension.
+    /// </summary>
+    /// <param name="dataBaseID"></param>
+    /// <param name="dimension"></param>
     private void SetupGalery(int dataBaseID, int dimension)
     {
         switch(dimension)
@@ -141,6 +167,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         ObjectCollection.GetComponent<ObjectCollection>().UpdateCollection();
     }
 
+    /// <summary>
+    /// Creates a galery of all attributes.
+    /// </summary>
+    /// <param name="dbID"></param>
     private void Setup1DGalery(int dbID)
     {
         DataSet ds = dataProvider.dataSets[dbID];
@@ -155,10 +185,14 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
 
         foreach(DataDimensionMeasures m in ms)
         {
-            interactables.Add(Create1DIconAndInsert(m.variableName, m.type));
+            interactables.Add(Create1DIconAndInsert(m.name, m.type));
         }
     }
     
+    /// <summary>
+    /// Generates a galery by combining all available attributes to 2D pairs.
+    /// </summary>
+    /// <param name="dbID"></param>
     private void Setup2DGalery(int dbID)
     {
         DataSet ds = dataProvider.dataSets[dbID];
@@ -179,13 +213,16 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
                 if(!keys.Contains(key) && !m1.Equals(m2))
                 {
                     keys.Add(key);
-                    interactables.Add(Create2DIconAndInsert(m1.variableName, m2.variableName, m1.type, m2.type));
+                    interactables.Add(Create2DIconAndInsert(m1.name, m2.name, m1.type, m2.type));
                 }
             }
         }
     }
-    
 
+    /// <summary>
+    /// Generates a galery by combining all available attributes to 3D groups.
+    /// </summary>
+    /// <param name="dbID"></param>
     private void Setup3DGalery(int dbID)
     {
         DataSet ds = dataProvider.dataSets[dbID];
@@ -209,13 +246,17 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
                     if(!keys.Contains(key) && !(m1.Equals(m2) || m2.Equals(m3) || m3.Equals(m1)))
                     {
                         keys.Add(key);
-                        interactables.Add(Create3DIconAndInsert(m1.variableName, m2.variableName, m3.variableName, m1.type, m2.type, m3.type));
+                        interactables.Add(Create3DIconAndInsert(m1.name, m2.name, m3.name, m1.type, m2.type, m3.type));
                     }
                 }
             }
         }
     }
 
+    /// <summary>
+    /// Generates a galery by grouping attributes all together or by level of measurement.
+    /// </summary>
+    /// <param name="dbID"></param>
     private void SetupNDGalery(int dbID)
     {
         DataSet ds = dataProvider.dataSets[dbID];

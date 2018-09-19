@@ -1,0 +1,15 @@
+0:Aggressive assault
+1:Arson
+2:Assault by threat
+3:Auto theft
+4:Burglary
+5:Common assault
+6:Homicide
+7:Larceny
+8:Larceny from auto
+9:Rape
+10:Robbery - carjackacking
+11:Robbery - commercial
+12:Robbery - residence
+13:Robbery - street
+14:Shooting

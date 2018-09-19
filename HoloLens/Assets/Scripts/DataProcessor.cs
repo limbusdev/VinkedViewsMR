@@ -3,6 +3,7 @@ using Model.Attributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class DataProcessor
 {
@@ -11,10 +12,8 @@ public class DataProcessor
         public static NominalDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID)
         {
             var measures = new NominalDataDimensionMeasures(
-                os[0].nominalAtt[aID].levelOfMeasurement,
                 CalculateDistribution(os, aID),
-                os[0].nominalAtt[aID].name,
-                "");
+                os[0].nominalAtt[aID].name);
 
             return measures;
         }
@@ -74,14 +73,34 @@ public class DataProcessor
 
     public static class OrdinalAttribute
     {
-        public static OrdinalDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID)
+        public static OrdinalDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID, IDictionary<int, string> dict)
         {
             var measures = new OrdinalDataDimensionMeasures(
-                CalculateMin(os, aID),
-                CalculateMax(os, aID),
+                dict,
+                CalculateDistribution(os, aID, dict),
                 os[0].ordinalAtt[aID].name);
 
             return measures;
+        }
+
+        public static IDictionary<int, int> CalculateDistribution(IList<InformationObject> os, int aID, IDictionary<int, string> dict)
+        {
+            var distribution = new Dictionary<int, int>();
+
+            int[] keys = dict.Keys.ToArray();
+
+            foreach(var key in keys)
+            {
+                distribution.Add(key, 0);
+            }
+
+            foreach(var o in os)
+            {
+                var a = o.ordinalAtt[aID];
+                distribution[a.value] = distribution[a.value] + 1;
+            }
+
+            return distribution;
         }
 
         public static int CalculateMin(IList<InformationObject> os, int attributeID)
@@ -117,14 +136,34 @@ public class DataProcessor
 
     public static class IntervalAttribute
     {
-        public static IntervalDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID)
+        public static IntervalDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID, IDictionary<string, string> intervalTranslators)
         {
             var measures = new IntervalDataDimensionMeasures(
+                CalculateDistribution(os, aID),
+                os[0].intervalAtt[aID].name,
+                intervalTranslators[os[0].intervalAtt[aID].name],
                 CalculateMin(os, aID),
-                CalculateMax(os, aID),
-                os[0].intervalAtt[aID].name);
+                CalculateMax(os, aID)
+                );
 
             return measures;
+        }
+
+        public static IDictionary<int, int> CalculateDistribution(IList<InformationObject> os, int aID)
+        {
+            var distribution = new Dictionary<int, int>();
+
+            foreach(var o in os)
+            {
+                var a = o.intervalAtt[aID];
+                if(!distribution.ContainsKey(a.value))
+                {
+                    distribution.Add(a.value, 0);
+                }
+                distribution[a.value] = distribution[a.value] + 1;
+            }
+
+            return distribution;
         }
 
         public static int CalculateMin(IList<InformationObject> os, int attributeID)
@@ -157,8 +196,7 @@ public class DataProcessor
             return maximum;
         }
     }
-
-
+    
     public static class RatioAttribute
     {
         public static RatioDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID)
@@ -170,8 +208,7 @@ public class DataProcessor
                 CalculateMin(os, aID),
                 CalculateZeroBoundMin(os, aID),
                 CalculateMax(os, aID),
-                CalculateZeroBoundMax(os, aID),
-                ""
+                CalculateZeroBoundMax(os, aID)
                 );
 
             return measures;

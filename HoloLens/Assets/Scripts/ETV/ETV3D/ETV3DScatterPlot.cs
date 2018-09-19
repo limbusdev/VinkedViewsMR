@@ -26,10 +26,11 @@ public class ETV3DScatterPlot : AETV3D
         }
     }
 
-    public void Init(DataSet data, int floatAttributeIDX, int floatAttributeIDY, int floatAttributeIDZ)
+    public void Init(DataSet data, int att1ID, int att2ID, int att3ID,
+        LevelOfMeasurement type1, LevelOfMeasurement type2, LevelOfMeasurement type3)
     {
         this.data = data;
-        this.floatAttIDs = new Vector3Int(floatAttributeIDX, floatAttributeIDY, floatAttributeIDZ);
+        this.floatAttIDs = new Vector3Int(att1ID, att2ID, att3ID);
         SetUpAxis();
         DrawGraph();
         this.initialized = true;

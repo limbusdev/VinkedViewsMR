@@ -14,7 +14,6 @@ public abstract class AETV2D : MonoBehaviour, IEuclideanTransformableView
 
     public void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
     {
-        axis[axisDirection].GetComponent<Axis2D>().labelUnitText = axisUnit;
         axis[axisDirection].GetComponent<Axis2D>().labelVariableText = axisVariable;
         axis[axisDirection].GetComponent<Axis2D>().UpdateAxis();
     }

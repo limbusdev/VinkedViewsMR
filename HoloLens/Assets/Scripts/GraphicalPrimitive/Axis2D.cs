@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,39 +9,96 @@ namespace GraphicalPrimitive
 {
     public class Axis2D : AAxis
     {
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        private void Awake()
-        {
-            if(ticks == null) ticks = new List<GameObject>();
-        }
-
         public GameObject Anchor;
         public GameObject Axis;
         public GameObject Tip;
         public GameObject labelAnchor;
+        public Material lineMaterial;
 
+        public LevelOfMeasurement type;
 
-        // Drawing methods
-        public override void UpdateAxis()
+        public void Init(NominalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
         {
-            foreach (GameObject go in ticks)
-            {
-                Destroy(go);
-            }
-            ticks.Clear();
+            base.Init(m, dir);
+            this.min= 0;
+            this.max = m.numberOfUniqueValues;
+            this.length = .15f * m.numberOfUniqueValues;
+            this.tickResolution = .15f;
+            this.tipped = false;
+            this.ticked = true;
+            type = LevelOfMeasurement.NOMINAL;
+            AssembleNominalAxis(m);
+        }
 
-            // Update Base Axis
+        public void Init(OrdinalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
+        {
+            base.Init(m, dir);
+            this.min= m.min;
+            this.max = m.max;
+            this.length = .15f * m.numberOfUniqueValues;
+            this.tickResolution = .15f;
+            this.tipped = true;
+            this.ticked = true;
+            type = LevelOfMeasurement.ORDINAL;
+            AssembleOrdinalAxis(m);
+        }
+
+        public void Init(IntervalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
+        {
+            base.Init(m, dir);
+            this.min = m.min;
+            this.max = m.max;
+            this.length = 1f;
+            this.tipped = true;
+            this.ticked = true;
+            CalculateTickResolution();
+            type = LevelOfMeasurement.INTERVAL;
+            AssembleIntervalAxis(m);
+        }
+
+        public void Init(RatioDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
+        {
+            base.Init(m, dir);
+            this.min = m.zeroBoundMin;
+            this.max = m.zeroBoundMax;
+            this.length = 1f;
+            this.tipped = true;
+            this.ticked = true;
+            CalculateTickResolution();
+            type = LevelOfMeasurement.RATIO;
+            AssembleRatioAxis(m);
+        }
+
+        private void AssembleNominalAxis(NominalDataDimensionMeasures m)
+        {
+            DrawBaseAxis();
+            GenerateNominalTicks(m);
+            UpdateLabels();
+        }
+
+        private void AssembleOrdinalAxis(OrdinalDataDimensionMeasures m)
+        {
+            DrawBaseAxis();
+            GenerateOrdinalTicks(m);
+            UpdateLabels();
+        }
+
+        private void AssembleIntervalAxis(IntervalDataDimensionMeasures m)
+        {
+            DrawBaseAxis();
+            GenerateIntervalTicks(m);
+            UpdateLabels();
+        }
+
+        private void AssembleRatioAxis(RatioDataDimensionMeasures m)
+        {
+            DrawBaseAxis();
+            GenerateRatioTicks(m);
+            UpdateLabels();
+        }
+
+        private void DrawBaseAxis()
+        {
             var lr = Axis.GetComponent<LineRenderer>();
             if(axisDirection == AxisDirection.Z)
             {
@@ -51,7 +109,7 @@ namespace GraphicalPrimitive
             lr.endWidth = diameter;
             lr.SetPosition(0, Vector3.zero);
 
-            if (tipped)
+            if(tipped)
             {
                 lr.SetPosition(1, (length - diameter / length * 4) * direction);
                 Tip.SetActive(true);
@@ -61,20 +119,21 @@ namespace GraphicalPrimitive
                 lrTip.SetPosition(0, lr.GetPosition(1));
                 lrTip.SetPosition(1, length * direction);
 
-                if (axisDirection == AxisDirection.Z)
+                if(axisDirection == AxisDirection.Z)
                 {
                     lrTip.alignment = LineAlignment.View;
                 }
-            }
-            else
+            } else
             {
                 lr.SetPosition(1, length * direction);
                 Tip.SetActive(false);
             }
+        }
 
-            // Update Ticks
+        private Vector3 DefineTickDirection(AxisDirection dir)
+        {
             Vector3 tickDirection;
-            switch (axisDirection)
+            switch(axisDirection)
             {
                 case AxisDirection.Y:
                     tickDirection = Vector3.left;
@@ -86,85 +145,104 @@ namespace GraphicalPrimitive
                     tickDirection = Vector3.down;
                     break;
             }
+            return tickDirection;
+        }
+        
 
-            if (ticked)
+        private void GenerateNominalTicks(NominalDataDimensionMeasures m)
+        {
+            var tickDir = DefineTickDirection(axisDirection);
+
+            // Draw ticks
+            for(int i=0; i<=m.max; i++)
             {
-                int tickCounter = 0;
-                for (float i = min; i <= max; i += tickResolution)
-                {
-                    GameObject tick = new GameObject("Tick");
-                    var lineRend = tick.AddComponent<LineRenderer>();
-                    lineRend.useWorldSpace = false;
-                    lineRend.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-                    lineRend.startColor = color;
-                    lineRend.endColor = color;
-                    lineRend.startWidth = diameter;
-                    lineRend.endWidth = diameter;
-                    lineRend.SetPosition(0, Vector3.zero);
-                    lineRend.SetPosition(1, tickDirection * diameter * 4f);
+                var tick = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateTick();
+                tick.lr.SetPosition(1, tickDir * diameter * 4f);
+                tick.SetDirection(axisDirection);
+                tick.label.text = m.uniqueValues[i];
 
-                    string tickText = i.ToString(i % 1 == 0 ? "N0" : ("N"+decimals));
-                    GameObject tickLabel = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateLabel(tickText);
-                    var textMesh = tickLabel.GetComponent<TextMesh>();
-                    textMesh.color = color;
-                    switch (axisDirection)
-                    {
-                        case AxisDirection.X:
-                            textMesh.anchor = TextAnchor.UpperCenter;
-                            textMesh.alignment = TextAlignment.Center;
-                            break;
-                        case AxisDirection.Y:
-                            textMesh.anchor = TextAnchor.MiddleRight;
-                            textMesh.alignment = TextAlignment.Right;
-                            break;
-                        default: /* Z */
-                            textMesh.anchor = TextAnchor.MiddleRight;
-                            textMesh.alignment = TextAlignment.Right;
-                            break;
-                    }
-                    tickLabel.transform.localPosition = tickDirection * diameter * 5;
-                    tickLabel.transform.parent = tick.transform;
-
-                    tick.transform.parent = Anchor.transform;
-                    tick.transform.localPosition = direction * length * ((tickCounter * tickResolution) / (max - min));
-                    ticks.Add(tick);
-                    tickCounter++;
-                }
+                tick.transform.parent = Anchor.transform;
+                tick.transform.localPosition = direction * .15f*(i+1);
+                ticks.Add(tick);
             }
+        }
 
-            // Update Labels
+        private void GenerateOrdinalTicks(OrdinalDataDimensionMeasures m)
+        {
+            var tickDir = DefineTickDirection(axisDirection);
+
+            // Draw ticks
+            for(int i = 0; i <= m.max; i++)
+            {
+                var tick = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateTick();
+                tick.lr.SetPosition(1, tickDir * diameter * 4f);
+                tick.SetDirection(axisDirection);
+                tick.label.text = m.uniqueValues[i];
+
+                tick.transform.parent = Anchor.transform;
+                tick.transform.localPosition = direction * .15f * (i+1);
+                ticks.Add(tick);
+            }
+        }
+
+        private void GenerateIntervalTicks(IntervalDataDimensionMeasures m)
+        {
+            var tickDir = DefineTickDirection(axisDirection);
+
+            // Draw ticks
+            for(int i = m.min; i <= m.max; i++)
+            {
+                var tick = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateTick();
+                tick.lr.SetPosition(1, tickDir * diameter * 4f);
+                tick.SetDirection(axisDirection);
+                tick.label.text = IntervalValueConverters.Translate(i, m.intervalTranslator);
+
+                tick.transform.parent = Anchor.transform;
+                tick.transform.localPosition = direction * TransformFromValueToAxisSpace(i);
+                ticks.Add(tick);
+            }
+        }
+
+        private void GenerateRatioTicks(RatioDataDimensionMeasures m)
+        {
+            var tickDir = DefineTickDirection(axisDirection);
+
+            int tickCounter = 0;
+            // Draw ticks
+            for(float i = min; i <= max; i += tickResolution)
+            {
+                var tick = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateTick();
+                tick.lr.SetPosition(1, tickDir * diameter * 4f);
+                tick.SetDirection(axisDirection);
+                tick.label.text = i.ToString(i % 1 == 0 ? "N0" : ("N" + decimals));
+
+                tick.transform.parent = Anchor.transform;
+                tick.transform.localPosition = direction * TransformFromValueToAxisSpace(tickCounter*tickResolution);
+                ticks.Add(tick);
+                tickCounter++;
+            }
+        }
+        
+        
+        private void UpdateLabels()
+        {
             TextMesh tmVariable = labelVariable.GetComponent<TextMesh>();
             tmVariable.text = labelVariableText;
 
-            TextMesh tmUnit = labelUnit.GetComponent<TextMesh>();
-            if (labelUnitText.Length == 0)
-            {
-                tmUnit.text = "";
-            }
-            else
-            {
-                tmUnit.text = "[" + labelUnitText + "]";
-            }
 
-            switch (axisDirection)
+            switch(axisDirection)
             {
                 case AxisDirection.X:
                     tmVariable.anchor = TextAnchor.MiddleLeft;
                     tmVariable.alignment = TextAlignment.Left;
-                    tmUnit.anchor = TextAnchor.MiddleLeft;
-                    tmUnit.alignment = TextAlignment.Left;
                     break;
                 case AxisDirection.Y:
                     tmVariable.anchor = TextAnchor.LowerRight;
                     tmVariable.alignment = TextAlignment.Right;
-                    tmUnit.anchor = TextAnchor.UpperRight;
-                    tmUnit.alignment = TextAlignment.Right;
                     break;
                 default:
                     tmVariable.anchor = TextAnchor.MiddleRight;
                     tmVariable.alignment = TextAlignment.Right;
-                    tmUnit.anchor = TextAnchor.MiddleRight;
-                    tmUnit.alignment = TextAlignment.Right;
                     break;
             }
 
@@ -174,8 +252,17 @@ namespace GraphicalPrimitive
                 labelAnchor.transform.localPosition = lrTip.GetPosition(1);
             } else
             {
+                var lr = Axis.GetComponent<LineRenderer>();
                 labelAnchor.transform.localPosition = lr.GetPosition(1);
             }
+        }
+
+        // Drawing methods
+        public override void UpdateAxis()
+        {
+            // Update Base Axis
+            DrawBaseAxis();
+            UpdateLabels();
         }
     }
 }

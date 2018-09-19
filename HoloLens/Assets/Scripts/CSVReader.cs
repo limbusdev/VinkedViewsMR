@@ -5,20 +5,6 @@ using UnityEngine;
 
 public class CSVReader : MonoBehaviour
 {
-    
-
-	// Use this for initialization
-	void Start ()
-    {
-        
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		
-	}
-
     public static string[][] SplitCsvGrid(string csvText)
     {
         string[][] outputGrid;
@@ -43,26 +29,6 @@ public class CSVReader : MonoBehaviour
                 outputGrid[col][row] = rowString[col];
             }
         }
-        /*
-        string debugString = "";
-        for(int i=0; i<outputGrid[0].Length; i++)
-        {
-            for(int ii=0; ii<outputGrid.Length; ii++)
-            {
-                debugString += outputGrid[ii][i] + "\t";
-            }
-            debugString += "\n";
-        }
-
-        Debug.Log(debugString);
-
-        debugString = "";
-        for(int i=0; i<outputGrid[0].Length; i++)
-        {
-            debugString += outputGrid[0][i] + "\n";
-        }
-        Debug.Log(debugString);
-        */
 
         return outputGrid;
     }

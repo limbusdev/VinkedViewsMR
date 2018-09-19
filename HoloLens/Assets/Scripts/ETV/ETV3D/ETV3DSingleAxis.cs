@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using GraphicalPrimitive;
+using Model;
 using UnityEngine;
 
 public class ETV3DSingleAxis : AETV3D
@@ -59,7 +60,6 @@ public class ETV3DSingleAxis : AETV3D
 
     public override void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
     {
-        axis.GetComponent<Axis3D>().labelUnitText = axisUnit;
         axis.GetComponent<Axis3D>().labelVariableText = axisVariable;
         axis.GetComponent<Axis3D>().UpdateAxis();
     }

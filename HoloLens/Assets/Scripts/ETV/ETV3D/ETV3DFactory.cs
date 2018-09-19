@@ -67,10 +67,12 @@ public class ETV3DFactory : AETVFactory
         throw new System.NotImplementedException();
     }
 
-    public override GameObject CreateETVScatterPlot(DataSet data, int[] floatAttributeIDs)
+    public override GameObject CreateETVScatterPlot(DataSet data, string[] attIDs)
     {
         GameObject scatterPlot3D = Instantiate(ETV3DScatterPlotPrefab);
-        scatterPlot3D.GetComponent<ETV3DScatterPlot>().Init(data, floatAttributeIDs[0], floatAttributeIDs[1], floatAttributeIDs[2]);
+        scatterPlot3D.GetComponent<ETV3DScatterPlot>().Init(data, 
+            data.GetIDOf(attIDs[0]), data.GetIDOf(attIDs[1]), data.GetIDOf(attIDs[2]),
+            data.GetTypeOf(attIDs[0]), data.GetTypeOf(attIDs[1]), data.GetTypeOf(attIDs[2]));
         scatterPlot3D.GetComponent<ETV3DScatterPlot>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
         return scatterPlot3D;

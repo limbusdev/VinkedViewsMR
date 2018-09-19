@@ -132,6 +132,7 @@ MonoBehaviour:
     type: 2}
   ScatterDot2DPrefab: {fileID: 1304509300456040, guid: 58364d502df45bb478ef6870ff9fb9e9,
     type: 2}
+  TickPrefab: {fileID: 1966629896501752, guid: b1c36d1c9a172aa4a875cc7fe5d941af, type: 2}
 --- !u!114 &114876645080609092
 MonoBehaviour:
   m_ObjectHideFlags: 1

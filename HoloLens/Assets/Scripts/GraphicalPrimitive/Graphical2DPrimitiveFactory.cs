@@ -1,4 +1,5 @@
 ﻿using GraphicalPrimitive;
+using Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,21 +12,47 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     public GameObject PCPLine2DPrefab;
     public GameObject XYLine2DPrefab;
     public GameObject ScatterDot2DPrefab;
+    public GameObject TickPrefab;
 
     public override GameObject CreateAxis(Color color, string variableName, string variableEntity, 
         AxisDirection axisDirection, float length, float width = 0.01F, bool tipped = true, bool ticked = false)
     {
         GameObject axis = Instantiate(Axis2DPrefab);
         Axis2D axis2Dcomp = axis.GetComponent<Axis2D>();
+        axis2Dcomp.Init(new DataDimensionMeasures(LevelOfMeasurement.RATIO, variableName));
         axis2Dcomp.diameter = width;
         axis2Dcomp.color = color;
         axis2Dcomp.labelVariableText = variableName;
-        axis2Dcomp.labelUnitText = variableEntity;
-        axis2Dcomp.AxisDirection = axisDirection;
         axis2Dcomp.tipped = tipped;
         axis2Dcomp.length = length;
         axis2Dcomp.ticked = ticked;
         axis2Dcomp.UpdateAxis();
+        
+
+        return axis;
+    }
+
+    public override GameObject CreateAutoTickedAxis(string name, AxisDirection direction, DataSet data)
+    {
+        GameObject axis = Instantiate(Axis2DPrefab);
+        Axis2D axis2Dcomp = axis.GetComponent<Axis2D>();
+
+
+        switch(data.GetTypeOf(name))
+        {
+            case LevelOfMeasurement.NOMINAL:
+                axis2Dcomp.Init(data.dataMeasuresNominal[name], direction);
+                break;
+            case LevelOfMeasurement.ORDINAL:
+                axis2Dcomp.Init(data.dataMeasuresOrdinal[name], direction);
+                break;
+            case LevelOfMeasurement.INTERVAL:
+                axis2Dcomp.Init(data.dataMeasuresInterval[name], direction);
+                break;
+            default: // RATIO
+                axis2Dcomp.Init(data.dataMeasuresRatio[name], direction);
+                break;
+        }
         
 
         return axis;
@@ -97,5 +124,10 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     public override GameObject CreateScatterDot()
     {
         return Instantiate(ScatterDot2DPrefab);
+    }
+
+    public Tick CreateTick()
+    {
+        return (Instantiate(TickPrefab).GetComponent<Tick>());
     }
 }

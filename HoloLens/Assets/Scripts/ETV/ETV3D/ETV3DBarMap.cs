@@ -157,8 +157,8 @@ public class ETV3DBarMap : AETV3D
         axis.Add(AxisDirection.Y, yAxis);
         axis.Add(AxisDirection.Z, zAxis);
 
-        SetAxisLabels(AxisDirection.X, measuresX.variableName, "");
-        SetAxisLabels(AxisDirection.Z, measuresY.variableName, "");
+        SetAxisLabels(AxisDirection.X, measuresX.name, "");
+        SetAxisLabels(AxisDirection.Z, measuresY.name, "");
         SetAxisLabels(AxisDirection.Y, "Amount", "");
 
         // Write Categories next to Axes
@@ -233,7 +233,6 @@ public class ETV3DBarMap : AETV3D
 
     public override void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
     {
-        axis[axisDirection].GetComponent<Axis2D>().labelUnitText = axisUnit;
         axis[axisDirection].GetComponent<Axis2D>().labelVariableText = axisVariable;
         axis[axisDirection].GetComponent<Axis2D>().UpdateAxis();
     }

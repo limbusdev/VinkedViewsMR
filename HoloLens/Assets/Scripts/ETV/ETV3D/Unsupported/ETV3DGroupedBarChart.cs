@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GraphicalPrimitive;
+using Model;
 using UnityEngine;
 
 [Obsolete("ETV3DGroupedBarChart is not supported right now. It might get support at some point in time.")]
@@ -33,7 +34,7 @@ public class ETV3DGroupedBarChart : AETV3D
         {
             int key = stringAttributeIDs[i];
             string sKey = data.nomAttributes[key];
-            float newMax = data.dataMeasuresNominal[sKey].zBoundMax;
+            float newMax = data.dataMeasuresNominal[sKey].zBoundDistMax;
             if(max < newMax)
             {
                 max = newMax; // Get value for scaling

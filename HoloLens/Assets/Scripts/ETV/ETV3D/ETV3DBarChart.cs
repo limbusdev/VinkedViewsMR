@@ -1,4 +1,5 @@
 ﻿using GraphicalPrimitive;
+using Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -34,14 +35,14 @@ public class ETV3DBarChart : AETV3D
 
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
 
-        float range = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundRange;
+        float range = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistRange;
 
         int categoryCounter = 0;
 
 
         foreach(var cat in measures.distribution.Keys)
         {
-            GameObject bar = CreateBar(stringAttributeID, cat, measures.zBoundRange);
+            GameObject bar = CreateBar(stringAttributeID, cat, measures.zBoundDistRange);
             bars.Add(cat, bar.GetComponent<Bar3D>());
 
             bar.transform.localPosition = new Vector3((categoryCounter) * 0.15f + 0.1f, 0, 0);
@@ -78,8 +79,8 @@ public class ETV3DBarChart : AETV3D
         Axis2D axis2D = yAxis.GetComponent<Axis2D>();
 
         axis2D.ticked = true;
-        axis2D.min = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMin;
-        axis2D.max = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMax;
+        axis2D.min = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistMin;
+        axis2D.max = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistMax;
 
         axis2D.CalculateTickResolution();
         
@@ -92,8 +93,8 @@ public class ETV3DBarChart : AETV3D
                     Vector3.up,
                     1,
                     .005f,
-                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMin,
-                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMax);
+                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistMin,
+                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistMax);
         grid.transform.parent = Anchor.transform;
 
         axis.Add(AxisDirection.X, xAxis);
@@ -174,7 +175,6 @@ public class ETV3DBarChart : AETV3D
 
     public override void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
     {
-        axis[axisDirection].GetComponent<Axis2D>().labelUnitText = axisUnit;
         axis[axisDirection].GetComponent<Axis2D>().labelVariableText = axisVariable;
         axis[axisDirection].GetComponent<Axis2D>().UpdateAxis();
     }

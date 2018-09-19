@@ -17,7 +17,6 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
         GameObject axis;
 
         axis = Instantiate(axis3D);
-        axis.GetComponent<AAxis>().labelUnitText = variableEntity;
         axis.GetComponent<AAxis>().labelVariableText = variableName;
         axis.GetComponent<AAxis>().tipped = tipped;
         axis.GetComponent<AAxis>().ticked = ticked;

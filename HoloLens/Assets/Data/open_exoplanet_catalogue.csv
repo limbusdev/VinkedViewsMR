@@ -1,5 +1,5 @@
 Identifier,Constellation [0=unknown|1=P-type binary|2=S-type binary|3=orphan],Mass [Jupiter masses],Radius[Jupiter radii],Period [days],Semi-major axis [Astronomical Units],Eccentricity,Periastron [degree],Longitude [degree],Ascending node [degree],Inclination [degree],Surface or equilibrium temperature [K],Age [Gyr],Discovery method,Discovery year [yyyy],Last updated [yy/mm/dd],Right ascension [hh mm ss],Declination [+/-dd mm ss],Distance from Sun [parsec],Host star mass [Solar masses],Host star radius [Solar radii],Host star metallicity [log relative to solar],Host star temperature [K],Host star age [Gyr],A list of lists the planet is on
-nominal,nominal,ratio,ratio,interval,ratio,ratio,ratio,ratio,ratio,ratio,ratio,ratio,nominal,ordinal,nominal,nominal,nominal,ratio,ratio,ratio,ratio,ratio,ratio,nominal
+nominal,nominal,ratio,ratio,nominal,ratio,ratio,ratio,ratio,ratio,ratio,ratio,ratio,nominal,nominal,nominal,nominal,nominal,ratio,ratio,ratio,ratio,ratio,ratio,nominal
 KOI-1843.03,0,0.0014,0.054,0.1768913,0.0048,,,,,72,,,transit,2012,13/07/15,19 00 03.14,+40 13 14.7,,0.52,0.50,0.07,3687.0,,Controversial
 Kepler-974 b,0,,0.140,4.194496510,0.039,,,,,89.38,,,transit,,17/11/28,19 00 03.14,+40 13 14.7,,0.52,0.50,0.07,3687.0,,Confirmed planets
 KOI-1843.02,0,,0.071,6.356006,0.052,,,,,88.24,,,transit,,,19 00 03.14,+40 13 14.7,,0.52,0.50,0.07,3687.0,,Controversial

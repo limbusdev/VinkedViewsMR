@@ -1,4 +1,5 @@
 ﻿using GraphicalPrimitive;
+using Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,4 +15,6 @@ public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
     public abstract GameObject CreateScatterDot();
 
     public abstract GameObject CreateAxis(Color color, string variableName, string variableUnit, AxisDirection axisDirection, float length, float width = 0.01f, bool tipped = true, bool ticked = false);
+
+    public virtual GameObject CreateAutoTickedAxis(string name, AxisDirection direction, DataSet data) { return new GameObject("Dummy Axis"); }
 }

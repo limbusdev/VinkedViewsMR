@@ -1,4 +1,5 @@
 ﻿using GraphicalPrimitive;
+using Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -23,13 +24,13 @@ public class ETV2DBarChart : AETV2D
         
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
-        float range = measures.zBoundRange;
+        float range = measures.zBoundDistRange;
 
         int categoryCounter = 0;
 
         foreach(var cat in measures.distribution.Keys)
         {
-            GameObject bar = CreateBar(stringAttributeID, cat, measures.zBoundRange);
+            GameObject bar = CreateBar(stringAttributeID, cat, measures.zBoundDistRange);
             bars.Add(cat, bar.GetComponent<Bar2D>());
 
             bar.transform.localPosition = new Vector3((categoryCounter) * 0.15f + 0.1f, 0, 0);
@@ -142,8 +143,8 @@ public class ETV2DBarChart : AETV2D
         Axis2D axis2D = yAxis.GetComponent<Axis2D>();
 
         axis2D.ticked = true;
-        axis2D.min = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMin;
-        axis2D.max = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMax;
+        axis2D.min = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistMin;
+        axis2D.max = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistMax;
 
         axis2D.CalculateTickResolution();
 
@@ -158,8 +159,8 @@ public class ETV2DBarChart : AETV2D
                     Vector3.up,
                     1,
                     .005f,
-                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMin,
-                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundMax);
+                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistMin,
+                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistMax);
         grid.transform.localPosition = new Vector3(0, 0, .001f);
         grid.transform.parent = Anchor.transform;
 

@@ -8,24 +8,6 @@ namespace GraphicalPrimitive
     public class Axis3D : AAxis
     {
 
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-
-        private void Awake()
-        {
-            if(ticks == null)
-                ticks = new List<GameObject>();
-        }
-
         public GameObject axisBody;
         public GameObject axisBodyGeometry;
         public GameObject axisTip;
@@ -49,13 +31,7 @@ namespace GraphicalPrimitive
             // Update Colors
             axisBodyGeometry.GetComponent<Renderer>().material.color = color;
             axisTip.GetComponent<Renderer>().material.color = color;
-
-            // Update Ticks
-            foreach(GameObject go in ticks)
-            {
-                Destroy(go);
-            }
-            ticks.Clear();
+            
 
             Vector3 tickDirection;
             switch (axisDirection)
@@ -107,7 +83,7 @@ namespace GraphicalPrimitive
 
                 tick.transform.parent = axisBody.transform;
                 tick.transform.localPosition = direction * ((tickCounter * tickResolution) / (max - min));
-                ticks.Add(tick);
+                //ticks.Add(tick);
                 tickCounter++;
             }
 
@@ -115,34 +91,20 @@ namespace GraphicalPrimitive
             TextMesh tmVariable = labelVariable.GetComponent<TextMesh>();
             tmVariable.text = labelVariableText;
 
-            TextMesh tmUnit = labelUnit.GetComponent<TextMesh>();
-            if(labelUnitText.Length == 0)
-            {
-                tmUnit.text = "";
-            } else
-            {
-                tmUnit.text = "[" + labelUnitText + "]";
-            }
 
             switch (axisDirection)
             {
                 case AxisDirection.X:
                     tmVariable.anchor = TextAnchor.UpperCenter;
                     tmVariable.alignment = TextAlignment.Center;
-                    tmUnit.anchor = TextAnchor.UpperCenter;
-                    tmUnit.alignment = TextAlignment.Center;
                     break;
                 case AxisDirection.Y:
                     tmVariable.anchor = TextAnchor.MiddleRight;
                     tmVariable.alignment = TextAlignment.Right;
-                    tmUnit.anchor = TextAnchor.MiddleRight;
-                    tmUnit.alignment = TextAlignment.Right;
                     break;
                 default:
                     tmVariable.anchor = TextAnchor.MiddleRight;
                     tmVariable.alignment = TextAlignment.Right;
-                    tmUnit.anchor = TextAnchor.MiddleRight;
-                    tmUnit.alignment = TextAlignment.Right;
                     break;
             }
 

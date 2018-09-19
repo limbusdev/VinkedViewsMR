@@ -22,19 +22,25 @@ public class CubeIconVariable : InteractionReceiver
     private string[] IconKeys = {"1DOrdinal", "1DNominal", "2DOrdinal", "2DNominal", "2DMixed", "3DOrdinal", "3DNominal", "3D2Ord1Nom", "3D1Ord2Nom", "MultiD" };
 
     public int IconType = 0;
-    public string[] VariableNames;
-    public LevelOfMeasurement[] VariableTypes;
+    public string[] varNames;
+    public LevelOfMeasurement[] varTypes;
     public int dimension;
     public int dataSetID { get; private set; }
     private bool clicked = false;
     private bool initialized = false;
 
+    public void InitMulti(string[] variableNames, LevelOfMeasurement[] variableTypes, int dataSetID, string name)
+    {
+        Init(variableNames, variableTypes, dataSetID);
+        text.text = name;
+    }
+
     public void Init(string[] variableNames, LevelOfMeasurement[] variableTypes, int dataSetID)
     {
         this.gameObject.name = "CubeIconVariable";
 
-        VariableNames = variableNames;
-        VariableTypes = variableTypes;
+        varNames = variableNames;
+        varTypes = variableTypes;
 
         this.dataSetID = dataSetID;
         dimension = variableNames.Length;
@@ -105,7 +111,7 @@ public class CubeIconVariable : InteractionReceiver
             lr.endWidth = .01f;
             
             visButtonsAnchor.SetActive(true);
-            string[] viss = ServiceLocator.instance.visualizationFactory.ListPossibleVisualizations(dataSetID, VariableNames);
+            string[] viss = ServiceLocator.instance.visualizationFactory.ListPossibleVisualizations(dataSetID, varNames);
 
             lr.positionCount = viss.Length * 2;
             var poss = new List<Vector3>();
@@ -149,16 +155,16 @@ public class CubeIconVariable : InteractionReceiver
         switch(obj.name)
         {
             case "SingleAxis3D":
-                ServiceLocator.instance.visualizationFactory.GenerateSingle3DAxisFrom(dataSetID, VariableNames[0]);
+                ServiceLocator.instance.visualizationFactory.GenerateSingle3DAxisFrom(dataSetID, varNames[0]);
                 break;
             case "BarChart2D":
-                ServiceLocator.instance.visualizationFactory.GenerateBarChart2DFrom(dataSetID, VariableNames[0]);
+                ServiceLocator.instance.visualizationFactory.GenerateBarChart2DFrom(dataSetID, varNames[0]);
                 break;
             case "BarChart3D":
-                ServiceLocator.instance.visualizationFactory.GenerateBarChart3DFrom(dataSetID, VariableNames[0]);
+                ServiceLocator.instance.visualizationFactory.GenerateBarChart3DFrom(dataSetID, varNames[0]);
                 break;
             case "BarMap3D":
-                ServiceLocator.instance.visualizationFactory.GenerateBarMap3DFrom(dataSetID, VariableNames);
+                ServiceLocator.instance.visualizationFactory.GenerateBarMap3DFrom(dataSetID, varNames);
                 break;
             case "PCP2D":
                 break;

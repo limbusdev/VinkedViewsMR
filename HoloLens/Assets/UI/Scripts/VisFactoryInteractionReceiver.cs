@@ -134,7 +134,8 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         {
             case 3: Setup3DGalery(dataBaseID); break;
             case 2: Setup2DGalery(dataBaseID); break;
-            default: Setup1DGalery(dataBaseID); break;
+            case 1: Setup1DGalery(dataBaseID); break;
+            default: SetupNDGalery(dataBaseID); break;
         }
 
         ObjectCollection.GetComponent<ObjectCollection>().UpdateCollection();
@@ -215,6 +216,91 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         }
     }
 
+    private void SetupNDGalery(int dbID)
+    {
+        DataSet ds = dataProvider.dataSets[dbID];
+
+        // 1 Icon for all variables
+        var allVars = new List<string>();
+        var allLoms = new List<LevelOfMeasurement>();
+        foreach(string key in ds.dataMeasuresNominal.Keys)
+        {
+            allVars.Add(key);
+            allLoms.Add(ds.dataMeasuresNominal[key].type);
+        }
+        foreach(string key in ds.dataMeasuresOrdinal.Keys)
+        {
+            allVars.Add(key);
+            allLoms.Add(ds.dataMeasuresOrdinal[key].type);
+        }
+        foreach(string key in ds.dataMeasuresInterval.Keys)
+        {
+            allVars.Add(key);
+            allLoms.Add(ds.dataMeasuresInterval[key].type);
+        }
+        foreach(string key in ds.dataMeasuresRatio.Keys)
+        {
+            allVars.Add(key);
+            allLoms.Add(ds.dataMeasuresRatio[key].type);
+        }
+
+        if(allVars.Count > 0)
+            interactables.Add(CreateNDIconAndInsert(allVars.ToArray(), allLoms.ToArray(), "All Attr."));
+
+        // 1 Icon for all nominal variables
+        allVars.Clear();
+        allLoms.Clear();
+
+        foreach(string key in ds.dataMeasuresNominal.Keys)
+        {
+            allVars.Add(key);
+            allLoms.Add(ds.dataMeasuresNominal[key].type);
+        }
+
+        if(allVars.Count > 0)
+            interactables.Add(CreateNDIconAndInsert(allVars.ToArray(), allLoms.ToArray(), "All Nom."));
+
+        // 1 Icon for all ordinal variables
+        allVars.Clear();
+        allLoms.Clear();
+
+        foreach(string key in ds.dataMeasuresOrdinal.Keys)
+        {
+            allVars.Add(key);
+            allLoms.Add(ds.dataMeasuresOrdinal[key].type);
+        }
+
+        if(allVars.Count > 0)
+            interactables.Add(CreateNDIconAndInsert(allVars.ToArray(), allLoms.ToArray(), "All Ord."));
+
+        // 1 Icon for all interval variables
+        allVars.Clear();
+        allLoms.Clear();
+
+        foreach(string key in ds.dataMeasuresInterval.Keys)
+        {
+            allVars.Add(key);
+            allLoms.Add(ds.dataMeasuresInterval[key].type);
+        }
+
+        if(allVars.Count > 0)
+            interactables.Add(CreateNDIconAndInsert(allVars.ToArray(), allLoms.ToArray(), "All Intv."));
+
+        // 1 Icon for all ratio variables
+        allVars.Clear();
+        allLoms.Clear();
+
+        foreach(string key in ds.dataMeasuresRatio.Keys)
+        {
+            allVars.Add(key);
+            allLoms.Add(ds.dataMeasuresRatio[key].type);
+        }
+
+        if(allVars.Count > 0)
+            interactables.Add(CreateNDIconAndInsert(allVars.ToArray(), allLoms.ToArray(), "All Ratio"));
+
+    }
+
     private GameObject Create1DIconAndInsert(string name, LevelOfMeasurement lom)
     {
        return CreateIconAndInsertInCollection(new string[] { name }, new LevelOfMeasurement[] { lom });
@@ -230,11 +316,26 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         return CreateIconAndInsertInCollection(new string[] { name1, name2, name3 }, new LevelOfMeasurement[] { lom1, lom2, lom3 });
     }
 
+    private GameObject CreateNDIconAndInsert(string[] names, LevelOfMeasurement[] loms, string name)
+    {
+        return CreateMultiIconAndInsertInCollection(names, loms, name);
+    }
+
     private GameObject CreateIconAndInsertInCollection(string[] names, LevelOfMeasurement[] loms)
     {
         GameObject etvIcon = Instantiate(CubeIconVariablePrefab);
         CubeIconVariable civ = etvIcon.GetComponent<CubeIconVariable>();
         civ.Init(names, loms, currentlyChosenDataBase);
+        etvIcon.transform.parent = ObjectCollection.transform;
+
+        return etvIcon;
+    }
+
+    private GameObject CreateMultiIconAndInsertInCollection(string[] names, LevelOfMeasurement[] loms, string name)
+    {
+        GameObject etvIcon = Instantiate(CubeIconVariablePrefab);
+        CubeIconVariable civ = etvIcon.GetComponent<CubeIconVariable>();
+        civ.InitMulti(names, loms, currentlyChosenDataBase, name);
         etvIcon.transform.parent = ObjectCollection.transform;
 
         return etvIcon;

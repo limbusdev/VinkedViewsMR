@@ -17,12 +17,25 @@ namespace GraphicalPrimitive
 
         public LevelOfMeasurement type;
 
+        public void Init(string name, float max, AxisDirection dir = AxisDirection.Y)
+        {
+            base.Init(name, dir);
+            this.min = 0;
+            this.max = max;
+            this.length = 1f;
+            this.tipped = true;
+            this.ticked = true;
+            type = LevelOfMeasurement.RATIO;
+            CalculateTickResolution();
+            AssembleRatioAxis();
+        }
+       
         public void Init(NominalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
         {
             base.Init(m, dir);
             this.min= 0;
             this.max = m.numberOfUniqueValues;
-            this.length = .15f * m.numberOfUniqueValues;
+            this.length = .15f * m.numberOfUniqueValues + .15f;
             this.tickResolution = .15f;
             this.tipped = false;
             this.ticked = true;
@@ -35,7 +48,7 @@ namespace GraphicalPrimitive
             base.Init(m, dir);
             this.min= m.min;
             this.max = m.max;
-            this.length = .15f * m.numberOfUniqueValues;
+            this.length = .15f * m.numberOfUniqueValues + .15f;
             this.tickResolution = .15f;
             this.tipped = true;
             this.ticked = true;
@@ -66,7 +79,7 @@ namespace GraphicalPrimitive
             this.ticked = true;
             CalculateTickResolution();
             type = LevelOfMeasurement.RATIO;
-            AssembleRatioAxis(m);
+            AssembleRatioAxis();
         }
 
         private void AssembleNominalAxis(NominalDataDimensionMeasures m)
@@ -90,10 +103,10 @@ namespace GraphicalPrimitive
             UpdateLabels();
         }
 
-        private void AssembleRatioAxis(RatioDataDimensionMeasures m)
+        private void AssembleRatioAxis()
         {
             DrawBaseAxis();
-            GenerateRatioTicks(m);
+            GenerateRatioTicks();
             UpdateLabels();
         }
 
@@ -203,7 +216,7 @@ namespace GraphicalPrimitive
             }
         }
 
-        private void GenerateRatioTicks(RatioDataDimensionMeasures m)
+        private void GenerateRatioTicks()
         {
             var tickDir = DefineTickDirection(axisDirection);
 

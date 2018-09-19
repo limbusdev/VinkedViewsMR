@@ -32,9 +32,9 @@ namespace GraphicalPrimitive
 
         public AxisDirection axisDirection = AxisDirection.Y;
 
-        public void Init(DataDimensionMeasures m, AxisDirection dir=AxisDirection.Y)
+        public void Init(string name, AxisDirection dir = AxisDirection.Y)
         {
-            this.labelVariableText = m.name;
+            this.labelVariableText = name;
             this.ticks = new List<Tick>();
             axisDirection = dir;
 
@@ -50,6 +50,11 @@ namespace GraphicalPrimitive
                     direction = Vector3.forward;
                     break;
             }
+        }
+
+        public void Init(DataDimensionMeasures m, AxisDirection dir=AxisDirection.Y)
+        {
+            Init(m.name, dir);
         }
 
         public void CalculateTickResolution()

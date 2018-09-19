@@ -16,52 +16,97 @@ public class ETV3DBarChart : AETV3D
     public GameObject Anchor;
 
     private DataSet data;
+    private int attID = 0;
+    private LevelOfMeasurement lom;
 
     private IDictionary<string, Bar3D> bars;
     private IDictionary<AxisDirection, GameObject> axis;
 
     private int stringAttributeID;
 
-    public void Init(DataSet data, int nominalAttributeID)
+    public void Init(DataSet dataSet, string attributeName)
     {
-        this.data = data;
-        this.stringAttributeID = nominalAttributeID;
-
+        this.data = dataSet;
+        this.attID = dataSet.GetIDOf(attributeName);
+        this.lom = dataSet.GetTypeOf(attributeName);
         bars = new Dictionary<string, Bar3D>();
-        axis = new Dictionary<AxisDirection, GameObject>();
 
-        string attName = data.nomAttributes[stringAttributeID];
-        var measures = data.dataMeasuresNominal[attName];
+        if(lom == LevelOfMeasurement.RATIO || lom == LevelOfMeasurement.INTERVAL)
+        {
+            Debug.LogWarning(attributeName + " is unsuitable for BarChart2D");
+            return;
+        }
 
-        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
+        string attName = attributeName;
 
-        float range = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistRange;
+        switch(lom)
+        {
+            case LevelOfMeasurement.NOMINAL:
+                InitNominal(dataSet, attributeName);
+                break;
+            default: // ORDINAL
+                InitOrdinal(dataSet, attributeName);
+                break;
+        }
+
+        SetUpAxis();
+    }
+
+    private void InitNominal(DataSet data, string attributeName)
+    {
+        var measures = data.dataMeasuresNominal[attributeName];
+        var factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        float range = measures.zBoundDistRange;
 
         int categoryCounter = 0;
 
-
         foreach(var cat in measures.distribution.Keys)
         {
-            GameObject bar = CreateBar(stringAttributeID, cat, measures.zBoundDistRange);
+            GameObject bar = CreateBar(attID, cat, measures.zBoundDistRange);
             bars.Add(cat, bar.GetComponent<Bar3D>());
 
-            bar.transform.localPosition = new Vector3((categoryCounter) * 0.15f + 0.1f, 0, 0);
+            bar.transform.localPosition = new Vector3((categoryCounter + 1) * 0.15f, 0, 0);
 
             bar.transform.parent = Anchor.transform;
-            string labelString = (cat.Length > 10) ? (cat.Substring(0, 9) + ".") : cat;
-            bar.GetComponent<Bar3D>().SetLabelCategoryText(labelString);
 
             categoryCounter++;
         }
 
         foreach(var o in data.informationObjects)
         {
-            var bar = bars[o.nominalAtt[stringAttributeID].value];
-            o.AddRepresentativeObject(attName, bar.gameObject);
+            string value = o.nominalAtt[attID].value;
+            Bar3D bar = bars[value];
+            o.AddRepresentativeObject(attributeName, bar.gameObject);
         }
-        
-        
-        SetUpAxis();
+    }
+
+    private void InitOrdinal(DataSet data, string attributeName)
+    {
+        var measures = data.dataMeasuresOrdinal[attributeName];
+        var factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        float range = measures.zBoundDistRange;
+
+        int categoryCounter = 0;
+
+        foreach(var cat in measures.orderedValueIDs.Keys)
+        {
+            string catName = measures.orderedValueIDs[cat];
+            GameObject bar = CreateBar(attID, catName, measures.zBoundDistRange);
+            bars.Add(catName, bar.GetComponent<Bar3D>());
+
+            bar.transform.localPosition = new Vector3((categoryCounter + 1) * 0.15f, 0, 0);
+
+            bar.transform.parent = Anchor.transform;
+
+            categoryCounter++;
+        }
+
+        foreach(var o in data.informationObjects)
+        {
+            string value = measures.orderedValueIDs[o.ordinalAtt[attID].value];
+            Bar3D bar = bars[value];
+            o.AddRepresentativeObject(attributeName, bar.gameObject);
+        }
     }
 
     public override void SetUpAxis()

@@ -54,6 +54,8 @@ public class VisualizationFactory : MonoBehaviour
         var ae4 = fact2.PutETVOnAnchor(a4);
         ae4.transform.position = new Vector3(0, 0, 3);
 
+        var ae5 = GenerateBarChart2DFrom(1, "Crime");
+        ae5.transform.position = new Vector3(0, 0, 4);
 
         /*
         DataSet fbiData = dataProvider.dataSets[0];
@@ -239,7 +241,7 @@ public class VisualizationFactory : MonoBehaviour
         var type = ds.GetTypeOf(variable);
 
         var factory = ServiceLocator.instance.ETV2DFactoryService;
-        var vis = factory.CreateETVBarChart(ds, ds.GetIDOf(variable));
+        var vis = factory.CreateETVBarChart(ds, variable);
         vis = factory.PutETVOnAnchor(vis);
 
         vis.transform.position = NewETVPosition.transform.position;
@@ -259,7 +261,7 @@ public class VisualizationFactory : MonoBehaviour
         var type = ds.GetTypeOf(variable);
 
         var factory = ServiceLocator.instance.ETV3DFactoryService;
-        var vis = factory.CreateETVBarChart(ds, ds.GetIDOf(variable));
+        var vis = factory.CreateETVBarChart(ds, variable);
         vis = factory.PutETVOnAnchor(vis);
 
         vis.transform.position = NewETVPosition.transform.position;

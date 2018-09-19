@@ -199,7 +199,6 @@ public class ETV3DBarMap : AETV3D
         Bar3D bar = factory3D.CreateBar(value, range, .1f, .1f).GetComponent<Bar3D>();
 
         bar.SetLabelText(value.ToString());
-        bar.SetLabelCategoryText("");
 
         return bar;
     }

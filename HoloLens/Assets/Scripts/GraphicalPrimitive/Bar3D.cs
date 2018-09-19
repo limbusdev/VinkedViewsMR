@@ -21,7 +21,6 @@ namespace GraphicalPrimitive
             var textMesh = label.GetComponent<TextMesh>();
             textMesh.anchor = (height < 0) ? TextAnchor.UpperCenter : TextAnchor.LowerCenter;
             label.transform.localPosition = new Vector3(0, height, 0);
-            labelCategory.transform.localPosition = new Vector3(0, 0, -depth / 2);
         }
         
     }

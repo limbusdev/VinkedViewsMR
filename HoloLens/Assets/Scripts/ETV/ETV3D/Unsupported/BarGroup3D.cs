@@ -34,7 +34,6 @@ public class BarGroup3D : MonoBehaviour {
             bar.transform.localPosition = new Vector3(-groupWidth/2 + singleWidth/2 + singleWidth*i, 0, 0);
             bars.Add(bar);
             Bar3D bar3D = bar.GetComponent<Bar3D>();
-            bar3D.SetLabelCategoryText("");
             bar3D.SetLabelText(values[i].ToString());
         }
 

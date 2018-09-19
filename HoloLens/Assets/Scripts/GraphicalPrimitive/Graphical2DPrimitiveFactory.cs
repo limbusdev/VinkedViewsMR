@@ -14,6 +14,12 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     public GameObject ScatterDot2DPrefab;
     public GameObject TickPrefab;
 
+    public GameObject CreateEmptyAxis()
+    {
+        GameObject axis = Instantiate(Axis2DPrefab);
+        return axis;
+    }
+
     public override GameObject CreateAxis(Color color, string variableName, string variableEntity, 
         AxisDirection axisDirection, float length, float width = 0.01F, bool tipped = true, bool ticked = false)
     {
@@ -28,6 +34,15 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         axis2Dcomp.ticked = ticked;
         axis2Dcomp.UpdateAxis();
         
+
+        return axis;
+    }
+
+    public GameObject CreateAutoTickedAxis(string name, float max, AxisDirection dir = AxisDirection.Y)
+    {
+        GameObject axis = Instantiate(Axis2DPrefab);
+        Axis2D axis2Dcomp = axis.GetComponent<Axis2D>();
+        axis2Dcomp.Init(name, max, dir);
 
         return axis;
     }
@@ -56,6 +71,44 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         
 
         return axis;
+    }
+
+    public GameObject CreateAutoGrid(float max, Vector3 axisDir, Vector3 expansionDir, float length)
+    {
+        GameObject grid = new GameObject("grid");
+
+        var ticks = new List<GameObject>();
+
+        float range = Mathf.Abs(max);
+        int tickCount = 11;
+        float unroundedTickSize = range / (tickCount - 1);
+        float x = Mathf.Ceil(Mathf.Log10(unroundedTickSize) - 1);
+        float pow10x = Mathf.Pow(10, x);
+        float tickResolution = Mathf.Ceil(unroundedTickSize / pow10x) * pow10x;
+
+        float diameter = .005f;
+
+        int tickCounter = 0;
+        for(float i = 0; i <= max; i += tickResolution)
+        {
+            GameObject tick = new GameObject("Tick");
+            var lineRend = tick.AddComponent<LineRenderer>();
+            lineRend.useWorldSpace = false;
+            lineRend.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
+            lineRend.startColor = Color.white;
+            lineRend.endColor = Color.white;
+            lineRend.startWidth = diameter;
+            lineRend.endWidth = diameter;
+            lineRend.SetPosition(0, Vector3.zero);
+            lineRend.SetPosition(1, axisDir * length);
+
+            tick.transform.parent = grid.transform;
+            tick.transform.localPosition = expansionDir * (tickCounter * tickResolution) / (range);
+            ticks.Add(tick);
+            tickCounter++;
+        }
+
+        return grid;
     }
 
     public override GameObject CreateGrid(Color color, Vector3 axisDir, Vector3 expansionDir, float length, float width, float min, float max)

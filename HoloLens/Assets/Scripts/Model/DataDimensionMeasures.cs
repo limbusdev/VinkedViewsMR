@@ -84,6 +84,7 @@ namespace Model
     {
         public IDictionary<int, int> distribution;
         public string[] uniqueValues;
+        public int[] uniqueIDs;
         public IDictionary<int, string> orderedValueIDs;
         public int distMin, zBoundDistMin;
         public int distMax, zBoundDistMax;
@@ -96,7 +97,16 @@ namespace Model
         {
             this.orderedValueIDs = orderedValueIDs;
             this.distribution = distribution;
-            this.uniqueValues = orderedValueIDs.Values.ToArray();
+
+            uniqueValues = new string[orderedValueIDs.Keys.Count];
+            uniqueIDs = new int[orderedValueIDs.Keys.Count];
+            int counter = 0;
+            foreach(int key in orderedValueIDs.Keys)
+            {
+                uniqueValues[counter] = orderedValueIDs[key];
+                uniqueIDs[counter] = key;
+                counter++;
+            }
 
             this.distMin = distribution.Values.Min();
             this.distMax = distribution.Values.Max();

@@ -211,7 +211,7 @@ namespace GraphicalPrimitive
                 tick.label.text = IntervalValueConverters.Translate(i, m.intervalTranslator);
 
                 tick.transform.parent = Anchor.transform;
-                tick.transform.localPosition = direction * TransformFromValueToAxisSpace(i);
+                tick.transform.localPosition = direction * TransformToAxisSpace(i);
                 ticks.Add(tick);
             }
         }
@@ -230,7 +230,7 @@ namespace GraphicalPrimitive
                 tick.label.text = i.ToString(i % 1 == 0 ? "N0" : ("N" + decimals));
 
                 tick.transform.parent = Anchor.transform;
-                tick.transform.localPosition = direction * TransformFromValueToAxisSpace(tickCounter*tickResolution);
+                tick.transform.localPosition = direction * TransformToAxisSpace(tickCounter*tickResolution);
                 ticks.Add(tick);
                 tickCounter++;
             }

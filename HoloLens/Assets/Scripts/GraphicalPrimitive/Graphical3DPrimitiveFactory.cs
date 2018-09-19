@@ -35,10 +35,10 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
         throw new System.NotImplementedException();
     }
 
-    public override GameObject CreateBar(float value, float rangeToNormalizeTo, float width, float depth)
+    public override GameObject CreateBar(float value, float width=.1f, float depth=.1f)
     {
         GameObject bar = Instantiate(bar3D);
-        bar.GetComponent<Bar3D>().SetSize(width, value / rangeToNormalizeTo, depth);
+        bar.GetComponent<Bar3D>().SetSize(width, value, depth);
         
         return bar;
     }

@@ -4,78 +4,70 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/**
- * 3D Euclidean transformable View: 3D Bar Chart
- * 
- * A Bar chart which normalizes linearily to 1,
- * calculated from the maximum of the provided
- * values.
- * */
+/// <summary>
+/// 3D Euclidean transformable View: 3D Bar Chart
+///
+/// A Bar chart which normalizes linearily to 1,
+/// calculated from the maximum of the provided
+/// values.
+/// </summary>
 public class ETV3DBarChart : AETV3D
 {
+    // ........................................................................ Populate in Editor
     public GameObject Anchor;
 
+    // ........................................................................ Private properties
     private DataSet data;
-    private int attID = 0;
+    private string attributeName;
+    private int attributeID;
     private LevelOfMeasurement lom;
 
     private IDictionary<string, Bar3D> bars;
-    private IDictionary<AxisDirection, GameObject> axis;
 
-    private int stringAttributeID;
 
-    public void Init(DataSet dataSet, string attributeName)
+    // ........................................................................ Initializers
+    public void Init(DataSet data, string attributeName)
     {
-        this.data = dataSet;
-        this.attID = dataSet.GetIDOf(attributeName);
-        this.lom = dataSet.GetTypeOf(attributeName);
+        this.data = data;
+        this.attributeName = attributeName;
+        this.attributeID = data.GetIDOf(attributeName);
+        this.lom = data.GetTypeOf(attributeName);
+
+
         bars = new Dictionary<string, Bar3D>();
 
-        if(lom == LevelOfMeasurement.RATIO || lom == LevelOfMeasurement.INTERVAL)
-        {
-            Debug.LogWarning(attributeName + " is unsuitable for BarChart2D");
-            return;
-        }
+        SetUpAxis();
 
-        string attName = attributeName;
-
+        // .................................................................... initialize
         switch(lom)
         {
             case LevelOfMeasurement.NOMINAL:
-                InitNominal(dataSet, attributeName);
+                InitNominal(data, attributeName);
                 break;
-            default: // ORDINAL
-                InitOrdinal(dataSet, attributeName);
+            case LevelOfMeasurement.ORDINAL:
+                InitOrdinal(data, attributeName);
+                break;
+            default:
+                Debug.Log("Attribute level of measurement unsuitable for BarChart3D");
                 break;
         }
-
-        SetUpAxis();
     }
 
     private void InitNominal(DataSet data, string attributeName)
     {
         var measures = data.dataMeasuresNominal[attributeName];
-        var factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
-        float range = measures.zBoundDistRange;
+        var factory = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
-        int categoryCounter = 0;
-
-        foreach(var cat in measures.distribution.Keys)
+        for(int i = 0; i < measures.numberOfUniqueValues; i++)
         {
-            GameObject bar = CreateBar(attID, cat, measures.zBoundDistRange);
-            bars.Add(cat, bar.GetComponent<Bar3D>());
-
-            bar.transform.localPosition = new Vector3((categoryCounter + 1) * 0.15f, 0, 0);
-
-            bar.transform.parent = Anchor.transform;
-
-            categoryCounter++;
+            string val = measures.uniqueValues[i];
+            InsertBar(val, measures.distribution[val], i);
         }
 
         foreach(var o in data.informationObjects)
         {
-            string value = o.nominalAtt[attID].value;
-            Bar3D bar = bars[value];
+            string value = o.nominalAtt[attributeID].value;
+            var bar = bars[value];
             o.AddRepresentativeObject(attributeName, bar.gameObject);
         }
     }
@@ -83,90 +75,71 @@ public class ETV3DBarChart : AETV3D
     private void InitOrdinal(DataSet data, string attributeName)
     {
         var measures = data.dataMeasuresOrdinal[attributeName];
-        var factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
-        float range = measures.zBoundDistRange;
+        var factory = ServiceLocator.instance.PrimitiveFactory2Dservice;
 
-        int categoryCounter = 0;
-
-        foreach(var cat in measures.orderedValueIDs.Keys)
+        for(int i = 0; i < measures.numberOfUniqueValues; i++)
         {
-            string catName = measures.orderedValueIDs[cat];
-            GameObject bar = CreateBar(attID, catName, measures.zBoundDistRange);
-            bars.Add(catName, bar.GetComponent<Bar3D>());
-
-            bar.transform.localPosition = new Vector3((categoryCounter + 1) * 0.15f, 0, 0);
-
-            bar.transform.parent = Anchor.transform;
-
-            categoryCounter++;
+            InsertBar(measures.uniqueValues[i], measures.distribution[i], i);
         }
 
         foreach(var o in data.informationObjects)
         {
-            string value = measures.orderedValueIDs[o.ordinalAtt[attID].value];
-            Bar3D bar = bars[value];
+            int value = o.ordinalAtt[attributeID].value;
+            var bar = bars[measures.uniqueValues[value]];
             o.AddRepresentativeObject(attributeName, bar.gameObject);
         }
     }
 
-    public override void SetUpAxis()
+    // ........................................................................ Helper Methods
+    private Bar3D InsertBar(string name, int value, int barID)
     {
-        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        var factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
 
-        float xAxisLength = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].distribution.Keys.Count * 0.15f;
-
-        // x-Axis
-        GameObject xAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.X, xAxisLength + .1f, .01f, false, false);
-        xAxis.transform.parent = Anchor.transform;
-
-        // y-Axis
-        GameObject yAxis = factory2D.CreateAxis(Color.white, "", "", AxisDirection.Y, 1.0f, .01f, true, true);
-        Axis2D axis2D = yAxis.GetComponent<Axis2D>();
-
-        axis2D.ticked = true;
-        axis2D.min = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistMin;
-        axis2D.max = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistMax;
-
-        axis2D.CalculateTickResolution();
-        
-        yAxis.transform.parent = Anchor.transform;
-
-        // Grid
-        GameObject grid = factory2D.CreateGrid(
-                    new Color(1, 1, 1, .7f),
-                    Vector3.right,
-                    Vector3.up,
-                    1,
-                    .005f,
-                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistMin,
-                    data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].zBoundDistMax);
-        grid.transform.parent = Anchor.transform;
-
-        axis.Add(AxisDirection.X, xAxis);
-        axis.Add(AxisDirection.Y, yAxis);
-
-        SetAxisLabels(AxisDirection.X, data.informationObjects[0].nominalAtt[stringAttributeID].name, "");
-        SetAxisLabels(AxisDirection.Y, "Amount", "");
-    }
-
-    /**
-     * Creates a colored bar. 
-     * @param range         maximum - minimum value of this attribute
-     * @param attributeID   which attribute
-     * */
-    private GameObject CreateBar(int stringAttributeID, string category, float range)
-    {
-        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
-        
-        float value = data.dataMeasuresNominal[data.nomAttributes[stringAttributeID]].distribution[category];
-        GameObject bar = factory3D.CreateBar(value, range, .1f, .1f);
-
+        float normValue = GetAxis(AxisDirection.Y).TransformToAxisSpace(value);
+        var bar = factory3D.CreateBar(normValue).GetComponent<Bar3D>();
         bar.GetComponent<Bar3D>().SetLabelText(value.ToString());
+
+        bars.Add(name, bar);
+        bar.gameObject.transform.localPosition = new Vector3((barID + 1) * 0.15f, 0, .001f);
+        bar.gameObject.transform.parent = Anchor.transform;
 
         return bar;
     }
 
-    
+    public override void SetUpAxis()
+    {
+        var factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+
+        var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.X, data);
+        xAxis.transform.parent = Anchor.transform;
+
+        float max, length;
+
+        switch(lom)
+        {
+            case LevelOfMeasurement.NOMINAL:
+                var mea = data.dataMeasuresNominal[attributeName];
+                length = (mea.numberOfUniqueValues + 1) * .15f;
+                max = mea.distMax;
+                break;
+            default:
+                var mea2 = data.dataMeasuresOrdinal[attributeName];
+                length = (mea2.numberOfUniqueValues + 1) * .15f;
+                max = mea2.distMax;
+                break;
+        }
+
+        var yAxis = factory2D.CreateAutoTickedAxis("Amount", max);
+        yAxis.transform.parent = Anchor.transform;
+
+        // Grid
+        GameObject grid = factory2D.CreateAutoGrid(max, Vector3.right, Vector3.up, length);
+        grid.transform.localPosition = new Vector3(0, 0, .002f);
+        grid.transform.parent = Anchor.transform;
+
+        axes.Add(AxisDirection.X, xAxis);
+        axes.Add(AxisDirection.Y, yAxis);
+    }
 
     public override void ChangeColoringScheme(ETVColorSchemes scheme)
     {
@@ -206,22 +179,6 @@ public class ETV3DBarChart : AETV3D
             default:
                 break;
         }
-    }
-
-	// Use this for initialization
-	void Start () {
-
-    }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-    public override void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
-    {
-        axis[axisDirection].GetComponent<Axis2D>().labelVariableText = axisVariable;
-        axis[axisDirection].GetComponent<Axis2D>().UpdateAxis();
     }
 
     public override void UpdateETV()

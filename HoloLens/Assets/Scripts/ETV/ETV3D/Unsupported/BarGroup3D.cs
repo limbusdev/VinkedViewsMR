@@ -29,7 +29,7 @@ public class BarGroup3D : MonoBehaviour {
 
         for(int i=0; i<barCount; i++)
         {
-            GameObject bar = factory.CreateBar(values[i], rangesToNormalizeTo[i], singleWidth, depth);
+            GameObject bar = factory.CreateBar(values[i], singleWidth, depth);
             bar.transform.parent = gameObject.transform;
             bar.transform.localPosition = new Vector3(-groupWidth/2 + singleWidth/2 + singleWidth*i, 0, 0);
             bars.Add(bar);

@@ -6,7 +6,7 @@ using UnityEngine;
 
 public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
 {
-    public abstract GameObject CreateBar(float value, float rangeToNormalizeTo, float width, float depth);
+    public abstract GameObject CreateBar(float value, float width, float depth);
 
     public abstract GameObject CreateGrid(Color color, Vector3 axisDir, Vector3 expansionDir, float length, float width, float min, float max);
 

@@ -71,12 +71,12 @@ namespace GraphicalPrimitive
         // Abstract Methods
         public abstract void UpdateAxis();
 
-        public float TransformFromValueToAxisSpace(float value)
+        public float TransformToAxisSpace(float value)
         {
             return ((value - min) / (max - min)) * length;
         }
 
-        public float TransformFromAxisSpaceToValue(float value)
+        public float TransformFromAxisSpace(float value)
         {
             return (value / length) * (max - min) + min;
         }

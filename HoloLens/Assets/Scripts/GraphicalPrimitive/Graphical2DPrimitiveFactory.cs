@@ -94,6 +94,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
             GameObject tick = new GameObject("Tick");
             var lineRend = tick.AddComponent<LineRenderer>();
             lineRend.useWorldSpace = false;
+            lineRend.alignment = LineAlignment.TransformZ;
             lineRend.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
             lineRend.startColor = Color.white;
             lineRend.endColor = Color.white;
@@ -149,10 +150,10 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         return grid;
     }
 
-    public override GameObject CreateBar(float value, float rangeToNormalizeTo, float width, float depth)
+    public override GameObject CreateBar(float value, float width, float depth=1f)
     {
         GameObject bar = Instantiate(bar2D);
-        bar.GetComponent<Bar2D>().SetSize(width, value/rangeToNormalizeTo);
+        bar.GetComponent<Bar2D>().SetSize(width, value);
 
         return bar;
     }

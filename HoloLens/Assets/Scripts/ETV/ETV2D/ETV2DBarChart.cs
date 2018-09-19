@@ -7,67 +7,61 @@ using System.Linq;
 
 public class ETV2DBarChart : AETV2D
 {
+    // ........................................................................ Populate in Editor
     public GameObject Anchor;
 
+
+    // ........................................................................ Private properties
     private DataSet data;
-    private int attID = 0;
     private string attributeName;
-    private IDictionary<string, Bar2D> bars;
+    private int attributeID;
     private LevelOfMeasurement lom;
 
-    public void Init(DataSet dataSet, string attributeName)
+    private IDictionary<string, Bar2D> bars;
+    
+
+    // ........................................................................ Initializers
+    public void Init(DataSet data, string attributeName)
     {
-        this.bounds = new float[] { 0, 0, 0 };
-        this.data = dataSet;
-        this.attID = dataSet.GetIDOf(attributeName);
-        this.lom = dataSet.GetTypeOf(attributeName);
+        this.data = data;
         this.attributeName = attributeName;
+        this.attributeID = data.GetIDOf(attributeName);
+        this.lom = data.GetTypeOf(attributeName);
+
+        this.bounds = new float[] { 0, 0, 0 };
         bars = new Dictionary<string, Bar2D>();
 
-        if(lom == LevelOfMeasurement.RATIO || lom == LevelOfMeasurement.INTERVAL)
-        {
-            Debug.LogWarning(attributeName + " is unsuitable for BarChart2D");
-            return;
-        }
+        SetUpAxis();
 
-        string attName = attributeName;
-
+        // .................................................................... initialize
         switch(lom)
         {
             case LevelOfMeasurement.NOMINAL:
-                InitNominal(dataSet, attributeName);
+                InitNominal(data, attributeName);
                 break;
-            default: // ORDINAL
-                InitOrdinal(dataSet, attributeName);
+            case LevelOfMeasurement.ORDINAL:
+                InitOrdinal(data, attributeName);
+                break;
+            default:
+                Debug.Log("Attribute level of measurement unsuitable for BarChart2D");
                 break;
         }
-
-        SetUpAxis();
     }
 
     private void InitNominal(DataSet data, string attributeName)
     {
         var measures = data.dataMeasuresNominal[attributeName];
-        var factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
-        float range = measures.zBoundDistRange;
-
-        int categoryCounter = 0;
-
-        foreach(var cat in measures.distribution.Keys)
+        var factory = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        
+        for(int i = 0; i < measures.numberOfUniqueValues; i++)
         {
-            GameObject bar = CreateBar(measures.zBoundDistRange, measures.distribution[cat]);
-            bars.Add(cat, bar.GetComponent<Bar2D>());
-
-            bar.transform.localPosition = new Vector3((categoryCounter+1) * 0.15f, 0, .001f);
-
-            bar.transform.parent = Anchor.transform;
-
-            categoryCounter++;
+            string val = measures.uniqueValues[i];
+            InsertBar(val, measures.distribution[val], i);
         }
 
         foreach(var o in data.informationObjects)
         {
-            string value = o.nominalAtt[attID].value;
+            string value = o.nominalAtt[attributeID].value;
             Bar2D bar = bars[value];
             o.AddRepresentativeObject(attributeName, bar.gameObject);
         }
@@ -76,85 +70,35 @@ public class ETV2DBarChart : AETV2D
     private void InitOrdinal(DataSet data, string attributeName)
     {
         var measures = data.dataMeasuresOrdinal[attributeName];
-        var factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
-        float range = measures.zBoundDistRange;
-
-        int categoryCounter = 0;
-
-        foreach(var cat in measures.orderedValueIDs.Keys)
+        var factory = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        
+        for(int i=0; i<measures.numberOfUniqueValues; i++)
         {
-            string catName = measures.orderedValueIDs[cat];
-            GameObject bar = CreateBar(measures.zBoundDistRange, measures.distribution[cat]);
-            bars.Add(catName, bar.GetComponent<Bar2D>());
-
-            bar.transform.localPosition = new Vector3((categoryCounter + 1) * 0.15f, 0, .001f);
-
-            bar.transform.parent = Anchor.transform;
-
-            categoryCounter++;
+            InsertBar(measures.uniqueValues[i], measures.distribution[i], i);
         }
 
         foreach(var o in data.informationObjects)
         {
-            string value = measures.orderedValueIDs[o.ordinalAtt[attID].value];
-            Bar2D bar = bars[value];
+            int value = o.ordinalAtt[attributeID].value;
+            Bar2D bar = bars[measures.uniqueValues[value]];
             o.AddRepresentativeObject(attributeName, bar.gameObject);
         }
     }
 
-
-    /**
-     * Creates a colored bar. 
-     * @param range         maximum - minimum value of this attribute
-     * @param attributeID   which attribute
-     * */
-    private GameObject CreateBar(float range, float value)
+    // ........................................................................ Helper Methods
+    private Bar2D InsertBar(string name, int value, int barID)
     {
         var factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
-        var bar = factory2D.CreateBar(value, range, .1f, .1f);
+
+        float normValue = GetAxis(AxisDirection.Y).TransformToAxisSpace(value);
+        var bar = factory2D.CreateBar(normValue, .1f).GetComponent<Bar2D>();
         bar.GetComponent<Bar2D>().SetLabelText(value.ToString());
 
-        return bar;
-    }
+        bars.Add(name, bar);
+        bar.gameObject.transform.localPosition = new Vector3((barID + 1) * 0.15f, 0, .001f);
+        bar.gameObject.transform.parent = Anchor.transform;
 
-    public override void ChangeColoringScheme(ETVColorSchemes scheme)
-    {
-        int category = 0;
-        int numberOfCategories = bars.Count;
-        switch (scheme)
-        {
-            case ETVColorSchemes.Rainbow:
-                foreach (Bar2D bar in bars.Values)
-                {
-                    Color color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
-                    bar.SetColor(color);
-                    bar.ApplyColor(color);
-                    category++;
-                }
-                break;
-            case ETVColorSchemes.GrayZebra:
-                bool even = true;
-                foreach (Bar2D bar in bars.Values)
-                {
-                    Color color = (even) ? Color.gray : Color.white;
-                    bar.SetColor(color);
-                    bar.ApplyColor(color);
-                    even = !even;
-                    category++;
-                }
-                break;
-            case ETVColorSchemes.SplitHSV:
-                foreach(Bar2D bar in bars.Values)
-                {
-                    Color color = Color.HSVToRGB((((float)category) / numberOfCategories)/2f+.5f, 1, 1);
-                    bar.SetColor(color);
-                    bar.ApplyColor(color);
-                    category++;
-                }
-                break;
-            default:
-                break;
-        }
+        return bar;
     }
     
     public override void SetUpAxis()
@@ -185,15 +129,52 @@ public class ETV2DBarChart : AETV2D
 
         // Grid
         GameObject grid = factory2D.CreateAutoGrid(max, Vector3.right, Vector3.up, length);
-        grid.transform.localPosition = new Vector3(0, 0, 0);
+        grid.transform.localPosition = new Vector3(0, 0, .002f);
         grid.transform.parent = Anchor.transform;
 
-        axis.Add(AxisDirection.X, xAxis);
-        axis.Add(AxisDirection.Y, yAxis);
+        axes.Add(AxisDirection.X, xAxis);
+        axes.Add(AxisDirection.Y, yAxis);
     }
 
-    public override void UpdateETV()
+    public override void ChangeColoringScheme(ETVColorSchemes scheme)
     {
-        throw new System.NotImplementedException();
+        int category = 0;
+        int numberOfCategories = bars.Count;
+        switch(scheme)
+        {
+            case ETVColorSchemes.Rainbow:
+                foreach(Bar2D bar in bars.Values)
+                {
+                    Color color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
+                    bar.SetColor(color);
+                    bar.ApplyColor(color);
+                    category++;
+                }
+                break;
+            case ETVColorSchemes.GrayZebra:
+                bool even = true;
+                foreach(Bar2D bar in bars.Values)
+                {
+                    Color color = (even) ? Color.gray : Color.white;
+                    bar.SetColor(color);
+                    bar.ApplyColor(color);
+                    even = !even;
+                    category++;
+                }
+                break;
+            case ETVColorSchemes.SplitHSV:
+                foreach(Bar2D bar in bars.Values)
+                {
+                    Color color = Color.HSVToRGB((((float)category) / numberOfCategories) / 2f + .5f, 1, 1);
+                    bar.SetColor(color);
+                    bar.ApplyColor(color);
+                    category++;
+                }
+                break;
+            default:
+                break;
+        }
     }
+
+    public override void UpdateETV() { }
 }

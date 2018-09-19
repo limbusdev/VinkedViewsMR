@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class AETV2D : MonoBehaviour, IEuclideanTransformableView
 {
     public float[] bounds { get; set; }
-    public IDictionary<AxisDirection, GameObject> axis { get; set; }
+    public IDictionary<AxisDirection, GameObject> axes { get; set; }
 
     public virtual void ChangeColoringScheme(ETVColorSchemes scheme) { }
     public virtual void SetUpAxis() { }
@@ -14,23 +14,18 @@ public abstract class AETV2D : MonoBehaviour, IEuclideanTransformableView
 
     public void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
     {
-        axis[axisDirection].GetComponent<Axis2D>().labelVariableText = axisVariable;
-        axis[axisDirection].GetComponent<Axis2D>().UpdateAxis();
+        axes[axisDirection].GetComponent<Axis2D>().labelVariableText = axisVariable;
+        axes[axisDirection].GetComponent<Axis2D>().UpdateAxis();
     }
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    
+    public Axis2D GetAxis(AxisDirection dir)
+    {
+        return axes[dir].GetComponent<Axis2D>();
+    }
 
     void Awake()
     {
-        axis = new Dictionary<AxisDirection, GameObject>();
+        axes = new Dictionary<AxisDirection, GameObject>();
         bounds = new float[] { 1, 1 };
     }
 }

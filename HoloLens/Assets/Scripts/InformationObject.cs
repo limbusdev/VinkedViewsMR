@@ -1,4 +1,5 @@
-﻿using Model.Attributes;
+﻿using Model;
+using Model.Attributes;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,6 +35,26 @@ public class InformationObject
         this.ratioAtt = attributesRat;
         this.attributesVector2 = attributesVector2;
         this.attributesVector3 = attributesVector3;
+    }
+
+    public string GetNomValue(string attributeName, DataSet data)
+    {
+        return nominalAtt[data.GetIDOf(attributeName)].value;
+    }
+
+    public int GetOrdValue(string attributeName, DataSet data)
+    {
+        return ordinalAtt[data.GetIDOf(attributeName)].value;
+    }
+
+    public int GetIvlValue(string attributeName, DataSet data)
+    {
+        return intervalAtt[data.GetIDOf(attributeName)].value;
+    }
+
+    public float GetRatValue(string attributeName, DataSet data)
+    {
+        return ratioAtt[data.GetIDOf(attributeName)].value;
     }
 
     public override string ToString()

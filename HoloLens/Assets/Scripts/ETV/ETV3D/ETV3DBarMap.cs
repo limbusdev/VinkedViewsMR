@@ -196,7 +196,7 @@ public class ETV3DBarMap : AETV3D
     {
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
         
-        Bar3D bar = factory3D.CreateBar(value, range, .1f, .1f).GetComponent<Bar3D>();
+        Bar3D bar = factory3D.CreateBar(value, .1f, .1f).GetComponent<Bar3D>();
 
         bar.SetLabelText(value.ToString());
 

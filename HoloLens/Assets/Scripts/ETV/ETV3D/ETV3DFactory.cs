@@ -92,7 +92,7 @@ public class ETV3DFactory : AETVFactory
         return pcp;
     }
 
-    public GameObject CreateETVBarMap(DataSet data, int a1, int a2)
+    public GameObject CreateETVBarMap(DataSet data, string a1, string a2)
     {
         GameObject bm = Instantiate(ETV3DBarMapPrefab);
 

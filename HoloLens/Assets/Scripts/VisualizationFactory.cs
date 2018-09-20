@@ -112,6 +112,9 @@ public class VisualizationFactory : MonoBehaviour
         var ae8 = GenerateBarChart3DFrom(1, "Time");
         ae8.transform.position = new Vector3(-6, 0, 3.5f);
 
+        var ae9 = GenerateBarMap3DFrom(1, new string[] {"Crime", "Weapon" });
+        ae9.transform.position = new Vector3(-4, 0, 5f);
+
         DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[1].informationObjects[0]);
         
 
@@ -284,8 +287,8 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateBarMap3DFrom(int dataSetID, string[] variables)
     {
-        try
-        {
+        //try
+        //{
             if(!CheckIfSuitable(dataSetID, variables, VisualizationType.BAR_MAP))
             {
                 return new GameObject("Not Suitable");
@@ -296,18 +299,18 @@ public class VisualizationFactory : MonoBehaviour
             var type2 = ds.GetTypeOf(variables[1]);
 
             var factory = ServiceLocator.instance.Factory3DETV;
-            var vis = factory.CreateETVBarMap(ds, ds.GetIDOf(variables[0]), ds.GetIDOf(variables[1]));
+            var vis = factory.CreateETVBarMap(ds, variables[0], variables[1]);
             vis = factory.PutETVOnAnchor(vis);
 
             vis.transform.position = NewETVPosition.transform.position;
 
             return vis;
-        } catch(Exception e)
-        {
-            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
-            Debug.LogError(e.Message);
-            return new GameObject("Creation Failed");
-        }
+        //} catch(Exception e)
+        //{
+        //    Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+        //    Debug.LogError(e.Message);
+        //    return new GameObject("Creation Failed");
+        //}
     }
 
     /// <summary>
@@ -488,7 +491,7 @@ public class VisualizationFactory : MonoBehaviour
             return new string[] { "BarMap3D", "PCP2D", "PCP3D" };
         } else if(count == new Vector4(0, 0, 1, 0))
         {
-            return new string[] { "SingleAxis3D"};
+            return new string[] { "SingleAxis3D" };
         } else if(count == new Vector4(0, 0, 2, 0))
         {
             return new string[] { "PCP2D", "PCP3D" };
@@ -501,6 +504,8 @@ public class VisualizationFactory : MonoBehaviour
         } else if(count == new Vector4(0, 0, 0, 3))
         {
             return new string[] { "PCP2D", "PCP3D", "ScatterXYZ3D" };
+        } else if(count == new Vector4(1, 1, 0, 0)) {
+            return new string[] { "BarMap3D", "PCP2D", "PCP3D", "ScatterXYZ2D" };
         } else
         {
             return new string[] { "PCP2D", "PCP3D" };

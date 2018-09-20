@@ -34,6 +34,7 @@ namespace Model
         public IDictionary<string, int> distribution;
         public string[] uniqueValues;
         public IDictionary<string, int> valueIDs;
+        public IDictionary<int, string> idValues;
         public int distMin, zBoundDistMin;
         public int distMax, zBoundDistMax;
         public int distRange, zBoundDistRange;
@@ -45,6 +46,7 @@ namespace Model
         {
             this.distribution = distribution;
             valueIDs = new Dictionary<string, int>();
+            idValues = new Dictionary<int, string>();
 
             this.distMin = distribution.Values.Min();
             this.distMax = distribution.Values.Max();
@@ -62,9 +64,21 @@ namespace Model
             foreach(string key in distribution.Keys)
             {
                 valueIDs.Add(key, counter);
+                idValues.Add(counter, key);
                 uniqueValues[counter] = key;
                 counter++;
             }
+        }
+
+        public int[] GetDistributionValues()
+        {
+            int[] vals = new int[uniqueValues.Length];
+            for(int i=0; i < uniqueValues.Length; i++)
+            {
+                vals[i] = distribution[uniqueValues[i]];
+            }
+
+            return vals;
         }
     }
 
@@ -86,6 +100,7 @@ namespace Model
         public string[] uniqueValues;
         public int[] uniqueIDs;
         public IDictionary<int, string> orderedValueIDs;
+        public IDictionary<string, int> orderedIDValues;
         public int distMin, zBoundDistMin;
         public int distMax, zBoundDistMax;
         public int distRange, zBoundDistRange;
@@ -108,6 +123,13 @@ namespace Model
                 counter++;
             }
 
+            orderedIDValues = new Dictionary<string, int>();
+            foreach(var key in orderedValueIDs.Keys)
+            {
+                var name = orderedValueIDs[key];
+                orderedIDValues.Add(name, key);
+            }
+
             this.distMin = distribution.Values.Min();
             this.distMax = distribution.Values.Max();
             this.zBoundDistMin = 0;
@@ -124,6 +146,17 @@ namespace Model
         public float NormalizeToRange(int value)
         {
             return (((float)value) / range);
+        }
+
+        public int[] GetDistributionValues()
+        {
+            int[] vals = new int[uniqueValues.Length];
+            for(int i = 0; i < uniqueValues.Length; i++)
+            {
+                vals[i] = distribution[uniqueIDs[i]];
+            }
+
+            return vals;
         }
     }
 

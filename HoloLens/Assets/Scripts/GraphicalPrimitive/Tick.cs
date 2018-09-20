@@ -14,9 +14,9 @@ public class Tick : MonoBehaviour
         switch(dir)
         {
             case AxisDirection.X:
-                label.alignment = TextAlignment.Right;
-                label.anchor = TextAnchor.MiddleRight;
-                label.transform.localRotation = Quaternion.Euler(0, 0, 90);
+                label.alignment = TextAlignment.Left;
+                label.anchor = TextAnchor.MiddleLeft;
+                label.transform.localRotation = Quaternion.Euler(0, 0, -90);
                 label.transform.localPosition = Vector3.down * .05f;
                 break;
             case AxisDirection.Y:

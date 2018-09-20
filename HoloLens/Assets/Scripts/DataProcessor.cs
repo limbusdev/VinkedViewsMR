@@ -7,6 +7,26 @@ using System.Linq;
 
 public class DataProcessor
 {
+    public static class CategoricalAttribute
+    {
+        public static int CountObjectsMatchingTwoCattegoriesNomOrd(IList<InfoObject> os, string a1, string a2, string v1, int v2)
+        {
+            int counter = 0;
+
+            foreach(var o in os)
+            {
+                var vNom = o.GetNomValue(a1);
+                var vOrd = o.GetOrdValue(a2);
+
+                if(vNom.Equals(v1) && vOrd == v2)
+                {
+                    counter++;
+                }
+            }
+            return counter;
+        }
+    }
+
     public static class NominalAttribute
     {
         public static NominalDataDimensionMeasures CalculateMeasures(IList<InfoObject> os, int aID)
@@ -57,6 +77,7 @@ public class DataProcessor
         public static int CountObjectsMatchingTwoCattegories(IList<InfoObject> os, int aID1, int aID2, string value1, string value2)
         {
             int counter = 0;
+
             foreach(var o in os)
             {
                 var v1 = o.nominalAtt[aID1].value;
@@ -101,6 +122,23 @@ public class DataProcessor
             }
 
             return distribution;
+        }
+
+        public static int CountObjectsMatchingTwoCattegories(IList<InfoObject> os, int aID1, int aID2, int value1, int value2)
+        {
+            int counter = 0;
+
+            foreach(var o in os)
+            {
+                var v1 = o.ordinalAtt[aID1].value;
+                var v2 = o.ordinalAtt[aID2].value;
+
+                if(v1 == value1 && v2 == value2)
+                {
+                    counter++;
+                }
+            }
+            return counter;
         }
 
         public static int CalculateMin(IList<InfoObject> os, int attributeID)

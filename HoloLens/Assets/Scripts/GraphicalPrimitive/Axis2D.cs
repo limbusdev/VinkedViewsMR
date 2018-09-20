@@ -218,8 +218,6 @@ namespace GraphicalPrimitive
         {
             TextMesh tmVariable = labelVariable.GetComponent<TextMesh>();
             tmVariable.text = labelVariableText;
-
-
             switch(axisDirection)
             {
                 case AxisDirection.X:

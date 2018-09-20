@@ -11,24 +11,24 @@ public class DataProvider : MonoBehaviour
     public class DictFile { public string name; public TextAsset file; }
 
     [SerializeField]
-    public TextAsset[] csvFile;
-    public DictFile[] ordinalDictionaries;
+    public TextAsset[] csvFiles;
+    public DictFile[] ordinalDicts;
     public DataSet[] dataSets;
     
     private void Awake()
     {
-        dataSets = new DataSet[csvFile.Length];
+        dataSets = new DataSet[csvFiles.Length];
         
-        for(int i=0; i<csvFile.Length; i++)
+        for(int i=0; i<csvFiles.Length; i++)
         {
-            dataSets[i] = ImportDataSet(csvFile[i]);
+            dataSets[i] = ImportDataSet(csvFiles[i]);
         }
     }
 
     private IDictionary<string, IDictionary<int, string>> ParseDictionaries()
     {
         var dictionaries = new Dictionary<string, IDictionary<int, string>>();
-        foreach(var d in ordinalDictionaries)
+        foreach(var d in ordinalDicts)
         {
             var dict = OrdinalValueTranslator.CreateDictionary(d.file.text);
             dictionaries.Add(d.name, dict);
@@ -37,31 +37,35 @@ public class DataProvider : MonoBehaviour
         return dictionaries;
     }
 
+    /// <summary>
+    /// Parses the given files contents and puts them into an instance of DataSet
+    /// </summary>
+    /// <param name="csvFile">file to parse</param>
+    /// <returns>DataSet filled with the files contents</returns>
     private DataSet ImportDataSet(TextAsset csvFile)
     {
         // Initialize Sets
-        var nominalDataSets = new Dictionary<string, string[]>();
-        var ordinalDataSets = new Dictionary<string, int[]>();
-        var intervalDataSets = new Dictionary<string, int[]>();
-        var ratioDataSets = new Dictionary<string, float[]>();
+        var nominalAttributes   = new Dictionary<string, string[]>();
+        var ordinalAtributes    = new Dictionary<string, int[]>();
+        var intervalAttributes  = new Dictionary<string, int[]>();
+        var ratioAttributes     = new Dictionary<string, float[]>();
         
-        var variableTypes = new Dictionary<string, LevelOfMeasurement>();
+        var attributeLoMs = new Dictionary<string, LoM>();
         var intervalTranslators = new Dictionary<string, string>();
 
         // Initialize Grid to store values
         var grid = CSVReader.SplitCsvGrid(csvFile.text);
-        var variables = new string[grid.Length];
-        var units = new string[grid.Length];
-        var loms = new LevelOfMeasurement[grid.Length];
+        var attributes = new string[grid.Length];
+        var loms = new LoM[grid.Length];
         
-        LevelOfMeasurement type;
+        LoM type;
 
         // For every column / variable in grid
         for(int variable = 0; variable < grid.Length; variable++)
         {
             // Extract variable name from first row
             var currentVariableName = grid[variable][0];
-            variables[variable] = currentVariableName;
+            attributes[variable] = currentVariableName;
 
             // Extract Level of Measurement from second row
             var lom = grid[variable][1];
@@ -71,16 +75,16 @@ public class DataProvider : MonoBehaviour
             switch(lom)
             {
                 case "ordinal":
-                    type = LevelOfMeasurement.ORDINAL;
+                    type = LoM.ORDINAL;
                     break;
                 case "interval":
-                    type = LevelOfMeasurement.INTERVAL;
+                    type = LoM.INTERVAL;
                     break;
                 case "ratio":
-                    type = LevelOfMeasurement.RATIO;
+                    type = LoM.RATIO;
                     break;
                 default:
-                    type = LevelOfMeasurement.NOMINAL;
+                    type = LoM.NOMINAL;
                     break;
             }
 
@@ -89,19 +93,19 @@ public class DataProvider : MonoBehaviour
             {
                 string[] intv = lom.Split("+"[0]);
                 intervalTranslators.Add(currentVariableName, intv[1]);
-                type = LevelOfMeasurement.INTERVAL;
+                type = LoM.INTERVAL;
             }
 
             loms[variable] = type;
-            variableTypes.Add(currentVariableName, type);
+            attributeLoMs.Add(currentVariableName, type);
 
 
             switch(type)
             {
-                case LevelOfMeasurement.ORDINAL:
+                case LoM.ORDINAL:
                     int parseResultI = 0;
                     int[] newDataSetInt = new int[grid[variable].Length - 2];
-                    ordinalDataSets.Add(currentVariableName, newDataSetInt);
+                    ordinalAtributes.Add(currentVariableName, newDataSetInt);
 
                     // For every row in this column
                     for(int i = 2; i < grid[variable].Length; i++)
@@ -115,10 +119,10 @@ public class DataProvider : MonoBehaviour
                         }
                     }
                     break;
-                case LevelOfMeasurement.INTERVAL:
+                case LoM.INTERVAL:
                     int parseResultI2 = 0;
                     int[] newDataSetInt2 = new int[grid[variable].Length - 2];
-                    intervalDataSets.Add(currentVariableName, newDataSetInt2);
+                    intervalAttributes.Add(currentVariableName, newDataSetInt2);
 
                     // For every row in this column
                     for(int i = 2; i < grid[variable].Length; i++)
@@ -132,10 +136,10 @@ public class DataProvider : MonoBehaviour
                         }
                     }
                     break;
-                case LevelOfMeasurement.RATIO:
+                case LoM.RATIO:
                     float parseResultF = 0;
                     float[] newDataSetFloat = new float[grid[variable].Length - 2];
-                    ratioDataSets.Add(currentVariableName, newDataSetFloat);
+                    ratioAttributes.Add(currentVariableName, newDataSetFloat);
 
                     // For every row in this column
                     for(int i = 2; i < grid[variable].Length; i++)
@@ -151,7 +155,7 @@ public class DataProvider : MonoBehaviour
                     break;
                 default:
                     string[] newDataSetString = new string[grid[variable].Length - 2];
-                    nominalDataSets.Add(currentVariableName, newDataSetString);
+                    nominalAttributes.Add(currentVariableName, newDataSetString);
 
                     for(int i = 2; i < grid[variable].Length; i++)
                     {
@@ -163,7 +167,16 @@ public class DataProvider : MonoBehaviour
             
         }
 
-        return AssembleDataSet(variables, nominalDataSets, ordinalDataSets, intervalDataSets, ratioDataSets, null, null, ParseDictionaries(), intervalTranslators);
+        return AssembleDataSet(
+            attributes, 
+            nominalAttributes, 
+            ordinalAtributes, 
+            intervalAttributes, 
+            ratioAttributes, 
+            null, 
+            null, 
+            ParseDictionaries(), 
+            intervalTranslators);
     }
 
     private static DataSet AssembleDataSet(
@@ -186,61 +199,60 @@ public class DataProvider : MonoBehaviour
         int vector2VarsCount = 0;
         int vector3VarsCount = 0;
 
-        var infoObjs = new List<InformationObject>();
+        var infoObjs = new List<InfoObject>();
 
         for(int sample = 0; sample < sampleCount; sample++)
         {
-            // Create new information object
-            InformationObject obj = new InformationObject(
-                new GenericAttribute<string>[nomVarsCount],
-                new GenericAttribute<int>[ordVarsCount],
-                new GenericAttribute<int>[ivlVarsCount],
-                new GenericAttribute<float>[ratioVarsCount],
-                new GenericAttribute<Vector2>[vector2VarsCount],
-                new GenericAttribute<Vector3>[vector3VarsCount]
-                );
-
+            var nomAtts = new GenericAttribute<string>[nomVarsCount];
+            var ordAtts = new GenericAttribute<int>[ordVarsCount];
+            var ivlAtts = new GenericAttribute<int>[ivlVarsCount];
+            var ratAtts = new GenericAttribute<float>[ratioVarsCount];
+            var ve2Atts = new GenericAttribute<Vector2>[vector2VarsCount];
+            var ve3Atts = new GenericAttribute<Vector3>[vector3VarsCount];
 
             // Fill new information object's nominal attributes
             int variable = 0;
-            foreach(string variableName in nomVars.Keys)
+            foreach(string attName in nomVars.Keys)
             {
                 var newAttribute = new GenericAttribute<string>(
-                    variableName, nomVars[variableName][sample], LevelOfMeasurement.NOMINAL);
-                obj.nominalAtt[variable] = newAttribute;
+                    attName, nomVars[attName][sample], LoM.NOMINAL);
+                nomAtts[variable] = newAttribute;
                 variable++;
             }
 
             // Fill new information object's ordinal attributes
             variable = 0;
-            foreach(string variableName in ordVars.Keys)
+            foreach(string attName in ordVars.Keys)
             {
                 var newAttribute = new GenericAttribute<int>(
-                    variableName, ordVars[variableName][sample], LevelOfMeasurement.ORDINAL);
-                obj.ordinalAtt[variable] = newAttribute;
+                    attName, ordVars[attName][sample], LoM.ORDINAL);
+                ordAtts[variable] = newAttribute;
                 variable++;
             }
 
             // Fill new information object's interval attributes
             variable = 0;
-            foreach(string variableName in ivlVars.Keys)
+            foreach(string attName in ivlVars.Keys)
             {
                 var newAttribute = new GenericAttribute<int>(
-                    variableName, ivlVars[variableName][sample], LevelOfMeasurement.INTERVAL);
-                obj.intervalAtt[variable] = newAttribute;
+                    attName, ivlVars[attName][sample], LoM.INTERVAL);
+                ivlAtts[variable] = newAttribute;
                 variable++;
             }
 
             // Fill new information object's ratio attributes
             variable = 0;
-            foreach(string variableName in ratioVars.Keys)
+            foreach(string attName in ratioVars.Keys)
             {
                 var newFloatAttribute = new GenericAttribute<float>(
-                    variableName, ratioVars[variableName][sample], LevelOfMeasurement.RATIO);
-                obj.ratioAtt[variable] = newFloatAttribute;
+                    attName, ratioVars[attName][sample], LoM.RATIO);
+                ratAtts[variable] = newFloatAttribute;
                 variable++;
             }
 
+            // Create new information object
+            InfoObject obj = new InfoObject(nomAtts, ordAtts, ivlAtts, ratAtts, ve2Atts, ve3Atts);
+            
             infoObjs.Add(obj);
         }
 

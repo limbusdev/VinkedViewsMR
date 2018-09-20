@@ -7,7 +7,7 @@ namespace Model
     {
         public string Title { get; set; }
 
-        public IList<InformationObject> informationObjects { get; set; }
+        public IList<InfoObject> informationObjects { get; set; }
         public IDictionary<string, NominalDataDimensionMeasures> dataMeasuresNominal { get; set; }
         public IDictionary<string, OrdinalDataDimensionMeasures> dataMeasuresOrdinal { get; set; }
         public IDictionary<string, IntervalDataDimensionMeasures> dataMeasuresInterval { get; set; }
@@ -25,7 +25,7 @@ namespace Model
         public IDictionary<string, IDictionary<int, string>> dicts;
         public IDictionary<string, string> intervalTranslators;
 
-        public DataSet(string title, IList<InformationObject> dataObjects, IDictionary<string, IDictionary<int, string>> dicts, IDictionary<string, string> intervalTranslators)
+        public DataSet(string title, IList<InfoObject> dataObjects, IDictionary<string, IDictionary<int, string>> dicts, IDictionary<string, string> intervalTranslators)
         {
             Title = title;
             this.informationObjects = dataObjects;
@@ -83,7 +83,7 @@ namespace Model
             }
 
             // Fill variable names
-            InformationObject infoObj = dataObjects[0];
+            InfoObject infoObj = dataObjects[0];
 
             nomAttributes = new string[infoObj.nominalAtt.Length];
             for(int i = 0; i < dataObjects[0].nominalAtt.Length; i++)
@@ -127,16 +127,16 @@ namespace Model
 
         }
 
-        public LevelOfMeasurement GetTypeOf(string varName)
+        public LoM GetTypeOf(string varName)
         {
             if(dataMeasuresNominal.ContainsKey(varName))
-                return LevelOfMeasurement.NOMINAL;
+                return LoM.NOMINAL;
             if(dataMeasuresOrdinal.ContainsKey(varName))
-                return LevelOfMeasurement.ORDINAL;
+                return LoM.ORDINAL;
             if(dataMeasuresInterval.ContainsKey(varName))
-                return LevelOfMeasurement.INTERVAL;
+                return LoM.INTERVAL;
             else
-                return LevelOfMeasurement.RATIO;
+                return LoM.RATIO;
 
         }
 
@@ -151,7 +151,7 @@ namespace Model
 
             outString += "DataSet: " + Title + "\n\n";
 
-            foreach(InformationObject o in informationObjects)
+            foreach(InfoObject o in informationObjects)
             {
                 outString += o.ToString() + "\n";
             }

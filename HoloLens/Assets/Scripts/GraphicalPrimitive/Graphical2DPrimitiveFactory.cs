@@ -25,7 +25,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     {
         GameObject axis = Instantiate(Axis2DPrefab);
         Axis2D axis2Dcomp = axis.GetComponent<Axis2D>();
-        axis2Dcomp.Init(new DataDimensionMeasures(LevelOfMeasurement.RATIO, variableName));
+        axis2Dcomp.Init(new DataDimensionMeasures(LoM.RATIO, variableName));
         axis2Dcomp.diameter = width;
         axis2Dcomp.color = color;
         axis2Dcomp.labelVariableText = variableName;
@@ -38,7 +38,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         return axis;
     }
 
-    public GameObject CreateAutoTickedAxis(string name, float max, AxisDirection dir = AxisDirection.Y)
+    public override GameObject CreateAutoTickedAxis(string name, float max, AxisDirection dir = AxisDirection.Y)
     {
         GameObject axis = Instantiate(Axis2DPrefab);
         Axis2D axis2Dcomp = axis.GetComponent<Axis2D>();
@@ -51,17 +51,16 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     {
         GameObject axis = Instantiate(Axis2DPrefab);
         Axis2D axis2Dcomp = axis.GetComponent<Axis2D>();
-
-
+        
         switch(data.GetTypeOf(name))
         {
-            case LevelOfMeasurement.NOMINAL:
+            case LoM.NOMINAL:
                 axis2Dcomp.Init(data.dataMeasuresNominal[name], direction);
                 break;
-            case LevelOfMeasurement.ORDINAL:
+            case LoM.ORDINAL:
                 axis2Dcomp.Init(data.dataMeasuresOrdinal[name], direction);
                 break;
-            case LevelOfMeasurement.INTERVAL:
+            case LoM.INTERVAL:
                 axis2Dcomp.Init(data.dataMeasuresInterval[name], direction);
                 break;
             default: // RATIO
@@ -69,7 +68,6 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
                 break;
         }
         
-
         return axis;
     }
 

@@ -1,12 +1,33 @@
-﻿using GraphicalPrimitive;
-using HoloToolkit.Unity.Collections;
-using Model;
-using Model.Attributes;
-using System.Collections;
+﻿/*
+Copyright 2018 Georg Eckert
+
+(Lincensed under MIT license)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy 
+of this software and associated documentation files (the "Software"), to 
+deal in the Software without restriction, including without limitation the 
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or 
+sell copies of the Software, and to permit persons to whom the Software is 
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in 
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR 
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE 
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER 
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE 
+SOFTWARE.
+*/
+
+using GraphicalPrimitive;
 using System.Collections.Generic;
 using UnityEngine;
 using VisBridge;
 using System.Linq;
+using System;
 
 /// <summary>
 /// Main class for visualization generation from databases.
@@ -14,21 +35,27 @@ using System.Linq;
 public class VisualizationFactory : MonoBehaviour
 {
     // ........................................................................ Field to populate in editor
+
+    // Prefabs
     public GameObject ObjectBasedVisBridgePrefab;
     public GameObject NewETVPosition;
     public GameObject ObjectCollection;
     public GameObject CubeIconVariable;
+
+    [SerializeField]
     public DataProvider dataProvider;
     public VisFactoryInteractionReceiver interactionReceiver;
-
     public Material lineMaterial;
 
+
     // ........................................................................ Private properties
+
     private IList<GameObject> activeVisualizations;
     private IList<ObjectBasedVisBridge> activeVisBridges;
 
 
     // ........................................................................ MonoBehaviour methods
+
     void Awake()
     {
         activeVisualizations = new List<GameObject>();
@@ -37,8 +64,8 @@ public class VisualizationFactory : MonoBehaviour
 
     void Start()
     {
-        var fact2 = ServiceLocator.instance.ETV2DFactoryService;
-        var prim2Dfactory = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        var fact2 = ServiceLocator.instance.Factory2DETV;
+        var prim2Dfactory = ServiceLocator.instance.Factory2DPrimitives;
         var a1 = prim2Dfactory.CreateAutoTickedAxis("Year", AxisDirection.X, dataProvider.dataSets[0]);
         var ae1 = fact2.PutETVOnAnchor(a1);
 
@@ -54,102 +81,42 @@ public class VisualizationFactory : MonoBehaviour
         var ae4 = fact2.PutETVOnAnchor(a4);
         ae4.transform.position = new Vector3(0, 0, 3);
 
+        var fact3 = ServiceLocator.instance.Factory3DETV;
+        var prim3Dfactory = ServiceLocator.instance.Factory3DPrimitives;
+        var a3d1 = prim3Dfactory.CreateAutoTickedAxis("Year", AxisDirection.X, dataProvider.dataSets[0]);
+        var a3de1 = fact3.PutETVOnAnchor(a3d1);
+        a3d1.transform.position = new Vector3(0, 0, -1);
+
+        var a3d2 = prim3Dfactory.CreateAutoTickedAxis("Population", AxisDirection.X, dataProvider.dataSets[0]);
+        var a3de2 = fact3.PutETVOnAnchor(a3d2);
+        a3de2.transform.position = new Vector3(0, 0, -2);
+
+        var a3d3 = prim3Dfactory.CreateAutoTickedAxis("Crime", AxisDirection.X, dataProvider.dataSets[1]);
+        var a3de3 = fact3.PutETVOnAnchor(a3d3);
+        a3de3.transform.position = new Vector3(0, 0, -3);
+
+        var a3d4 = prim3Dfactory.CreateAutoTickedAxis("Weapon", AxisDirection.X, dataProvider.dataSets[1]);
+        var a3de4 = fact3.PutETVOnAnchor(a3d4);
+        a3de4.transform.position = new Vector3(0, 0, -4);
+
+
         var ae5 = GenerateBarChart2DFrom(1, "Crime");
-        ae5.transform.position = new Vector3(0, 0, 4);
+        ae5.transform.position = new Vector3(0, 0, 3.5f);
 
-        /*
-        DataSet fbiData = dataProvider.dataSets[0];
+        var ae7 = GenerateBarChart2DFrom(1, "Weapon");
+        ae7.transform.position = new Vector3(4, 0, 3.5f);
 
-        GameObject new2DBarChart = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 2);
-        GameObject newETV2DBarChart = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart);
-        newETV2DBarChart.transform.Translate(new Vector3(1.98f * 2, 0, -.39f * 2));
-        newETV2DBarChart.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
+        var ae6 = GenerateBarChart3DFrom(1, "Crime");
+        ae6.transform.position = new Vector3(-4, 0, 3.5f);
 
-        GameObject new2DBarChart2 = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 4);
-        GameObject newETV2DBarChart2 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart2);
-        newETV2DBarChart2.transform.Translate(new Vector3(-.12f * 2, 0, -1.97f * 2));
-        newETV2DBarChart2.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
-
-        GameObject new2DBarChart3 = ServiceLocator.instance.ETV2DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 6);
-        GameObject newETV2DBarChart3 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DBarChart3);
-        newETV2DBarChart3.transform.Translate(new Vector3(-1.22f * 2, 0, -1.53f * 2));
-        newETV2DBarChart3.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
-
-        //GameObject new2DPCP = ServiceLocator.instance.ETV2DFactoryService.CreateETVParallelCoordinatesPlot(fbiData, new int[] { }, new int[] { }, new int[] {0 }, new int[] { 0,1,3,5 });
-        //GameObject newETV2DPCP = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DPCP);
-        //newETV2DPCP.transform.Translate(new Vector3(-1.84f * 2, 0, -.72f * 2));
-        //newETV2DPCP.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
-
-        GameObject new2DXY = ServiceLocator.instance.ETV2DFactoryService.CreateETVLineChart(fbiData, 0, 2, false, true);
-        GameObject newETV2DXY = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DXY);
-        newETV2DXY.transform.Translate(new Vector3(-1.97f * 2, 0, .22f * 2));
-        newETV2DXY.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
-
-        GameObject new2DXY2 = ServiceLocator.instance.ETV2DFactoryService.CreateETVLineChart(fbiData, 0, 1, false, true);
-        GameObject newETV2DXY2 = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DXY2);
-        newETV2DXY2.transform.Translate(new Vector3(-1.67f * 2, 0, 1 * 2));
-        newETV2DXY2.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
-
-        GameObject new2DScatter = ServiceLocator.instance.ETV2DFactoryService.CreateETVScatterPlot(fbiData, new int[] { 3, 5 });
-        GameObject newETV2DScatter = ServiceLocator.instance.ETV2DFactoryService.PutETVOnAnchor(new2DScatter);
-        newETV2DScatter.transform.Translate(new Vector3(-.92f * 2, 0, 1.73f * 2));
-        newETV2DScatter.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
-
-        GameObject new3DBarChart = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarChart(dataProvider.dataSets[1], 9);
-        GameObject newETV3DBarChart = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DBarChart);
-        newETV3DBarChart.transform.Translate(new Vector3(1 * 2, 0, 1.71f * 2));
-        newETV3DBarChart.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
-
-        GameObject new3DBarMap = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarMap(dataProvider.dataSets[1], 2, 4);
-        GameObject newETV3DBarMap = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DBarMap);
-        newETV3DBarMap.transform.Translate(new Vector3(1.86f * 2, 0, .71f * 2));
-        newETV3DBarMap.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
-
-        GameObject new3DScatter = ServiceLocator.instance.ETV3DFactoryService.CreateETVScatterPlot(fbiData, new int[] { 1, 0, 2 });
-        GameObject newETV3DScatter = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DScatter);
-        newETV3DScatter.transform.Translate(new Vector3(.94f * 2, 0, -1.74f * 2));
-        newETV3DScatter.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
-
-        //GameObject new3DScatter2 = ServiceLocator.instance.ETV3DFactoryService.CreateETVParallelCoordinatesPlot(
-        //    fbiData, new int[] { }, new int[] { }, new int[] { 0 }, new int[] { 0, 1, 3, 5 });
-        //GameObject newETV3DScatter2 = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(new3DScatter2);
-        //newETV3DScatter2.transform.Translate(new Vector3(.94f * 4, 0, -1.74f * 4));
-        //newETV3DScatter2.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(Vector3.zero);
-
-        // Exoplanets
-        GameObject ex1 = ServiceLocator.instance.ETV3DFactoryService.CreateETVScatterPlot(dataProvider.dataSets[2], new int[] { 0, 1, 2 });
-        GameObject exETV1 = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(ex1);
-        exETV1.transform.Translate(new Vector3(1.98f * 2, 0, -.39f * 2 - 10));
-        exETV1.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(new Vector3(0, 0, -10));
-
-        GameObject ex2 = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarChart(dataProvider.dataSets[2], 1);
-        GameObject exETV2 = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(ex2);
-        exETV2.transform.Translate(new Vector3(-.12f * 2, 0, -1.97f * 2 - 10));
-        exETV2.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(new Vector3(0, 0, -10));
-
-        GameObject ex3 = ServiceLocator.instance.ETV3DFactoryService.CreateETVBarMap(dataProvider.dataSets[2], 1, 2);
-        GameObject exETV3 = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(ex3);
-        exETV3.transform.Translate(new Vector3(-1.22f * 2, 0, -1.53f * 2 - 10));
-        exETV3.GetComponent<ETVAnchor>().VisAnchor.transform.parent.LookAt(new Vector3(0, 0, -10));
-
-
-        //foreach(InformationObject o in educationalData.dataObjects)
-        //{
-        //    DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(o);
-        //}
-
-        DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(fbiData.informationObjects[0]);
+        var ae8 = GenerateBarChart3DFrom(1, "Time");
+        ae8.transform.position = new Vector3(-6, 0, 3.5f);
 
         DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[1].informationObjects[0]);
-        */
+        
 
     }
-
-    void Update()
-    {
-
-    }
-
+    
 
     // ........................................................................ VisBridge generation
     /// <summary>
@@ -157,7 +124,7 @@ public class VisualizationFactory : MonoBehaviour
     /// active visualizations that represent the given InformationObject to each other.
     /// </summary>
     /// <param name="obj">InformationObject in question</param>
-    public void DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(InformationObject obj)
+    public void DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(InfoObject obj)
     {
         AGraphicalPrimitive primOrigin, primTarget;
 
@@ -218,15 +185,29 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateSingle3DAxisFrom(int dataSetID, string variable)
     {
-        var ds = dataProvider.dataSets[dataSetID];
-        var type = ds.GetTypeOf(variable);
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, new string[] { variable }, VisualizationType.AXIS))
+            {
+                return new GameObject("Not Suitable");
+            }
 
-        var vis = ServiceLocator.instance.ETV3DFactoryService.CreateSingleAxis(ds, ds.GetIDOf(variable), type);
-        vis = ServiceLocator.instance.ETV3DFactoryService.PutETVOnAnchor(vis);
+            var factory = ServiceLocator.instance.Factory3DETV;
+            var ds = dataProvider.dataSets[dataSetID];
+            var type = ds.GetTypeOf(variable);
 
-        vis.transform.position = NewETVPosition.transform.position;
+            var vis = factory.CreateSingleAxis(ds, ds.GetIDOf(variable), type);
+            vis = ServiceLocator.instance.Factory3DETV.PutETVOnAnchor(vis);
 
-        return vis;
+            vis.transform.position = NewETVPosition.transform.position;
+
+            return vis;
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variable + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -237,16 +218,29 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateBarChart2DFrom(int dataSetID, string variable)
     {
-        var ds = dataProvider.dataSets[dataSetID];
-        var type = ds.GetTypeOf(variable);
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, new string[] { variable }, VisualizationType.BAR_CHART))
+            {
+                return new GameObject("Not Suitable");
+            }
 
-        var factory = ServiceLocator.instance.ETV2DFactoryService;
-        var vis = factory.CreateETVBarChart(ds, variable);
-        vis = factory.PutETVOnAnchor(vis);
+            var ds = dataProvider.dataSets[dataSetID];
+            var lom = ds.GetTypeOf(variable);
 
-        vis.transform.position = NewETVPosition.transform.position;
+            var factory = ServiceLocator.instance.Factory2DETV;
+            var vis = factory.CreateETVBarChart(ds, variable);
+            vis = factory.PutETVOnAnchor(vis);
 
-        return vis;
+            vis.transform.position = NewETVPosition.transform.position;
+
+            return vis;
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variable + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -257,16 +251,29 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateBarChart3DFrom(int dataSetID, string variable)
     {
-        var ds = dataProvider.dataSets[dataSetID];
-        var type = ds.GetTypeOf(variable);
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, new string[] { variable }, VisualizationType.BAR_CHART))
+            {
+                return new GameObject("Not Suitable");
+            }
 
-        var factory = ServiceLocator.instance.ETV3DFactoryService;
-        var vis = factory.CreateETVBarChart(ds, variable);
-        vis = factory.PutETVOnAnchor(vis);
+            var ds = dataProvider.dataSets[dataSetID];
+            var lom = ds.GetTypeOf(variable);
 
-        vis.transform.position = NewETVPosition.transform.position;
+            var factory = ServiceLocator.instance.Factory3DETV;
+            var vis = factory.CreateETVBarChart(ds, variable);
+            vis = factory.PutETVOnAnchor(vis);
 
-        return vis;
+            vis.transform.position = NewETVPosition.transform.position;
+
+            return vis;
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variable + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -277,17 +284,30 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateBarMap3DFrom(int dataSetID, string[] variables)
     {
-        var ds = dataProvider.dataSets[dataSetID];
-        var type1 = ds.GetTypeOf(variables[0]);
-        var type2 = ds.GetTypeOf(variables[1]);
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.BAR_MAP))
+            {
+                return new GameObject("Not Suitable");
+            }
 
-        var factory = ServiceLocator.instance.ETV3DFactoryService;
-        var vis = factory.CreateETVBarMap(ds, ds.GetIDOf(variables[0]), ds.GetIDOf(variables[1]));
-        vis = factory.PutETVOnAnchor(vis);
+            var ds = dataProvider.dataSets[dataSetID];
+            var type1 = ds.GetTypeOf(variables[0]);
+            var type2 = ds.GetTypeOf(variables[1]);
 
-        vis.transform.position = NewETVPosition.transform.position;
+            var factory = ServiceLocator.instance.Factory3DETV;
+            var vis = factory.CreateETVBarMap(ds, ds.GetIDOf(variables[0]), ds.GetIDOf(variables[1]));
+            vis = factory.PutETVOnAnchor(vis);
 
-        return vis;
+            vis.transform.position = NewETVPosition.transform.position;
+
+            return vis;
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -298,16 +318,29 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GeneratePCP2DFrom(int dataSetID, string[] variables)
     {
-        var ds = dataProvider.dataSets[dataSetID];
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.PCP))
+            {
+                return new GameObject("Not Suitable");
+            }
 
-        var factory = ServiceLocator.instance.ETV2DFactoryService;
-        var vis = factory.CreateETVParallelCoordinatesPlot(ds, variables);
+            var ds = dataProvider.dataSets[dataSetID];
 
-        vis = factory.PutETVOnAnchor(vis);
+            var factory = ServiceLocator.instance.Factory2DETV;
+            var vis = factory.CreateETVParallelCoordinatesPlot(ds, variables);
 
-        vis.transform.position = NewETVPosition.transform.position;
+            vis = factory.PutETVOnAnchor(vis);
 
-        return vis;
+            vis.transform.position = NewETVPosition.transform.position;
+
+            return vis;
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -318,16 +351,29 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GeneratePCP3DFrom(int dataSetID, string[] variables)
     {
-        var ds = dataProvider.dataSets[dataSetID];
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.PCP))
+            {
+                return new GameObject("Not Suitable");
+            }
 
-        var factory = ServiceLocator.instance.ETV3DFactoryService;
-        var vis = factory.CreateETVParallelCoordinatesPlot(ds, variables);
+            var ds = dataProvider.dataSets[dataSetID];
 
-        vis = factory.PutETVOnAnchor(vis);
+            var factory = ServiceLocator.instance.Factory3DETV;
+            var vis = factory.CreateETVParallelCoordinatesPlot(ds, variables);
 
-        vis.transform.position = NewETVPosition.transform.position;
+            vis = factory.PutETVOnAnchor(vis);
 
-        return vis;
+            vis.transform.position = NewETVPosition.transform.position;
+
+            return vis;
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -338,16 +384,29 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateScatterplot2DFrom(int dataSetID, string[] variables)
     {
-        var ds = dataProvider.dataSets[dataSetID];
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.SCATTER_PLOT_2D))
+            {
+                return new GameObject("Not Suitable");
+            }
 
-        var factory = ServiceLocator.instance.ETV2DFactoryService;
-        var vis = factory.CreateETVScatterPlot(ds, variables);
+            var ds = dataProvider.dataSets[dataSetID];
 
-        vis = factory.PutETVOnAnchor(vis);
+            var factory = ServiceLocator.instance.Factory2DETV;
+            var vis = factory.CreateETVScatterPlot(ds, variables);
 
-        vis.transform.position = NewETVPosition.transform.position;
+            vis = factory.PutETVOnAnchor(vis);
 
-        return vis;
+            vis.transform.position = NewETVPosition.transform.position;
+
+            return vis;
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -358,7 +417,20 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateScatterplot3DFrom(int dataSetID, string[] variables)
     {
-        return null;
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.SCATTER_PLOT_2D))
+            {
+                return new GameObject("Not Suitable");
+            }
+
+            return new GameObject();
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -369,9 +441,24 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateLineplot2DFrom(int dataSetID, string[] variables)
     {
-        return null;
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.LINE_CHART))
+            {
+                return new GameObject("Not Suitable");
+            }
+
+            return new GameObject();
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
+
+    // ........................................................................ Helper methods
 
     /// <summary>
     /// List which visualizations are suitable for the combination of provided attributes.
@@ -401,10 +488,10 @@ public class VisualizationFactory : MonoBehaviour
             return new string[] { "BarMap3D", "PCP2D", "PCP3D" };
         } else if(count == new Vector4(0, 0, 1, 0))
         {
-            return new string[] { "SingleAxis3D", "BarChart2D", "BarChart3D" };
+            return new string[] { "SingleAxis3D"};
         } else if(count == new Vector4(0, 0, 2, 0))
         {
-            return new string[] { "BarMap3D", "PCP2D", "PCP3D" };
+            return new string[] { "PCP2D", "PCP3D" };
         } else if(count == new Vector4(0, 0, 0, 1))
         {
             return new string[] { "SingleAxis3D" };
@@ -420,6 +507,52 @@ public class VisualizationFactory : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks whether the given attributes of the given DataSet are suitable for
+    /// the visualization type in question
+    /// </summary>
+    /// <param name="dataSetID">ID of the data set</param>
+    /// <param name="attributes">attributes in question</param>
+    /// <param name="visType">planned visualization type</param>
+    /// <returns>if suitable</returns>
+    public bool CheckIfSuitable(int dataSetID, string[] attributes, VisualizationType visType)
+    {
+        // SingleAxis3D, BarChart2D, BarChart3D, BarMap3D, PCP2D, PCP3D, ScatterXY2D, ScatterXYZ3D, LineXY2D
+        var suitables = ListPossibleVisualizations(dataSetID, attributes);
+
+        bool suitable;
+
+        switch(visType)
+        {
+            case VisualizationType.AXIS:
+                suitable = (suitables.Contains("SingleAxis3D"));
+                break;
+            case VisualizationType.BAR_CHART:
+                suitable = (suitables.Contains("BarChart2D") || suitables.Contains("BarChart3D"));
+                break;
+            case VisualizationType.BAR_MAP:
+                suitable = (suitables.Contains("BarMap3D"));
+                break;
+            case VisualizationType.LINE_CHART:
+                suitable = (suitables.Contains("LineXY2D"));
+                break;
+            case VisualizationType.SCATTER_PLOT_2D:
+                suitable = (suitables.Contains("ScatterXY2D"));
+                break;
+            case VisualizationType.SCATTER_PLOT_3D:
+                suitable = (suitables.Contains("ScatterXYZ3D"));
+                break;
+            case VisualizationType.PCP:
+                suitable = (suitables.Contains("PCP2D") || suitables.Contains("PCP3D"));
+                break;
+            default:
+                suitable = false;
+                break;
+        }
+
+        return suitable;
+    }
+
     public void AddNewVisualization(GameObject visualization)
     {
         if(visualization.GetComponent<ETVAnchor>() != null)
@@ -430,4 +563,11 @@ public class VisualizationFactory : MonoBehaviour
             Debug.LogWarning("Given GameObject ist not an anchored visualization!");
         }
     }
+
+    
+}
+
+public enum VisualizationType
+{
+    AXIS, BAR_CHART, BAR_MAP, LINE_CHART, SCATTER_PLOT_2D, SCATTER_PLOT_3D, PCP
 }

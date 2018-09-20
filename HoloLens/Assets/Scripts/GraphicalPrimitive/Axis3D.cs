@@ -1,4 +1,5 @@
 ﻿
+using Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,99 +8,228 @@ namespace GraphicalPrimitive
 {
     public class Axis3D : AAxis
     {
-
+        public GameObject Anchor;
         public GameObject axisBody;
         public GameObject axisBodyGeometry;
         public GameObject axisTip;
         public GameObject labelAnchor;
-        
-        
-        public override void UpdateAxis()
+        public GameObject pivot;
+
+        public LoM type;
+
+        public void Init(string name, float max, AxisDirection dir = AxisDirection.Y)
         {
-            // Update Base Axis
-            if (tipped)
+            base.Init(name, dir);
+            this.min = 0;
+            this.max = max;
+            this.length = 1f;
+            this.tipped = true;
+            this.ticked = true;
+            type = LoM.RATIO;
+            CalculateTickResolution();
+            AssembleRatioAxis();
+        }
+
+        public void Init(NominalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
+        {
+            base.Init(m, dir);
+            this.min = 0;
+            this.max = m.numberOfUniqueValues;
+            this.length = .15f * m.numberOfUniqueValues + .15f;
+            this.tickResolution = .15f;
+            this.tipped = false;
+            this.ticked = true;
+            type = LoM.NOMINAL;
+            AssembleNominalAxis(m);
+        }
+
+        public void Init(OrdinalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
+        {
+            base.Init(m, dir);
+            this.min = m.min;
+            this.max = m.max;
+            this.length = .15f * m.numberOfUniqueValues + .15f;
+            this.tickResolution = .15f;
+            this.tipped = true;
+            this.ticked = true;
+            type = LoM.ORDINAL;
+            AssembleOrdinalAxis(m);
+        }
+
+        public void Init(IntervalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
+        {
+            base.Init(m, dir);
+            this.min = m.min;
+            this.max = m.max;
+            this.length = 1f;
+            this.tipped = true;
+            this.ticked = true;
+            CalculateTickResolution();
+            type = LoM.INTERVAL;
+            AssembleIntervalAxis(m);
+        }
+
+        public void Init(RatioDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
+        {
+            base.Init(m, dir);
+            this.min = m.zeroBoundMin;
+            this.max = m.zeroBoundMax;
+            this.length = 1f;
+            this.tipped = true;
+            this.ticked = true;
+            CalculateTickResolution();
+            type = LoM.RATIO;
+            AssembleRatioAxis();
+        }
+
+        private void AssembleNominalAxis(NominalDataDimensionMeasures m)
+        {
+            DrawBaseAxis();
+            GenerateNominalTicks(m);
+            UpdateLabels();
+        }
+
+        private void AssembleOrdinalAxis(OrdinalDataDimensionMeasures m)
+        {
+            DrawBaseAxis();
+            GenerateOrdinalTicks(m);
+            UpdateLabels();
+        }
+
+        private void AssembleIntervalAxis(IntervalDataDimensionMeasures m)
+        {
+            DrawBaseAxis();
+            GenerateIntervalTicks(m);
+            UpdateLabels();
+        }
+
+        private void AssembleRatioAxis()
+        {
+            DrawBaseAxis();
+            GenerateRatioTicks();
+            UpdateLabels();
+        }
+
+        private void DrawBaseAxis()
+        {
+            if(tipped)
             {
+                axisTip.SetActive(true);
                 axisBody.transform.localScale = new Vector3(diameter, length - diameter * 4f, diameter);
                 axisTip.transform.localScale = new Vector3(diameter * 3f, diameter * 4f, diameter * 3f);
                 axisTip.transform.localPosition = new Vector3(0, length - diameter * 4f, 0);
-            }
-            else
+            } else
             {
+                axisTip.SetActive(false);
                 axisBody.transform.localScale = new Vector3(diameter, length, diameter);
             }
 
             // Update Colors
             axisBodyGeometry.GetComponent<Renderer>().material.color = color;
             axisTip.GetComponent<Renderer>().material.color = color;
-            
 
-            Vector3 tickDirection;
-            switch (axisDirection)
+            switch(axisDirection)
             {
-                case AxisDirection.Y:
-                    tickDirection = Vector3.left;
-                    break;
                 case AxisDirection.Z:
-                    tickDirection = Vector3.left;
+                    pivot.transform.localRotation = Quaternion.Euler(90, 0, 0);
                     break;
-                default: /* case X */
-                    tickDirection = Vector3.down;
+                case AxisDirection.Y:
+                    pivot.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                    break;
+                default: //X
+                    pivot.transform.localRotation = Quaternion.Euler(0, 0, -90);
                     break;
             }
+        }
+
+        private void GenerateNominalTicks(NominalDataDimensionMeasures m)
+        {
+            var tickDir = DefineTickDirection(axisDirection);
+
+            // Draw ticks
+            for(int i = 0; i <= m.max; i++)
+            {
+                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
+                tick.lr.SetPosition(1, tickDir * diameter * 4f);
+                tick.SetDirection(axisDirection);
+                tick.label.text = m.uniqueValues[i];
+
+                tick.transform.parent = Anchor.transform;
+                tick.transform.localPosition = direction * .15f * (i + 1);
+                ticks.Add(tick);
+            }
+        }
+
+        private void GenerateOrdinalTicks(OrdinalDataDimensionMeasures m)
+        {
+            var tickDir = DefineTickDirection(axisDirection);
+
+            // Draw ticks
+            for(int i = 0; i <= m.max; i++)
+            {
+                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
+                tick.lr.SetPosition(1, tickDir * diameter * 4f);
+                tick.SetDirection(axisDirection);
+                tick.label.text = m.uniqueValues[i];
+
+                tick.transform.parent = Anchor.transform;
+                tick.transform.localPosition = direction * .15f * (i + 1);
+                ticks.Add(tick);
+            }
+        }
+
+        private void GenerateIntervalTicks(IntervalDataDimensionMeasures m)
+        {
+            var tickDir = DefineTickDirection(axisDirection);
+
+            // Draw ticks
+            for(int i = m.min; i <= m.max; i++)
+            {
+                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
+                tick.lr.SetPosition(1, tickDir * diameter * 4f);
+                tick.SetDirection(axisDirection);
+                tick.label.text = IntervalValueConverters.Translate(i, m.intervalTranslator);
+
+                tick.transform.parent = Anchor.transform;
+                tick.transform.localPosition = direction * TransformToAxisSpace(i);
+                ticks.Add(tick);
+            }
+        }
+
+        private void GenerateRatioTicks()
+        {
+            var tickDir = DefineTickDirection(axisDirection);
 
             int tickCounter = 0;
-            for (float i = min; i <= max; i += tickResolution)
+            // Draw ticks
+            for(float i = min; i <= max; i += tickResolution)
             {
-                GameObject tick = new GameObject("Tick");
-                var lineRend = tick.AddComponent<LineRenderer>();
-                lineRend.useWorldSpace = false;
-                lineRend.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-                lineRend.startColor = Color.white;
-                lineRend.endColor = Color.white;
-                lineRend.startWidth = diameter;
-                lineRend.endWidth = diameter;
-                lineRend.SetPosition(0, Vector3.zero);
-                lineRend.SetPosition(1, tickDirection * diameter * 4f);
+                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
+                tick.lr.SetPosition(1, tickDir * diameter * 4f);
+                tick.SetDirection(axisDirection);
+                tick.label.text = i.ToString(i % 1 == 0 ? "N0" : ("N" + decimals));
 
-                GameObject tickLabel = ServiceLocator.instance.PrimitiveFactory3Dservice.CreateLabel(i.ToString("F" + decimals));
-                var textMesh = tickLabel.GetComponent<TextMesh>();
-                switch (axisDirection)
-                {
-                    case AxisDirection.X:
-                        textMesh.anchor = TextAnchor.UpperCenter;
-                        textMesh.alignment = TextAlignment.Center;
-                        break;
-                    case AxisDirection.Y:
-                        textMesh.anchor = TextAnchor.MiddleRight;
-                        textMesh.alignment = TextAlignment.Right;
-                        break;
-                    default: /* Z */
-                        textMesh.anchor = TextAnchor.MiddleRight;
-                        textMesh.alignment = TextAlignment.Right;
-                        break;
-                }
-                tickLabel.transform.localPosition = tickDirection * diameter * 5;
-                tickLabel.transform.parent = tick.transform;
-
-                tick.transform.parent = axisBody.transform;
-                tick.transform.localPosition = direction * ((tickCounter * tickResolution) / (max - min));
-                //ticks.Add(tick);
+                tick.transform.parent = Anchor.transform;
+                tick.transform.localPosition = direction * TransformToAxisSpace(tickCounter * tickResolution);
+                ticks.Add(tick);
                 tickCounter++;
             }
+        }
 
-            // Update Labels
+
+        private void UpdateLabels()
+        {
             TextMesh tmVariable = labelVariable.GetComponent<TextMesh>();
             tmVariable.text = labelVariableText;
-
-
-            switch (axisDirection)
+            
+            switch(axisDirection)
             {
                 case AxisDirection.X:
-                    tmVariable.anchor = TextAnchor.UpperCenter;
-                    tmVariable.alignment = TextAlignment.Center;
+                    tmVariable.anchor = TextAnchor.UpperLeft;
+                    tmVariable.alignment = TextAlignment.Left;
                     break;
                 case AxisDirection.Y:
-                    tmVariable.anchor = TextAnchor.MiddleRight;
+                    tmVariable.anchor = TextAnchor.LowerRight;
                     tmVariable.alignment = TextAlignment.Right;
                     break;
                 default:
@@ -108,7 +238,21 @@ namespace GraphicalPrimitive
                     break;
             }
 
-            labelAnchor.transform.localPosition = axisTip.transform.localPosition;
+            if(tipped)
+            {
+                labelAnchor.transform.localPosition = direction*length;
+            } else
+            {
+                labelAnchor.transform.localPosition = direction * (length - diameter*3);
+            }
+        }
+
+        // Drawing methods
+        public override void UpdateAxis()
+        {
+            // Update Base Axis
+            DrawBaseAxis();
+            UpdateLabels();
         }
     }
 }

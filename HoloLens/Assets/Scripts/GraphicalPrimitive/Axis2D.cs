@@ -1,8 +1,4 @@
 ﻿using Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace GraphicalPrimitive
@@ -15,7 +11,7 @@ namespace GraphicalPrimitive
         public GameObject labelAnchor;
         public Material lineMaterial;
 
-        public LevelOfMeasurement type;
+        public LoM type;
 
         public void Init(string name, float max, AxisDirection dir = AxisDirection.Y)
         {
@@ -25,7 +21,7 @@ namespace GraphicalPrimitive
             this.length = 1f;
             this.tipped = true;
             this.ticked = true;
-            type = LevelOfMeasurement.RATIO;
+            type = LoM.RATIO;
             CalculateTickResolution();
             AssembleRatioAxis();
         }
@@ -39,7 +35,7 @@ namespace GraphicalPrimitive
             this.tickResolution = .15f;
             this.tipped = false;
             this.ticked = true;
-            type = LevelOfMeasurement.NOMINAL;
+            type = LoM.NOMINAL;
             AssembleNominalAxis(m);
         }
 
@@ -52,7 +48,7 @@ namespace GraphicalPrimitive
             this.tickResolution = .15f;
             this.tipped = true;
             this.ticked = true;
-            type = LevelOfMeasurement.ORDINAL;
+            type = LoM.ORDINAL;
             AssembleOrdinalAxis(m);
         }
 
@@ -65,7 +61,7 @@ namespace GraphicalPrimitive
             this.tipped = true;
             this.ticked = true;
             CalculateTickResolution();
-            type = LevelOfMeasurement.INTERVAL;
+            type = LoM.INTERVAL;
             AssembleIntervalAxis(m);
         }
 
@@ -78,7 +74,7 @@ namespace GraphicalPrimitive
             this.tipped = true;
             this.ticked = true;
             CalculateTickResolution();
-            type = LevelOfMeasurement.RATIO;
+            type = LoM.RATIO;
             AssembleRatioAxis();
         }
 
@@ -142,26 +138,7 @@ namespace GraphicalPrimitive
                 Tip.SetActive(false);
             }
         }
-
-        private Vector3 DefineTickDirection(AxisDirection dir)
-        {
-            Vector3 tickDirection;
-            switch(axisDirection)
-            {
-                case AxisDirection.Y:
-                    tickDirection = Vector3.left;
-                    break;
-                case AxisDirection.Z:
-                    tickDirection = Vector3.left;
-                    break;
-                default: /* case X */
-                    tickDirection = Vector3.down;
-                    break;
-            }
-            return tickDirection;
-        }
         
-
         private void GenerateNominalTicks(NominalDataDimensionMeasures m)
         {
             var tickDir = DefineTickDirection(axisDirection);
@@ -169,7 +146,7 @@ namespace GraphicalPrimitive
             // Draw ticks
             for(int i=0; i<=m.max; i++)
             {
-                var tick = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateTick();
+                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
                 tick.lr.SetPosition(1, tickDir * diameter * 4f);
                 tick.SetDirection(axisDirection);
                 tick.label.text = m.uniqueValues[i];
@@ -187,7 +164,7 @@ namespace GraphicalPrimitive
             // Draw ticks
             for(int i = 0; i <= m.max; i++)
             {
-                var tick = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateTick();
+                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
                 tick.lr.SetPosition(1, tickDir * diameter * 4f);
                 tick.SetDirection(axisDirection);
                 tick.label.text = m.uniqueValues[i];
@@ -205,7 +182,7 @@ namespace GraphicalPrimitive
             // Draw ticks
             for(int i = m.min; i <= m.max; i++)
             {
-                var tick = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateTick();
+                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
                 tick.lr.SetPosition(1, tickDir * diameter * 4f);
                 tick.SetDirection(axisDirection);
                 tick.label.text = IntervalValueConverters.Translate(i, m.intervalTranslator);
@@ -224,7 +201,7 @@ namespace GraphicalPrimitive
             // Draw ticks
             for(float i = min; i <= max; i += tickResolution)
             {
-                var tick = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateTick();
+                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
                 tick.lr.SetPosition(1, tickDir * diameter * 4f);
                 tick.SetDirection(axisDirection);
                 tick.label.text = i.ToString(i % 1 == 0 ? "N0" : ("N" + decimals));

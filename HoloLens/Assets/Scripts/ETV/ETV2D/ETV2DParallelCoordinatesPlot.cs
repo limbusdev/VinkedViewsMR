@@ -36,7 +36,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
     public override void SetUpAxis()
     {
-        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
         int counter = 0;
         allAxesGO = new GameObject("Axes-Set");
@@ -125,9 +125,9 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         allAxesGO.transform.parent = Anchor.transform;
     }
 
-    private PCPLine2D CreateLine(InformationObject o, Color color)
+    private PCPLine2D CreateLine(InfoObject o, Color color)
     {
-        Graphical2DPrimitiveFactory factory = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        Graphical2DPrimitiveFactory factory = ServiceLocator.instance.Factory2DPrimitives;
         var pcpLine = factory.CreatePCPLine();
         var pcpComp = pcpLine.GetComponent<PCPLine2D>();
         pcpComp.lineRenderer.startColor = color;
@@ -187,7 +187,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         int dimension = ratioIDs.Length + nominalIDs.Length;
 
         int i = 0;
-        foreach(InformationObject o in data.informationObjects)
+        foreach(InfoObject o in data.informationObjects)
         {
             linePrimitives[i] = CreateLine(o, Color.white);
             i++;

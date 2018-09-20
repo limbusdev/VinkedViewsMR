@@ -8,10 +8,10 @@ namespace Model
     /// </summary>
     public class DataDimensionMeasures
     {
-        public LevelOfMeasurement type;
+        public LoM type;
         public string name;
 
-        public DataDimensionMeasures(LevelOfMeasurement type, string name)
+        public DataDimensionMeasures(LoM type, string name)
         {
             this.type = type;
             this.name = name;
@@ -41,7 +41,7 @@ namespace Model
         public int numberOfUniqueValues;
 
         public NominalDataDimensionMeasures(IDictionary<string, int> distribution, string variableName)
-             : base(LevelOfMeasurement.NOMINAL, variableName)
+             : base(LoM.NOMINAL, variableName)
         {
             this.distribution = distribution;
             valueIDs = new Dictionary<string, int>();
@@ -93,7 +93,7 @@ namespace Model
         public int numberOfUniqueValues;
 
         public OrdinalDataDimensionMeasures(IDictionary<int, string> orderedValueIDs, IDictionary<int, int> distribution, string variableName)
-             : base(LevelOfMeasurement.ORDINAL, variableName)
+             : base(LoM.ORDINAL, variableName)
         {
             this.orderedValueIDs = orderedValueIDs;
             this.distribution = distribution;
@@ -149,7 +149,7 @@ namespace Model
         public string intervalTranslator;
 
         public IntervalDataDimensionMeasures(IDictionary<int, int> distribution, string variableName, string intervalTranslator, int min, int max)
-             : base(LevelOfMeasurement.INTERVAL, variableName)
+             : base(LoM.INTERVAL, variableName)
         {
             this.intervalTranslator = intervalTranslator;
             this.distribution = distribution;
@@ -190,7 +190,7 @@ namespace Model
             string variableName,
             float range, float zeroBoundRange,
             float min, float zeroBoundMin,
-            float max, float zeroBoundMax) : base(LevelOfMeasurement.RATIO, variableName)
+            float max, float zeroBoundMax) : base(LoM.RATIO, variableName)
         {
             this.range = range;
             this.zeroBoundRange = zeroBoundRange;

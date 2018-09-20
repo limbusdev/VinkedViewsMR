@@ -67,7 +67,25 @@ namespace GraphicalPrimitive
             tickResolution = Mathf.Ceil(unroundedTickSize / pow10x) * pow10x;
         }
 
-        
+        public Vector3 DefineTickDirection(AxisDirection dir)
+        {
+            Vector3 tickDirection;
+            switch(axisDirection)
+            {
+                case AxisDirection.Y:
+                    tickDirection = Vector3.left;
+                    break;
+                case AxisDirection.Z:
+                    tickDirection = Vector3.left;
+                    break;
+                default: /* case X */
+                    tickDirection = Vector3.down;
+                    break;
+            }
+            return tickDirection;
+        }
+
+
         // Abstract Methods
         public abstract void UpdateAxis();
 

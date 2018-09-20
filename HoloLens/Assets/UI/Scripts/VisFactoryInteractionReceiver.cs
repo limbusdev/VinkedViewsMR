@@ -263,7 +263,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
 
         // 1 Icon for all variables
         var allVars = new List<string>();
-        var allLoms = new List<LevelOfMeasurement>();
+        var allLoms = new List<LoM>();
         foreach(string key in ds.dataMeasuresNominal.Keys)
         {
             allVars.Add(key);
@@ -342,27 +342,27 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
 
     }
 
-    private GameObject Create1DIconAndInsert(string name, LevelOfMeasurement lom)
+    private GameObject Create1DIconAndInsert(string name, LoM lom)
     {
-       return CreateIconAndInsertInCollection(new string[] { name }, new LevelOfMeasurement[] { lom });
+       return CreateIconAndInsertInCollection(new string[] { name }, new LoM[] { lom });
     }
 
-    private GameObject Create2DIconAndInsert(string name1, string name2, LevelOfMeasurement lom1, LevelOfMeasurement lom2)
+    private GameObject Create2DIconAndInsert(string name1, string name2, LoM lom1, LoM lom2)
     {
-        return CreateIconAndInsertInCollection(new string[] { name1, name2 }, new LevelOfMeasurement[] { lom1, lom2 });
+        return CreateIconAndInsertInCollection(new string[] { name1, name2 }, new LoM[] { lom1, lom2 });
     }
 
-    private GameObject Create3DIconAndInsert(string name1, string name2, string name3, LevelOfMeasurement lom1, LevelOfMeasurement lom2, LevelOfMeasurement lom3)
+    private GameObject Create3DIconAndInsert(string name1, string name2, string name3, LoM lom1, LoM lom2, LoM lom3)
     {
-        return CreateIconAndInsertInCollection(new string[] { name1, name2, name3 }, new LevelOfMeasurement[] { lom1, lom2, lom3 });
+        return CreateIconAndInsertInCollection(new string[] { name1, name2, name3 }, new LoM[] { lom1, lom2, lom3 });
     }
 
-    private GameObject CreateNDIconAndInsert(string[] names, LevelOfMeasurement[] loms, string name)
+    private GameObject CreateNDIconAndInsert(string[] names, LoM[] loms, string name)
     {
         return CreateMultiIconAndInsertInCollection(names, loms, name);
     }
 
-    private GameObject CreateIconAndInsertInCollection(string[] names, LevelOfMeasurement[] loms)
+    private GameObject CreateIconAndInsertInCollection(string[] names, LoM[] loms)
     {
         GameObject etvIcon = Instantiate(CubeIconVariablePrefab);
         CubeIconVariable civ = etvIcon.GetComponent<CubeIconVariable>();
@@ -372,7 +372,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         return etvIcon;
     }
 
-    private GameObject CreateMultiIconAndInsertInCollection(string[] names, LevelOfMeasurement[] loms, string name)
+    private GameObject CreateMultiIconAndInsertInCollection(string[] names, LoM[] loms, string name)
     {
         GameObject etvIcon = Instantiate(CubeIconVariablePrefab);
         CubeIconVariable civ = etvIcon.GetComponent<CubeIconVariable>();

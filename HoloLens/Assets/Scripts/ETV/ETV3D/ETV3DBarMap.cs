@@ -53,7 +53,7 @@ public class ETV3DBarMap : AETV3D
         var keysX = measuresX.distribution.Keys.ToArray();
         var keysY = measuresY.distribution.Keys.ToArray();
 
-        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
+        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.Factory3DPrimitives;
         axis = new Dictionary<AxisDirection, GameObject>();
         
         absMapValues = new int[keysX.Length, keysY.Length];
@@ -130,7 +130,7 @@ public class ETV3DBarMap : AETV3D
     /// </summary>
     public override void SetUpAxis()
     {
-        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
         // x-Axis
         float xAxisLength = measuresX.distribution.Count * 0.15f;
@@ -165,7 +165,7 @@ public class ETV3DBarMap : AETV3D
         var catsX = measuresX.distribution.Keys.ToArray();
         for(int catX = 0; catX < catsX.Length; catX++)
         {
-            GameObject label = ServiceLocator.instance.PrimitiveFactory3Dservice.CreateLabel(catsX[catX]);
+            GameObject label = ServiceLocator.instance.Factory3DPrimitives.CreateLabel(catsX[catX]);
             TextMesh textMesh = label.GetComponent<TextMesh>();
             textMesh.anchor = TextAnchor.MiddleLeft;
             textMesh.alignment = TextAlignment.Left;
@@ -177,7 +177,7 @@ public class ETV3DBarMap : AETV3D
         var catsY = measuresY.distribution.Keys.ToArray();
         for (int catY = 0; catY < catsY.Length; catY++)
         {
-            GameObject label = ServiceLocator.instance.PrimitiveFactory3Dservice.CreateLabel(catsY[catY]);
+            GameObject label = ServiceLocator.instance.Factory3DPrimitives.CreateLabel(catsY[catY]);
             TextMesh textMesh = label.GetComponent<TextMesh>();
             textMesh.anchor = TextAnchor.MiddleRight;
             textMesh.alignment = TextAlignment.Left;
@@ -194,7 +194,7 @@ public class ETV3DBarMap : AETV3D
      * */
     private Bar3D CreateBar(float value, float range)
     {
-        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
+        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.Factory3DPrimitives;
         
         Bar3D bar = factory3D.CreateBar(value, .1f, .1f).GetComponent<Bar3D>();
 
@@ -229,13 +229,7 @@ public class ETV3DBarMap : AETV3D
                 break;
         }
     }
-
-    public override void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
-    {
-        axis[axisDirection].GetComponent<Axis2D>().labelVariableText = axisVariable;
-        axis[axisDirection].GetComponent<Axis2D>().UpdateAxis();
-    }
-
+    
     public override void UpdateETV()
     {
 

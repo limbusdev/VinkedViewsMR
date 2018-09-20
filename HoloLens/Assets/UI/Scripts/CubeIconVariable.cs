@@ -24,7 +24,7 @@ public class CubeIconVariable : InteractionReceiver
 
     public int IconType = 0;
     public string[] varNames;
-    public LevelOfMeasurement[] varTypes;
+    public LoM[] varTypes;
     public int dimension;
     public int dataSetID { get; private set; }
 
@@ -54,7 +54,7 @@ public class CubeIconVariable : InteractionReceiver
     /// <param name="variableTypes">Level of Measurement of the given variables.</param>
     /// <param name="dataSetID">ID of the DataSet to use.</param>
     /// <param name="name">Name to show on the button sign.</param>
-    public void InitMulti(string[] variableNames, LevelOfMeasurement[] variableTypes, int dataSetID, string name)
+    public void InitMulti(string[] variableNames, LoM[] variableTypes, int dataSetID, string name)
     {
         Init(variableNames, variableTypes, dataSetID);
         text.text = name;
@@ -66,7 +66,7 @@ public class CubeIconVariable : InteractionReceiver
     /// <param name="variableNames">Variables to represent.</param>
     /// <param name="variableTypes">Level of Measurement of the given variables.</param>
     /// <param name="dataSetID">ID of the DataSet to use.</param>
-    public void Init(string[] variableNames, LevelOfMeasurement[] variableTypes, int dataSetID)
+    public void Init(string[] variableNames, LoM[] variableTypes, int dataSetID)
     {
         this.gameObject.name = "CubeIconVariable";
 
@@ -79,9 +79,9 @@ public class CubeIconVariable : InteractionReceiver
         int counterNumericVars = 0;
         int counterCategoricalVars = 0;
 
-        foreach(LevelOfMeasurement t in variableTypes)
+        foreach(LoM t in variableTypes)
         {
-            if (t == LevelOfMeasurement.RATIO || t == LevelOfMeasurement.INTERVAL) counterNumericVars++;
+            if (t == LoM.RATIO || t == LoM.INTERVAL) counterNumericVars++;
             else counterCategoricalVars++;
         }
 
@@ -92,7 +92,7 @@ public class CubeIconVariable : InteractionReceiver
         switch (dimension)
         {
             case 1:
-                iconNum = (variableTypes[0] == LevelOfMeasurement.RATIO || variableTypes[0] == LevelOfMeasurement.INTERVAL) ? 0 : 1;
+                iconNum = (variableTypes[0] == LoM.RATIO || variableTypes[0] == LoM.INTERVAL) ? 0 : 1;
                 break;
             case 2:
                 if      (allVarsNumeric) iconNum = 2;

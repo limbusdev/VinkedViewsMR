@@ -45,7 +45,7 @@ public class ETV2DLineChart : AETV2D
 
     public override void SetUpAxis()
     {
-        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
         // x-Axis
         GameObject xAxis = factory2D.CreateAxis(Color.white, data.ratAttributes[floatAttributeX], "", AxisDirection.X, 1f, .01f, true, true);
@@ -89,7 +89,7 @@ public class ETV2DLineChart : AETV2D
 
     public void DrawGraph()
     {
-        var line = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateXYLine();
+        var line = ServiceLocator.instance.Factory2DPrimitives.CreateXYLine();
         var xyLineComp = line.GetComponent<XYLine2D>();
         var polyline = new Vector3[data.informationObjects.Count];
         
@@ -101,7 +101,7 @@ public class ETV2DLineChart : AETV2D
 
         for(int i = 0; i < data.informationObjects.Count; i++)
         {
-            InformationObject o = data.informationObjects[i];
+            InfoObject o = data.informationObjects[i];
 
             float x=0, y=0;
             if(xBoundToZero && yBoundToZero)

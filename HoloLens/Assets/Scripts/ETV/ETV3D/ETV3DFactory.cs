@@ -26,7 +26,7 @@ public class ETV3DFactory : AETVFactory
         return barChart;
     }
 
-    public GameObject Create3DGroupedBarChart(IDictionary<string, InformationObject> data)
+    public GameObject Create3DGroupedBarChart(IDictionary<string, InfoObject> data)
     {
         GameObject barChart = Instantiate(etv3DGroupedBarChart);
 
@@ -54,7 +54,7 @@ public class ETV3DFactory : AETVFactory
 		
 	}
 
-    public override GameObject CreateSingleAxis(DataSet data, int attributeID, LevelOfMeasurement lom)
+    public override GameObject CreateSingleAxis(DataSet data, int attributeID, LoM lom)
     {
         GameObject singleAxis3D = Instantiate(ETV3DSingleAxisPrefab);
         singleAxis3D.GetComponent<ETV3DSingleAxis>().Init(data, attributeID, lom);

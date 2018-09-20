@@ -1,20 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ServiceLocator : MonoBehaviour {
 
     public static ServiceLocator instance = null;
 
-    public Graphical3DPrimitiveFactory PrimitiveFactory3Dservice;       // Populate in editor
-    public Graphical2DPrimitiveFactory PrimitiveFactory2Dservice;       // Populate in editor
-    public ETV3DFactory ETV3DFactoryService;                            // Populate in editor
-    public ETV2DFactory ETV2DFactoryService;                            // populate in editor
-    public VisualizationFactory visualizationFactory;                   // Populate in editor
+    public Graphical3DPrimitiveFactory Factory3DPrimitives; // Populate in editor
+    public Graphical2DPrimitiveFactory Factory2DPrimitives; // Populate in editor
+    public ETV3DFactory Factory3DETV;                       // Populate in editor
+    public ETV2DFactory Factory2DETV;                       // populate in editor
+    public VisualizationFactory visualizationFactory;       // Populate in editor
+    
 
-    //Awake is always called before any Start functions
     void Awake()
     {
+        // SINGLETON
+
         //Check if instance already exists
         if (instance == null)
         {
@@ -31,15 +31,4 @@ public class ServiceLocator : MonoBehaviour {
         //Sets this to not be destroyed when reloading scene
         DontDestroyOnLoad(gameObject);
     }
-
-    
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

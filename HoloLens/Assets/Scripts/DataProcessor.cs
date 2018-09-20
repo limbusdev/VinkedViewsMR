@@ -9,7 +9,7 @@ public class DataProcessor
 {
     public static class NominalAttribute
     {
-        public static NominalDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID)
+        public static NominalDataDimensionMeasures CalculateMeasures(IList<InfoObject> os, int aID)
         {
             var measures = new NominalDataDimensionMeasures(
                 CalculateDistribution(os, aID),
@@ -18,7 +18,7 @@ public class DataProcessor
             return measures;
         }
 
-        public static string[] FindUniqueValues(IList<InformationObject> os, int aID)
+        public static string[] FindUniqueValues(IList<InfoObject> os, int aID)
         {
             var uniqueList = new List<string>();
 
@@ -34,7 +34,7 @@ public class DataProcessor
             return uniqueList.ToArray();
         }
 
-        public static IDictionary<string, int> CalculateDistribution(IList<InformationObject> os, int aID)
+        public static IDictionary<string, int> CalculateDistribution(IList<InfoObject> os, int aID)
         {
             var distribution = new Dictionary<string, int>();
 
@@ -54,7 +54,7 @@ public class DataProcessor
             return distribution;
         }
 
-        public static int CountObjectsMatchingTwoCattegories(IList<InformationObject> os, int aID1, int aID2, string value1, string value2)
+        public static int CountObjectsMatchingTwoCattegories(IList<InfoObject> os, int aID1, int aID2, string value1, string value2)
         {
             int counter = 0;
             foreach(var o in os)
@@ -73,7 +73,7 @@ public class DataProcessor
 
     public static class OrdinalAttribute
     {
-        public static OrdinalDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID, IDictionary<int, string> dict)
+        public static OrdinalDataDimensionMeasures CalculateMeasures(IList<InfoObject> os, int aID, IDictionary<int, string> dict)
         {
             var measures = new OrdinalDataDimensionMeasures(
                 dict,
@@ -83,7 +83,7 @@ public class DataProcessor
             return measures;
         }
 
-        public static IDictionary<int, int> CalculateDistribution(IList<InformationObject> os, int aID, IDictionary<int, string> dict)
+        public static IDictionary<int, int> CalculateDistribution(IList<InfoObject> os, int aID, IDictionary<int, string> dict)
         {
             var distribution = new Dictionary<int, int>();
 
@@ -103,10 +103,10 @@ public class DataProcessor
             return distribution;
         }
 
-        public static int CalculateMin(IList<InformationObject> os, int attributeID)
+        public static int CalculateMin(IList<InfoObject> os, int attributeID)
         {
             int minimum = int.MaxValue;
-            foreach(InformationObject dataObject in os)
+            foreach(InfoObject dataObject in os)
             {
                 var attribute = dataObject.ordinalAtt[attributeID];
                 int attributeValue = attribute.value;
@@ -118,10 +118,10 @@ public class DataProcessor
             return minimum;
         }
 
-        public static int CalculateMax(IList<InformationObject> os, int attributeID)
+        public static int CalculateMax(IList<InfoObject> os, int attributeID)
         {
             int maximum = int.MinValue;
-            foreach(InformationObject dataObject in os)
+            foreach(InfoObject dataObject in os)
             {
                 var attribute = dataObject.ordinalAtt[attributeID];
                 int attributeValue = attribute.value;
@@ -136,7 +136,7 @@ public class DataProcessor
 
     public static class IntervalAttribute
     {
-        public static IntervalDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID, IDictionary<string, string> intervalTranslators)
+        public static IntervalDataDimensionMeasures CalculateMeasures(IList<InfoObject> os, int aID, IDictionary<string, string> intervalTranslators)
         {
             var measures = new IntervalDataDimensionMeasures(
                 CalculateDistribution(os, aID),
@@ -149,7 +149,7 @@ public class DataProcessor
             return measures;
         }
 
-        public static IDictionary<int, int> CalculateDistribution(IList<InformationObject> os, int aID)
+        public static IDictionary<int, int> CalculateDistribution(IList<InfoObject> os, int aID)
         {
             var distribution = new Dictionary<int, int>();
 
@@ -166,10 +166,10 @@ public class DataProcessor
             return distribution;
         }
 
-        public static int CalculateMin(IList<InformationObject> os, int attributeID)
+        public static int CalculateMin(IList<InfoObject> os, int attributeID)
         {
             int minimum = int.MaxValue;
-            foreach(InformationObject dataObject in os)
+            foreach(InfoObject dataObject in os)
             {
                 var attribute = dataObject.intervalAtt[attributeID];
                 int attributeValue = attribute.value;
@@ -181,10 +181,10 @@ public class DataProcessor
             return minimum;
         }
 
-        public static int CalculateMax(IList<InformationObject> os, int attributeID)
+        public static int CalculateMax(IList<InfoObject> os, int attributeID)
         {
             int maximum = int.MinValue;
-            foreach(InformationObject dataObject in os)
+            foreach(InfoObject dataObject in os)
             {
                 var attribute = dataObject.intervalAtt[attributeID];
                 int attributeValue = attribute.value;
@@ -199,7 +199,7 @@ public class DataProcessor
     
     public static class RatioAttribute
     {
-        public static RatioDataDimensionMeasures CalculateMeasures(IList<InformationObject> os, int aID)
+        public static RatioDataDimensionMeasures CalculateMeasures(IList<InfoObject> os, int aID)
         {
             var measures = new RatioDataDimensionMeasures(
                 os[0].ratioAtt[aID].name,
@@ -214,10 +214,10 @@ public class DataProcessor
             return measures;
         }
 
-        public static float CalculateMin(IList<InformationObject> os, int attributeID)
+        public static float CalculateMin(IList<InfoObject> os, int attributeID)
         {
             float minimum = float.MaxValue;
-            foreach(InformationObject dataObject in os)
+            foreach(InfoObject dataObject in os)
             {
                 var attribute = dataObject.ratioAtt[attributeID];
                 float attributeValue = attribute.value;
@@ -229,17 +229,17 @@ public class DataProcessor
             return minimum;
         }
 
-        public static float CalculateZeroBoundMin(IList<InformationObject> os, int attributeID)
+        public static float CalculateZeroBoundMin(IList<InfoObject> os, int attributeID)
         {
             float min = CalculateMin(os, attributeID);
             min = (min > 0) ? 0f : min;
             return min;
         }
 
-        public static float CalculateMax(IList<InformationObject> os, int attributeID)
+        public static float CalculateMax(IList<InfoObject> os, int attributeID)
         {
             float max = float.MinValue;
-            foreach(InformationObject dataObject in os)
+            foreach(InfoObject dataObject in os)
             {
                 var attribute = dataObject.ratioAtt[attributeID];
                 float attributeValue = attribute.value;
@@ -251,7 +251,7 @@ public class DataProcessor
             return max;
         }
 
-        public static float CalculateZeroBoundMax(IList<InformationObject> os, int attributeID)
+        public static float CalculateZeroBoundMax(IList<InfoObject> os, int attributeID)
         {
             float max = CalculateMax(os, attributeID);
             max = (max < 0) ? 0f : max;
@@ -262,7 +262,7 @@ public class DataProcessor
          * Calculates the range from minimum to maximum in the available attribute.
          * This is needed to scale the bars appropriately.
          * */
-        public static float CalculateRange(IList<InformationObject> os, int aID)
+        public static float CalculateRange(IList<InfoObject> os, int aID)
         {
             float Maximum = CalculateMax(os, aID);
             float Minimum = CalculateMin(os, aID);
@@ -270,7 +270,7 @@ public class DataProcessor
             return Maximum - Minimum;
         }
 
-        public static float CalculateZeroBoundRange(IList<InformationObject> os, int aID)
+        public static float CalculateZeroBoundRange(IList<InfoObject> os, int aID)
         {
             float Maximum = CalculateZeroBoundMax(os, aID);
             float Minimum = CalculateZeroBoundMin(os, aID);
@@ -291,16 +291,16 @@ public class DataProcessor
             var type = data.GetTypeOf(key);
             switch(type)
             {
-                case LevelOfMeasurement.NOMINAL:
+                case LoM.NOMINAL:
                     nomIDsL.Add(data.GetIDOf(key));
                     break;
-                case LevelOfMeasurement.ORDINAL:
+                case LoM.ORDINAL:
                     ordIDsL.Add(data.GetIDOf(key));
                     break;
-                case LevelOfMeasurement.INTERVAL:
+                case LoM.INTERVAL:
                     ivlIDsL.Add(data.GetIDOf(key));
                     break;
-                case LevelOfMeasurement.RATIO:
+                case LoM.RATIO:
                     ratIDsL.Add(data.GetIDOf(key));
                     break;
                 default:

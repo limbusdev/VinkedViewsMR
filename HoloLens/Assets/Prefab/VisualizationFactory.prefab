@@ -5071,11 +5071,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62288e4235d7e6d419482d4e6c044b2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  csvFile:
+  csvFiles:
   - {fileID: 4900000, guid: be361341d24760640b5298eab962fae4, type: 3}
   - {fileID: 4900000, guid: d87741474dde7654ca23c0c65eb1b4ca, type: 3}
   - {fileID: 4900000, guid: c53a891ca112e2844a1ad97df83770ef, type: 3}
-  ordinalDictionaries:
+  ordinalDicts:
   - name: Crime
     file: {fileID: 4900000, guid: 2fd0a3775efe8c549a5bc5f9434e3722, type: 3}
 --- !u!114 &114281658072433982

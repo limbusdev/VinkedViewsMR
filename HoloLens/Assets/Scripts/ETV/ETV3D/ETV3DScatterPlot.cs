@@ -27,7 +27,7 @@ public class ETV3DScatterPlot : AETV3D
     }
 
     public void Init(DataSet data, int att1ID, int att2ID, int att3ID,
-        LevelOfMeasurement type1, LevelOfMeasurement type2, LevelOfMeasurement type3)
+        LoM type1, LoM type2, LoM type3)
     {
         this.data = data;
         this.floatAttIDs = new Vector3Int(att1ID, att2ID, att3ID);
@@ -46,14 +46,9 @@ public class ETV3DScatterPlot : AETV3D
         }
     }
 
-    public override void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
-    {
-        throw new System.NotImplementedException();
-    }
-
     public override void SetUpAxis()
     {
-        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
         // x-Axis
         GameObject xAxis = factory2D.CreateAxis(Color.white, data.ratAttributes[floatAttIDs.x], "", AxisDirection.X, 1f, .01f, true, true);
@@ -99,7 +94,7 @@ public class ETV3DScatterPlot : AETV3D
 
         for(int i = 0; i < data.informationObjects.Count; i++)
         {
-            InformationObject o = data.informationObjects[i];
+            InfoObject o = data.informationObjects[i];
 
             float x = 0, y = 0, z = 0;
             x = measuresX.NormalizeToZeroBoundRange(o.ratioAtt[floatAttIDs.x].value);
@@ -108,7 +103,7 @@ public class ETV3DScatterPlot : AETV3D
 
             if(!float.IsNaN(x) && !float.IsNaN(y) && !float.IsNaN(z))
             {
-                GameObject dot = ServiceLocator.instance.PrimitiveFactory3Dservice.CreateScatterDot();
+                GameObject dot = ServiceLocator.instance.Factory3DPrimitives.CreateScatterDot();
                 dot.transform.position = new Vector3(x, y, z);
                 dot.transform.parent = Anchor.transform;
                 dotArray.Add(dot.GetComponent<ScatterDot3D>());

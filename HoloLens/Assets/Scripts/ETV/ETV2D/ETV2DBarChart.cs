@@ -15,7 +15,7 @@ public class ETV2DBarChart : AETV2D
     private DataSet data;
     private string attributeName;
     private int attributeID;
-    private LevelOfMeasurement lom;
+    private LoM lom;
 
     private IDictionary<string, Bar2D> bars;
     
@@ -27,7 +27,7 @@ public class ETV2DBarChart : AETV2D
         this.attributeName = attributeName;
         this.attributeID = data.GetIDOf(attributeName);
         this.lom = data.GetTypeOf(attributeName);
-
+        
         this.bounds = new float[] { 0, 0, 0 };
         bars = new Dictionary<string, Bar2D>();
 
@@ -36,14 +36,14 @@ public class ETV2DBarChart : AETV2D
         // .................................................................... initialize
         switch(lom)
         {
-            case LevelOfMeasurement.NOMINAL:
+            case LoM.NOMINAL:
                 InitNominal(data, attributeName);
                 break;
-            case LevelOfMeasurement.ORDINAL:
+            case LoM.ORDINAL:
                 InitOrdinal(data, attributeName);
                 break;
             default:
-                Debug.Log("Attribute level of measurement unsuitable for BarChart2D");
+                // Nothing
                 break;
         }
     }
@@ -51,7 +51,7 @@ public class ETV2DBarChart : AETV2D
     private void InitNominal(DataSet data, string attributeName)
     {
         var measures = data.dataMeasuresNominal[attributeName];
-        var factory = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        var factory = ServiceLocator.instance.Factory2DPrimitives;
         
         for(int i = 0; i < measures.numberOfUniqueValues; i++)
         {
@@ -70,7 +70,7 @@ public class ETV2DBarChart : AETV2D
     private void InitOrdinal(DataSet data, string attributeName)
     {
         var measures = data.dataMeasuresOrdinal[attributeName];
-        var factory = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        var factory = ServiceLocator.instance.Factory2DPrimitives;
         
         for(int i=0; i<measures.numberOfUniqueValues; i++)
         {
@@ -88,7 +88,7 @@ public class ETV2DBarChart : AETV2D
     // ........................................................................ Helper Methods
     private Bar2D InsertBar(string name, int value, int barID)
     {
-        var factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        var factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
         float normValue = GetAxis(AxisDirection.Y).TransformToAxisSpace(value);
         var bar = factory2D.CreateBar(normValue, .1f).GetComponent<Bar2D>();
@@ -103,7 +103,7 @@ public class ETV2DBarChart : AETV2D
     
     public override void SetUpAxis()
     {
-        var factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        var factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
         var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.X, data);
         xAxis.transform.parent = Anchor.transform;
@@ -112,7 +112,7 @@ public class ETV2DBarChart : AETV2D
 
         switch(lom)
         {
-            case LevelOfMeasurement.NOMINAL:
+            case LoM.NOMINAL:
                 var mea = data.dataMeasuresNominal[attributeName];
                 length = (mea.numberOfUniqueValues + 1) * .15f;
                 max = mea.distMax;

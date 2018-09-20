@@ -60,7 +60,7 @@ public class ETV2DFactory : AETVFactory
         return scatterPlot;
     }
 
-    public override GameObject CreateSingleAxis(DataSet data, int attributeID, LevelOfMeasurement lom)
+    public override GameObject CreateSingleAxis(DataSet data, int attributeID, LoM lom)
     {
         throw new System.NotImplementedException();
     }
@@ -76,14 +76,5 @@ public class ETV2DFactory : AETVFactory
         Anchor.GetComponent<ETVAnchor>().PutETVintoAnchor(ETV);
         return Anchor;
     }
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    
 }

@@ -22,7 +22,7 @@ public class BarGroup3D : MonoBehaviour {
 
     public void Init(int barCount, float[] values, float[] rangesToNormalizeTo, float groupWidth, float depth)
     {
-        Graphical3DPrimitiveFactory factory = ServiceLocator.instance.PrimitiveFactory3Dservice;
+        Graphical3DPrimitiveFactory factory = ServiceLocator.instance.Factory3DPrimitives;
 
         bars = new List<GameObject>();
         float singleWidth = groupWidth / barCount;

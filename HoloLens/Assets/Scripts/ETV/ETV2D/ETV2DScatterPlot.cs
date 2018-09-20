@@ -11,9 +11,9 @@ public class ETV2DScatterPlot : AETV2D
     private Vector2Int attIDs;
     
     private ScatterDot2D[] dots;
-    private LevelOfMeasurement type1, type2;
+    private LoM type1, type2;
 
-    public void Init(DataSet data, int attID1, int attID2, LevelOfMeasurement type1, LevelOfMeasurement type2)
+    public void Init(DataSet data, int attID1, int attID2, LoM type1, LoM type2)
     {
         this.data = data;
         this.attIDs = new Vector2Int(attID1, attID2);
@@ -44,7 +44,7 @@ public class ETV2DScatterPlot : AETV2D
         SetUpXAxis();
         SetUpYAxis();
 
-        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
         // x-Axis
         GameObject xAxis = factory2D.CreateAxis(Color.white, data.ratAttributes[attIDs.x], "", AxisDirection.X, 1f, .01f, true, true);
@@ -76,26 +76,26 @@ public class ETV2DScatterPlot : AETV2D
 
     private void SetUpXAxis()
     {
-        var factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+        var factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
         GameObject axis;
         string attName;
 
         switch(type1)
         {
-            case LevelOfMeasurement.NOMINAL:
+            case LoM.NOMINAL:
                 attName = data.nomAttributes[attIDs.x];
                 axis = factory2D.CreateAxis(Color.white, attName, "", AxisDirection.X, 1f, .01f, true, true);
                 var axisComp = axis.GetComponent<Axis2D>();
                 axisComp.min = 0;
                 axisComp.max = data.dataMeasuresNominal[attName].numberOfUniqueValues;
                 break;
-            case LevelOfMeasurement.ORDINAL:
+            case LoM.ORDINAL:
                 attName = data.ordAttributes[attIDs.x];
                 axis = factory2D.CreateAxis(Color.white, attName, "", AxisDirection.X, 1f, .01f, true, true);
                 // TODO
                 break;
-            case LevelOfMeasurement.INTERVAL:
+            case LoM.INTERVAL:
                 attName = data.ivlAttributes[attIDs.x];
                 axis = factory2D.CreateAxis(Color.white, attName, "", AxisDirection.X, 1f, .01f, true, true);
                 // TODO
@@ -125,7 +125,7 @@ public class ETV2DScatterPlot : AETV2D
 
         for(int i = 0; i < data.informationObjects.Count; i++)
         {
-            InformationObject o = data.informationObjects[i];
+            InfoObject o = data.informationObjects[i];
 
             float x = 0, y = 0;
             x = measuresX.NormalizeToZeroBoundRange(o.ratioAtt[attIDs.x].value);
@@ -134,7 +134,7 @@ public class ETV2DScatterPlot : AETV2D
 
             if(!float.IsNaN(x) && !float.IsNaN(y))
             {
-                GameObject dot = ServiceLocator.instance.PrimitiveFactory2Dservice.CreateScatterDot();
+                GameObject dot = ServiceLocator.instance.Factory2DPrimitives.CreateScatterDot();
                 dot.transform.position = new Vector3(x, y, 0);
                 dot.transform.parent = Anchor.transform;
                 dotArray.Add(dot.GetComponent<ScatterDot2D>());

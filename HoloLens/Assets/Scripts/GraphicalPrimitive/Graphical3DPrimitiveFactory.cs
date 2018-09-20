@@ -1,4 +1,5 @@
 ﻿using GraphicalPrimitive;
+using Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
     public GameObject axis3D;
     public GameObject label;
     public GameObject ScatterDot3DPrefab;
+    public GameObject Axis3DPrefab;
 
     public override GameObject CreateAxis(Color color, string variableName, string variableEntity,
         AxisDirection axisDirection, float length, float width = 0.01F, bool tipped = true, bool ticked = false)
@@ -29,6 +31,41 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
 
         return axis;
     }
+
+
+    public override GameObject CreateAutoTickedAxis(string name, float max, AxisDirection dir = AxisDirection.Y)
+    {
+        GameObject axis = Instantiate(Axis3DPrefab);
+        var axis3Dcomp = axis.GetComponent<Axis3D>();
+        axis3Dcomp.Init(name, max, dir);
+
+        return axis;
+    }
+
+    public override GameObject CreateAutoTickedAxis(string name, AxisDirection direction, DataSet data)
+    {
+        GameObject axis = Instantiate(Axis3DPrefab);
+        var axis3Dcomp = axis.GetComponent<Axis3D>();
+        
+        switch(data.GetTypeOf(name))
+        {
+            case LoM.NOMINAL:
+                axis3Dcomp.Init(data.dataMeasuresNominal[name], direction);
+                break;
+            case LoM.ORDINAL:
+                axis3Dcomp.Init(data.dataMeasuresOrdinal[name], direction);
+                break;
+            case LoM.INTERVAL:
+                axis3Dcomp.Init(data.dataMeasuresInterval[name], direction);
+                break;
+            default: // RATIO
+                axis3Dcomp.Init(data.dataMeasuresRatio[name], direction);
+                break;
+        }
+        
+        return axis;
+    }
+
 
     public override GameObject CreateGrid(Color color, Vector3 axisDir, Vector3 expansionDir, float length, float width, float min, float max)
     { 

@@ -62,12 +62,7 @@ namespace ETV.ETV3D
                     break;
             }
         }
-
-        public override void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public override void SetUpAxis()
         {
             GameObject axesFront = GenerateAxes(true);
@@ -81,7 +76,7 @@ namespace ETV.ETV3D
         public void DrawGraph()
         {
             int i = 0;
-            foreach(InformationObject o in data.informationObjects)
+            foreach(InfoObject o in data.informationObjects)
             {
                 //GameObject newAxes = Instantiate(allAxesGO);
                 //newAxes.transform.localPosition = new Vector3(0, 0, i * .25f - .002f);
@@ -96,7 +91,7 @@ namespace ETV.ETV3D
 
         private GameObject GenerateAxes(bool withGrid)
         {
-            AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+            AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
             int counter = 0;
             GameObject allAxesGO = new GameObject("Axes-Set");
@@ -218,7 +213,7 @@ namespace ETV.ETV3D
 
         private GameObject GenerateGrid(float min, float max)
         {
-            AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.PrimitiveFactory2Dservice;
+            AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
                 GameObject grid = factory2D.CreateGrid(
                     new Color(1, 1, 1, .5f),
@@ -240,9 +235,9 @@ namespace ETV.ETV3D
             DrawGraph();
         }
 
-        private PCPLine2D CreateLine(InformationObject o, Color color)
+        private PCPLine2D CreateLine(InfoObject o, Color color)
         {
-            Graphical2DPrimitiveFactory factory = ServiceLocator.instance.PrimitiveFactory2Dservice;
+            Graphical2DPrimitiveFactory factory = ServiceLocator.instance.Factory2DPrimitives;
             var pcpLine = factory.CreatePCPLine();
             var pcpComp = pcpLine.GetComponent<PCPLine2D>();
             pcpComp.lineRenderer.startColor = color;

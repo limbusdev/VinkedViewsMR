@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Based on CSVReader by Dock. (24/8/11) http://starfruitgames.com
+/// 
+/// Simplified to fit this project by Georg Eckert (2018-09-01)
+/// </summary>
 public class CSVReader : MonoBehaviour
 {
     public static string[][] SplitCsvGrid(string csvText)

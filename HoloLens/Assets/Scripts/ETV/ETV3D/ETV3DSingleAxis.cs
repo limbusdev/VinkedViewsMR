@@ -13,14 +13,14 @@ public class ETV3DSingleAxis : AETV3D
 
     // ........................................................................ Private Variables
     private DataSet data;
-    private LevelOfMeasurement type;
+    private LoM type;
     private int attributeID;
     private GameObject axis;
     private string name;
 
 
     // ........................................................................ AETV3D Methods
-    public void Init(DataSet data, int attributeID, LevelOfMeasurement type)
+    public void Init(DataSet data, int attributeID, LoM type)
     {
         this.data = data;
         this.attributeID = attributeID;
@@ -33,13 +33,13 @@ public class ETV3DSingleAxis : AETV3D
 
         switch(type)
         {
-            case LevelOfMeasurement.NOMINAL:
+            case LoM.NOMINAL:
                 this.name = data.nomAttributes[attributeID];
                 break;
-            case LevelOfMeasurement.ORDINAL:
+            case LoM.ORDINAL:
                 this.name = data.ordAttributes[attributeID];
                 break;
-            case LevelOfMeasurement.INTERVAL:
+            case LoM.INTERVAL:
                 this.name = data.ivlAttributes[attributeID];
                 break;
             default: //case LevelOfMeasurement.RATIO:
@@ -57,16 +57,10 @@ public class ETV3DSingleAxis : AETV3D
     {
         throw new System.NotImplementedException();
     }
-
-    public override void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
-    {
-        axis.GetComponent<Axis3D>().labelVariableText = axisVariable;
-        axis.GetComponent<Axis3D>().UpdateAxis();
-    }
-
+    
     public override void SetUpAxis()
     {
-        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.PrimitiveFactory3Dservice;
+        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.Factory3DPrimitives;
 
         // y-Axis
         axis = factory3D.CreateAxis(Color.white, this.name, "", AxisDirection.Y, 1f, .01f, true, true);

@@ -16,7 +16,7 @@ public class ETV3DSingleAxis : AETV3D
     private LoM type;
     private int attributeID;
     private GameObject axis;
-    private string name;
+    private string attributeName;
 
 
     // ........................................................................ AETV3D Methods
@@ -25,31 +25,28 @@ public class ETV3DSingleAxis : AETV3D
         this.data = data;
         this.attributeID = attributeID;
         this.type = type;
-
-        float attributeRange = DataProcessor.RatioAttribute.CalculateRange(data.informationObjects, attributeID);
-
         
-        SetUpAxis();
+        
 
         switch(type)
         {
             case LoM.NOMINAL:
-                this.name = data.nomAttributes[attributeID];
+                this.attributeName = data.nomAttributes[attributeID];
                 break;
             case LoM.ORDINAL:
-                this.name = data.ordAttributes[attributeID];
+                this.attributeName = data.ordAttributes[attributeID];
                 break;
             case LoM.INTERVAL:
-                this.name = data.ivlAttributes[attributeID];
+                this.attributeName = data.ivlAttributes[attributeID];
                 break;
             default: //case LevelOfMeasurement.RATIO:
-                this.name = data.ratAttributes[attributeID];
+                this.attributeName = data.ratAttributes[attributeID];
                 break;
         }
 
-        SetAxisLabels(AxisDirection.Y, name, "");
+        SetUpAxis();
 
-
+        SetAxisLabels(AxisDirection.Y, attributeName);
     }
 
 
@@ -63,14 +60,11 @@ public class ETV3DSingleAxis : AETV3D
         AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.Factory3DPrimitives;
 
         // y-Axis
-        axis = factory3D.CreateAxis(Color.white, this.name, "", AxisDirection.Y, 1f, .01f, true, true);
-        Axis3D axis3D = axis.GetComponent<Axis3D>();
-        axis3D.max = 0;
-        axis3D.min = 0;
-        axis3D.CalculateTickResolution();
-        
-        axis.transform.localPosition = new Vector3();
+        axis = factory3D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, data);
         axis.transform.parent = Anchor.transform;
+        axis.transform.localPosition = new Vector3();
+
+        axes.Add(AxisDirection.Y, axis);
     }
 
     public override void UpdateETV()

@@ -127,6 +127,8 @@ public class VisualizationFactory : MonoBehaviour
         var ae13 = GeneratePCP3DFrom(1, new string[] { "Crime", "Inside/Outside", "Weapon", "District", "Neighborhood" });
         ae13.transform.position = new Vector3(-10, 0, 8f);
 
+        ServiceLocator.instance.visualizationFactory.GenerateSingle3DAxisFrom(0, "Year");
+
         DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[1].informationObjects[0]);
         
 
@@ -200,8 +202,8 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateSingle3DAxisFrom(int dataSetID, string variable)
     {
-        try
-        {
+        //try
+        //{
             if(!CheckIfSuitable(dataSetID, new string[] { variable }, VisualizationType.AXIS))
             {
                 return new GameObject("Not Suitable");
@@ -217,12 +219,12 @@ public class VisualizationFactory : MonoBehaviour
             vis.transform.position = NewETVPosition.transform.position;
 
             return vis;
-        } catch(Exception e)
-        {
-            Debug.Log("Creation of requested Visualization for variable " + variable + " failed.");
-            Debug.LogError(e.Message);
-            return new GameObject("Creation Failed");
-        }
+        //} catch(Exception e)
+        //{
+        //    Debug.Log("Creation of requested Visualization for variable " + variable + " failed.");
+        //    Debug.LogError(e.Message);
+        //    return new GameObject("Creation Failed");
+        //}
     }
 
     /// <summary>

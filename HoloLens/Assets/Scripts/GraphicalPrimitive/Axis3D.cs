@@ -284,7 +284,6 @@ namespace GraphicalPrimitive
         public override void UpdateAxis()
         {
             // Update Base Axis
-            DrawBaseAxis();
             UpdateLabels();
         }
     }

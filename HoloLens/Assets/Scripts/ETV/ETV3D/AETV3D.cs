@@ -12,10 +12,10 @@ public abstract class AETV3D : MonoBehaviour, IEuclideanTransformableView
     public abstract void UpdateETV();
 
 
-    public void SetAxisLabels(AxisDirection axisDirection, string axisVariable, string axisUnit)
+    public void SetAxisLabels(AxisDirection axisDirection, string axisVariable)
     {
-        axes[axisDirection].GetComponent<Axis2D>().labelVariableText = axisVariable;
-        axes[axisDirection].GetComponent<Axis2D>().UpdateAxis();
+        axes[axisDirection].GetComponent<AAxis>().labelVariableText = axisVariable;
+        axes[axisDirection].GetComponent<AAxis>().UpdateAxis();
     }
 
     public Axis2D GetAxis(AxisDirection dir)

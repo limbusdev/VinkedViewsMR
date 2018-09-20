@@ -115,6 +115,15 @@ public class VisualizationFactory : MonoBehaviour
         var ae9 = GenerateBarMap3DFrom(1, new string[] {"Crime", "Weapon" });
         ae9.transform.position = new Vector3(-4, 0, 5f);
 
+        var ae10 = GeneratePCP2DFrom(1, new string[] { "Crime", "Inside/Outside", "Weapon", "District", "Neighborhood"});
+        ae10.transform.position = new Vector3(-8, 0, 5f);
+
+        var ae12 = GeneratePCP2DFrom(1, new string[] { "Date", "Time" });
+        ae12.transform.position = new Vector3(-8, 0, 9f);
+
+        var ae11 = GeneratePCP2DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
+        ae11.transform.position = new Vector3(-8, 0, 7f);
+
         DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[1].informationObjects[0]);
         
 
@@ -287,8 +296,8 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateBarMap3DFrom(int dataSetID, string[] variables)
     {
-        //try
-        //{
+        try
+        {
             if(!CheckIfSuitable(dataSetID, variables, VisualizationType.BAR_MAP))
             {
                 return new GameObject("Not Suitable");
@@ -305,12 +314,12 @@ public class VisualizationFactory : MonoBehaviour
             vis.transform.position = NewETVPosition.transform.position;
 
             return vis;
-        //} catch(Exception e)
-        //{
-        //    Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
-        //    Debug.LogError(e.Message);
-        //    return new GameObject("Creation Failed");
-        //}
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -321,8 +330,8 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GeneratePCP2DFrom(int dataSetID, string[] variables)
     {
-        try
-        {
+        //try
+        //{
             if(!CheckIfSuitable(dataSetID, variables, VisualizationType.PCP))
             {
                 return new GameObject("Not Suitable");
@@ -338,12 +347,12 @@ public class VisualizationFactory : MonoBehaviour
             vis.transform.position = NewETVPosition.transform.position;
 
             return vis;
-        } catch(Exception e)
-        {
-            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
-            Debug.LogError(e.Message);
-            return new GameObject("Creation Failed");
-        }
+        //} catch(Exception e)
+        //{
+        //    Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+        //    Debug.LogError(e.Message);
+        //    return new GameObject("Creation Failed");
+        //}
     }
 
     /// <summary>

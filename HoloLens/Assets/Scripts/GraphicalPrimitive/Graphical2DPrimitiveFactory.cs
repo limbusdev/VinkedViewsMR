@@ -71,6 +71,34 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         return axis;
     }
 
+    public override GameObject CreateFixedLengthAutoTickedAxis(string name, float length, AxisDirection direction, DataSet data)
+    {
+        if(data.GetTypeOf(name) == LoM.INTERVAL || data.GetTypeOf(name) == LoM.RATIO)
+        {
+            return CreateAutoTickedAxis(name, direction, data);
+        } else
+        {
+
+            GameObject axis = Instantiate(Axis2DPrefab);
+            Axis2D axis2Dcomp = axis.GetComponent<Axis2D>();
+
+            switch(data.GetTypeOf(name))
+            {
+                case LoM.NOMINAL:
+                    axis2Dcomp.Init(data.dataMeasuresNominal[name], direction, true, length);
+                    break;
+                case LoM.ORDINAL:
+                    axis2Dcomp.Init(data.dataMeasuresOrdinal[name], direction, true, length);
+                    break;
+                default:
+                    axis = new GameObject("Creation Failed");
+                    break;
+            }
+
+            return axis;
+        }
+    }
+
     public GameObject CreateAutoGrid(float max, Vector3 axisDir, Vector3 expansionDir, float length)
     {
         GameObject grid = new GameObject("grid");

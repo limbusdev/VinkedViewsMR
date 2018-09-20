@@ -91,11 +91,15 @@ namespace GraphicalPrimitive
 
         public float TransformToAxisSpace(float value)
         {
+            if(max - min == 0)
+                return 0f;
             return ((value - min) / (max - min)) * length;
         }
 
         public float TransformFromAxisSpace(float value)
         {
+            if(max - min == 0)
+                return 0f;
             return (value / length) * (max - min) + min;
         }
     }

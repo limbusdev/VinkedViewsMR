@@ -19,4 +19,6 @@ public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
     public virtual GameObject CreateAutoTickedAxis(string name, float max, AxisDirection dir = AxisDirection.Y) { return new GameObject("Dummy Axis"); }
 
     public virtual GameObject CreateAutoTickedAxis(string name, AxisDirection direction, DataSet data) { return new GameObject("Dummy Axis"); }
+
+    public virtual GameObject CreateFixedLengthAutoTickedAxis(string name, float length, AxisDirection direction, DataSet data) { return new GameObject("Dummy Axis"); }
 }

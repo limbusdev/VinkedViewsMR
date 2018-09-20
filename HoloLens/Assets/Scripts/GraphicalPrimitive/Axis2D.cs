@@ -26,30 +26,48 @@ namespace GraphicalPrimitive
             AssembleRatioAxis();
         }
        
-        public void Init(NominalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
+        public void Init(NominalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y, bool manualLength=false, float length=1)
         {
             base.Init(m, dir);
-            this.min= 0;
-            this.max = m.numberOfUniqueValues;
-            this.length = .15f * m.numberOfUniqueValues + .15f;
-            this.tickResolution = .15f;
+            this.min = 0;
+            this.max = m.max;
+
+            if(manualLength)
+            {
+                this.length = length;
+                this.tickResolution = 1f / (m.numberOfUniqueValues-1);
+            } else
+            {
+                this.length = .15f * m.numberOfUniqueValues + .15f;
+                this.tickResolution = .15f;
+            }
+            
             this.tipped = false;
             this.ticked = true;
             type = LoM.NOMINAL;
-            AssembleNominalAxis(m);
+            AssembleNominalAxis(m, manualLength, this.tickResolution);
         }
 
-        public void Init(OrdinalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
+        public void Init(OrdinalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y, bool manualLength = false, float length = 1)
         {
             base.Init(m, dir);
             this.min= m.min;
             this.max = m.max;
-            this.length = .15f * m.numberOfUniqueValues + .15f;
-            this.tickResolution = .15f;
+
+            if(manualLength)
+            {
+                this.length = length;
+                this.tickResolution = 1f / (m.numberOfUniqueValues-1);
+            } else
+            {
+                this.length = .15f * m.numberOfUniqueValues + .15f;
+                this.tickResolution = .15f;
+            }
+
             this.tipped = true;
             this.ticked = true;
             type = LoM.ORDINAL;
-            AssembleOrdinalAxis(m);
+            AssembleOrdinalAxis(m, manualLength, this.tickResolution);
         }
 
         public void Init(IntervalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
@@ -78,17 +96,17 @@ namespace GraphicalPrimitive
             AssembleRatioAxis();
         }
 
-        private void AssembleNominalAxis(NominalDataDimensionMeasures m)
+        private void AssembleNominalAxis(NominalDataDimensionMeasures m, bool manualLength=false, float tickRes=.15f)
         {
             DrawBaseAxis();
-            GenerateNominalTicks(m);
+            GenerateNominalTicks(m, manualLength, tickRes);
             UpdateLabels();
         }
 
-        private void AssembleOrdinalAxis(OrdinalDataDimensionMeasures m)
+        private void AssembleOrdinalAxis(OrdinalDataDimensionMeasures m, bool manualLength = false, float tickRes = .15f)
         {
             DrawBaseAxis();
-            GenerateOrdinalTicks(m);
+            GenerateOrdinalTicks(m, manualLength, tickRes);
             UpdateLabels();
         }
 
@@ -139,7 +157,7 @@ namespace GraphicalPrimitive
             }
         }
         
-        private void GenerateNominalTicks(NominalDataDimensionMeasures m)
+        private void GenerateNominalTicks(NominalDataDimensionMeasures m, bool manualTickRes=false, float tickRes=.15f)
         {
             var tickDir = DefineTickDirection(axisDirection);
 
@@ -147,17 +165,26 @@ namespace GraphicalPrimitive
             for(int i=0; i<=m.max; i++)
             {
                 var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
+
+                
                 tick.lr.SetPosition(1, tickDir * diameter * 4f);
+
                 tick.SetDirection(axisDirection);
                 tick.label.text = m.uniqueValues[i];
 
                 tick.transform.parent = Anchor.transform;
-                tick.transform.localPosition = direction * .15f*(i+1);
+                if(manualTickRes)
+                {
+                    tick.transform.localPosition = direction * (tickRes * i);
+                } else
+                {
+                    tick.transform.localPosition = direction * .15f * (i + 1);
+                }
                 ticks.Add(tick);
             }
         }
 
-        private void GenerateOrdinalTicks(OrdinalDataDimensionMeasures m)
+        private void GenerateOrdinalTicks(OrdinalDataDimensionMeasures m, bool manualTickRes = false, float tickRes = .15f)
         {
             var tickDir = DefineTickDirection(axisDirection);
 
@@ -170,7 +197,13 @@ namespace GraphicalPrimitive
                 tick.label.text = m.uniqueValues[i];
 
                 tick.transform.parent = Anchor.transform;
-                tick.transform.localPosition = direction * .15f * (i+1);
+                if(manualTickRes)
+                {
+                    tick.transform.localPosition = direction * tickRes * i;
+                } else
+                {
+                    tick.transform.localPosition = direction * .15f * (i + 1);
+                }
                 ticks.Add(tick);
             }
         }

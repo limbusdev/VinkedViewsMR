@@ -18,6 +18,8 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
     private GameObject allAxesGO;
 
+    private IDictionary<int, Axis2D> PCPAxes;
+
     private PCPLine2D[] linePrimitives;
 
     public void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs)
@@ -36,87 +38,57 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
     public override void SetUpAxis()
     {
+        PCPAxes = new Dictionary<int, Axis2D>();
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
         int counter = 0;
         allAxesGO = new GameObject("Axes-Set");
 
         // Setup nominal axes
-        for(int i=0; i<nominalIDs.Length; i++)
+        foreach(int attID in nominalIDs)
         {
-            string attributeName = data.informationObjects[0].nominalAtt[nominalIDs[i]].name;
-            GameObject axis = factory2D.CreateAxis(
-                Color.white,attributeName,"",AxisDirection.Y,1f,.01f,true,true);
-            axis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
-            axis.transform.parent = allAxesGO.transform;
-            Axis2D axis2D = axis.GetComponent<Axis2D>();
-            axis2D.ticked = true;
-            axis2D.min = 0;
-            axis2D.max = data.dataMeasuresNominal[attributeName].numberOfUniqueValues;
-
-            axis2D.CalculateTickResolution();
-            axis2D.UpdateAxis();
+            string attributeName = data.nomAttributes[attID];
+            var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, data);
+            xAxis.transform.parent = allAxesGO.transform;
+            xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
+            PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
 
             counter++;
         }
 
         // Setup ordinal axes
-        for(int i = 0; i < ordinalIDs.Length; i++)
+        foreach(int attID in ordinalIDs)
         {
-            string attributeName = data.informationObjects[0].ordinalAtt[ordinalIDs[i]].name;
-            GameObject axis = factory2D.CreateAxis(
-                Color.white, attributeName, "", AxisDirection.Y, 1f, .01f, true, true);
-            axis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
-            axis.transform.parent = allAxesGO.transform;
-            Axis2D axis2D = axis.GetComponent<Axis2D>();
-            axis2D.ticked = true;
-            axis2D.min = data.dataMeasuresOrdinal[attributeName].min;
-            axis2D.max = data.dataMeasuresOrdinal[attributeName].max;
-
-            axis2D.CalculateTickResolution();
-            axis2D.UpdateAxis();
+            string attributeName = data.ordAttributes[attID];
+            var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, data);
+            xAxis.transform.parent = allAxesGO.transform;
+            xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
+            PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
 
             counter++;
         }
 
         // Setup interval axes
-        for(int i = 0; i < intervalIDs.Length; i++)
+        foreach(int attID in intervalIDs)
         {
-            string attributeName = data.informationObjects[0].intervalAtt[intervalIDs[i]].name;
-            GameObject axis = factory2D.CreateAxis(
-                Color.white, attributeName, "", AxisDirection.Y, 1f, .01f, true, true);
-            axis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
-            axis.transform.parent = allAxesGO.transform;
-            Axis2D axis2D = axis.GetComponent<Axis2D>();
-            axis2D.ticked = true;
-            axis2D.min = data.dataMeasuresInterval[attributeName].min;
-            axis2D.max = data.dataMeasuresInterval[attributeName].max;
-
-            axis2D.CalculateTickResolution();
-            axis2D.UpdateAxis();
+            string attributeName = data.ivlAttributes[attID];
+            var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, data);
+            xAxis.transform.parent = allAxesGO.transform;
+            xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
+            PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
 
             counter++;
         }
 
 
         // Setup ratio axes
-        for(int i=0; i<ratioIDs.Length; i++)
+        foreach(int attID in ratioIDs)
         {
-            string attributeName = data.informationObjects[0].ratioAtt[ratioIDs[i]].name;
-            string attributeUnit = "";
-            GameObject axis = factory2D.CreateAxis(
-                Color.white, attributeName, attributeUnit, 
-                AxisDirection.Y, 1f, .01f, true, true);
-
-            axis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
-            axis.transform.parent = allAxesGO.transform;
-            Axis2D axis2D = axis.GetComponent<Axis2D>();
-            axis2D.ticked = true;
-            axis2D.min = data.dataMeasuresRatio[attributeName].zeroBoundMin;
-            axis2D.max = data.dataMeasuresRatio[attributeName].zeroBoundMax;
-
-            axis2D.CalculateTickResolution();
-            axis2D.UpdateAxis();
+            string attributeName = data.ratAttributes[attID];
+            var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, data);
+            xAxis.transform.parent = allAxesGO.transform;
+            xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
+            PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
 
             counter++;
         }
@@ -127,6 +99,8 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
     private PCPLine2D CreateLine(InfoObject o, Color color)
     {
+        var replacement = (new GameObject("Information object contained NaN")).AddComponent<PCPLine2D>();
+
         Graphical2DPrimitiveFactory factory = ServiceLocator.instance.Factory2DPrimitives;
         var pcpLine = factory.CreatePCPLine();
         var pcpComp = pcpLine.GetComponent<PCPLine2D>();
@@ -141,37 +115,61 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         Vector3[] polyline = new Vector3[dimension];
 
         int counter = 0;
-        for(int variable = 0; variable < nominalIDs.Length; variable++)
+        foreach(int attID in nominalIDs)
         {
-            GenericAttribute<string> attribute = o.nominalAtt[variable];
-            polyline[counter] = new Vector3(.5f * counter, 
-                ((float)data.dataMeasuresNominal[attribute.name].valueIDs[attribute.value]) / 
-                data.dataMeasuresNominal[attribute.name].numberOfUniqueValues, 0);
-            o.AddRepresentativeObject(attribute.name, pcpLine);
+            var m = data.dataMeasuresNominal[data.nomAttributes[attID]];
+            var a = o.nominalAtt[attID];
+
+            polyline[counter] = new Vector3(.5f*counter, PCPAxes[counter].TransformToAxisSpace(m.valueIDs[a.value]), 0);
+            o.AddRepresentativeObject(a.name, pcpLine);
             counter++;
         }
 
-        for(int variable = 0; variable < ordinalIDs.Length; variable++)
+        foreach(var attID in ordinalIDs)
         {
-            GenericAttribute<int> attribute = o.ordinalAtt[variable];
-            polyline[counter] = new Vector3(.5f * counter, ((float)attribute.value - data.dataMeasuresInterval[attribute.name].min) / data.dataMeasuresOrdinal[attribute.name].range, 0);
-            o.AddRepresentativeObject(attribute.name, pcpLine);
+            var m = data.dataMeasuresOrdinal[data.ordAttributes[attID]];
+            var a = o.ordinalAtt[attID];
+
+            // If NaN
+            if(a.value == int.MinValue)
+            {
+                return replacement;
+            }
+
+            polyline[counter] = new Vector3(.5f * counter, PCPAxes[counter].TransformToAxisSpace(a.value), 0);
+            o.AddRepresentativeObject(a.name, pcpLine);
             counter++;
         }
 
-        for(int variable = 0; variable < intervalIDs.Length; variable++)
+        foreach(var attID in intervalIDs)
         {
-            GenericAttribute<int> attribute = o.intervalAtt[variable];
-            polyline[counter] = new Vector3(.5f * counter, ((float)attribute.value - data.dataMeasuresInterval[attribute.name].min) / data.dataMeasuresInterval[attribute.name].range, 0);
-            o.AddRepresentativeObject(attribute.name, pcpLine);
+            var m = data.dataMeasuresInterval[data.ivlAttributes[attID]];
+            var a = o.intervalAtt[attID];
+
+            // If NaN
+            if(a.value == int.MinValue)
+            {
+                return replacement;
+            }
+
+            polyline[counter] = new Vector3(.5f * counter, PCPAxes[counter].TransformToAxisSpace(a.value), 0);
+            o.AddRepresentativeObject(a.name, pcpLine);
             counter++;
         }
 
-        for(int variable = 0; variable < ratioIDs.Length; variable++)
+        foreach(var attID in ratioIDs)
         {
-            GenericAttribute<float> attribute = o.ratioAtt[variable];
-            polyline[counter] = new Vector3(.5f * counter, attribute.value / data.dataMeasuresRatio[attribute.name].zeroBoundRange, 0);
-            o.AddRepresentativeObject(attribute.name, pcpLine);
+            var m = data.dataMeasuresRatio[data.ratAttributes[attID]];
+            var a = o.ratioAtt[attID];
+
+            // If NaN
+            if(float.IsNaN(a.value))
+            {
+                return replacement;
+            }
+
+            polyline[counter] = new Vector3(.5f * counter, PCPAxes[counter].TransformToAxisSpace(a.value), 0);
+            o.AddRepresentativeObject(a.name, pcpLine);
             counter++;
         }
 

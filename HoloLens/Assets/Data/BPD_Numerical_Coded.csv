@@ -1,5 +1,5 @@
 Date,Time,Address,Crime,Inside/Outside,Weapon,PostCode,District,Neighborhood,Longitude,Latitude,Location,Premise
-interval+day,interval+minute,nominal,ordinal,nominal,nominal,nominal,nominal,nominal,ratio,ratio,vector2,nominal
+interval+date,interval+minute,nominal,ordinal,nominal,nominal,nominal,nominal,nominal,ratio,ratio,vector2,nominal
 43288,1433,1600 PENTWOOD RD,6,,FIREARM,413,NORTHEASTERN,Stonewood-Pentwood-Winsto,-76.58727,39.34782,"(39.34782, -76.58727)",Alley
 43288,1430,ST & DIVISION ST,5,O,,131,CENTRAL,Druid Heights,-76.63936,39.30903,"(39.30903, -76.63936)",STREET
 43288,1398,2500 PERRING MANOR RD,0,I,OTHER,423,NORTHEASTERN,Hamilton Hills,-76.56094,39.37189,"(39.37189, -76.56094)",ROW/TOWNHO

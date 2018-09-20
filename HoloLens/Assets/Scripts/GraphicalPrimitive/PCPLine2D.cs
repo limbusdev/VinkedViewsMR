@@ -10,8 +10,11 @@ namespace GraphicalPrimitive
         
         public override void ApplyColor(Color color)
         {
-            lineRenderer.startColor = color;
-            lineRenderer.endColor = color;
+            if(lineRenderer != null)
+            {
+                lineRenderer.startColor = color;
+                lineRenderer.endColor = color;
+            }
         }
     }
 }

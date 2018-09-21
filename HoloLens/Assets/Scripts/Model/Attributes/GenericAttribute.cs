@@ -15,7 +15,7 @@ namespace Model.Attributes
     /// var size = new GenericValue&lt;string&gt;("size", "XL", LoM.ORDINAL);
     /// </summary>
     /// <typeparam name="T">data type to use</typeparam>
-    public class GenericAttribute<T>
+    public class Attribute<T>
     {
         public string name { get; }
         public LoM lom { get; }
@@ -27,7 +27,7 @@ namespace Model.Attributes
         /// <param name="name">Name of the attribute</param>
         /// <param name="value">Value of the attribute</param>
         /// <param name="lom">Level of Measurement</param>
-        public GenericAttribute(string name, T value, LoM lom)
+        public Attribute(string name, T value, LoM lom)
         {
             this.value = value;
             this.name = name;

@@ -502,7 +502,7 @@ public class VisualizationFactory : MonoBehaviour
     {
         int[] nomIDs, ordIDs, ivlIDs, ratIDs;
 
-        DataProcessor.ExtractAttributeIDs(dataProvider.dataSets[dataSetID], attNames, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
+        AttributeProcessor.ExtractAttributeIDs(dataProvider.dataSets[dataSetID], attNames, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
 
         var count = new Vector4(nomIDs.Length, ordIDs.Length, ivlIDs.Length, ratIDs.Length);
 

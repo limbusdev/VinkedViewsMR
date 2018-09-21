@@ -1,35 +1,42 @@
 ﻿using Model;
-using Model.Attributes;
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
-public class DataProcessor
+public class AttributeProcessor
 {
-    public static class CategoricalAttribute
+    public static class Categorial
     {
-        public static int CountObjectsMatchingTwoCattegoriesNomOrd(IList<InfoObject> os, string a1, string a2, string v1, int v2)
+        public static int CountObjectsMatchingTwoCategoriesNomOrd(IList<InfoObject> os, string a1, string a2, string v1, int v2)
         {
             int counter = 0;
 
-            foreach(var o in os)
+            try
             {
-                var vNom = o.GetNomValue(a1);
-                var vOrd = o.GetOrdValue(a2);
-
-                if(vNom.Equals(v1) && vOrd == v2)
+                foreach(var o in os)
                 {
-                    counter++;
+                    var vNom = o.GetNomValue(a1);
+                    var vOrd = o.GetOrdValue(a2);
+
+                    if(vNom.Equals(v1) && vOrd == v2)
+                    {
+                        counter++;
+                    }
                 }
             }
+            catch(Exception e)
+            {
+                Debug.LogWarning("Attributes must be Nominal and Ordinal" + e.Message);
+            }
+
             return counter;
         }
     }
 
-    public static class NominalAttribute
+    public static class Nominal
     {
-        public static NominalAttributeStats CalculateMeasures(IList<InfoObject> os, int aID)
+        public static NominalAttributeStats CalculateStats(IList<InfoObject> os, int aID)
         {
             var measures = new NominalAttributeStats(
                 CalculateDistribution(os, aID),
@@ -92,9 +99,9 @@ public class DataProcessor
         }
     }
 
-    public static class OrdinalAttribute
+    public static class Ordinal
     {
-        public static OrdinalAttributeStats CalculateMeasures(IList<InfoObject> os, int aID, IDictionary<int, string> dict)
+        public static OrdinalAttributeStats CalculateStats(IList<InfoObject> os, int aID, IDictionary<int, string> dict)
         {
             var measures = new OrdinalAttributeStats(
                 dict,
@@ -172,9 +179,9 @@ public class DataProcessor
         }
     }
 
-    public static class IntervalAttribute
+    public static class Interval
     {
-        public static IntervalAttributeStats CalculateMeasures(IList<InfoObject> os, int aID, IDictionary<string, string> intervalTranslators)
+        public static IntervalAttributeStats CalculateStats(IList<InfoObject> os, int aID, IDictionary<string, string> intervalTranslators)
         {
             var measures = new IntervalAttributeStats(
                 CalculateDistribution(os, aID),
@@ -235,9 +242,9 @@ public class DataProcessor
         }
     }
     
-    public static class RatioAttribute
+    public static class Ratio
     {
-        public static RatioAttributeStats CalculateMeasures(IList<InfoObject> os, int aID)
+        public static RatioAttributeStats CalculateStats(IList<InfoObject> os, int aID)
         {
             var measures = new RatioAttributeStats(
                 os[0].ratAttribVals[aID].name,

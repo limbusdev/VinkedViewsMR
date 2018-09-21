@@ -196,16 +196,16 @@ public class DataProvider : MonoBehaviour
 
         for(int sample = 0; sample < sampleCount; sample++)
         {
-            var nomAtts = new GenericAttribute<string>[nomVarsCount];
-            var ordAtts = new GenericAttribute<int>[ordVarsCount];
-            var ivlAtts = new GenericAttribute<int>[ivlVarsCount];
-            var ratAtts = new GenericAttribute<float>[ratioVarsCount];
+            var nomAtts = new Attribute<string>[nomVarsCount];
+            var ordAtts = new Attribute<int>[ordVarsCount];
+            var ivlAtts = new Attribute<int>[ivlVarsCount];
+            var ratAtts = new Attribute<float>[ratioVarsCount];
 
             // Fill new information object's nominal attributes
             int variable = 0;
             foreach(string attName in nomVars.Keys)
             {
-                var newAttribute = new GenericAttribute<string>(
+                var newAttribute = new Attribute<string>(
                     attName, nomVars[attName][sample], LoM.NOMINAL);
                 nomAtts[variable] = newAttribute;
                 variable++;
@@ -215,7 +215,7 @@ public class DataProvider : MonoBehaviour
             variable = 0;
             foreach(string attName in ordVars.Keys)
             {
-                var newAttribute = new GenericAttribute<int>(
+                var newAttribute = new Attribute<int>(
                     attName, ordVars[attName][sample], LoM.ORDINAL);
                 ordAtts[variable] = newAttribute;
                 variable++;
@@ -225,7 +225,7 @@ public class DataProvider : MonoBehaviour
             variable = 0;
             foreach(string attName in ivlVars.Keys)
             {
-                var newAttribute = new GenericAttribute<int>(
+                var newAttribute = new Attribute<int>(
                     attName, ivlVars[attName][sample], LoM.INTERVAL);
                 ivlAtts[variable] = newAttribute;
                 variable++;
@@ -235,7 +235,7 @@ public class DataProvider : MonoBehaviour
             variable = 0;
             foreach(string attName in ratioVars.Keys)
             {
-                var newFloatAttribute = new GenericAttribute<float>(
+                var newFloatAttribute = new Attribute<float>(
                     attName, ratioVars[attName][sample], LoM.RATIO);
                 ratAtts[variable] = newFloatAttribute;
                 variable++;

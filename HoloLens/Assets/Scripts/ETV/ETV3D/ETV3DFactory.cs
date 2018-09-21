@@ -82,7 +82,7 @@ public class ETV3DFactory : AETVFactory
 
         int[] nomIDs, ordIDs, ivlIDs, ratIDs;
 
-        DataProcessor.ExtractAttributeIDs(data, attIDs, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
+        AttributeProcessor.ExtractAttributeIDs(data, attIDs, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
 
         pcp.GetComponent<ETV3DParallelCoordinatesPlot>().Init(data, nomIDs, ordIDs, ivlIDs, ratIDs);
         pcp.GetComponent<ETV3DParallelCoordinatesPlot>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);

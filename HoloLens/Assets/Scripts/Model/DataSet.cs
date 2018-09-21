@@ -13,7 +13,7 @@ namespace Model
         public IDictionary<string, IntervalAttributeStats> intervalAttribStats { get; set; }
         public IDictionary<string, RatioAttributeStats> ratioAttribStats { get; set; }
 
-        public IDictionary<string, int> attributeIDs { get; set; }
+        public IDictionary<string, int> attributeIDsByName { get; set; }
 
         public string[] nomAttribNames { get; set; }
         public string[] ordAttribNames { get; set; }
@@ -36,46 +36,46 @@ namespace Model
             this.intervalAttribStats = new Dictionary<string, IntervalAttributeStats>();
             this.ratioAttribStats = new Dictionary<string, RatioAttributeStats>();
 
-            this.attributeIDs = new Dictionary<string, int>();
+            this.attributeIDsByName = new Dictionary<string, int>();
 
             // CALCULATE
 
             // Calculate Data Measures for nominal attributes
             int nominalCounter = 0;
-            foreach(GenericAttribute<string> attribute in dataObjects[0].nomAttribVals)
+            foreach(Attribute<string> attribute in dataObjects[0].nomAttribVals)
             {
                 NominalAttributeStats measure;
-                measure = DataProcessor.NominalAttribute.CalculateMeasures(dataObjects, nominalCounter);
+                measure = AttributeProcessor.Nominal.CalculateStats(dataObjects, nominalCounter);
                 nominalAttribStats.Add(attribute.name, measure);
                 nominalCounter++;
             }
 
             // Calculate Data Measures for ordinal attributes
             int ordinalCounter = 0;
-            foreach(GenericAttribute<int> attribute in dataObjects[0].ordAttribVals)
+            foreach(Attribute<int> attribute in dataObjects[0].ordAttribVals)
             {
                 OrdinalAttributeStats measure;
-                measure = DataProcessor.OrdinalAttribute.CalculateMeasures(dataObjects, ordinalCounter, dicts[attribute.name]);
+                measure = AttributeProcessor.Ordinal.CalculateStats(dataObjects, ordinalCounter, dicts[attribute.name]);
                 ordinalAttribStats.Add(attribute.name, measure);
                 nominalCounter++;
             }
 
             // Calculate Data Measures for interval Attributes
             int intervalCounter = 0;
-            foreach(GenericAttribute<int> attribute in dataObjects[0].ivlAttribVals)
+            foreach(Attribute<int> attribute in dataObjects[0].ivlAttribVals)
             {
                 IntervalAttributeStats measure;
-                measure = DataProcessor.IntervalAttribute.CalculateMeasures(dataObjects, intervalCounter, intervalTranslators);
+                measure = AttributeProcessor.Interval.CalculateStats(dataObjects, intervalCounter, intervalTranslators);
                 intervalAttribStats.Add(attribute.name, measure);
                 intervalCounter++;
             }
 
             // Calculate Data Measures for ratio Attributes
             int ratioCounter = 0;
-            foreach(GenericAttribute<float> attribute in dataObjects[0].ratAttribVals)
+            foreach(Attribute<float> attribute in dataObjects[0].ratAttribVals)
             {
                 RatioAttributeStats measure;
-                measure = DataProcessor.RatioAttribute.CalculateMeasures(dataObjects, ratioCounter);
+                measure = AttributeProcessor.Ratio.CalculateStats(dataObjects, ratioCounter);
                 ratioAttribStats.Add(attribute.name, measure);
                 ratioCounter++;
             }
@@ -87,28 +87,28 @@ namespace Model
             for(int i = 0; i < dataObjects[0].nomAttribVals.Length; i++)
             {
                 nomAttribNames[i] = infoObj.nomAttribVals[i].name;
-                attributeIDs.Add(nomAttribNames[i], i);
+                attributeIDsByName.Add(nomAttribNames[i], i);
             }
 
             ordAttribNames = new string[infoObj.ordAttribVals.Length];
             for(int i = 0; i < dataObjects[0].ordAttribVals.Length; i++)
             {
                 ordAttribNames[i] = infoObj.ordAttribVals[i].name;
-                attributeIDs.Add(ordAttribNames[i], i);
+                attributeIDsByName.Add(ordAttribNames[i], i);
             }
 
             ivlAttribNames = new string[infoObj.ivlAttribVals.Length];
             for(int i = 0; i < dataObjects[0].ivlAttribVals.Length; i++)
             {
                 ivlAttribNames[i] = infoObj.ivlAttribVals[i].name;
-                attributeIDs.Add(ivlAttribNames[i], i);
+                attributeIDsByName.Add(ivlAttribNames[i], i);
             }
 
             ratAttribNames = new string[infoObj.ratAttribVals.Length];
             for(int i = 0; i < dataObjects[0].ratAttribVals.Length; i++)
             {
                 ratAttribNames[i] = infoObj.ratAttribVals[i].name;
-                attributeIDs.Add(ratAttribNames[i], i);
+                attributeIDsByName.Add(ratAttribNames[i], i);
             }
         }
 
@@ -127,7 +127,7 @@ namespace Model
 
         public int GetIDOf(string varName)
         {
-            return attributeIDs[varName];
+            return attributeIDsByName[varName];
         }
 
         public override string ToString()

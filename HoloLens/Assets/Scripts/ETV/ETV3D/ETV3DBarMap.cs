@@ -120,22 +120,22 @@ public class ETV3DBarMap : AETV3D
 
                 if(lomA == LoM.NOMINAL && lomB == LoM.NOMINAL)
                 {
-                    count = DataProcessor.NominalAttribute.CountObjectsMatchingTwoCattegories(
+                    count = AttributeProcessor.Nominal.CountObjectsMatchingTwoCattegories(
                         data.infoObjects, attributeIDA, attributeIDB, v1, v2);
 
                 } else if(lomA == LoM.ORDINAL && lomB == LoM.ORDINAL)
                 {
-                    count = DataProcessor.OrdinalAttribute.CountObjectsMatchingTwoCattegories(
+                    count = AttributeProcessor.Ordinal.CountObjectsMatchingTwoCattegories(
                         data.infoObjects, attributeIDA, attributeIDB, dictA2[v1], dictB2[v2]);
 
                 } else if(lomA == LoM.NOMINAL && lomB == LoM.ORDINAL)
                 {
-                    count = DataProcessor.CategoricalAttribute.CountObjectsMatchingTwoCattegoriesNomOrd(
+                    count = AttributeProcessor.Categorial.CountObjectsMatchingTwoCategoriesNomOrd(
                         data.infoObjects, attributeNameX, attributeNameY, v1, dictB2[v2]);
 
                 } else if(lomA == LoM.ORDINAL && lomB == LoM.NOMINAL)
                 {
-                    count = DataProcessor.CategoricalAttribute.CountObjectsMatchingTwoCattegoriesNomOrd(
+                    count = AttributeProcessor.Categorial.CountObjectsMatchingTwoCategoriesNomOrd(
                         data.infoObjects, attributeNameY, attributeNameX, v2, dictA2[v1]);
 
                 } else

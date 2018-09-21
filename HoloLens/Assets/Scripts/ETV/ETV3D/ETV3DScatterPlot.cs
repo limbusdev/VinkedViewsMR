@@ -8,8 +8,6 @@ public class ETV3DScatterPlot : AETV3D
 {
     public GameObject Anchor;
 
-    private DataSet data;
-
     private ScatterDot3D[] dots;
     private string attributeA, attributeB, attributeC;
     private LoM lomA, lomB, lomC;
@@ -18,7 +16,7 @@ public class ETV3DScatterPlot : AETV3D
 
     public void Init(DataSet data, string attA, string attB, string attC)
     {
-        this.data = data;
+        base.Init(data);
         this.attributeA = attA;
         this.attributeB = attB;
         this.attributeC = attC;
@@ -33,12 +31,12 @@ public class ETV3DScatterPlot : AETV3D
     
     public override void SetUpAxis()
     {
-        AddAxis(attributeA, lomA, AxisDirection.X, data, Anchor);
-        AddAxis(attributeB, lomB, AxisDirection.Y, data, Anchor);
-        AddAxis(attributeC, lomC, AxisDirection.Z, data, Anchor);
+        AddAxis(attributeA, lomA, AxisDirection.X, data, Anchor.transform);
+        AddAxis(attributeB, lomB, AxisDirection.Y, data, Anchor.transform);
+        AddAxis(attributeC, lomC, AxisDirection.Z, data, Anchor.transform);
     }
 
-    public void DrawGraph()
+    public override void DrawGraph()
     {
         var dotArray = new List<ScatterDot3D>();
 
@@ -97,5 +95,10 @@ public class ETV3DScatterPlot : AETV3D
                 dot.gameObject.transform.LookAt(camera.transform);
             }
         }
+    }
+
+    public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
+    {
+        return ServiceLocator.instance.Factory2DPrimitives;
     }
 }

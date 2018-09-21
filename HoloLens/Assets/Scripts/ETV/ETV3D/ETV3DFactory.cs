@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using ETV.ETV3D;
+using ETV;
 using Model;
 using UnityEngine;
 
@@ -9,8 +9,6 @@ public class ETV3DFactory : AETVFactory
     public GameObject ETVAnchor;
 
     public GameObject etv3DBarChart;
-    public GameObject etv3DGroupedBarChart;
-    public GameObject barChartLegend3D;
     public GameObject ETV3DScatterPlotPrefab;
     public GameObject ETV3DParallelCoordinatesPlotPrefab;
     public GameObject ETV3DBarMapPrefab;
@@ -26,34 +24,6 @@ public class ETV3DFactory : AETVFactory
         return barChart;
     }
 
-    public GameObject Create3DGroupedBarChart(IDictionary<string, InfoObject> data)
-    {
-        GameObject barChart = Instantiate(etv3DGroupedBarChart);
-
-        //barChart.GetComponent<ETV3DGroupedBarChart>().Init(data);
-
-        return barChart;
-    }
-
-    public GameObject Create3DBarChartLegend(string[] names, Color[] colors)
-    {
-        GameObject legend = Instantiate(barChartLegend3D);
-
-        legend.GetComponent<BarChartLegend3D>().Init(names, colors);
-
-        return legend;
-    }
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     public override GameObject CreateSingleAxis(DataSet data, int attributeID, LoM lom)
     {
         GameObject singleAxis3D = Instantiate(ETV3DSingleAxisPrefab);
@@ -62,7 +32,7 @@ public class ETV3DFactory : AETVFactory
         return singleAxis3D;
     }
 
-    public override GameObject CreateETVLineChart(DataSet data, int floatAttributeX, int floatAttributeY, bool xAxisBoundToZero, bool yAxisBoundToZero)
+    public override GameObject CreateETVLineChart(DataSet data, string attributeNameA, string attributeNameB)
     {
         throw new System.NotImplementedException();
     }

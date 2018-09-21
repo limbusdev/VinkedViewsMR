@@ -4,14 +4,14 @@ using Model;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ETV2DParallelCoordinatesPlot : AETV2D {
+public class ETV2DParallelCoordinatesPlot : AETV2D
+{
 
     public GameObject Anchor;
 
     // Hook
     private IPCPLineGenerator pcpLineGenerator;
-
-    private DataSet data;
+    
     private int[]
             nominalIDs,
             ordinalIDs,
@@ -26,9 +26,9 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
     public void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs)
     {
+        base.Init(data);
         this.pcpLineGenerator = new PCP2DLineGenerator();
-
-        this.data = data;
+        
         this.nominalIDs = nominalIDs;
         this.ordinalIDs = ordinalIDs;
         this.intervalIDs = intervalIDs;
@@ -99,7 +99,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         allAxesGO.transform.parent = Anchor.transform;
     }
 
-    public void DrawGraph()
+    public override void DrawGraph()
     {
         var notNaNPrimitives = new List<PCPLine2D>();
         
@@ -145,5 +145,10 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
     {
         SetUpAxis();
         DrawGraph();
+    }
+
+    public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
+    {
+        return ServiceLocator.instance.Factory2DPrimitives;
     }
 }

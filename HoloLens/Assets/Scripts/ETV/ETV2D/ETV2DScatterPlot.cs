@@ -1,4 +1,5 @@
-﻿using GraphicalPrimitive;
+﻿using ETV;
+using GraphicalPrimitive;
 using Model;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,8 +7,6 @@ using UnityEngine;
 public class ETV2DScatterPlot : AETV2D
 {
     public GameObject Anchor;
-
-    private DataSet data;
     
     private ScatterDot2D[] dots;
     private string attributeA, attributeB;
@@ -15,7 +14,7 @@ public class ETV2DScatterPlot : AETV2D
 
     public void Init(DataSet data, string attributeNameA, string attributeNameB)
     {
-        this.data = data;
+        base.Init(data);
         this.attributeA = attributeNameA;
         this.attributeB = attributeNameB;
         this.lomA = data.GetTypeOf(attributeNameA);
@@ -33,11 +32,11 @@ public class ETV2DScatterPlot : AETV2D
 
     public override void SetUpAxis()
     {
-        AddAxis(attributeA, lomA, AxisDirection.X, data, Anchor);
-        AddAxis(attributeB, lomB, AxisDirection.Y, data, Anchor);
+        AddAxis(attributeA, lomA, AxisDirection.X, data, Anchor.transform);
+        AddAxis(attributeB, lomB, AxisDirection.Y, data, Anchor.transform);
     }
     
-    public void DrawGraph()
+    public override void DrawGraph()
     {
         var dotArray = new List<ScatterDot2D>();
         
@@ -75,6 +74,11 @@ public class ETV2DScatterPlot : AETV2D
             dot.SetColor(color);
             dot.ApplyColor(color);
         }
+    }
+
+    public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
+    {
+        return ServiceLocator.instance.Factory2DPrimitives;
     }
 }
 

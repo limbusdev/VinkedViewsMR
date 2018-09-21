@@ -99,7 +99,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         }
     }
 
-    public GameObject CreateAutoGrid(float max, Vector3 axisDir, Vector3 expansionDir, float length)
+    public override GameObject CreateAutoGrid(float max, Vector3 axisDir, Vector3 expansionDir, float length)
     {
         GameObject grid = new GameObject("grid");
 

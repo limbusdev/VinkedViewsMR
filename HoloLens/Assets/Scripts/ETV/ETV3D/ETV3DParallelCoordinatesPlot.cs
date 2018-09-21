@@ -3,7 +3,7 @@ using GraphicalPrimitive;
 using Model;
 using UnityEngine;
 
-namespace ETV.ETV3D
+namespace ETV
 {
     public class ETV3DParallelCoordinatesPlot : AETV3D
     {
@@ -13,8 +13,7 @@ namespace ETV.ETV3D
         private IPCPLineGenerator pcpLineGenerator;
 
         float pcpLength;
-
-        private DataSet data;
+        
         private int[]
             nominalIDs,
             ordinalIDs,
@@ -27,6 +26,7 @@ namespace ETV.ETV3D
 
         public void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs)
         {
+            base.Init(data);
             this.pcpLineGenerator = new PCP2DLineGenerator();
 
             this.data = data;
@@ -154,7 +154,7 @@ namespace ETV.ETV3D
         }
         
 
-        public void DrawGraph()
+        public override void DrawGraph()
         {
             var notNaNPrimitives = new List<PCPLine2D>();
 
@@ -177,7 +177,7 @@ namespace ETV.ETV3D
 
         private GameObject GenerateGrid(float min, float max)
         {
-            AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
+            var factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
                 GameObject grid = factory2D.CreateGrid(
                     new Color(1, 1, 1, .5f),
@@ -222,6 +222,11 @@ namespace ETV.ETV3D
                 default:
                     break;
             }
+        }
+
+        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
+        {
+            return ServiceLocator.instance.Factory2DPrimitives;
         }
     }
 }

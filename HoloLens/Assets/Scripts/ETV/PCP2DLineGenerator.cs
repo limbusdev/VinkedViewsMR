@@ -22,6 +22,29 @@ namespace ETV
             IDictionary<int, Axis2D> axes
             )
         {
+            bool missing = false;
+            foreach(var id in nominalIDs)
+            {
+                missing |= data.IsValueMissing(o, data.nomAttribNames[id], LoM.NOMINAL);
+            }
+            foreach(var id in ordinalIDs)
+            {
+                missing |= data.IsValueMissing(o, data.ordAttribNames[id], LoM.ORDINAL);
+            }
+            foreach(var id in intervalIDs)
+            {
+                missing |= data.IsValueMissing(o, data.ivlAttribNames[id], LoM.INTERVAL);
+            }
+            foreach(var id in ratioIDs)
+            {
+                missing |= data.IsValueMissing(o, data.ratAttribNames[id], LoM.RATIO);
+            }
+
+            if(missing)
+            {
+                return null;
+            }
+
             var factory = ServiceLocator.instance.Factory2DPrimitives;
             var pcpLine = factory.CreatePCPLine();
             var pcpComp = pcpLine.GetComponent<PCPLine2D>();

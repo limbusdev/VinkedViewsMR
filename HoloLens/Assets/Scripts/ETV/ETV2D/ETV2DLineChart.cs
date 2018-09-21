@@ -1,4 +1,5 @@
-﻿using GraphicalPrimitive;
+﻿using ETV;
+using GraphicalPrimitive;
 using Model;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,22 +8,22 @@ using UnityEngine;
 public class ETV2DLineChart : AETV2D
 {
     public GameObject Anchor;
-
-    public DataSet data;
-    int floatAttributeX, floatAttributeY;
-    bool xBoundToZero, yBoundToZero;
-
+    
     private XYLine2D primitive;
+    private string attributeA, attributeB;
+    private LoM lomA, lomB;
 
     
-    public void Init(DataSet data, int floatAttributeIDx, int floatAttributeIDy, bool xAxisBoundToZero, bool yAxisBoundToZero)
+    public void Init(DataSet data, string attributeA, string attributeB)
     {
-        this.data = data;
-        this.floatAttributeX = floatAttributeIDx;
-        this.floatAttributeY = floatAttributeIDy;
-        this.xBoundToZero = xAxisBoundToZero;
-        this.yBoundToZero = yAxisBoundToZero;
-        UpdateETV();
+        base.Init(data);
+        this.attributeA = attributeA;
+        this.attributeB = attributeB;
+        this.lomA = data.GetTypeOf(attributeA);
+        this.lomB = data.GetTypeOf(attributeB);
+
+        SetUpAxis();
+        DrawGraph();
     }
 
     public override void ChangeColoringScheme(ETVColorSchemes scheme)
@@ -45,88 +46,44 @@ public class ETV2DLineChart : AETV2D
 
     public override void SetUpAxis()
     {
-        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
-
-        // x-Axis
-        GameObject xAxis = factory2D.CreateAxis(Color.white, data.ratAttribNames[floatAttributeX], "", AxisDirection.X, 1f, .01f, true, true);
-        xAxis.transform.localPosition = new Vector3(0, 0, -.001f);
-        xAxis.transform.parent = Anchor.transform;
-        Axis2D xAxis2D = xAxis.GetComponent<Axis2D>();
-        xAxis2D.ticked = true;
-        if(xBoundToZero)
-        {
-            xAxis2D.min = data.ratioAttribStats[data.ratAttribNames[floatAttributeX]].zeroBoundMin;
-            xAxis2D.max = data.ratioAttribStats[data.ratAttribNames[floatAttributeX]].zeroBoundMax;
-        } else
-        {
-            xAxis2D.min = data.ratioAttribStats[data.ratAttribNames[floatAttributeX]].min;
-            xAxis2D.max = data.ratioAttribStats[data.ratAttribNames[floatAttributeX]].max;
-        }
-        xAxis2D.CalculateTickResolution();
-        xAxis2D.UpdateAxis();
-        bounds[0] += 1f + .5f;
-
-        // y-Axis
-        GameObject yAxis = factory2D.CreateAxis(Color.white, data.ratAttribNames[floatAttributeY], "", AxisDirection.Y, 1f, .01f, true, true);
-        yAxis.transform.localPosition = new Vector3(0, 0, -.001f);
-        yAxis.transform.parent = Anchor.transform;
-        Axis2D yAxis2D = yAxis.GetComponent<Axis2D>();
-        yAxis2D.ticked = true;
-        if(yBoundToZero)
-        {
-            yAxis2D.min = data.ratioAttribStats[data.ratAttribNames[floatAttributeY]].zeroBoundMin;
-            yAxis2D.max = data.ratioAttribStats[data.ratAttribNames[floatAttributeY]].zeroBoundMax;
-        } else
-        {
-            yAxis2D.min = data.ratioAttribStats[data.ratAttribNames[floatAttributeY]].min;
-            yAxis2D.max = data.ratioAttribStats[data.ratAttribNames[floatAttributeY]].max;
-        }
-        yAxis2D.CalculateTickResolution();
-        yAxis2D.UpdateAxis();
-        
-
+        AddAxis(attributeA, lomA, AxisDirection.X, data, Anchor.transform);
+        AddAxis(attributeB, lomB, AxisDirection.Y, data, Anchor.transform);
     }
 
-    public void DrawGraph()
+    public override void DrawGraph()
     {
         var line = ServiceLocator.instance.Factory2DPrimitives.CreateXYLine();
         var xyLineComp = line.GetComponent<XYLine2D>();
-        var polyline = new Vector3[data.infoObjects.Count];
+        Vector3[] polyline;
         
         xyLineComp.lineRenderer.startWidth = 0.02f;
         xyLineComp.lineRenderer.endWidth = 0.02f;
-
-        RatioAttributeStats measuresX = data.ratioAttribStats[data.ratAttribNames[floatAttributeX]];
-        RatioAttributeStats measuresY = data.ratioAttribStats[data.ratAttribNames[floatAttributeY]];
+        
+        var points = new List<Vector3>();
 
         for(int i = 0; i < data.infoObjects.Count; i++)
         {
             InfoObject o = data.infoObjects[i];
 
-            float x=0, y=0;
-            if(xBoundToZero && yBoundToZero)
+            bool valAMissing = data.IsValueMissing(o, attributeA, lomA);
+            bool valBMissing = data.IsValueMissing(o, attributeB, lomB);
+
+            if(!(valAMissing || valBMissing))
             {
-                x = measuresX.NormalizeToZeroBoundRange(o.ratAttribVals[floatAttributeX].value);
-                y = measuresY.NormalizeToZeroBoundRange(o.ratAttribVals[floatAttributeY].value);
-            } else if(xBoundToZero && !yBoundToZero)
-            {
-                x = measuresX.NormalizeToZeroBoundRange(o.ratAttribVals[floatAttributeX].value);
-                y = measuresY.NormalizeToRange(o.ratAttribVals[floatAttributeY].value);
-            } else if(!xBoundToZero && yBoundToZero)
-            {
-                x = measuresX.NormalizeToRange(o.ratAttribVals[floatAttributeX].value);
-                y = measuresY.NormalizeToZeroBoundRange(o.ratAttribVals[floatAttributeY].value);
-            } else if(!xBoundToZero && !yBoundToZero)
-            {
-                x = measuresX.NormalizeToRange(o.ratAttribVals[floatAttributeX].value);
-                y = measuresY.NormalizeToRange(o.ratAttribVals[floatAttributeY].value);
+                var valA = data.GetValue(o, attributeA, lomA);
+                var x = GetAxis(AxisDirection.X).TransformToAxisSpace(valA);
+
+                var valB = data.GetValue(o, attributeB, lomB);
+                var y = GetAxis(AxisDirection.Y).TransformToAxisSpace(valB);
+
+                points.Add(new Vector3(x, y, 0));
+
+                o.AddRepresentativeObject(attributeA, line);
+                o.AddRepresentativeObject(attributeB, line);
             }
-
-            polyline[i] = new Vector3(x,y,0);
-
-            o.AddRepresentativeObject(data.ratAttribNames[floatAttributeX], line);
-            o.AddRepresentativeObject(data.ratAttribNames[floatAttributeY], line);
         }
+
+        polyline = points.ToArray();
 
         xyLineComp.visBridgePort.transform.localPosition = polyline[0];
         xyLineComp.lineRenderer.positionCount = polyline.Length;
@@ -134,5 +91,10 @@ public class ETV2DLineChart : AETV2D
         line.transform.parent = Anchor.transform;
 
         primitive = xyLineComp;
+    }
+
+    public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
+    {
+        return ServiceLocator.instance.Factory2DPrimitives;
     }
 }

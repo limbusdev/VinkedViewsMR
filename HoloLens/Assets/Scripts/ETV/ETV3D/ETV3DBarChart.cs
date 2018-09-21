@@ -11,181 +11,177 @@ using UnityEngine;
 /// calculated from the maximum of the provided
 /// values.
 /// </summary>
-public class ETV3DBarChart : AETV3D
+namespace ETV
 {
-    // ........................................................................ Populate in Editor
-    public GameObject Anchor;
-
-    // ........................................................................ Private properties
-    private DataSet data;
-    private string attributeName;
-    private int attributeID;
-    private LoM lom;
-
-    private IDictionary<string, Bar3D> bars;
-
-
-    // ........................................................................ Initializers
-    public void Init(DataSet data, string attributeName)
+    public class ETV3DBarChart : AETV3D
     {
-        this.data = data;
-        this.attributeName = attributeName;
-        this.attributeID = data.GetIDOf(attributeName);
-        this.lom = data.GetTypeOf(attributeName);
-        
-        bars = new Dictionary<string, Bar3D>();
+        // ........................................................................ Populate in Editor
+        public GameObject Anchor;
 
-        SetUpAxis();
+        // ........................................................................ Private properties
 
-        // .................................................................... initialize
-        switch(lom)
+        private string attributeName;
+        private int attributeID;
+        private LoM lom;
+
+        private IDictionary<string, Bar3D> bars;
+
+
+        // ........................................................................ Initializers
+        public void Init(DataSet data, string attributeName)
         {
-            case LoM.NOMINAL:
-                InitNominal(data, attributeName);
-                break;
-            case LoM.ORDINAL:
-                InitOrdinal(data, attributeName);
-                break;
-            default:
-                // Nothing
-                break;
-        }
-    }
+            base.Init(data);
+            this.attributeName = attributeName;
+            this.attributeID = data.GetIDOf(attributeName);
+            this.lom = data.GetTypeOf(attributeName);
 
-    private void InitNominal(DataSet data, string attributeName)
-    {
-        var measures = data.nominalAttribStats[attributeName];
-        var factory = ServiceLocator.instance.Factory2DPrimitives;
+            bars = new Dictionary<string, Bar3D>();
 
-        for(int i = 0; i < measures.numberOfUniqueValues; i++)
-        {
-            string val = measures.uniqueValues[i];
-            InsertBar(val, measures.distribution[val], i);
-        }
+            SetUpAxis();
 
-        foreach(var o in data.infoObjects)
-        {
-            bool valMissing = data.IsValueMissing(o, attributeName, lom);
-            if(!valMissing)
+            // .................................................................... initialize
+            switch(lom)
             {
-                string value = o.nomAttribVals[attributeID].value;
-                var bar = bars[value];
-                o.AddRepresentativeObject(attributeName, bar.gameObject);
+                case LoM.NOMINAL:
+                    InitNominal(data, attributeName);
+                    break;
+                case LoM.ORDINAL:
+                    InitOrdinal(data, attributeName);
+                    break;
+                default:
+                    // Nothing
+                    break;
             }
         }
-    }
 
-    private void InitOrdinal(DataSet data, string attributeName)
-    {
-        var measures = data.ordinalAttribStats[attributeName];
-        var factory = ServiceLocator.instance.Factory2DPrimitives;
-
-        for(int i = 0; i < measures.numberOfUniqueValues; i++)
+        private void InitNominal(DataSet data, string attributeName)
         {
-            InsertBar(measures.uniqueValues[i], measures.distribution[i], i);
-        }
+            var measures = data.nominalAttribStats[attributeName];
+            var factory = ServiceLocator.instance.Factory2DPrimitives;
 
-        foreach(var o in data.infoObjects)
-        {
-            int value = o.ordAttribVals[attributeID].value;
-            var bar = bars[measures.uniqueValues[value]];
-            o.AddRepresentativeObject(attributeName, bar.gameObject);
-        }
-    }
+            for(int i = 0; i < measures.numberOfUniqueValues; i++)
+            {
+                string val = measures.uniqueValues[i];
+                InsertBar(val, measures.distribution[val], i);
+            }
 
-    // ........................................................................ Helper Methods
-    private Bar3D InsertBar(string name, int value, int barID)
-    {
-        var factory3D = ServiceLocator.instance.Factory3DPrimitives;
-
-        float normValue = GetAxis(AxisDirection.Y).TransformToAxisSpace(value);
-        var bar = factory3D.CreateBar(normValue).GetComponent<Bar3D>();
-        bar.GetComponent<Bar3D>().SetLabelText(value.ToString());
-
-        bars.Add(name, bar);
-        bar.gameObject.transform.localPosition = new Vector3((barID + 1) * 0.15f, 0, .001f);
-        bar.gameObject.transform.parent = Anchor.transform;
-
-        return bar;
-    }
-
-    public override void SetUpAxis()
-    {
-        var factory2D = ServiceLocator.instance.Factory2DPrimitives;
-
-        var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.X, data);
-        xAxis.transform.parent = Anchor.transform;
-
-        float max, length;
-
-        switch(lom)
-        {
-            case LoM.NOMINAL:
-                var mea = data.nominalAttribStats[attributeName];
-                length = (mea.numberOfUniqueValues + 1) * .15f;
-                max = mea.distMax;
-                break;
-            default:
-                var mea2 = data.ordinalAttribStats[attributeName];
-                length = (mea2.numberOfUniqueValues + 1) * .15f;
-                max = mea2.distMax;
-                break;
-        }
-
-        var yAxis = factory2D.CreateAutoTickedAxis("Amount", max);
-        yAxis.transform.parent = Anchor.transform;
-
-        // Grid
-        GameObject grid = factory2D.CreateAutoGrid(max, Vector3.right, Vector3.up, length);
-        grid.transform.localPosition = new Vector3(0, 0, .002f);
-        grid.transform.parent = Anchor.transform;
-
-        axes.Add(AxisDirection.X, xAxis);
-        axes.Add(AxisDirection.Y, yAxis);
-    }
-
-    public override void ChangeColoringScheme(ETVColorSchemes scheme)
-    {
-        int category = 0;
-        int numberOfCategories = bars.Count;
-        switch(scheme)
-        {
-            case ETVColorSchemes.Rainbow:
-                foreach(Bar3D bar in bars.Values)
+            foreach(var o in data.infoObjects)
+            {
+                bool valMissing = data.IsValueMissing(o, attributeName, lom);
+                if(!valMissing)
                 {
-                    Color color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
-                    bar.SetColor(color);
-                    bar.ApplyColor(color);
-                    category++;
+                    string value = o.nomAttribVals[attributeID].value;
+                    var bar = bars[value];
+                    o.AddRepresentativeObject(attributeName, bar.gameObject);
                 }
-                break;
-            case ETVColorSchemes.GrayZebra:
-                bool even = true;
-                foreach(Bar3D bar in bars.Values)
-                {
-                    Color color = (even) ? Color.gray : Color.white;
-                    bar.SetColor(color);
-                    bar.ApplyColor(color);
-                    even = !even;
-                    category++;
-                }
-                break;
-            case ETVColorSchemes.SplitHSV:
-                foreach(Bar3D bar in bars.Values)
-                {
-                    Color color = Color.HSVToRGB((((float)category) / numberOfCategories) / 2f + .5f, 1, 1);
-                    bar.SetColor(color);
-                    bar.ApplyColor(color);
-                    category++;
-                }
-                break;
-            default:
-                break;
+            }
         }
-    }
 
-    public override void UpdateETV()
-    {
-        throw new System.NotImplementedException();
+        private void InitOrdinal(DataSet data, string attributeName)
+        {
+            var measures = data.ordinalAttribStats[attributeName];
+            var factory = ServiceLocator.instance.Factory2DPrimitives;
+
+            for(int i = 0; i < measures.numberOfUniqueValues; i++)
+            {
+                InsertBar(measures.uniqueValues[i], measures.distribution[i], i);
+            }
+
+            foreach(var o in data.infoObjects)
+            {
+                bool valMissing = data.IsValueMissing(o, attributeName, lom);
+                if(!valMissing)
+                {
+                    int value = o.ordAttribVals[attributeID].value;
+                    var bar = bars[measures.uniqueValues[value]];
+                    o.AddRepresentativeObject(attributeName, bar.gameObject);
+                }
+            }
+        }
+
+        // ........................................................................ Helper Methods
+        private Bar3D InsertBar(string name, int value, int barID)
+        {
+            var factory3D = ServiceLocator.instance.Factory3DPrimitives;
+
+            float normValue = GetAxis(AxisDirection.Y).TransformToAxisSpace(value);
+            var bar = factory3D.CreateBar(normValue).GetComponent<Bar3D>();
+            bar.GetComponent<Bar3D>().SetLabelText(value.ToString());
+
+            bars.Add(name, bar);
+            bar.gameObject.transform.localPosition = new Vector3((barID + 1) * 0.15f, 0, .001f);
+            bar.gameObject.transform.parent = Anchor.transform;
+
+            return bar;
+        }
+
+        public override void SetUpAxis()
+        {
+            float max, length;
+            AddBarChartAxis(attributeName, AxisDirection.X, data, Anchor.transform);
+            AddAggregatedAxis(attributeName, lom, AxisDirection.Y, data, Anchor.transform, out max, out length);
+
+            var factory = GetGraphicalPrimitiveFactory();
+
+            // Grid
+            GameObject grid = factory.CreateAutoGrid(max, Vector3.right, Vector3.up, length);
+            grid.transform.localPosition = new Vector3(0, 0, .002f);
+            grid.transform.parent = Anchor.transform;
+        }
+
+        public override void ChangeColoringScheme(ETVColorSchemes scheme)
+        {
+            int category = 0;
+            int numberOfCategories = bars.Count;
+            switch(scheme)
+            {
+                case ETVColorSchemes.Rainbow:
+                    foreach(Bar3D bar in bars.Values)
+                    {
+                        Color color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
+                        bar.SetColor(color);
+                        bar.ApplyColor(color);
+                        category++;
+                    }
+                    break;
+                case ETVColorSchemes.GrayZebra:
+                    bool even = true;
+                    foreach(Bar3D bar in bars.Values)
+                    {
+                        Color color = (even) ? Color.gray : Color.white;
+                        bar.SetColor(color);
+                        bar.ApplyColor(color);
+                        even = !even;
+                        category++;
+                    }
+                    break;
+                case ETVColorSchemes.SplitHSV:
+                    foreach(Bar3D bar in bars.Values)
+                    {
+                        Color color = Color.HSVToRGB((((float)category) / numberOfCategories) / 2f + .5f, 1, 1);
+                        bar.SetColor(color);
+                        bar.ApplyColor(color);
+                        category++;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public override void UpdateETV()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void DrawGraph()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
+        {
+            return ServiceLocator.instance.Factory2DPrimitives;
+        }
     }
 }

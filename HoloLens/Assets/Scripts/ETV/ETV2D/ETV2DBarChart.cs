@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using ETV;
 
 public class ETV2DBarChart : AETV2D
 {
@@ -12,7 +13,6 @@ public class ETV2DBarChart : AETV2D
 
 
     // ........................................................................ Private properties
-    private DataSet data;
     private string attributeName;
     private int attributeID;
     private LoM lom;
@@ -23,7 +23,7 @@ public class ETV2DBarChart : AETV2D
     // ........................................................................ Initializers
     public void Init(DataSet data, string attributeName)
     {
-        this.data = data;
+        base.Init(data);
         this.attributeName = attributeName;
         this.attributeID = data.GetIDOf(attributeName);
         this.lom = data.GetTypeOf(attributeName);
@@ -107,37 +107,14 @@ public class ETV2DBarChart : AETV2D
     
     public override void SetUpAxis()
     {
-        var factory2D = ServiceLocator.instance.Factory2DPrimitives;
-
-        var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.X, data);
-        xAxis.transform.parent = Anchor.transform;
-
         float max, length;
-
-        switch(lom)
-        {
-            case LoM.NOMINAL:
-                var mea = data.nominalAttribStats[attributeName];
-                length = (mea.numberOfUniqueValues + 1) * .15f;
-                max = mea.distMax;
-                break;
-            default:
-                var mea2 = data.ordinalAttribStats[attributeName];
-                length = (mea2.numberOfUniqueValues + 1) * .15f;
-                max = mea2.distMax;
-                break;
-        }
-
-        var yAxis = factory2D.CreateAutoTickedAxis("Amount", max);
-        yAxis.transform.parent = Anchor.transform;
+        AddBarChartAxis(attributeName, AxisDirection.X, data, Anchor.transform);
+        AddAggregatedAxis(attributeName, lom, AxisDirection.Y, data, Anchor.transform, out max, out length);
 
         // Grid
-        GameObject grid = factory2D.CreateAutoGrid(max, Vector3.right, Vector3.up, length);
+        GameObject grid = GetGraphicalPrimitiveFactory().CreateAutoGrid(max, Vector3.right, Vector3.up, length);
         grid.transform.localPosition = new Vector3(0, 0, .002f);
         grid.transform.parent = Anchor.transform;
-
-        axes.Add(AxisDirection.X, xAxis);
-        axes.Add(AxisDirection.Y, yAxis);
     }
 
     public override void ChangeColoringScheme(ETVColorSchemes scheme)
@@ -181,4 +158,14 @@ public class ETV2DBarChart : AETV2D
     }
 
     public override void UpdateETV() { }
+
+    public override void DrawGraph()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
+    {
+        return ServiceLocator.instance.Factory2DPrimitives;
+    }
 }

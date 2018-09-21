@@ -12,8 +12,8 @@ public class ETV3DSingleAxis : AETV3D
 
 
     // ........................................................................ Private Variables
-    private DataSet data;
-    private LoM type;
+
+    private LoM lom;
     private int attributeID;
     private GameObject axis;
     private string attributeName;
@@ -22,12 +22,10 @@ public class ETV3DSingleAxis : AETV3D
     // ........................................................................ AETV3D Methods
     public void Init(DataSet data, int attributeID, LoM type)
     {
-        this.data = data;
+        base.Init(data);
         this.attributeID = attributeID;
-        this.type = type;
+        this.lom = type;
         
-        
-
         switch(type)
         {
             case LoM.NOMINAL:
@@ -57,14 +55,7 @@ public class ETV3DSingleAxis : AETV3D
     
     public override void SetUpAxis()
     {
-        AGraphicalPrimitiveFactory factory3D = ServiceLocator.instance.Factory3DPrimitives;
-
-        // y-Axis
-        axis = factory3D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, data);
-        axis.transform.parent = Anchor.transform;
-        axis.transform.localPosition = new Vector3();
-
-        axes.Add(AxisDirection.Y, axis);
+        AddAxis(attributeName, lom, AxisDirection.Y, data, Anchor.transform);
     }
 
     public override void UpdateETV()
@@ -72,17 +63,17 @@ public class ETV3DSingleAxis : AETV3D
         throw new System.NotImplementedException();
     }
 
+    public override void DrawGraph()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
+    {
+        return ServiceLocator.instance.Factory3DPrimitives;
+    }
+
 
     // ........................................................................ MonoBehaviour Methods
-    // Use this for initialization
-    void Start ()
-    {
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		
-	}
+
 }

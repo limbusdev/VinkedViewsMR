@@ -242,8 +242,8 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateBarChart2DFrom(int dataSetID, string variable)
     {
-        try
-        {
+        //try
+        //{
             if(!CheckIfSuitable(dataSetID, new string[] { variable }, VisualizationType.BAR_CHART))
             {
                 return new GameObject("Not Suitable");
@@ -259,12 +259,12 @@ public class VisualizationFactory : MonoBehaviour
             vis.transform.position = NewETVPosition.transform.position;
 
             return vis;
-        } catch(Exception e)
-        {
-            Debug.Log("Creation of requested Visualization for variable " + variable + " failed.");
-            Debug.LogError(e.Message);
-            return new GameObject("Creation Failed");
-        }
+        //} catch(Exception e)
+        //{
+        //    Debug.Log("Creation of requested Visualization for variable " + variable + " failed.");
+        //    Debug.LogError(e.Message);
+        //    return new GameObject("Creation Failed");
+        //}
     }
 
     /// <summary>
@@ -342,8 +342,8 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GeneratePCP2DFrom(int dataSetID, string[] variables)
     {
-        try
-        {
+        //try
+        //{
             if(!CheckIfSuitable(dataSetID, variables, VisualizationType.PCP))
             {
                 return new GameObject("Not Suitable");
@@ -359,12 +359,12 @@ public class VisualizationFactory : MonoBehaviour
             vis.transform.position = NewETVPosition.transform.position;
 
             return vis;
-        } catch(Exception e)
-        {
-            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
-            Debug.LogError(e.Message);
-            return new GameObject("Creation Failed");
-        }
+        //} catch(Exception e)
+        //{
+        //    Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+        //    Debug.LogError(e.Message);
+        //    return new GameObject("Creation Failed");
+        //}
     }
 
     /// <summary>

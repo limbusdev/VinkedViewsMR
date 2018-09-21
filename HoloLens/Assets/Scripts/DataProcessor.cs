@@ -4,6 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// Calculates various stats. Keep in mind that missing values are coded as
+/// float.NaN for ratio scaled attributes and int.MinValue for ordinal and
+/// interval scaled values. Nominal values are marked with "missingValue".
+/// </summary>
 public class AttributeProcessor
 {
     public static class Categorial
@@ -52,9 +57,12 @@ public class AttributeProcessor
             foreach(var o in os)
             {
                 var a = o.nomAttribVals[aID];
-                if(!uniqueList.Contains(a.value))
+                if(!a.value.Equals("missingValue"))
                 {
-                    uniqueList.Add(a.value);
+                    if(!uniqueList.Contains(a.value))
+                    {
+                        uniqueList.Add(a.value);
+                    }
                 }
             }
 
@@ -75,7 +83,10 @@ public class AttributeProcessor
             foreach(var o in os)
             {
                 var a = o.nomAttribVals[aID];
-                distribution[a.value] = distribution[a.value] + 1;
+                if(!a.value.Equals("missingValue"))
+                {
+                    distribution[a.value] = distribution[a.value] + 1;
+                }
             }
 
             return distribution;
@@ -125,7 +136,10 @@ public class AttributeProcessor
             foreach(var o in os)
             {
                 var a = o.ordAttribVals[aID];
-                distribution[a.value] = distribution[a.value] + 1;
+                if(a.value != int.MinValue)
+                {
+                    distribution[a.value] = distribution[a.value] + 1;
+                }
             }
 
             return distribution;
@@ -140,9 +154,12 @@ public class AttributeProcessor
                 var v1 = o.ordAttribVals[aID1].value;
                 var v2 = o.ordAttribVals[aID2].value;
 
-                if(v1 == value1 && v2 == value2)
+                if(v1 != int.MinValue && v2 != int.MinValue)
                 {
-                    counter++;
+                    if(v1 == value1 && v2 == value2)
+                    {
+                        counter++;
+                    }
                 }
             }
             return counter;
@@ -153,11 +170,13 @@ public class AttributeProcessor
             int minimum = int.MaxValue;
             foreach(InfoObject dataObject in os)
             {
-                var attribute = dataObject.ordAttribVals[attributeID];
-                int attributeValue = attribute.value;
-                if(attributeValue < minimum)
+                var a = dataObject.ordAttribVals[attributeID];
+                if(a.value != int.MinValue)
                 {
-                    minimum = attributeValue;
+                    if(a.value < minimum)
+                    {
+                        minimum = a.value;
+                    }
                 }
             }
             return minimum;
@@ -168,11 +187,13 @@ public class AttributeProcessor
             int maximum = int.MinValue;
             foreach(InfoObject dataObject in os)
             {
-                var attribute = dataObject.ordAttribVals[attributeID];
-                int attributeValue = attribute.value;
-                if(attributeValue > maximum)
+                var a = dataObject.ordAttribVals[attributeID];
+                if(a.value != int.MinValue)
                 {
-                    maximum = attributeValue;
+                    if(a.value > maximum)
+                    {
+                        maximum = a.value;
+                    }
                 }
             }
             return maximum;
@@ -201,11 +222,14 @@ public class AttributeProcessor
             foreach(var o in os)
             {
                 var a = o.ivlAttribVals[aID];
-                if(!distribution.ContainsKey(a.value))
+                if(a.value != int.MinValue)
                 {
-                    distribution.Add(a.value, 0);
+                    if(!distribution.ContainsKey(a.value))
+                    {
+                        distribution.Add(a.value, 0);
+                    }
+                    distribution[a.value] = distribution[a.value] + 1;
                 }
-                distribution[a.value] = distribution[a.value] + 1;
             }
 
             return distribution;
@@ -216,11 +240,13 @@ public class AttributeProcessor
             int minimum = int.MaxValue;
             foreach(InfoObject dataObject in os)
             {
-                var attribute = dataObject.ivlAttribVals[attributeID];
-                int attributeValue = attribute.value;
-                if(attributeValue < minimum)
+                var a = dataObject.ivlAttribVals[attributeID];
+                if(a.value != int.MinValue)
                 {
-                    minimum = attributeValue;
+                    if(a.value < minimum)
+                    {
+                        minimum = a.value;
+                    }
                 }
             }
             return minimum;
@@ -231,11 +257,13 @@ public class AttributeProcessor
             int maximum = int.MinValue;
             foreach(InfoObject dataObject in os)
             {
-                var attribute = dataObject.ivlAttribVals[attributeID];
-                int attributeValue = attribute.value;
-                if(attributeValue > maximum)
+                var a = dataObject.ivlAttribVals[attributeID];
+                if(a.value != int.MinValue)
                 {
-                    maximum = attributeValue;
+                    if(a.value > maximum)
+                    {
+                        maximum = a.value;
+                    }
                 }
             }
             return maximum;
@@ -264,11 +292,13 @@ public class AttributeProcessor
             float minimum = float.MaxValue;
             foreach(InfoObject dataObject in os)
             {
-                var attribute = dataObject.ratAttribVals[attributeID];
-                float attributeValue = attribute.value;
-                if(attributeValue < minimum)
+                var a = dataObject.ratAttribVals[attributeID];
+                if(!float.IsNaN(a.value))
                 {
-                    minimum = attributeValue;
+                    if(a.value < minimum)
+                    {
+                        minimum = a.value;
+                    }
                 }
             }
             return minimum;
@@ -283,17 +313,19 @@ public class AttributeProcessor
 
         public static float CalculateMax(IList<InfoObject> os, int attributeID)
         {
-            float max = float.MinValue;
+            float maximum = float.MinValue;
             foreach(InfoObject dataObject in os)
             {
-                var attribute = dataObject.ratAttribVals[attributeID];
-                float attributeValue = attribute.value;
-                if(attributeValue > max)
+                var a = dataObject.ratAttribVals[attributeID];
+                if(!float.IsNaN(a.value))
                 {
-                    max = attributeValue;
+                    if(a.value > maximum)
+                    {
+                        maximum = a.value;
+                    }
                 }
             }
-            return max;
+            return maximum;
         }
 
         public static float CalculateZeroBoundMax(IList<InfoObject> os, int attributeID)

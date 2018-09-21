@@ -168,43 +168,49 @@ public class ETV3DBarMap : AETV3D
 
             foreach(var o in data.infoObjects)
             {
-                Bar3D bar;
+                bool valAMissing = data.IsValueMissing(o, attributeNameA, lomA);
+                bool valBMissing = data.IsValueMissing(o, attributeNameB, lomB);
 
-                if(lomA == LoM.NOMINAL && lomB == LoM.NOMINAL)
+                if(!(valAMissing || valBMissing))
                 {
-                    bar = bars[
-                        dictA2[o.GetNomValue(attributeNameA)],
-                        dictB2[o.GetNomValue(attributeNameB)]
-                        ];
+                    Bar3D bar;
 
-                } else if(lomA == LoM.ORDINAL && lomB == LoM.ORDINAL)
-                {
-                    bar = bars[
-                        o.GetOrdValue(attributeNameA),
-                        o.GetOrdValue(attributeNameB)
-                        ];
+                    if(lomA == LoM.NOMINAL && lomB == LoM.NOMINAL)
+                    {
+                        bar = bars[
+                            dictA2[o.GetNomValue(attributeNameA)],
+                            dictB2[o.GetNomValue(attributeNameB)]
+                            ];
 
-                } else if(lomA == LoM.NOMINAL && lomB == LoM.ORDINAL)
-                {
-                    bar = bars[
-                        dictA2[o.GetNomValue(attributeNameA)],
-                        o.GetOrdValue(attributeNameB)
-                        ];
+                    } else if(lomA == LoM.ORDINAL && lomB == LoM.ORDINAL)
+                    {
+                        bar = bars[
+                            o.GetOrdValue(attributeNameA),
+                            o.GetOrdValue(attributeNameB)
+                            ];
 
-                } else if(lomA == LoM.ORDINAL && lomB == LoM.NOMINAL)
-                {
-                    bar = bars[
-                        o.GetOrdValue(attributeNameA),
-                        dictB2[o.GetNomValue(attributeNameB)]
-                        ];
+                    } else if(lomA == LoM.NOMINAL && lomB == LoM.ORDINAL)
+                    {
+                        bar = bars[
+                            dictA2[o.GetNomValue(attributeNameA)],
+                            o.GetOrdValue(attributeNameB)
+                            ];
 
-                } else
-                {
-                    bar = new Bar3D();
+                    } else if(lomA == LoM.ORDINAL && lomB == LoM.NOMINAL)
+                    {
+                        bar = bars[
+                            o.GetOrdValue(attributeNameA),
+                            dictB2[o.GetNomValue(attributeNameB)]
+                            ];
+
+                    } else
+                    {
+                        bar = new Bar3D();
+                    }
+
+                    o.AddRepresentativeObject(attributeNameA, bar.gameObject);
+                    o.AddRepresentativeObject(attributeNameB, bar.gameObject);
                 }
-
-                o.AddRepresentativeObject(attributeNameA, bar.gameObject);
-                o.AddRepresentativeObject(attributeNameB, bar.gameObject);
             }
         }
     }

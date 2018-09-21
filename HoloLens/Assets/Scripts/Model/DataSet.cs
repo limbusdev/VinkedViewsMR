@@ -144,6 +144,17 @@ namespace Model
             return outString;
         }
 
+        public bool IsValueMissing(InfoObject infO, string attributeName, LoM lom)
+        {
+            if(float.IsNaN(GetValue(infO, attributeName, lom)))
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }   
+
         public float GetValue(InfoObject infO, string attributeName, LoM lom)
         {
             float val;
@@ -151,11 +162,10 @@ namespace Model
             {
                 case LoM.NOMINAL:
                     var mN = nominalAttribStats[attributeName];
-                    int valN = mN.valueIDs[infO.GetNomValue(attributeName)];
-                    if(valN == int.MinValue)
+                    if(infO.GetNomValue(attributeName).Equals("missingValue"))
                         val = float.NaN;
                     else
-                        val = valN;
+                        val = mN.valueIDs[infO.GetNomValue(attributeName)];
                     break;
                 case LoM.ORDINAL:
                     int valO = infO.GetOrdValue(attributeName);

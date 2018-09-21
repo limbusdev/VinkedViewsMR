@@ -160,7 +160,7 @@ public class DataProvider : MonoBehaviour
                     for(int i = 2; i < grid[variable].Length; i++)
                     {
                         string value = grid[variable][i];
-                        newDataSetString[i - 2] = (value == null || value.Length == 0) ? "unknown" : value;
+                        newDataSetString[i - 2] = (value == null || value.Length == 0) ? "missingValue" : value;
                     }
                     break;
             }

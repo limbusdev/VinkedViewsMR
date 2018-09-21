@@ -61,9 +61,13 @@ public class ETV2DBarChart : AETV2D
 
         foreach(var o in data.infoObjects)
         {
-            string value = o.nomAttribVals[attributeID].value;
-            Bar2D bar = bars[value];
-            o.AddRepresentativeObject(attributeName, bar.gameObject);
+            bool valMissing = data.IsValueMissing(o, attributeName, lom);
+            if(!valMissing)
+            {
+                string value = o.nomAttribVals[attributeID].value;
+                Bar2D bar = bars[value];
+                o.AddRepresentativeObject(attributeName, bar.gameObject);
+            }
         }
     }
 

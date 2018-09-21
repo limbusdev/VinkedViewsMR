@@ -1,6 +1,7 @@
 ﻿using HoloToolkit.Unity.Buttons;
 using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.Receivers;
+using Model;
 using System.Collections.Generic;
 using UnityEngine;
 

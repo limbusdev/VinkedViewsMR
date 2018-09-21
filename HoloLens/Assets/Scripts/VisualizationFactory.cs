@@ -28,6 +28,7 @@ using UnityEngine;
 using VisBridge;
 using System.Linq;
 using System;
+using Model;
 
 /// <summary>
 /// Main class for visualization generation from databases.
@@ -307,8 +308,8 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateBarMap3DFrom(int dataSetID, string[] variables)
     {
-        try
-        {
+        //try
+        //{
             if(!CheckIfSuitable(dataSetID, variables, VisualizationType.BAR_MAP))
             {
                 return new GameObject("Not Suitable");
@@ -325,12 +326,12 @@ public class VisualizationFactory : MonoBehaviour
             vis.transform.position = NewETVPosition.transform.position;
 
             return vis;
-        } catch(Exception e)
-        {
-            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
-            Debug.LogError(e.Message);
-            return new GameObject("Creation Failed");
-        }
+        //} catch(Exception e)
+        //{
+        //    Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+        //    Debug.LogError(e.Message);
+        //    return new GameObject("Creation Failed");
+        //}
     }
 
     /// <summary>

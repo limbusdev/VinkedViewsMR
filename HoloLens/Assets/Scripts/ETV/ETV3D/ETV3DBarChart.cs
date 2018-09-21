@@ -65,9 +65,13 @@ public class ETV3DBarChart : AETV3D
 
         foreach(var o in data.infoObjects)
         {
-            string value = o.nomAttribVals[attributeID].value;
-            var bar = bars[value];
-            o.AddRepresentativeObject(attributeName, bar.gameObject);
+            bool valMissing = data.IsValueMissing(o, attributeName, lom);
+            if(!valMissing)
+            {
+                string value = o.nomAttribVals[attributeID].value;
+                var bar = bars[value];
+                o.AddRepresentativeObject(attributeName, bar.gameObject);
+            }
         }
     }
 

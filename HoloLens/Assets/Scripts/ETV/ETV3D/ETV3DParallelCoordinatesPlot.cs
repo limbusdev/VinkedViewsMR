@@ -161,9 +161,10 @@ namespace ETV.ETV3D
             int counter = 0;
             foreach(var infoO in data.infoObjects)
             {
-                var line = CreateLine(infoO, Color.white);
+                var line = pcpLineGenerator.CreateLine(infoO, Color.white, data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs, PCPAxesFront);
                 if(line != null)
                 {
+                    line.transform.parent = Anchor.transform;
                     line.transform.localPosition = new Vector3(0, 0, counter * pcpLength - .002f);
                     notNaNPrimitives.Add(line);
                 }
@@ -197,15 +198,7 @@ namespace ETV.ETV3D
             SetUpAxis();
             DrawGraph();
         }
-
-        private PCPLine2D CreateLine(InfoObject o, Color color)
-        {
-            var pcpLine = pcpLineGenerator.CreateLine(o, color, data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs, PCPAxesFront);
-            pcpLine.transform.parent = Anchor.transform;
-
-            return pcpLine;
-        }
-
+        
         public override void ChangeColoringScheme(ETVColorSchemes scheme)
         {
             switch(scheme)

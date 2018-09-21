@@ -41,6 +41,11 @@ namespace ETV
                 var m = data.nominalAttribStats[data.nomAttribNames[attID]];
                 var a = o.nomAttribVals[attID];
 
+                if(a.value.Equals("missingValue"))
+                {
+                    return null;
+                }
+
                 polyline[counter] = new Vector3(.5f * counter, axes[counter].TransformToAxisSpace(m.valueIDs[a.value]), 0);
                 o.AddRepresentativeObject(a.name, pcpLine);
                 counter++;

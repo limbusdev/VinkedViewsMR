@@ -82,8 +82,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8516dac928d69bb47b4a86167ec64383, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Anchor: {fileID: 1861221027037028}
-  particleSystem: {fileID: 1861221027037028}
+  Anchor: {fileID: 4589257330021588}
 --- !u!198 &198196365392548348
 ParticleSystem:
   m_ObjectHideFlags: 1

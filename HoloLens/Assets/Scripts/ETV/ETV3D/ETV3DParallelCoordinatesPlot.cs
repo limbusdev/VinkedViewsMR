@@ -7,8 +7,6 @@ namespace ETV
 {
     public class ETV3DParallelCoordinatesPlot : AETV3D
     {
-        public GameObject Anchor;
-
         // Hook
         private IPCPLineGenerator pcpLineGenerator;
 

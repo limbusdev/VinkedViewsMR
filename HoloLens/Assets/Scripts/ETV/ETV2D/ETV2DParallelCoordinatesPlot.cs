@@ -6,9 +6,6 @@ using UnityEngine;
 
 public class ETV2DParallelCoordinatesPlot : AETV2D
 {
-
-    public GameObject Anchor;
-
     // Hook
     private IPCPLineGenerator pcpLineGenerator;
     

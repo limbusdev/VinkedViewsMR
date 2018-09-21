@@ -17,7 +17,6 @@ namespace ETV
     public class ETV3DBarMap : AETV3D
     {
         // ........................................................................ Populate in Editor
-        public GameObject Anchor;
 
         // ........................................................................ Private properties
 
@@ -245,15 +244,15 @@ namespace ETV
             var factory3D = ServiceLocator.instance.Factory3DPrimitives;
             var factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
-            AddBarChartAxis(attributeNameA, AxisDirection.X, data, Anchor.transform);
+            AddBarChartAxis(attributeNameA, AxisDirection.X);
             var xAxis = GetAxis(AxisDirection.X);
             xAxis.transform.parent = Anchor.transform;
             xAxis.transform.localRotation = Quaternion.Euler(90, 0, 0);
 
-            AddBarChartAxis(attributeNameB, AxisDirection.Z, data, Anchor.transform);
+            AddBarChartAxis(attributeNameB, AxisDirection.Z);
             
             var yAxis = factory2D.CreateAutoTickedAxis("Amount", max);
-            yAxis.transform.parent = Anchor.transform;
+            yAxis.transform.parent = Anchor;
         }
 
         /**

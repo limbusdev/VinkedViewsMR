@@ -16,7 +16,6 @@ namespace ETV
     public class ETV3DBarChart : AETV3D
     {
         // ........................................................................ Populate in Editor
-        public GameObject Anchor;
 
         // ........................................................................ Private properties
 
@@ -118,8 +117,8 @@ namespace ETV
         public override void SetUpAxis()
         {
             float max, length;
-            AddBarChartAxis(attributeName, AxisDirection.X, data, Anchor.transform);
-            AddAggregatedAxis(attributeName, lom, AxisDirection.Y, data, Anchor.transform, out max, out length);
+            AddBarChartAxis(attributeName, AxisDirection.X);
+            AddAggregatedAxis(attributeName, lom, AxisDirection.Y, out max, out length);
 
             var factory = GetGraphicalPrimitiveFactory();
 

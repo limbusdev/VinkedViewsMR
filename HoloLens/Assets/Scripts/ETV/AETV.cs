@@ -11,6 +11,9 @@ namespace ETV
 {
     public abstract class AETV : MonoBehaviour, IEuclideanTransformableView
     {
+        [SerializeField]
+        public Transform Anchor;
+
         protected DataSet data { get; set; }
 
         public IDictionary<AxisDirection, AAxis> axes { get; set; }
@@ -37,14 +40,14 @@ namespace ETV
             axes[axisDirection].UpdateAxis();
         }
 
-        public void AddBarChartAxis(string attributeName, AxisDirection dir, DataSet data, Transform parent)
+        public void AddBarChartAxis(string attributeName, AxisDirection dir)
         {
             var axis = GetGraphicalPrimitiveFactory().CreateAutoTickedAxis(attributeName, AxisDirection.X, data);
-            axis.transform.parent = parent;
+            axis.transform.parent = Anchor;
             axes.Add(dir, axis.GetComponent<AAxis>());
         }
 
-        public void AddAxis(string attributeName, LoM lom, AxisDirection dir, DataSet data, Transform parent)
+        public void AddAxis(string attributeName, LoM lom, AxisDirection dir)
         {
             var factory = GetGraphicalPrimitiveFactory();
 
@@ -64,7 +67,7 @@ namespace ETV
                     axis = factory.CreateAutoTickedAxis(attributeName, dir, data);
                     break;
             }
-            axis.transform.parent = parent;
+            axis.transform.parent = Anchor;
             axes.Add(dir, axis.GetComponent<AAxis>());
         }
 
@@ -73,7 +76,7 @@ namespace ETV
             return axes[dir].GetComponent<AAxis>();
         }
 
-        public void AddAggregatedAxis(string attributeName, LoM lom, AxisDirection dir, DataSet data, Transform parent, out float max, out float length)
+        public void AddAggregatedAxis(string attributeName, LoM lom, AxisDirection dir, out float max, out float length)
         {
             var factory = GetGraphicalPrimitiveFactory();
 
@@ -92,7 +95,7 @@ namespace ETV
             }
 
             var yAxis = factory.CreateAutoTickedAxis("Amount", max);
-            yAxis.transform.parent = parent;
+            yAxis.transform.parent = Anchor;
             
             axes.Add(AxisDirection.Y, yAxis.GetComponent<AAxis>());
         }

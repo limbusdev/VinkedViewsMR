@@ -7,9 +7,6 @@ using UnityEngine;
 public class ETV3DSingleAxis : AETV3D
 {
     // ........................................................................ Editor Variables
-    [SerializeField]
-    public GameObject Anchor;
-
 
     // ........................................................................ Private Variables
 
@@ -55,7 +52,7 @@ public class ETV3DSingleAxis : AETV3D
     
     public override void SetUpAxis()
     {
-        AddAxis(attributeName, lom, AxisDirection.Y, data, Anchor.transform);
+        AddAxis(attributeName, lom, AxisDirection.Y);
     }
 
     public override void UpdateETV()

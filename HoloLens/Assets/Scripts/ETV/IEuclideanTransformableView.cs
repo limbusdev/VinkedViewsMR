@@ -6,9 +6,9 @@ public interface IEuclideanTransformableView
 {
     void ChangeColoringScheme(ETVColorSchemes scheme);
     void SetUpAxis();
-    void AddBarChartAxis(string attributeName, AxisDirection dir, DataSet data, Transform parent);
-    void AddAxis(string attributeName, LoM lom, AxisDirection dir, DataSet data, Transform parent);
-    void AddAggregatedAxis(string attributeName, LoM lom, AxisDirection dir, DataSet data, Transform parent, out float max, out float length);
+    void AddBarChartAxis(string attributeName, AxisDirection dir);
+    void AddAxis(string attributeName, LoM lom, AxisDirection dir);
+    void AddAggregatedAxis(string attributeName, LoM lom, AxisDirection dir, out float max, out float length);
     void DrawGraph();
     void UpdateETV();
     void SetAxisLabels(AxisDirection axisDirection, string axisVariable);

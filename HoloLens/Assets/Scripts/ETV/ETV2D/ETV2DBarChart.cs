@@ -9,8 +9,6 @@ using ETV;
 public class ETV2DBarChart : AETV2D
 {
     // ........................................................................ Populate in Editor
-    public GameObject Anchor;
-
 
     // ........................................................................ Private properties
     private string attributeName;
@@ -108,8 +106,8 @@ public class ETV2DBarChart : AETV2D
     public override void SetUpAxis()
     {
         float max, length;
-        AddBarChartAxis(attributeName, AxisDirection.X, data, Anchor.transform);
-        AddAggregatedAxis(attributeName, lom, AxisDirection.Y, data, Anchor.transform, out max, out length);
+        AddBarChartAxis(attributeName, AxisDirection.X);
+        AddAggregatedAxis(attributeName, lom, AxisDirection.Y, out max, out length);
 
         // Grid
         GameObject grid = GetGraphicalPrimitiveFactory().CreateAutoGrid(max, Vector3.right, Vector3.up, length);

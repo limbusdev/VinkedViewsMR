@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class ETV3DScatterPlot : AETV3D
 {
-    public GameObject Anchor;
-
     private ScatterDot3D[] dots;
     private string attributeA, attributeB, attributeC;
     private LoM lomA, lomB, lomC;
@@ -31,9 +29,9 @@ public class ETV3DScatterPlot : AETV3D
     
     public override void SetUpAxis()
     {
-        AddAxis(attributeA, lomA, AxisDirection.X, data, Anchor.transform);
-        AddAxis(attributeB, lomB, AxisDirection.Y, data, Anchor.transform);
-        AddAxis(attributeC, lomC, AxisDirection.Z, data, Anchor.transform);
+        AddAxis(attributeA, lomA, AxisDirection.X);
+        AddAxis(attributeB, lomB, AxisDirection.Y);
+        AddAxis(attributeC, lomC, AxisDirection.Z);
     }
 
     public override void DrawGraph()

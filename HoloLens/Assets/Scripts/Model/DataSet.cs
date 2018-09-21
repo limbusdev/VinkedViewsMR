@@ -42,7 +42,7 @@ namespace Model
 
             // Calculate Data Measures for nominal attributes
             int nominalCounter = 0;
-            foreach(GenericAttribute<string> attribute in dataObjects[0].nominalAtt)
+            foreach(GenericAttribute<string> attribute in dataObjects[0].nomAttribVals)
             {
                 NominalAttributeStats measure;
                 measure = DataProcessor.NominalAttribute.CalculateMeasures(dataObjects, nominalCounter);
@@ -52,7 +52,7 @@ namespace Model
 
             // Calculate Data Measures for ordinal attributes
             int ordinalCounter = 0;
-            foreach(GenericAttribute<int> attribute in dataObjects[0].ordinalAtt)
+            foreach(GenericAttribute<int> attribute in dataObjects[0].ordAttribVals)
             {
                 OrdinalAttributeStats measure;
                 measure = DataProcessor.OrdinalAttribute.CalculateMeasures(dataObjects, ordinalCounter, dicts[attribute.name]);
@@ -62,7 +62,7 @@ namespace Model
 
             // Calculate Data Measures for interval Attributes
             int intervalCounter = 0;
-            foreach(GenericAttribute<int> attribute in dataObjects[0].intervalAtt)
+            foreach(GenericAttribute<int> attribute in dataObjects[0].ivlAttribVals)
             {
                 IntervalAttributeStats measure;
                 measure = DataProcessor.IntervalAttribute.CalculateMeasures(dataObjects, intervalCounter, intervalTranslators);
@@ -72,7 +72,7 @@ namespace Model
 
             // Calculate Data Measures for ratio Attributes
             int ratioCounter = 0;
-            foreach(GenericAttribute<float> attribute in dataObjects[0].ratioAtt)
+            foreach(GenericAttribute<float> attribute in dataObjects[0].ratAttribVals)
             {
                 RatioAttributeStats measure;
                 measure = DataProcessor.RatioAttribute.CalculateMeasures(dataObjects, ratioCounter);
@@ -83,31 +83,31 @@ namespace Model
             // Fill variable names
             var infoObj = dataObjects[0];
 
-            nomAttribNames = new string[infoObj.nominalAtt.Length];
-            for(int i = 0; i < dataObjects[0].nominalAtt.Length; i++)
+            nomAttribNames = new string[infoObj.nomAttribVals.Length];
+            for(int i = 0; i < dataObjects[0].nomAttribVals.Length; i++)
             {
-                nomAttribNames[i] = infoObj.nominalAtt[i].name;
+                nomAttribNames[i] = infoObj.nomAttribVals[i].name;
                 attributeIDs.Add(nomAttribNames[i], i);
             }
 
-            ordAttribNames = new string[infoObj.ordinalAtt.Length];
-            for(int i = 0; i < dataObjects[0].ordinalAtt.Length; i++)
+            ordAttribNames = new string[infoObj.ordAttribVals.Length];
+            for(int i = 0; i < dataObjects[0].ordAttribVals.Length; i++)
             {
-                ordAttribNames[i] = infoObj.ordinalAtt[i].name;
+                ordAttribNames[i] = infoObj.ordAttribVals[i].name;
                 attributeIDs.Add(ordAttribNames[i], i);
             }
 
-            ivlAttribNames = new string[infoObj.intervalAtt.Length];
-            for(int i = 0; i < dataObjects[0].intervalAtt.Length; i++)
+            ivlAttribNames = new string[infoObj.ivlAttribVals.Length];
+            for(int i = 0; i < dataObjects[0].ivlAttribVals.Length; i++)
             {
-                ivlAttribNames[i] = infoObj.intervalAtt[i].name;
+                ivlAttribNames[i] = infoObj.ivlAttribVals[i].name;
                 attributeIDs.Add(ivlAttribNames[i], i);
             }
 
-            ratAttribNames = new string[infoObj.ratioAtt.Length];
-            for(int i = 0; i < dataObjects[0].ratioAtt.Length; i++)
+            ratAttribNames = new string[infoObj.ratAttribVals.Length];
+            for(int i = 0; i < dataObjects[0].ratAttribVals.Length; i++)
             {
-                ratAttribNames[i] = infoObj.ratioAtt[i].name;
+                ratAttribNames[i] = infoObj.ratAttribVals[i].name;
                 attributeIDs.Add(ratAttribNames[i], i);
             }
         }

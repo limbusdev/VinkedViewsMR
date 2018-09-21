@@ -39,7 +39,7 @@ namespace ETV
             foreach(int attID in nominalIDs)
             {
                 var m = data.nominalAttribStats[data.nomAttribNames[attID]];
-                var a = o.nominalAtt[attID];
+                var a = o.nomAttribVals[attID];
 
                 polyline[counter] = new Vector3(.5f * counter, axes[counter].TransformToAxisSpace(m.valueIDs[a.value]), 0);
                 o.AddRepresentativeObject(a.name, pcpLine);
@@ -49,7 +49,7 @@ namespace ETV
             foreach(var attID in ordinalIDs)
             {
                 var m = data.ordinalAttribStats[data.ordAttribNames[attID]];
-                var a = o.ordinalAtt[attID];
+                var a = o.ordAttribVals[attID];
 
                 // If NaN
                 if(a.value == int.MinValue)
@@ -65,7 +65,7 @@ namespace ETV
             foreach(var attID in intervalIDs)
             {
                 var m = data.intervalAttribStats[data.ivlAttribNames[attID]];
-                var a = o.intervalAtt[attID];
+                var a = o.ivlAttribVals[attID];
 
                 // If NaN
                 if(a.value == int.MinValue)
@@ -81,7 +81,7 @@ namespace ETV
             foreach(var attID in ratioIDs)
             {
                 var m = data.ratioAttribStats[data.ratAttribNames[attID]];
-                var a = o.ratioAtt[attID];
+                var a = o.ratAttribVals[attID];
 
                 // If NaN
                 if(float.IsNaN(a.value))

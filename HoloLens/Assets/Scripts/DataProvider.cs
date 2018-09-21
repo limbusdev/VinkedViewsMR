@@ -191,9 +191,6 @@ public class DataProvider : MonoBehaviour
         int ordVarsCount = ordVars.Count;
         int ivlVarsCount = ivlVars.Count;
         int ratioVarsCount = ratioVars.Count;
-        
-        int vector2VarsCount = 0;
-        int vector3VarsCount = 0;
 
         var infoObjs = new List<InfoObject>();
 
@@ -203,8 +200,6 @@ public class DataProvider : MonoBehaviour
             var ordAtts = new GenericAttribute<int>[ordVarsCount];
             var ivlAtts = new GenericAttribute<int>[ivlVarsCount];
             var ratAtts = new GenericAttribute<float>[ratioVarsCount];
-            var ve2Atts = new GenericAttribute<Vector2>[vector2VarsCount];
-            var ve3Atts = new GenericAttribute<Vector3>[vector3VarsCount];
 
             // Fill new information object's nominal attributes
             int variable = 0;
@@ -247,12 +242,12 @@ public class DataProvider : MonoBehaviour
             }
 
             // Create new information object
-            InfoObject obj = new InfoObject(nomAtts, ordAtts, ivlAtts, ratAtts, ve2Atts, ve3Atts);
+            var obj = new InfoObject(nomAtts, ordAtts, ivlAtts, ratAtts);
             
             infoObjs.Add(obj);
         }
 
-        DataSet dataSet = new DataSet("DataSet", infoObjs, dicts, intervalTranslators);
+        var dataSet = new DataSet("DataSet", infoObjs, dicts, intervalTranslators);
 
         return dataSet;
     }

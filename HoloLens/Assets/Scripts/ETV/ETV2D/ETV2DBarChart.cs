@@ -61,7 +61,7 @@ public class ETV2DBarChart : AETV2D
 
         foreach(var o in data.infoObjects)
         {
-            string value = o.nominalAtt[attributeID].value;
+            string value = o.nomAttribVals[attributeID].value;
             Bar2D bar = bars[value];
             o.AddRepresentativeObject(attributeName, bar.gameObject);
         }
@@ -79,7 +79,7 @@ public class ETV2DBarChart : AETV2D
 
         foreach(var o in data.infoObjects)
         {
-            int value = o.ordinalAtt[attributeID].value;
+            int value = o.ordAttribVals[attributeID].value;
             Bar2D bar = bars[measures.uniqueValues[value]];
             o.AddRepresentativeObject(attributeName, bar.gameObject);
         }

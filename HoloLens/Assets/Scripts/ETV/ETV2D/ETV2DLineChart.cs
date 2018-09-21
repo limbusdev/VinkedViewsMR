@@ -106,20 +106,20 @@ public class ETV2DLineChart : AETV2D
             float x=0, y=0;
             if(xBoundToZero && yBoundToZero)
             {
-                x = measuresX.NormalizeToZeroBoundRange(o.ratioAtt[floatAttributeX].value);
-                y = measuresY.NormalizeToZeroBoundRange(o.ratioAtt[floatAttributeY].value);
+                x = measuresX.NormalizeToZeroBoundRange(o.ratAttribVals[floatAttributeX].value);
+                y = measuresY.NormalizeToZeroBoundRange(o.ratAttribVals[floatAttributeY].value);
             } else if(xBoundToZero && !yBoundToZero)
             {
-                x = measuresX.NormalizeToZeroBoundRange(o.ratioAtt[floatAttributeX].value);
-                y = measuresY.NormalizeToRange(o.ratioAtt[floatAttributeY].value);
+                x = measuresX.NormalizeToZeroBoundRange(o.ratAttribVals[floatAttributeX].value);
+                y = measuresY.NormalizeToRange(o.ratAttribVals[floatAttributeY].value);
             } else if(!xBoundToZero && yBoundToZero)
             {
-                x = measuresX.NormalizeToRange(o.ratioAtt[floatAttributeX].value);
-                y = measuresY.NormalizeToZeroBoundRange(o.ratioAtt[floatAttributeY].value);
+                x = measuresX.NormalizeToRange(o.ratAttribVals[floatAttributeX].value);
+                y = measuresY.NormalizeToZeroBoundRange(o.ratAttribVals[floatAttributeY].value);
             } else if(!xBoundToZero && !yBoundToZero)
             {
-                x = measuresX.NormalizeToRange(o.ratioAtt[floatAttributeX].value);
-                y = measuresY.NormalizeToRange(o.ratioAtt[floatAttributeY].value);
+                x = measuresX.NormalizeToRange(o.ratAttribVals[floatAttributeX].value);
+                y = measuresY.NormalizeToRange(o.ratAttribVals[floatAttributeY].value);
             }
 
             polyline[i] = new Vector3(x,y,0);

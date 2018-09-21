@@ -36,17 +36,14 @@ public enum LoM
 public class InfoObject
 {
     // ........................................................................ Lookup tables
-    public IDictionary<string, int> attributeNames;
+    public IDictionary<string, int> attributeIDsByName;
     public IDictionary<string, LoM> attributeLoMs;
 
     // ........................................................................ Attribute values
-    public GenericAttribute<string>[] nominalAtt;
-    public GenericAttribute<int>[] ordinalAtt;
-    public GenericAttribute<int>[] intervalAtt;
-    public GenericAttribute<float>[] ratioAtt;
-
-    public GenericAttribute<Vector2>[] attributesVector2;
-    public GenericAttribute<Vector3>[] attributesVector3;
+    public GenericAttribute<string>[] nomAttribVals;
+    public GenericAttribute<int>[] ordAttribVals;
+    public GenericAttribute<int>[] ivlAttribVals;
+    public GenericAttribute<float>[] ratAttribVals;
 
     // ........................................................................ Observed representatives
     public IDictionary<string, IList<GameObject>> representativeGameObjectsByAttributeName { get; }
@@ -57,17 +54,13 @@ public class InfoObject
         GenericAttribute<string>[] attributesNom,
         GenericAttribute<int>[] attributesOrd,
         GenericAttribute<int>[] attributesIvl,
-        GenericAttribute<float>[] attributesRat,
-        GenericAttribute<Vector2>[] attributesVector2, 
-        GenericAttribute<Vector3>[] attributesVector3)
+        GenericAttribute<float>[] attributesRat)
     {
         this.representativeGameObjectsByAttributeName = new Dictionary<string, IList<GameObject>>();
-        this.nominalAtt = attributesNom;
-        this.ordinalAtt = attributesOrd;
-        this.intervalAtt = attributesIvl;
-        this.ratioAtt = attributesRat;
-        this.attributesVector2 = attributesVector2;
-        this.attributesVector3 = attributesVector3;
+        this.nomAttribVals = attributesNom;
+        this.ordAttribVals = attributesOrd;
+        this.ivlAttribVals = attributesIvl;
+        this.ratAttribVals = attributesRat;
 
         GenerateLookupTables();
     }
@@ -75,34 +68,34 @@ public class InfoObject
     // ........................................................................ Initializer methods
     private void GenerateLookupTables()
     {
-        attributeNames = new Dictionary<string, int>();
+        attributeIDsByName = new Dictionary<string, int>();
         attributeLoMs = new Dictionary<string, LoM>();
         
-        for(int i = 0; i < nominalAtt.Length; i++)
+        for(int i = 0; i < nomAttribVals.Length; i++)
         {
-            var a = nominalAtt[i];
-            attributeNames.Add(a.name, i);
+            var a = nomAttribVals[i];
+            attributeIDsByName.Add(a.name, i);
             attributeLoMs.Add(a.name, a.lom);
         }
 
-        for(int i = 0; i < ordinalAtt.Length; i++)
+        for(int i = 0; i < ordAttribVals.Length; i++)
         {
-            var a = ordinalAtt[i];
-            attributeNames.Add(a.name, i);
+            var a = ordAttribVals[i];
+            attributeIDsByName.Add(a.name, i);
             attributeLoMs.Add(a.name, a.lom);
         }
 
-        for(int i = 0; i < intervalAtt.Length; i++)
+        for(int i = 0; i < ivlAttribVals.Length; i++)
         {
-            var a = intervalAtt[i];
-            attributeNames.Add(a.name, i);
+            var a = ivlAttribVals[i];
+            attributeIDsByName.Add(a.name, i);
             attributeLoMs.Add(a.name, a.lom);
         }
 
-        for(int i = 0; i < ratioAtt.Length; i++)
+        for(int i = 0; i < ratAttribVals.Length; i++)
         {
-            var a = ratioAtt[i];
-            attributeNames.Add(a.name, i);
+            var a = ratAttribVals[i];
+            attributeIDsByName.Add(a.name, i);
             attributeLoMs.Add(a.name, a.lom);
         }
     }
@@ -122,34 +115,34 @@ public class InfoObject
 
     public string GetNomValue(string attributeName)
     {
-        return nominalAtt[attributeNames[attributeName]].value;
+        return nomAttribVals[attributeIDsByName[attributeName]].value;
     }
 
     public int GetOrdValue(string attributeName)
     {
-        return ordinalAtt[attributeNames[attributeName]].value;
+        return ordAttribVals[attributeIDsByName[attributeName]].value;
     }
 
     public int GetIvlValue(string attributeName)
     {
-        return intervalAtt[attributeNames[attributeName]].value;
+        return ivlAttribVals[attributeIDsByName[attributeName]].value;
     }
 
     public float GetRatValue(string attributeName)
     {
-        return ratioAtt[attributeNames[attributeName]].value;
+        return ratAttribVals[attributeIDsByName[attributeName]].value;
     }
 
     public override string ToString()
     {
         string outString = "";
 
-        foreach(GenericAttribute<string> a in nominalAtt)
+        foreach(GenericAttribute<string> a in nomAttribVals)
         {
             outString += a.name + ": " + a.value + "\t|";
         }
 
-        foreach(GenericAttribute<float> a in ratioAtt)
+        foreach(GenericAttribute<float> a in ratAttribVals)
         {
             outString += a.name + ": " + a.value + "\t|";
         }

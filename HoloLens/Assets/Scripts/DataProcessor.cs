@@ -33,7 +33,7 @@ public class DataProcessor
         {
             var measures = new NominalAttributeStats(
                 CalculateDistribution(os, aID),
-                os[0].nominalAtt[aID].name);
+                os[0].nomAttribVals[aID].name);
 
             return measures;
         }
@@ -44,7 +44,7 @@ public class DataProcessor
 
             foreach(var o in os)
             {
-                var a = o.nominalAtt[aID];
+                var a = o.nomAttribVals[aID];
                 if(!uniqueList.Contains(a.value))
                 {
                     uniqueList.Add(a.value);
@@ -67,7 +67,7 @@ public class DataProcessor
 
             foreach(var o in os)
             {
-                var a = o.nominalAtt[aID];
+                var a = o.nomAttribVals[aID];
                 distribution[a.value] = distribution[a.value] + 1;
             }
 
@@ -80,8 +80,8 @@ public class DataProcessor
 
             foreach(var o in os)
             {
-                var v1 = o.nominalAtt[aID1].value;
-                var v2 = o.nominalAtt[aID2].value;
+                var v1 = o.nomAttribVals[aID1].value;
+                var v2 = o.nomAttribVals[aID2].value;
                 
                 if(v1.Equals(value1) && v2.Equals(value2))
                 {
@@ -99,7 +99,7 @@ public class DataProcessor
             var measures = new OrdinalAttributeStats(
                 dict,
                 CalculateDistribution(os, aID, dict),
-                os[0].ordinalAtt[aID].name);
+                os[0].ordAttribVals[aID].name);
 
             return measures;
         }
@@ -117,7 +117,7 @@ public class DataProcessor
 
             foreach(var o in os)
             {
-                var a = o.ordinalAtt[aID];
+                var a = o.ordAttribVals[aID];
                 distribution[a.value] = distribution[a.value] + 1;
             }
 
@@ -130,8 +130,8 @@ public class DataProcessor
 
             foreach(var o in os)
             {
-                var v1 = o.ordinalAtt[aID1].value;
-                var v2 = o.ordinalAtt[aID2].value;
+                var v1 = o.ordAttribVals[aID1].value;
+                var v2 = o.ordAttribVals[aID2].value;
 
                 if(v1 == value1 && v2 == value2)
                 {
@@ -146,7 +146,7 @@ public class DataProcessor
             int minimum = int.MaxValue;
             foreach(InfoObject dataObject in os)
             {
-                var attribute = dataObject.ordinalAtt[attributeID];
+                var attribute = dataObject.ordAttribVals[attributeID];
                 int attributeValue = attribute.value;
                 if(attributeValue < minimum)
                 {
@@ -161,7 +161,7 @@ public class DataProcessor
             int maximum = int.MinValue;
             foreach(InfoObject dataObject in os)
             {
-                var attribute = dataObject.ordinalAtt[attributeID];
+                var attribute = dataObject.ordAttribVals[attributeID];
                 int attributeValue = attribute.value;
                 if(attributeValue > maximum)
                 {
@@ -178,8 +178,8 @@ public class DataProcessor
         {
             var measures = new IntervalAttributeStats(
                 CalculateDistribution(os, aID),
-                os[0].intervalAtt[aID].name,
-                intervalTranslators[os[0].intervalAtt[aID].name],
+                os[0].ivlAttribVals[aID].name,
+                intervalTranslators[os[0].ivlAttribVals[aID].name],
                 CalculateMin(os, aID),
                 CalculateMax(os, aID)
                 );
@@ -193,7 +193,7 @@ public class DataProcessor
 
             foreach(var o in os)
             {
-                var a = o.intervalAtt[aID];
+                var a = o.ivlAttribVals[aID];
                 if(!distribution.ContainsKey(a.value))
                 {
                     distribution.Add(a.value, 0);
@@ -209,7 +209,7 @@ public class DataProcessor
             int minimum = int.MaxValue;
             foreach(InfoObject dataObject in os)
             {
-                var attribute = dataObject.intervalAtt[attributeID];
+                var attribute = dataObject.ivlAttribVals[attributeID];
                 int attributeValue = attribute.value;
                 if(attributeValue < minimum)
                 {
@@ -224,7 +224,7 @@ public class DataProcessor
             int maximum = int.MinValue;
             foreach(InfoObject dataObject in os)
             {
-                var attribute = dataObject.intervalAtt[attributeID];
+                var attribute = dataObject.ivlAttribVals[attributeID];
                 int attributeValue = attribute.value;
                 if(attributeValue > maximum)
                 {
@@ -240,7 +240,7 @@ public class DataProcessor
         public static RatioAttributeStats CalculateMeasures(IList<InfoObject> os, int aID)
         {
             var measures = new RatioAttributeStats(
-                os[0].ratioAtt[aID].name,
+                os[0].ratAttribVals[aID].name,
                 CalculateRange(os, aID),
                 CalculateZeroBoundRange(os, aID),
                 CalculateMin(os, aID),
@@ -257,7 +257,7 @@ public class DataProcessor
             float minimum = float.MaxValue;
             foreach(InfoObject dataObject in os)
             {
-                var attribute = dataObject.ratioAtt[attributeID];
+                var attribute = dataObject.ratAttribVals[attributeID];
                 float attributeValue = attribute.value;
                 if(attributeValue < minimum)
                 {
@@ -279,7 +279,7 @@ public class DataProcessor
             float max = float.MinValue;
             foreach(InfoObject dataObject in os)
             {
-                var attribute = dataObject.ratioAtt[attributeID];
+                var attribute = dataObject.ratAttribVals[attributeID];
                 float attributeValue = attribute.value;
                 if(attributeValue > max)
                 {

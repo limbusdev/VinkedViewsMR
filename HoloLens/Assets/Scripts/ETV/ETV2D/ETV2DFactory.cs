@@ -53,8 +53,7 @@ public class ETV2DFactory : AETVFactory
     {
         GameObject scatterPlot = Instantiate(ETV2DScatterPlotPrefab);
 
-        scatterPlot.GetComponent<ETV2DScatterPlot>().Init(
-            data, data.GetIDOf(attIDs[0]), data.GetIDOf(attIDs[1]), data.GetTypeOf(attIDs[0]), data.GetTypeOf(attIDs[1]));
+        scatterPlot.GetComponent<ETV2DScatterPlot>().Init(data, attIDs[0], attIDs[1]);
         scatterPlot.GetComponent<ETV2DScatterPlot>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
         return scatterPlot;

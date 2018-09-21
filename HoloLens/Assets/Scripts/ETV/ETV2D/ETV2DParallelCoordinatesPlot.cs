@@ -1,7 +1,5 @@
 ﻿using GraphicalPrimitive;
 using Model;
-using Model.Attributes;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,8 +27,6 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         this.ordinalIDs = ordinalIDs;
         this.intervalIDs = intervalIDs;
         this.ratioIDs = ratioIDs;
-
-        this.linePrimitives = new PCPLine2D[data.informationObjects.Count];
 
         SetUpAxis();
         DrawGraph();
@@ -99,9 +95,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
     private PCPLine2D CreateLine(InfoObject o, Color color)
     {
-        var replacement = (new GameObject("Information object contained NaN")).AddComponent<PCPLine2D>();
-
-        Graphical2DPrimitiveFactory factory = ServiceLocator.instance.Factory2DPrimitives;
+        var factory = ServiceLocator.instance.Factory2DPrimitives;
         var pcpLine = factory.CreatePCPLine();
         var pcpComp = pcpLine.GetComponent<PCPLine2D>();
         pcpComp.lineRenderer.startColor = color;
@@ -133,7 +127,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
             // If NaN
             if(a.value == int.MinValue)
             {
-                return replacement;
+                return null;
             }
 
             polyline[counter] = new Vector3(.5f * counter, PCPAxes[counter].TransformToAxisSpace(a.value), 0);
@@ -149,7 +143,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
             // If NaN
             if(a.value == int.MinValue)
             {
-                return replacement;
+                return null;
             }
 
             polyline[counter] = new Vector3(.5f * counter, PCPAxes[counter].TransformToAxisSpace(a.value), 0);
@@ -165,7 +159,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
             // If NaN
             if(float.IsNaN(a.value))
             {
-                return replacement;
+                return null;
             }
 
             polyline[counter] = new Vector3(.5f * counter, PCPAxes[counter].TransformToAxisSpace(a.value), 0);
@@ -182,14 +176,18 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
     public void DrawGraph()
     {
-        int dimension = ratioIDs.Length + nominalIDs.Length;
-
-        int i = 0;
-        foreach(InfoObject o in data.informationObjects)
+        var notNaNPrimitives = new List<PCPLine2D>();
+        
+        foreach(var infoO in data.informationObjects)
         {
-            linePrimitives[i] = CreateLine(o, Color.white);
-            i++;
+            var line = CreateLine(infoO, Color.white);
+            if(line != null)
+            {
+                notNaNPrimitives.Add(line);
+            }
         }
+
+        linePrimitives = notNaNPrimitives.ToArray();
     }
 
     public override void ChangeColoringScheme(ETVColorSchemes scheme)

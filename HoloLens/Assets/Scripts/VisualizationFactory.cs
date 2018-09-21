@@ -499,30 +499,37 @@ public class VisualizationFactory : MonoBehaviour
             return new string[] { "SingleAxis3D", "BarChart2D", "BarChart3D" };
         } else if(count == new Vector4(2, 0, 0, 0))
         {
-            return new string[] { "BarMap3D", "PCP2D", "PCP3D" };
+            return new string[] { "BarMap3D", "PCP2D", "PCP3D", "ScatterXY2D" };
         } else if(count == new Vector4(0, 1, 0, 0))
         {
             return new string[] { "SingleAxis3D", "BarChart2D", "BarChart3D" };
         } else if(count == new Vector4(0, 2, 0, 0))
         {
-            return new string[] { "BarMap3D", "PCP2D", "PCP3D" };
+            return new string[] { "BarMap3D", "PCP2D", "PCP3D", "ScatterXY2D" };
         } else if(count == new Vector4(0, 0, 1, 0))
         {
             return new string[] { "SingleAxis3D" };
         } else if(count == new Vector4(0, 0, 2, 0))
         {
-            return new string[] { "PCP2D", "PCP3D" };
+            return new string[] { "PCP2D", "PCP3D", "ScatterXY2D" };
         } else if(count == new Vector4(0, 0, 0, 1))
         {
             return new string[] { "SingleAxis3D" };
         } else if(count == new Vector4(0, 0, 0, 2))
         {
             return new string[] { "PCP2D", "PCP3D", "LineXY2D", "ScatterXY2D" };
-        } else if(count == new Vector4(0, 0, 0, 3))
+        } else if(count == new Vector4(1, 1, 0, 0))
+        {
+            return new string[] { "BarMap3D", "PCP2D", "PCP3D", "ScatterXYZ2D" };
+
+        } else if(count.x + count.y + count.z + count.w == 2)
+        {
+            return new string[] { "PCP2D", "PCP3D", "ScatterXYZ2D" };
+
+        } else if(count.x + count.y + count.z + count.w == 3)
         {
             return new string[] { "PCP2D", "PCP3D", "ScatterXYZ3D" };
-        } else if(count == new Vector4(1, 1, 0, 0)) {
-            return new string[] { "BarMap3D", "PCP2D", "PCP3D", "ScatterXYZ2D" };
+
         } else
         {
             return new string[] { "PCP2D", "PCP3D" };

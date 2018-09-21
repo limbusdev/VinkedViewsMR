@@ -119,6 +119,7 @@ public class InfoObject
     }
 
     // ........................................................................ Getters & Setters
+
     public string GetNomValue(string attributeName)
     {
         return nominalAtt[attributeNames[attributeName]].value;

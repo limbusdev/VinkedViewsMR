@@ -129,6 +129,9 @@ public class VisualizationFactory : MonoBehaviour
 
         ServiceLocator.instance.visualizationFactory.GenerateSingle3DAxisFrom(0, "Year");
 
+        var ae14 = GenerateScatterplot2DFrom(0, new string[] { "Population", "Violent crime" });
+        ae14.transform.position = new Vector3(4, 0, 3.5f);
+
         DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[1].informationObjects[0]);
         
 

@@ -70,9 +70,7 @@ public class ETV3DFactory : AETVFactory
     public override GameObject CreateETVScatterPlot(DataSet data, string[] attIDs)
     {
         GameObject scatterPlot3D = Instantiate(ETV3DScatterPlotPrefab);
-        scatterPlot3D.GetComponent<ETV3DScatterPlot>().Init(data, 
-            data.GetIDOf(attIDs[0]), data.GetIDOf(attIDs[1]), data.GetIDOf(attIDs[2]),
-            data.GetTypeOf(attIDs[0]), data.GetTypeOf(attIDs[1]), data.GetTypeOf(attIDs[2]));
+        scatterPlot3D.GetComponent<ETV3DScatterPlot>().Init(data, attIDs[0], attIDs[1], attIDs[2]);
         scatterPlot3D.GetComponent<ETV3DScatterPlot>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
         return scatterPlot3D;

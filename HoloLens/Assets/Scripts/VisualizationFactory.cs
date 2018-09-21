@@ -130,7 +130,10 @@ public class VisualizationFactory : MonoBehaviour
         ServiceLocator.instance.visualizationFactory.GenerateSingle3DAxisFrom(0, "Year");
 
         var ae14 = GenerateScatterplot2DFrom(0, new string[] { "Population", "Violent crime" });
-        ae14.transform.position = new Vector3(4, 0, 3.5f);
+        ae14.transform.position = new Vector3(4, 0, -8);
+
+        var ae15 = GenerateScatterplot3DFrom(0, new string[] { "Population", "Violent crime", "Year" });
+        ae15.transform.position = new Vector3(6, 0, -8);
 
         DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[1].informationObjects[0]);
         
@@ -437,20 +440,29 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateScatterplot3DFrom(int dataSetID, string[] variables)
     {
-        try
-        {
-            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.SCATTER_PLOT_2D))
+        //try
+        //{
+            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.SCATTER_PLOT_3D))
             {
                 return new GameObject("Not Suitable");
             }
 
-            return new GameObject();
-        } catch(Exception e)
-        {
-            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
-            Debug.LogError(e.Message);
-            return new GameObject("Creation Failed");
-        }
+            var ds = dataProvider.dataSets[dataSetID];
+
+            var factory = ServiceLocator.instance.Factory3DETV;
+            var vis = factory.CreateETVScatterPlot(ds, variables);
+
+            vis = factory.PutETVOnAnchor(vis);
+
+            vis.transform.position = NewETVPosition.transform.position;
+
+            return vis;
+        //} catch(Exception e)
+        //{
+        //    Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+        //    Debug.LogError(e.Message);
+        //    return new GameObject("Creation Failed");
+        //}
     }
 
     /// <summary>

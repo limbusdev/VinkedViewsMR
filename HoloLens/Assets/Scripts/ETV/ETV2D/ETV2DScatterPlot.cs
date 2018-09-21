@@ -10,14 +10,14 @@ public class ETV2DScatterPlot : AETV2D
     private DataSet data;
     
     private ScatterDot2D[] dots;
-    private string attributeNameA, attributeNameB;
+    private string attributeA, attributeB;
     private LoM lomA, lomB;
 
     public void Init(DataSet data, string attributeNameA, string attributeNameB)
     {
         this.data = data;
-        this.attributeNameA = attributeNameA;
-        this.attributeNameB = attributeNameB;
+        this.attributeA = attributeNameA;
+        this.attributeB = attributeNameB;
         this.lomA = data.GetTypeOf(attributeNameA);
         this.lomB = data.GetTypeOf(attributeNameB);
 
@@ -33,53 +33,18 @@ public class ETV2DScatterPlot : AETV2D
 
     public override void SetUpAxis()
     {
-        AddAxis(attributeNameA, lomA, AxisDirection.X, data, Anchor);
-        AddAxis(attributeNameB, lomB, AxisDirection.Y, data, Anchor);
+        AddAxis(attributeA, lomA, AxisDirection.X, data, Anchor);
+        AddAxis(attributeB, lomB, AxisDirection.Y, data, Anchor);
     }
-
-    private float GetValue(InfoObject infO, string attributeName, LoM lom, DataSet data)
-    {
-        float val;
-        switch(lom)
-        {
-            case LoM.NOMINAL:
-                var mN = data.dataMeasuresNominal[attributeName];
-                int valN = mN.valueIDs[infO.GetNomValue(attributeName)];
-                if(valN == int.MinValue)
-                    val = float.NaN;
-                else
-                    val = valN;
-                break;
-            case LoM.ORDINAL:
-                int valO = infO.GetOrdValue(attributeName);
-                if(valO == int.MinValue)
-                    val = float.NaN;
-                else
-                    val = valO;
-                break;
-            case LoM.INTERVAL:
-                int valI = infO.GetOrdValue(attributeName);
-                if(valI == int.MinValue)
-                    val = float.NaN;
-                else
-                    val = valI;
-                break;
-            default: /* RATIO */
-                val = infO.GetRatValue(attributeName);
-                break;
-        }
-
-        return val;
-    }
-
+    
     public void DrawGraph()
     {
         var dotArray = new List<ScatterDot2D>();
         
         foreach(var infO in data.informationObjects)
         {
-            float valA = GetValue(infO, attributeNameA, lomA, data);
-            float valB = GetValue(infO, attributeNameB, lomB, data);
+            float valA = data.GetValue(infO, attributeA, lomA);
+            float valB = data.GetValue(infO, attributeB, lomB);
             
             if(!float.IsNaN(valA) && !float.IsNaN(valB))
             {
@@ -94,8 +59,8 @@ public class ETV2DScatterPlot : AETV2D
                 dot.transform.parent = Anchor.transform;
                 dotArray.Add(dot.GetComponent<ScatterDot2D>());
 
-                infO.AddRepresentativeObject(attributeNameA, dot);
-                infO.AddRepresentativeObject(attributeNameB, dot);
+                infO.AddRepresentativeObject(attributeA, dot);
+                infO.AddRepresentativeObject(attributeB, dot);
             }
         }
 

@@ -9,31 +9,64 @@ public class ETV3DScatterPlot : AETV3D
     public GameObject Anchor;
 
     private DataSet data;
-    private Vector3Int floatAttIDs;
-    private bool initialized = false;
 
     private ScatterDot3D[] dots;
+    private string attributeA, attributeB, attributeC;
+    private LoM lomA, lomB, lomC;
+    private bool initialized = false;
     
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-        if(initialized)
-        {
-            foreach(ScatterDot3D dot in dots)
-            {
-                dot.gameObject.transform.LookAt(GameObject.FindGameObjectWithTag("MainCamera").transform);
-            }
-        }
-    }
 
-    public void Init(DataSet data, int att1ID, int att2ID, int att3ID,
-        LoM type1, LoM type2, LoM type3)
+    public void Init(DataSet data, string attA, string attB, string attC)
     {
         this.data = data;
-        this.floatAttIDs = new Vector3Int(att1ID, att2ID, att3ID);
+        this.attributeA = attA;
+        this.attributeB = attB;
+        this.attributeC = attC;
+        this.lomA = data.GetTypeOf(attA);
+        this.lomB = data.GetTypeOf(attB);
+        this.lomC = data.GetTypeOf(attC);
+
         SetUpAxis();
         DrawGraph();
         this.initialized = true;
+    }
+    
+    public override void SetUpAxis()
+    {
+        AddAxis(attributeA, lomA, AxisDirection.X, data, Anchor);
+        AddAxis(attributeB, lomB, AxisDirection.Y, data, Anchor);
+        AddAxis(attributeC, lomC, AxisDirection.Z, data, Anchor);
+    }
+
+    public void DrawGraph()
+    {
+        var dotArray = new List<ScatterDot3D>();
+
+        foreach(var infO in data.informationObjects)
+        {
+            float valA = data.GetValue(infO, attributeA, lomA);
+            float valB = data.GetValue(infO, attributeB, lomB);
+            float valC = data.GetValue(infO, attributeC, lomC);
+
+            if(!float.IsNaN(valA) && !float.IsNaN(valB) && !float.IsNaN(valC))
+            {
+                var pos = new Vector3(
+                    GetAxis(AxisDirection.X).TransformToAxisSpace(valA),
+                    GetAxis(AxisDirection.Y).TransformToAxisSpace(valB),
+                    GetAxis(AxisDirection.Z).TransformToAxisSpace(valC)
+                    );
+
+                GameObject dot = ServiceLocator.instance.Factory3DPrimitives.CreateScatterDot();
+                dot.transform.position = pos;
+                dot.transform.parent = Anchor.transform;
+                dotArray.Add(dot.GetComponent<ScatterDot3D>());
+
+                infO.AddRepresentativeObject(attributeA, dot);
+                infO.AddRepresentativeObject(attributeB, dot);
+                infO.AddRepresentativeObject(attributeC, dot);
+            }
+        }
+        dots = dotArray.ToArray();
     }
 
     public override void ChangeColoringScheme(ETVColorSchemes scheme)
@@ -46,82 +79,23 @@ public class ETV3DScatterPlot : AETV3D
         }
     }
 
-    public override void SetUpAxis()
-    {
-        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
-
-        // x-Axis
-        GameObject xAxis = factory2D.CreateAxis(Color.white, data.ratAttributes[floatAttIDs.x], "", AxisDirection.X, 1f, .01f, true, true);
-        xAxis.transform.localPosition = new Vector3(0, 0, 0);
-        xAxis.transform.parent = Anchor.transform;
-        Axis2D xAxis2D = xAxis.GetComponent<Axis2D>();
-        xAxis2D.ticked = true;
-        xAxis2D.min = data.dataMeasuresRatio[data.ratAttributes[floatAttIDs.x]].zeroBoundMin;
-        xAxis2D.max = data.dataMeasuresRatio[data.ratAttributes[floatAttIDs.x]].zeroBoundMax;
-        xAxis2D.CalculateTickResolution();
-        xAxis2D.UpdateAxis();
-
-        // y-Axis
-        GameObject yAxis = factory2D.CreateAxis(Color.white, data.ratAttributes[floatAttIDs.y], "", AxisDirection.Y, 1f, .01f, true, true);
-        yAxis.transform.localPosition = new Vector3(0, 0, 0);
-        yAxis.transform.parent = Anchor.transform;
-        Axis2D yAxis2D = yAxis.GetComponent<Axis2D>();
-        yAxis2D.ticked = true;
-        yAxis2D.min = data.dataMeasuresRatio[data.ratAttributes[floatAttIDs.y]].zeroBoundMin;
-        yAxis2D.max = data.dataMeasuresRatio[data.ratAttributes[floatAttIDs.y]].zeroBoundMax;
-        yAxis2D.CalculateTickResolution();
-        yAxis2D.UpdateAxis();
-
-        // z-Axis
-        GameObject zAxis = factory2D.CreateAxis(Color.white, data.ratAttributes[floatAttIDs.z], "", AxisDirection.Z, 1f, .01f, true, true);
-        zAxis.transform.localPosition = new Vector3(0, 0, 0);
-        zAxis.transform.parent = Anchor.transform;
-        Axis2D zAxis2D = zAxis.GetComponent<Axis2D>();
-        zAxis2D.ticked = true;
-        zAxis2D.min = data.dataMeasuresRatio[data.ratAttributes[floatAttIDs.z]].zeroBoundMin;
-        zAxis2D.max = data.dataMeasuresRatio[data.ratAttributes[floatAttIDs.z]].zeroBoundMax;
-        zAxis2D.CalculateTickResolution();
-        zAxis2D.UpdateAxis();
-    }
-
-    public void DrawGraph()
-    {
-        var dotArray = new List<ScatterDot3D>();
-
-        RatioDataDimensionMeasures measuresX = data.dataMeasuresRatio[data.ratAttributes[floatAttIDs.x]];
-        RatioDataDimensionMeasures measuresY = data.dataMeasuresRatio[data.ratAttributes[floatAttIDs.y]];
-        RatioDataDimensionMeasures measuresZ = data.dataMeasuresRatio[data.ratAttributes[floatAttIDs.z]];
-
-        for(int i = 0; i < data.informationObjects.Count; i++)
-        {
-            InfoObject o = data.informationObjects[i];
-
-            float x = 0, y = 0, z = 0;
-            x = measuresX.NormalizeToZeroBoundRange(o.ratioAtt[floatAttIDs.x].value);
-            y = measuresY.NormalizeToZeroBoundRange(o.ratioAtt[floatAttIDs.y].value);
-            z = measuresZ.NormalizeToZeroBoundRange(o.ratioAtt[floatAttIDs.z].value);
-
-            if(!float.IsNaN(x) && !float.IsNaN(y) && !float.IsNaN(z))
-            {
-                GameObject dot = ServiceLocator.instance.Factory3DPrimitives.CreateScatterDot();
-                dot.transform.position = new Vector3(x, y, z);
-                dot.transform.parent = Anchor.transform;
-                dotArray.Add(dot.GetComponent<ScatterDot3D>());
-
-                o.AddRepresentativeObject(data.ratAttributes[floatAttIDs.x], dot);
-                o.AddRepresentativeObject(data.ratAttributes[floatAttIDs.y], dot);
-                o.AddRepresentativeObject(data.ratAttributes[floatAttIDs.z], dot);
-            }
-        }
-
-        dots = dotArray.ToArray();
-    }
-
     public override void UpdateETV()
     {
         SetUpAxis();
         DrawGraph();
     }
 
-    
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if(initialized)
+        {
+            // Let point sprites face camera
+            foreach(var dot in dots)
+            {
+                var camera = GameObject.FindGameObjectWithTag("MainCamera");
+                dot.gameObject.transform.LookAt(camera.transform);
+            }
+        }
+    }
 }

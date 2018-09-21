@@ -158,5 +158,40 @@ namespace Model
 
             return outString;
         }
+
+        public float GetValue(InfoObject infO, string attributeName, LoM lom)
+        {
+            float val;
+            switch(lom)
+            {
+                case LoM.NOMINAL:
+                    var mN = dataMeasuresNominal[attributeName];
+                    int valN = mN.valueIDs[infO.GetNomValue(attributeName)];
+                    if(valN == int.MinValue)
+                        val = float.NaN;
+                    else
+                        val = valN;
+                    break;
+                case LoM.ORDINAL:
+                    int valO = infO.GetOrdValue(attributeName);
+                    if(valO == int.MinValue)
+                        val = float.NaN;
+                    else
+                        val = valO;
+                    break;
+                case LoM.INTERVAL:
+                    int valI = infO.GetIvlValue(attributeName);
+                    if(valI == int.MinValue)
+                        val = float.NaN;
+                    else
+                        val = valI;
+                    break;
+                default: /* RATIO */
+                    val = infO.GetRatValue(attributeName);
+                    break;
+            }
+
+            return val;
+        }
     }
 }

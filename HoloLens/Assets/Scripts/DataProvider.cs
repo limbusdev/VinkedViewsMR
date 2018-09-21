@@ -172,9 +172,7 @@ public class DataProvider : MonoBehaviour
             nominalAttributes, 
             ordinalAtributes, 
             intervalAttributes, 
-            ratioAttributes, 
-            null, 
-            null, 
+            ratioAttributes,
             ParseDictionaries(), 
             intervalTranslators);
     }
@@ -185,8 +183,6 @@ public class DataProvider : MonoBehaviour
         IDictionary<string, int[]> ordVars,
         IDictionary<string, int[]> ivlVars,
         IDictionary<string, float[]> ratioVars,
-        IDictionary<string, Vector2[]> vec2Vars,
-        IDictionary<string, Vector3[]> vec3Vars,
         IDictionary<string, IDictionary<int, string>> dicts,
         IDictionary<string, string> intervalTranslators)
     {

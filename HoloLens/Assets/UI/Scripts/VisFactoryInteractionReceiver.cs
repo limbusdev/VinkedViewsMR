@@ -175,15 +175,15 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     {
         DataSet ds = dataProvider.dataSets[dbID];
 
-        var ms = new List<DataDimensionMeasures>();
-        ms.AddRange(ds.dataMeasuresNominal.Values);
-        ms.AddRange(ds.dataMeasuresOrdinal.Values);
-        ms.AddRange(ds.dataMeasuresInterval.Values);
-        ms.AddRange(ds.dataMeasuresRatio.Values);
+        var ms = new List<AttributeStats>();
+        ms.AddRange(ds.nominalAttribStats.Values);
+        ms.AddRange(ds.ordinalAttribStats.Values);
+        ms.AddRange(ds.intervalAttribStats.Values);
+        ms.AddRange(ds.ratioAttribStats.Values);
 
         var keys = new List<IconKey>();
 
-        foreach(DataDimensionMeasures m in ms)
+        foreach(AttributeStats m in ms)
         {
             interactables.Add(Create1DIconAndInsert(m.name, m.type));
         }
@@ -197,11 +197,11 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     {
         DataSet ds = dataProvider.dataSets[dbID];
 
-        var ms = new List<DataDimensionMeasures>();
-        ms.AddRange(ds.dataMeasuresNominal.Values);
-        ms.AddRange(ds.dataMeasuresOrdinal.Values);
-        ms.AddRange(ds.dataMeasuresInterval.Values);
-        ms.AddRange(ds.dataMeasuresRatio.Values);
+        var ms = new List<AttributeStats>();
+        ms.AddRange(ds.nominalAttribStats.Values);
+        ms.AddRange(ds.ordinalAttribStats.Values);
+        ms.AddRange(ds.intervalAttribStats.Values);
+        ms.AddRange(ds.ratioAttribStats.Values);
 
         var keys = new List<IconKey2D>();
 
@@ -227,11 +227,11 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     {
         DataSet ds = dataProvider.dataSets[dbID];
         
-        var ms = new List<DataDimensionMeasures>();
-        ms.AddRange(ds.dataMeasuresNominal.Values);
-        ms.AddRange(ds.dataMeasuresOrdinal.Values);
-        ms.AddRange(ds.dataMeasuresInterval.Values);
-        ms.AddRange(ds.dataMeasuresRatio.Values);
+        var ms = new List<AttributeStats>();
+        ms.AddRange(ds.nominalAttribStats.Values);
+        ms.AddRange(ds.ordinalAttribStats.Values);
+        ms.AddRange(ds.intervalAttribStats.Values);
+        ms.AddRange(ds.ratioAttribStats.Values);
 
         var keys = new List<IconKey>();
 
@@ -264,25 +264,25 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         // 1 Icon for all variables
         var allVars = new List<string>();
         var allLoms = new List<LoM>();
-        foreach(string key in ds.dataMeasuresNominal.Keys)
+        foreach(string key in ds.nominalAttribStats.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.dataMeasuresNominal[key].type);
+            allLoms.Add(ds.nominalAttribStats[key].type);
         }
-        foreach(string key in ds.dataMeasuresOrdinal.Keys)
+        foreach(string key in ds.ordinalAttribStats.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.dataMeasuresOrdinal[key].type);
+            allLoms.Add(ds.ordinalAttribStats[key].type);
         }
-        foreach(string key in ds.dataMeasuresInterval.Keys)
+        foreach(string key in ds.intervalAttribStats.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.dataMeasuresInterval[key].type);
+            allLoms.Add(ds.intervalAttribStats[key].type);
         }
-        foreach(string key in ds.dataMeasuresRatio.Keys)
+        foreach(string key in ds.ratioAttribStats.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.dataMeasuresRatio[key].type);
+            allLoms.Add(ds.ratioAttribStats[key].type);
         }
 
         if(allVars.Count > 0)
@@ -292,10 +292,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         allVars.Clear();
         allLoms.Clear();
 
-        foreach(string key in ds.dataMeasuresNominal.Keys)
+        foreach(string key in ds.nominalAttribStats.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.dataMeasuresNominal[key].type);
+            allLoms.Add(ds.nominalAttribStats[key].type);
         }
 
         if(allVars.Count > 0)
@@ -305,10 +305,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         allVars.Clear();
         allLoms.Clear();
 
-        foreach(string key in ds.dataMeasuresOrdinal.Keys)
+        foreach(string key in ds.ordinalAttribStats.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.dataMeasuresOrdinal[key].type);
+            allLoms.Add(ds.ordinalAttribStats[key].type);
         }
 
         if(allVars.Count > 0)
@@ -318,10 +318,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         allVars.Clear();
         allLoms.Clear();
 
-        foreach(string key in ds.dataMeasuresInterval.Keys)
+        foreach(string key in ds.intervalAttribStats.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.dataMeasuresInterval[key].type);
+            allLoms.Add(ds.intervalAttribStats[key].type);
         }
 
         if(allVars.Count > 0)
@@ -331,10 +331,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         allVars.Clear();
         allLoms.Clear();
 
-        foreach(string key in ds.dataMeasuresRatio.Keys)
+        foreach(string key in ds.ratioAttribStats.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.dataMeasuresRatio[key].type);
+            allLoms.Add(ds.ratioAttribStats[key].type);
         }
 
         if(allVars.Count > 0)
@@ -385,11 +385,11 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
 
     private class IconKey2D
     {
-        DataDimensionMeasures[] ks;
+        AttributeStats[] ks;
 
-        public IconKey2D(DataDimensionMeasures k1, DataDimensionMeasures k2)
+        public IconKey2D(AttributeStats k1, AttributeStats k2)
         {
-            ks = new DataDimensionMeasures[2];
+            ks = new AttributeStats[2];
             ks[0] = k1;
             ks[0] = k2;
         }
@@ -409,11 +409,11 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
 
     private class IconKey
     {
-        DataDimensionMeasures[] ks;
+        AttributeStats[] ks;
 
-        public IconKey(DataDimensionMeasures k1, DataDimensionMeasures k2, DataDimensionMeasures k3)
+        public IconKey(AttributeStats k1, AttributeStats k2, AttributeStats k3)
         {
-            ks = new DataDimensionMeasures[3];
+            ks = new AttributeStats[3];
             ks[0] = k1;
             ks[0] = k2;
             ks[0] = k3;

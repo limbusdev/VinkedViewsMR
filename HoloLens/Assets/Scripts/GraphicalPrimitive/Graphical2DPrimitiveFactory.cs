@@ -25,7 +25,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     {
         GameObject axis = Instantiate(Axis2DPrefab);
         Axis2D axis2Dcomp = axis.GetComponent<Axis2D>();
-        axis2Dcomp.Init(new DataDimensionMeasures(LoM.RATIO, variableName));
+        axis2Dcomp.Init(new AttributeStats(LoM.RATIO, variableName));
         axis2Dcomp.diameter = width;
         axis2Dcomp.color = color;
         axis2Dcomp.labelVariableText = variableName;
@@ -55,16 +55,16 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         switch(data.GetTypeOf(name))
         {
             case LoM.NOMINAL:
-                axis2Dcomp.Init(data.dataMeasuresNominal[name], direction);
+                axis2Dcomp.Init(data.nominalAttribStats[name], direction);
                 break;
             case LoM.ORDINAL:
-                axis2Dcomp.Init(data.dataMeasuresOrdinal[name], direction);
+                axis2Dcomp.Init(data.ordinalAttribStats[name], direction);
                 break;
             case LoM.INTERVAL:
-                axis2Dcomp.Init(data.dataMeasuresInterval[name], direction);
+                axis2Dcomp.Init(data.intervalAttribStats[name], direction);
                 break;
             default: // RATIO
-                axis2Dcomp.Init(data.dataMeasuresRatio[name], direction);
+                axis2Dcomp.Init(data.ratioAttribStats[name], direction);
                 break;
         }
         
@@ -85,10 +85,10 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
             switch(data.GetTypeOf(name))
             {
                 case LoM.NOMINAL:
-                    axis2Dcomp.Init(data.dataMeasuresNominal[name], direction, true, length);
+                    axis2Dcomp.Init(data.nominalAttribStats[name], direction, true, length);
                     break;
                 case LoM.ORDINAL:
-                    axis2Dcomp.Init(data.dataMeasuresOrdinal[name], direction, true, length);
+                    axis2Dcomp.Init(data.ordinalAttribStats[name], direction, true, length);
                     break;
                 default:
                     axis = new GameObject("Creation Failed");

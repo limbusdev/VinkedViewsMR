@@ -29,9 +29,9 @@ public class DataProcessor
 
     public static class NominalAttribute
     {
-        public static NominalDataDimensionMeasures CalculateMeasures(IList<InfoObject> os, int aID)
+        public static NominalAttributeStats CalculateMeasures(IList<InfoObject> os, int aID)
         {
-            var measures = new NominalDataDimensionMeasures(
+            var measures = new NominalAttributeStats(
                 CalculateDistribution(os, aID),
                 os[0].nominalAtt[aID].name);
 
@@ -94,9 +94,9 @@ public class DataProcessor
 
     public static class OrdinalAttribute
     {
-        public static OrdinalDataDimensionMeasures CalculateMeasures(IList<InfoObject> os, int aID, IDictionary<int, string> dict)
+        public static OrdinalAttributeStats CalculateMeasures(IList<InfoObject> os, int aID, IDictionary<int, string> dict)
         {
-            var measures = new OrdinalDataDimensionMeasures(
+            var measures = new OrdinalAttributeStats(
                 dict,
                 CalculateDistribution(os, aID, dict),
                 os[0].ordinalAtt[aID].name);
@@ -174,9 +174,9 @@ public class DataProcessor
 
     public static class IntervalAttribute
     {
-        public static IntervalDataDimensionMeasures CalculateMeasures(IList<InfoObject> os, int aID, IDictionary<string, string> intervalTranslators)
+        public static IntervalAttributeStats CalculateMeasures(IList<InfoObject> os, int aID, IDictionary<string, string> intervalTranslators)
         {
-            var measures = new IntervalDataDimensionMeasures(
+            var measures = new IntervalAttributeStats(
                 CalculateDistribution(os, aID),
                 os[0].intervalAtt[aID].name,
                 intervalTranslators[os[0].intervalAtt[aID].name],
@@ -237,9 +237,9 @@ public class DataProcessor
     
     public static class RatioAttribute
     {
-        public static RatioDataDimensionMeasures CalculateMeasures(IList<InfoObject> os, int aID)
+        public static RatioAttributeStats CalculateMeasures(IList<InfoObject> os, int aID)
         {
-            var measures = new RatioDataDimensionMeasures(
+            var measures = new RatioAttributeStats(
                 os[0].ratioAtt[aID].name,
                 CalculateRange(os, aID),
                 CalculateZeroBoundRange(os, aID),

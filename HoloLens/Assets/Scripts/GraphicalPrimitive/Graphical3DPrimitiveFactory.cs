@@ -50,16 +50,16 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
         switch(data.GetTypeOf(name))
         {
             case LoM.NOMINAL:
-                axis3Dcomp.Init(data.dataMeasuresNominal[name], direction);
+                axis3Dcomp.Init(data.nominalAttribStats[name], direction);
                 break;
             case LoM.ORDINAL:
-                axis3Dcomp.Init(data.dataMeasuresOrdinal[name], direction);
+                axis3Dcomp.Init(data.ordinalAttribStats[name], direction);
                 break;
             case LoM.INTERVAL:
-                axis3Dcomp.Init(data.dataMeasuresInterval[name], direction);
+                axis3Dcomp.Init(data.intervalAttribStats[name], direction);
                 break;
             default: // RATIO
-                axis3Dcomp.Init(data.dataMeasuresRatio[name], direction);
+                axis3Dcomp.Init(data.ratioAttribStats[name], direction);
                 break;
         }
         

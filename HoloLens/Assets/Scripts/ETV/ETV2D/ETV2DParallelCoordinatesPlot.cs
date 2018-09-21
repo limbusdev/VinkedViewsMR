@@ -43,7 +43,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         // Setup nominal axes
         foreach(int attID in nominalIDs)
         {
-            string attributeName = data.nomAttributes[attID];
+            string attributeName = data.nomAttribNames[attID];
             var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, data);
             xAxis.transform.parent = allAxesGO.transform;
             xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
@@ -55,7 +55,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         // Setup ordinal axes
         foreach(int attID in ordinalIDs)
         {
-            string attributeName = data.ordAttributes[attID];
+            string attributeName = data.ordAttribNames[attID];
             var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, data);
             xAxis.transform.parent = allAxesGO.transform;
             xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
@@ -67,7 +67,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         // Setup interval axes
         foreach(int attID in intervalIDs)
         {
-            string attributeName = data.ivlAttributes[attID];
+            string attributeName = data.ivlAttribNames[attID];
             var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, data);
             xAxis.transform.parent = allAxesGO.transform;
             xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
@@ -80,7 +80,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         // Setup ratio axes
         foreach(int attID in ratioIDs)
         {
-            string attributeName = data.ratAttributes[attID];
+            string attributeName = data.ratAttribNames[attID];
             var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, data);
             xAxis.transform.parent = allAxesGO.transform;
             xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
@@ -111,7 +111,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
         int counter = 0;
         foreach(int attID in nominalIDs)
         {
-            var m = data.dataMeasuresNominal[data.nomAttributes[attID]];
+            var m = data.nominalAttribStats[data.nomAttribNames[attID]];
             var a = o.nominalAtt[attID];
 
             polyline[counter] = new Vector3(.5f*counter, PCPAxes[counter].TransformToAxisSpace(m.valueIDs[a.value]), 0);
@@ -121,7 +121,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
         foreach(var attID in ordinalIDs)
         {
-            var m = data.dataMeasuresOrdinal[data.ordAttributes[attID]];
+            var m = data.ordinalAttribStats[data.ordAttribNames[attID]];
             var a = o.ordinalAtt[attID];
 
             // If NaN
@@ -137,7 +137,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
         foreach(var attID in intervalIDs)
         {
-            var m = data.dataMeasuresInterval[data.ivlAttributes[attID]];
+            var m = data.intervalAttribStats[data.ivlAttribNames[attID]];
             var a = o.intervalAtt[attID];
 
             // If NaN
@@ -153,7 +153,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
 
         foreach(var attID in ratioIDs)
         {
-            var m = data.dataMeasuresRatio[data.ratAttributes[attID]];
+            var m = data.ratioAttribStats[data.ratAttribNames[attID]];
             var a = o.ratioAtt[attID];
 
             // If NaN
@@ -178,7 +178,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D {
     {
         var notNaNPrimitives = new List<PCPLine2D>();
         
-        foreach(var infoO in data.informationObjects)
+        foreach(var infoO in data.infoObjects)
         {
             var line = CreateLine(infoO, Color.white);
             if(line != null)

@@ -135,7 +135,7 @@ public class VisualizationFactory : MonoBehaviour
         var ae15 = GenerateScatterplot3DFrom(0, new string[] { "Population", "Violent crime", "Year" });
         ae15.transform.position = new Vector3(6, 0, -8);
 
-        DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[1].informationObjects[0]);
+        DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[1].infoObjects[0]);
         
 
     }

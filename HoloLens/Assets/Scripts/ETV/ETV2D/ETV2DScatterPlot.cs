@@ -41,7 +41,7 @@ public class ETV2DScatterPlot : AETV2D
     {
         var dotArray = new List<ScatterDot2D>();
         
-        foreach(var infO in data.informationObjects)
+        foreach(var infO in data.infoObjects)
         {
             float valA = data.GetValue(infO, attributeA, lomA);
             float valB = data.GetValue(infO, attributeB, lomB);

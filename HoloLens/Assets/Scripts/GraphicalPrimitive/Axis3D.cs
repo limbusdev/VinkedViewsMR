@@ -30,7 +30,7 @@ namespace GraphicalPrimitive
             AssembleRatioAxis();
         }
 
-        public void Init(NominalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y, bool manualLength = false, float length = 1)
+        public void Init(NominalAttributeStats m, AxisDirection dir = AxisDirection.Y, bool manualLength = false, float length = 1)
         {
             base.Init(m, dir);
             this.min = 0;
@@ -52,7 +52,7 @@ namespace GraphicalPrimitive
             AssembleNominalAxis(m, manualLength, this.tickResolution);
         }
 
-        public void Init(OrdinalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y, bool manualLength = false, float length = 1)
+        public void Init(OrdinalAttributeStats m, AxisDirection dir = AxisDirection.Y, bool manualLength = false, float length = 1)
         {
             base.Init(m, dir);
             this.min = m.min;
@@ -74,7 +74,7 @@ namespace GraphicalPrimitive
             AssembleOrdinalAxis(m, manualLength, this.tickResolution);
         }
 
-        public void Init(IntervalDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
+        public void Init(IntervalAttributeStats m, AxisDirection dir = AxisDirection.Y)
         {
             base.Init(m, dir);
             this.min = m.min;
@@ -87,7 +87,7 @@ namespace GraphicalPrimitive
             AssembleIntervalAxis(m);
         }
 
-        public void Init(RatioDataDimensionMeasures m, AxisDirection dir = AxisDirection.Y)
+        public void Init(RatioAttributeStats m, AxisDirection dir = AxisDirection.Y)
         {
             base.Init(m, dir);
             this.min = m.zeroBoundMin;
@@ -100,21 +100,21 @@ namespace GraphicalPrimitive
             AssembleRatioAxis();
         }
 
-        private void AssembleNominalAxis(NominalDataDimensionMeasures m, bool manualLength = false, float tickRes = .15f)
+        private void AssembleNominalAxis(NominalAttributeStats m, bool manualLength = false, float tickRes = .15f)
         {
             DrawBaseAxis();
             GenerateNominalTicks(m, manualLength, tickRes);
             UpdateLabels();
         }
 
-        private void AssembleOrdinalAxis(OrdinalDataDimensionMeasures m, bool manualLength = false, float tickRes = .15f)
+        private void AssembleOrdinalAxis(OrdinalAttributeStats m, bool manualLength = false, float tickRes = .15f)
         {
             DrawBaseAxis();
             GenerateOrdinalTicks(m, manualLength, tickRes);
             UpdateLabels();
         }
 
-        private void AssembleIntervalAxis(IntervalDataDimensionMeasures m)
+        private void AssembleIntervalAxis(IntervalAttributeStats m)
         {
             DrawBaseAxis();
             GenerateIntervalTicks(m);
@@ -160,7 +160,7 @@ namespace GraphicalPrimitive
             }
         }
 
-        private void GenerateNominalTicks(NominalDataDimensionMeasures m, bool manualTickRes = false, float tickRes = .15f)
+        private void GenerateNominalTicks(NominalAttributeStats m, bool manualTickRes = false, float tickRes = .15f)
         {
             var tickDir = DefineTickDirection(axisDirection);
 
@@ -187,7 +187,7 @@ namespace GraphicalPrimitive
             }
         }
 
-        private void GenerateOrdinalTicks(OrdinalDataDimensionMeasures m, bool manualTickRes = false, float tickRes = .15f)
+        private void GenerateOrdinalTicks(OrdinalAttributeStats m, bool manualTickRes = false, float tickRes = .15f)
         {
             var tickDir = DefineTickDirection(axisDirection);
 
@@ -211,7 +211,7 @@ namespace GraphicalPrimitive
             }
         }
 
-        private void GenerateIntervalTicks(IntervalDataDimensionMeasures m)
+        private void GenerateIntervalTicks(IntervalAttributeStats m)
         {
             var tickDir = DefineTickDirection(axisDirection);
 

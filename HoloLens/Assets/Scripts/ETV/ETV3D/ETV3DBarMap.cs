@@ -60,14 +60,14 @@ public class ETV3DBarMap : AETV3D
         switch(lomA)
         {
             case LoM.NOMINAL:
-                var mN = data.dataMeasuresNominal[attributeNameX];
+                var mN = data.nominalAttribStats[attributeNameX];
                 uniqueValsA = mN.uniqueValues;
                 distributionA = mN.GetDistributionValues();
                 dictA1 = mN.idValues;
                 dictA2 = mN.valueIDs;
                 break;
             case LoM.ORDINAL:
-                var mO = data.dataMeasuresOrdinal[attributeNameX];
+                var mO = data.ordinalAttribStats[attributeNameX];
                 uniqueValsA = mO.uniqueValues;
                 distributionA = mO.GetDistributionValues();
                 dictA1 = mO.orderedValueIDs;
@@ -80,14 +80,14 @@ public class ETV3DBarMap : AETV3D
         switch(lomB)
         {
             case LoM.NOMINAL:
-                var mN = data.dataMeasuresNominal[attributeNameY];
+                var mN = data.nominalAttribStats[attributeNameY];
                 uniqueValsB = mN.uniqueValues;
                 distributionB = mN.GetDistributionValues();
                 dictB1 = mN.idValues;
                 dictB2 = mN.valueIDs;
                 break;
             case LoM.ORDINAL:
-                var mO = data.dataMeasuresOrdinal[attributeNameY];
+                var mO = data.ordinalAttribStats[attributeNameY];
                 uniqueValsB = mO.uniqueValues;
                 distributionB = mO.GetDistributionValues();
                 dictB1 = mO.orderedValueIDs;
@@ -121,22 +121,22 @@ public class ETV3DBarMap : AETV3D
                 if(lomA == LoM.NOMINAL && lomB == LoM.NOMINAL)
                 {
                     count = DataProcessor.NominalAttribute.CountObjectsMatchingTwoCattegories(
-                        data.informationObjects, attributeIDA, attributeIDB, v1, v2);
+                        data.infoObjects, attributeIDA, attributeIDB, v1, v2);
 
                 } else if(lomA == LoM.ORDINAL && lomB == LoM.ORDINAL)
                 {
                     count = DataProcessor.OrdinalAttribute.CountObjectsMatchingTwoCattegories(
-                        data.informationObjects, attributeIDA, attributeIDB, dictA2[v1], dictB2[v2]);
+                        data.infoObjects, attributeIDA, attributeIDB, dictA2[v1], dictB2[v2]);
 
                 } else if(lomA == LoM.NOMINAL && lomB == LoM.ORDINAL)
                 {
                     count = DataProcessor.CategoricalAttribute.CountObjectsMatchingTwoCattegoriesNomOrd(
-                        data.informationObjects, attributeNameX, attributeNameY, v1, dictB2[v2]);
+                        data.infoObjects, attributeNameX, attributeNameY, v1, dictB2[v2]);
 
                 } else if(lomA == LoM.ORDINAL && lomB == LoM.NOMINAL)
                 {
                     count = DataProcessor.CategoricalAttribute.CountObjectsMatchingTwoCattegoriesNomOrd(
-                        data.informationObjects, attributeNameY, attributeNameX, v2, dictA2[v1]);
+                        data.infoObjects, attributeNameY, attributeNameX, v2, dictA2[v1]);
 
                 } else
                 {
@@ -166,7 +166,7 @@ public class ETV3DBarMap : AETV3D
             SetUpAxis();
             DrawGraph();
 
-            foreach(var o in data.informationObjects)
+            foreach(var o in data.infoObjects)
             {
                 Bar3D bar;
 

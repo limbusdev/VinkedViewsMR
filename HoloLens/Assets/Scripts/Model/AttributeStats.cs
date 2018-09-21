@@ -6,12 +6,12 @@ namespace Model
     /// <summary>
     /// Holds information about level of measurement and name of an attribute
     /// </summary>
-    public class DataDimensionMeasures
+    public class AttributeStats
     {
         public LoM type;
         public string name;
 
-        public DataDimensionMeasures(LoM type, string name)
+        public AttributeStats(LoM type, string name)
         {
             this.type = type;
             this.name = name;
@@ -29,7 +29,7 @@ namespace Model
     ///     * minimum, maximum and range of IDs
     ///     * number of unique values
     /// </summary>
-    public class NominalDataDimensionMeasures : DataDimensionMeasures
+    public class NominalAttributeStats : AttributeStats
     {
         public IDictionary<string, int> distribution;
         public string[] uniqueValues;
@@ -41,7 +41,7 @@ namespace Model
         public int min, max, range;
         public int numberOfUniqueValues;
 
-        public NominalDataDimensionMeasures(IDictionary<string, int> distribution, string variableName)
+        public NominalAttributeStats(IDictionary<string, int> distribution, string variableName)
              : base(LoM.NOMINAL, variableName)
         {
             this.distribution = distribution;
@@ -94,7 +94,7 @@ namespace Model
     ///     * number of unique values
     ///     * order of the ordinal values
     /// </summary>
-    public class OrdinalDataDimensionMeasures : DataDimensionMeasures
+    public class OrdinalAttributeStats : AttributeStats
     {
         public IDictionary<int, int> distribution;
         public string[] uniqueValues;
@@ -107,7 +107,7 @@ namespace Model
         public int min, max, range;
         public int numberOfUniqueValues;
 
-        public OrdinalDataDimensionMeasures(IDictionary<int, string> orderedValueIDs, IDictionary<int, int> distribution, string variableName)
+        public OrdinalAttributeStats(IDictionary<int, string> orderedValueIDs, IDictionary<int, int> distribution, string variableName)
              : base(LoM.ORDINAL, variableName)
         {
             this.orderedValueIDs = orderedValueIDs;
@@ -172,7 +172,7 @@ namespace Model
     ///     * number of unique values
     ///     * order of the ordinal values
     /// </summary>
-    public class IntervalDataDimensionMeasures : DataDimensionMeasures
+    public class IntervalAttributeStats : AttributeStats
     {
         public IDictionary<int, int> distribution;
         public int distMin, zBoundDistMin;
@@ -181,7 +181,7 @@ namespace Model
         public int min, max, range;
         public string intervalTranslator;
 
-        public IntervalDataDimensionMeasures(IDictionary<int, int> distribution, string variableName, string intervalTranslator, int min, int max)
+        public IntervalAttributeStats(IDictionary<int, int> distribution, string variableName, string intervalTranslator, int min, int max)
              : base(LoM.INTERVAL, variableName)
         {
             this.intervalTranslator = intervalTranslator;
@@ -212,14 +212,14 @@ namespace Model
     ///     * minimum, maximum and range
     ///     * zero bound minimum, maximum and range
     /// </summary>
-    public class RatioDataDimensionMeasures : DataDimensionMeasures
+    public class RatioAttributeStats : AttributeStats
     {
         public float range, zeroBoundRange;
         public float min, zeroBoundMin;
         public float max, zeroBoundMax;
         public string variableUnit;
 
-        public RatioDataDimensionMeasures(
+        public RatioAttributeStats(
             string variableName,
             float range, float zeroBoundRange,
             float min, float zeroBoundMin,

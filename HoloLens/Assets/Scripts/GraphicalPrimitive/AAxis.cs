@@ -52,7 +52,7 @@ namespace GraphicalPrimitive
             }
         }
 
-        public void Init(DataDimensionMeasures m, AxisDirection dir=AxisDirection.Y)
+        public void Init(AttributeStats m, AxisDirection dir=AxisDirection.Y)
         {
             Init(m.name, dir);
         }

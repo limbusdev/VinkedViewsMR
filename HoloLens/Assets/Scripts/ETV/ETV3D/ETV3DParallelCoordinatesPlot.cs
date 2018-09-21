@@ -35,7 +35,7 @@ namespace ETV.ETV3D
             this.intervalIDs = intervalIDs;
             this.ratioIDs = ratioIDs;
             
-            int numberOfObjects = data.informationObjects.Count;
+            int numberOfObjects = data.infoObjects.Count;
             if(numberOfObjects > 20)
                 pcpLength = 2f / numberOfObjects;
             else if(numberOfObjects > 100)
@@ -61,7 +61,7 @@ namespace ETV.ETV3D
 
             GameObject axesBack = GenerateAxes(false, PCPAxesBack);
             axesBack.transform.parent = Anchor.transform;
-            axesBack.transform.localPosition = new Vector3(0,0, data.informationObjects.Count * pcpLength);
+            axesBack.transform.localPosition = new Vector3(0,0, data.infoObjects.Count * pcpLength);
         }
 
         private GameObject GenerateAxes(bool withGrid, IDictionary<int, Axis2D> axes)
@@ -74,7 +74,7 @@ namespace ETV.ETV3D
             // Setup nominal axes
             foreach(int attID in nominalIDs)
             {
-                string attributeName = data.nomAttributes[attID];
+                string attributeName = data.nomAttribNames[attID];
                 var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
@@ -93,7 +93,7 @@ namespace ETV.ETV3D
             // Setup ordinal axes
             foreach(int attID in ordinalIDs)
             {
-                string attributeName = data.ordAttributes[attID];
+                string attributeName = data.ordAttribNames[attID];
                 var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
@@ -112,7 +112,7 @@ namespace ETV.ETV3D
             // Setup interval axes
             foreach(int attID in intervalIDs)
             {
-                string attributeName = data.ivlAttributes[attID];
+                string attributeName = data.ivlAttribNames[attID];
                 var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
@@ -132,7 +132,7 @@ namespace ETV.ETV3D
             // Setup ratio axes
             foreach(int attID in ratioIDs)
             {
-                string attributeName = data.ratAttributes[attID];
+                string attributeName = data.ratAttribNames[attID];
                 var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
@@ -159,7 +159,7 @@ namespace ETV.ETV3D
             var notNaNPrimitives = new List<PCPLine2D>();
 
             int counter = 0;
-            foreach(var infoO in data.informationObjects)
+            foreach(var infoO in data.infoObjects)
             {
                 var line = CreateLine(infoO, Color.white);
                 if(line != null)
@@ -182,7 +182,7 @@ namespace ETV.ETV3D
                     new Color(1, 1, 1, .5f),
                     Vector3.forward,
                     Vector3.up,
-                    data.informationObjects.Count * pcpLength,
+                    data.infoObjects.Count * pcpLength,
                     .005f,
                     min,
                     max

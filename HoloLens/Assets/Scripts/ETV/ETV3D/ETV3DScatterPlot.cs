@@ -42,7 +42,7 @@ public class ETV3DScatterPlot : AETV3D
     {
         var dotArray = new List<ScatterDot3D>();
 
-        foreach(var infO in data.informationObjects)
+        foreach(var infO in data.infoObjects)
         {
             float valA = data.GetValue(infO, attributeA, lomA);
             float valB = data.GetValue(infO, attributeB, lomB);

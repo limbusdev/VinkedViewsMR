@@ -31,16 +31,16 @@ public class ETV3DSingleAxis : AETV3D
         switch(type)
         {
             case LoM.NOMINAL:
-                this.attributeName = data.nomAttributes[attributeID];
+                this.attributeName = data.nomAttribNames[attributeID];
                 break;
             case LoM.ORDINAL:
-                this.attributeName = data.ordAttributes[attributeID];
+                this.attributeName = data.ordAttribNames[attributeID];
                 break;
             case LoM.INTERVAL:
-                this.attributeName = data.ivlAttributes[attributeID];
+                this.attributeName = data.ivlAttribNames[attributeID];
                 break;
             default: //case LevelOfMeasurement.RATIO:
-                this.attributeName = data.ratAttributes[attributeID];
+                this.attributeName = data.ratAttribNames[attributeID];
                 break;
         }
 

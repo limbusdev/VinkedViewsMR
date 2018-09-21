@@ -38,7 +38,7 @@ namespace ETV
             int counter = 0;
             foreach(int attID in nominalIDs)
             {
-                var m = data.dataMeasuresNominal[data.nomAttributes[attID]];
+                var m = data.nominalAttribStats[data.nomAttribNames[attID]];
                 var a = o.nominalAtt[attID];
 
                 polyline[counter] = new Vector3(.5f * counter, axes[counter].TransformToAxisSpace(m.valueIDs[a.value]), 0);
@@ -48,7 +48,7 @@ namespace ETV
 
             foreach(var attID in ordinalIDs)
             {
-                var m = data.dataMeasuresOrdinal[data.ordAttributes[attID]];
+                var m = data.ordinalAttribStats[data.ordAttribNames[attID]];
                 var a = o.ordinalAtt[attID];
 
                 // If NaN
@@ -64,7 +64,7 @@ namespace ETV
 
             foreach(var attID in intervalIDs)
             {
-                var m = data.dataMeasuresInterval[data.ivlAttributes[attID]];
+                var m = data.intervalAttribStats[data.ivlAttribNames[attID]];
                 var a = o.intervalAtt[attID];
 
                 // If NaN
@@ -80,7 +80,7 @@ namespace ETV
 
             foreach(var attID in ratioIDs)
             {
-                var m = data.dataMeasuresRatio[data.ratAttributes[attID]];
+                var m = data.ratioAttribStats[data.ratAttribNames[attID]];
                 var a = o.ratioAtt[attID];
 
                 // If NaN

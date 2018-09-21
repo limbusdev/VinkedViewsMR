@@ -54,7 +54,7 @@ public class ETV3DBarChart : AETV3D
 
     private void InitNominal(DataSet data, string attributeName)
     {
-        var measures = data.dataMeasuresNominal[attributeName];
+        var measures = data.nominalAttribStats[attributeName];
         var factory = ServiceLocator.instance.Factory2DPrimitives;
 
         for(int i = 0; i < measures.numberOfUniqueValues; i++)
@@ -63,7 +63,7 @@ public class ETV3DBarChart : AETV3D
             InsertBar(val, measures.distribution[val], i);
         }
 
-        foreach(var o in data.informationObjects)
+        foreach(var o in data.infoObjects)
         {
             string value = o.nominalAtt[attributeID].value;
             var bar = bars[value];
@@ -73,7 +73,7 @@ public class ETV3DBarChart : AETV3D
 
     private void InitOrdinal(DataSet data, string attributeName)
     {
-        var measures = data.dataMeasuresOrdinal[attributeName];
+        var measures = data.ordinalAttribStats[attributeName];
         var factory = ServiceLocator.instance.Factory2DPrimitives;
 
         for(int i = 0; i < measures.numberOfUniqueValues; i++)
@@ -81,7 +81,7 @@ public class ETV3DBarChart : AETV3D
             InsertBar(measures.uniqueValues[i], measures.distribution[i], i);
         }
 
-        foreach(var o in data.informationObjects)
+        foreach(var o in data.infoObjects)
         {
             int value = o.ordinalAtt[attributeID].value;
             var bar = bars[measures.uniqueValues[value]];
@@ -117,12 +117,12 @@ public class ETV3DBarChart : AETV3D
         switch(lom)
         {
             case LoM.NOMINAL:
-                var mea = data.dataMeasuresNominal[attributeName];
+                var mea = data.nominalAttribStats[attributeName];
                 length = (mea.numberOfUniqueValues + 1) * .15f;
                 max = mea.distMax;
                 break;
             default:
-                var mea2 = data.dataMeasuresOrdinal[attributeName];
+                var mea2 = data.ordinalAttribStats[attributeName];
                 length = (mea2.numberOfUniqueValues + 1) * .15f;
                 max = mea2.distMax;
                 break;

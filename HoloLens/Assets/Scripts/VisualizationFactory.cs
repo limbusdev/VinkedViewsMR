@@ -65,79 +65,91 @@ public class VisualizationFactory : MonoBehaviour
 
     void Start()
     {
+        TESTSetupFBI();
+    }
+
+    private void TESTSetupFBI()
+    {
+        try
+        {
+            var etvMan = ServiceLocator.instance.etvManager;
+            var fact2 = ServiceLocator.instance.Factory2DETV;
+            var prim2Dfactory = ServiceLocator.instance.Factory2DPrimitives;
+
+            var etvYearPopulationCrimePCP2D = GeneratePCP2DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
+            etvMan.AutoPlaceETV(etvYearPopulationCrimePCP2D);
+
+            var etvYearPopulationCrimePCP3D = GeneratePCP3DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
+            etvMan.AutoPlaceETV(etvYearPopulationCrimePCP3D);
+
+            var etvYearMurderScatterplot2D = GenerateScatterplot2DFrom(0, new string[] { "Year", "Murder/MS." });
+            etvMan.AutoPlaceETV(etvYearMurderScatterplot2D);
+
+            var etvYearCrimeMurderScatterplot3D = GenerateScatterplot3DFrom(0, new string[] { "Year", "Murder/MS.", "Violent crime" });
+            etvMan.AutoPlaceETV(etvYearCrimeMurderScatterplot3D);
+
+            var etvTimeRape = GenerateLineplot2DFrom(0, new string[] { "Year", "Rape (legacy)"});
+            etvMan.AutoPlaceETV(etvTimeRape);
+
+            var etvTimeMurder = GenerateLineplot2DFrom(0, new string[] { "Year", "Murder/MS." });
+            etvMan.AutoPlaceETV(etvTimeMurder);
+
+            DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[0].infoObjects[7]);
+
+        } catch(Exception e)
+        {
+            Debug.LogError("TESTSetupFBI failed.");
+        }
+    }
+
+    private void TESTPlaceAxes()
+    {
+        var etvMan = ServiceLocator.instance.etvManager;
         var fact2 = ServiceLocator.instance.Factory2DETV;
         var prim2Dfactory = ServiceLocator.instance.Factory2DPrimitives;
+
         var a1 = prim2Dfactory.CreateAutoTickedAxis("Year", AxisDirection.X, dataProvider.dataSets[0]);
         var ae1 = fact2.PutETVOnAnchor(a1);
 
+        etvMan.AutoPlaceETV(ae1);
+
         var a2 = prim2Dfactory.CreateAutoTickedAxis("Population", AxisDirection.X, dataProvider.dataSets[0]);
         var ae2 = fact2.PutETVOnAnchor(a2);
-        ae2.transform.position = new Vector3(0, 0, 1);
+
+        etvMan.AutoPlaceETV(ae2);
 
         var a3 = prim2Dfactory.CreateAutoTickedAxis("Crime", AxisDirection.X, dataProvider.dataSets[1]);
         var ae3 = fact2.PutETVOnAnchor(a3);
-        ae3.transform.position = new Vector3(0, 0, 2);
+
+        etvMan.AutoPlaceETV(ae3);
 
         var a4 = prim2Dfactory.CreateAutoTickedAxis("Weapon", AxisDirection.X, dataProvider.dataSets[1]);
         var ae4 = fact2.PutETVOnAnchor(a4);
-        ae4.transform.position = new Vector3(0, 0, 3);
+
+        etvMan.AutoPlaceETV(ae4);
 
         var fact3 = ServiceLocator.instance.Factory3DETV;
         var prim3Dfactory = ServiceLocator.instance.Factory3DPrimitives;
         var a3d1 = prim3Dfactory.CreateAutoTickedAxis("Year", AxisDirection.X, dataProvider.dataSets[0]);
         var a3de1 = fact3.PutETVOnAnchor(a3d1);
-        a3d1.transform.position = new Vector3(0, 0, -1);
+
+        etvMan.AutoPlaceETV(a3de1);
 
         var a3d2 = prim3Dfactory.CreateAutoTickedAxis("Population", AxisDirection.X, dataProvider.dataSets[0]);
         var a3de2 = fact3.PutETVOnAnchor(a3d2);
-        a3de2.transform.position = new Vector3(0, 0, -2);
+
+        etvMan.AutoPlaceETV(a3de2);
 
         var a3d3 = prim3Dfactory.CreateAutoTickedAxis("Crime", AxisDirection.X, dataProvider.dataSets[1]);
         var a3de3 = fact3.PutETVOnAnchor(a3d3);
-        a3de3.transform.position = new Vector3(0, 0, -3);
+
+        etvMan.AutoPlaceETV(a3de3);
 
         var a3d4 = prim3Dfactory.CreateAutoTickedAxis("Weapon", AxisDirection.X, dataProvider.dataSets[1]);
         var a3de4 = fact3.PutETVOnAnchor(a3d4);
-        a3de4.transform.position = new Vector3(0, 0, -4);
 
+        etvMan.AutoPlaceETV(a3de4);
 
-        var ae5 = GenerateBarChart2DFrom(1, "Crime");
-        ae5.transform.position = new Vector3(0, 0, 3.5f);
-
-        var ae7 = GenerateBarChart2DFrom(1, "Weapon");
-        ae7.transform.position = new Vector3(4, 0, 3.5f);
-
-        var ae6 = GenerateBarChart3DFrom(1, "Crime");
-        ae6.transform.position = new Vector3(-4, 0, 3.5f);
-
-        var ae8 = GenerateBarChart3DFrom(1, "Time");
-        ae8.transform.position = new Vector3(-6, 0, 3.5f);
-
-        var ae9 = GenerateBarMap3DFrom(1, new string[] {"Crime", "Weapon" });
-        ae9.transform.position = new Vector3(-4, 0, 5f);
-
-        var ae10 = GeneratePCP2DFrom(1, new string[] { "Crime", "Inside/Outside", "Weapon", "District", "Neighborhood"});
-        ae10.transform.position = new Vector3(-8, 0, 5f);
-
-        var ae12 = GeneratePCP2DFrom(1, new string[] { "Date", "Time" });
-        ae12.transform.position = new Vector3(-8, 0, 9f);
-
-        var ae11 = GeneratePCP2DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
-        ae11.transform.position = new Vector3(-8, 0, 7f);
-
-        var ae13 = GeneratePCP3DFrom(1, new string[] { "Crime", "Inside/Outside", "Weapon", "District", "Neighborhood" });
-        ae13.transform.position = new Vector3(-10, 0, 8f);
-
-        ServiceLocator.instance.visualizationFactory.GenerateSingle3DAxisFrom(0, "Year");
-
-        var ae14 = GenerateScatterplot2DFrom(0, new string[] { "Population", "Violent crime" });
-        ae14.transform.position = new Vector3(4, 0, -8);
-
-        var ae15 = GenerateScatterplot3DFrom(0, new string[] { "Population", "Violent crime", "Year" });
-        ae15.transform.position = new Vector3(6, 0, -8);
-
-        DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[1].infoObjects[0]);
-        
 
     }
     
@@ -209,9 +221,9 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateSingle3DAxisFrom(int dataSetID, string variable)
     {
-        //try
-        //{
-            if(!CheckIfSuitable(dataSetID, new string[] { variable }, VisualizationType.AXIS))
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, new string[] { variable }, VisType.SingleAxis))
             {
                 return new GameObject("Not Suitable");
             }
@@ -226,12 +238,12 @@ public class VisualizationFactory : MonoBehaviour
             vis.transform.position = NewETVPosition.transform.position;
 
             return vis;
-        //} catch(Exception e)
-        //{
-        //    Debug.Log("Creation of requested Visualization for variable " + variable + " failed.");
-        //    Debug.LogError(e.Message);
-        //    return new GameObject("Creation Failed");
-        //}
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variable + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -242,9 +254,9 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateBarChart2DFrom(int dataSetID, string variable)
     {
-        //try
-        //{
-            if(!CheckIfSuitable(dataSetID, new string[] { variable }, VisualizationType.BAR_CHART))
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, new string[] { variable }, VisType.BarChart2D))
             {
                 return new GameObject("Not Suitable");
             }
@@ -259,12 +271,12 @@ public class VisualizationFactory : MonoBehaviour
             vis.transform.position = NewETVPosition.transform.position;
 
             return vis;
-        //} catch(Exception e)
-        //{
-        //    Debug.Log("Creation of requested Visualization for variable " + variable + " failed.");
-        //    Debug.LogError(e.Message);
-        //    return new GameObject("Creation Failed");
-        //}
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variable + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -277,7 +289,7 @@ public class VisualizationFactory : MonoBehaviour
     {
         try
         {
-            if(!CheckIfSuitable(dataSetID, new string[] { variable }, VisualizationType.BAR_CHART))
+            if(!CheckIfSuitable(dataSetID, new string[] { variable }, VisType.BarChart3D))
             {
                 return new GameObject("Not Suitable");
             }
@@ -308,9 +320,9 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateBarMap3DFrom(int dataSetID, string[] variables)
     {
-        //try
-        //{
-            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.BAR_MAP))
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, variables, VisType.BarMap3D))
             {
                 return new GameObject("Not Suitable");
             }
@@ -326,12 +338,12 @@ public class VisualizationFactory : MonoBehaviour
             vis.transform.position = NewETVPosition.transform.position;
 
             return vis;
-        //} catch(Exception e)
-        //{
-        //    Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
-        //    Debug.LogError(e.Message);
-        //    return new GameObject("Creation Failed");
-        //}
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -342,9 +354,9 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GeneratePCP2DFrom(int dataSetID, string[] variables)
     {
-        //try
-        //{
-            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.PCP))
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, variables, VisType.PCP2D))
             {
                 return new GameObject("Not Suitable");
             }
@@ -359,12 +371,12 @@ public class VisualizationFactory : MonoBehaviour
             vis.transform.position = NewETVPosition.transform.position;
 
             return vis;
-        //} catch(Exception e)
-        //{
-        //    Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
-        //    Debug.LogError(e.Message);
-        //    return new GameObject("Creation Failed");
-        //}
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -377,7 +389,7 @@ public class VisualizationFactory : MonoBehaviour
     {
         try
         { 
-            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.PCP))
+            if(!CheckIfSuitable(dataSetID, variables, VisType.PCP3D))
             {
                 return new GameObject("Not Suitable");
             }
@@ -396,6 +408,7 @@ public class VisualizationFactory : MonoBehaviour
         {
             Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
             Debug.LogError(e.Message);
+            Debug.LogError(e.StackTrace);
             return new GameObject("Creation Failed");
         }
     }
@@ -410,7 +423,7 @@ public class VisualizationFactory : MonoBehaviour
     {
         try
         {
-            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.SCATTER_PLOT_2D))
+            if(!CheckIfSuitable(dataSetID, variables, VisType.ScatterPlot2D))
             {
                 return new GameObject("Not Suitable");
             }
@@ -441,9 +454,9 @@ public class VisualizationFactory : MonoBehaviour
     /// <returns>GameObject containing the anchored visualization.</returns>
     public GameObject GenerateScatterplot3DFrom(int dataSetID, string[] variables)
     {
-        //try
-        //{
-            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.SCATTER_PLOT_3D))
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, variables, VisType.ScatterPlot3D))
             {
                 return new GameObject("Not Suitable");
             }
@@ -458,12 +471,12 @@ public class VisualizationFactory : MonoBehaviour
             vis.transform.position = NewETVPosition.transform.position;
 
             return vis;
-        //} catch(Exception e)
-        //{
-        //    Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
-        //    Debug.LogError(e.Message);
-        //    return new GameObject("Creation Failed");
-        //}
+        } catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+            Debug.LogError(e.Message);
+            return new GameObject("Creation Failed");
+        }
     }
 
     /// <summary>
@@ -476,16 +489,27 @@ public class VisualizationFactory : MonoBehaviour
     {
         try
         {
-            if(!CheckIfSuitable(dataSetID, variables, VisualizationType.LINE_CHART))
+            if(!CheckIfSuitable(dataSetID, variables, VisType.LineChartXY2D))
             {
                 return new GameObject("Not Suitable");
             }
 
-            return new GameObject();
+            var ds = dataProvider.dataSets[dataSetID];
+
+            var factory = ServiceLocator.instance.Factory2DETV;
+            var vis = factory.CreateETVLineChart(ds, variables[0], variables[1]);
+
+            vis = factory.PutETVOnAnchor(vis);
+
+            vis.transform.position = NewETVPosition.transform.position;
+
+            return vis;
+
         } catch(Exception e)
         {
             Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
             Debug.LogError(e.Message);
+            Debug.LogError(e.StackTrace);
             return new GameObject("Creation Failed");
         }
     }
@@ -499,7 +523,7 @@ public class VisualizationFactory : MonoBehaviour
     /// <param name="dataSetID">ID of DataSet to use.</param>
     /// <param name="attNames">Names of the attributes to visualize.</param>
     /// <returns>List of suitable visualizations.</returns>
-    public string[] ListPossibleVisualizations(int dataSetID, string[] attNames)
+    public VisType[] ListPossibleVisualizations(int dataSetID, string[] attNames)
     {
         int[] nomIDs, ordIDs, ivlIDs, ratIDs;
 
@@ -507,46 +531,32 @@ public class VisualizationFactory : MonoBehaviour
 
         var count = new Vector4(nomIDs.Length, ordIDs.Length, ivlIDs.Length, ratIDs.Length);
 
-        if(count == new Vector4(1, 0, 0, 0))
-        {
-            return new string[] { "SingleAxis3D", "BarChart2D", "BarChart3D" };
-        } else if(count == new Vector4(2, 0, 0, 0))
-        {
-            return new string[] { "BarMap3D", "PCP2D", "PCP3D", "ScatterXY2D" };
-        } else if(count == new Vector4(0, 1, 0, 0))
-        {
-            return new string[] { "SingleAxis3D", "BarChart2D", "BarChart3D" };
-        } else if(count == new Vector4(0, 2, 0, 0))
-        {
-            return new string[] { "BarMap3D", "PCP2D", "PCP3D", "ScatterXY2D" };
-        } else if(count == new Vector4(0, 0, 1, 0))
-        {
-            return new string[] { "SingleAxis3D" };
-        } else if(count == new Vector4(0, 0, 2, 0))
-        {
-            return new string[] { "PCP2D", "PCP3D", "ScatterXY2D" };
-        } else if(count == new Vector4(0, 0, 0, 1))
-        {
-            return new string[] { "SingleAxis3D" };
-        } else if(count == new Vector4(0, 0, 0, 2))
-        {
-            return new string[] { "PCP2D", "PCP3D", "LineXY2D", "ScatterXY2D" };
-        } else if(count == new Vector4(1, 1, 0, 0))
-        {
-            return new string[] { "BarMap3D", "PCP2D", "PCP3D", "ScatterXYZ2D" };
+        // Only one categorical attribute
+        if(count.x + count.y == 1 && count.z + count.w == 0)
+            return new VisType[] {VisType.SingleAxis, VisType.BarChart2D, VisType.BarChart3D };
 
-        } else if(count.x + count.y + count.z + count.w == 2)
-        {
-            return new string[] { "PCP2D", "PCP3D", "ScatterXYZ2D" };
+        // Only one attribute
+        if(count.x + count.y + count.z + count.w == 1)
+            return new VisType[] { VisType.SingleAxis };
 
-        } else if(count.x + count.y + count.z + count.w == 3)
-        {
-            return new string[] { "PCP2D", "PCP3D", "ScatterXYZ3D" };
+        // Two categorical attributes
+        else if(count.x + count.y == 2 && count.z + count.w == 0)
+            return new VisType[] { VisType.BarMap3D, VisType.PCP2D, VisType.PCP3D, VisType.ScatterPlot2D };
 
-        } else
-        {
-            return new string[] { "PCP2D", "PCP3D" };
-        }
+        else if(count.x + count.y + count.z + count.w == 2)
+            return new VisType[] { VisType.PCP2D, VisType.PCP3D, VisType.ScatterPlot2D };
+
+        else if(count.z == 1 && count.w == 1)
+            return new VisType[] { VisType.PCP2D, VisType.PCP3D, VisType.ScatterPlot2D, VisType.LineChartXY2D };
+
+        else if(count.z + count.w == 2)
+            return new VisType[] { VisType.PCP2D, VisType.PCP3D, VisType.ScatterPlot2D };
+
+        else if(count.x + count.y + count.z + count.w == 3)
+            return new VisType[] { VisType.PCP2D, VisType.PCP3D, VisType.ScatterPlot3D };
+
+        else
+            return new VisType[] { VisType.PCP2D, VisType.PCP3D };
     }
 
     /// <summary>
@@ -557,39 +567,20 @@ public class VisualizationFactory : MonoBehaviour
     /// <param name="attributes">attributes in question</param>
     /// <param name="visType">planned visualization type</param>
     /// <returns>if suitable</returns>
-    public bool CheckIfSuitable(int dataSetID, string[] attributes, VisualizationType visType)
+    public bool CheckIfSuitable(int dataSetID, string[] attributes, VisType visType)
+    {
+        return CheckIfSuitable(dataSetID, attributes, new VisType[] { visType });
+    }
+    public bool CheckIfSuitable(int dataSetID, string[] attributes, VisType[] visTypes)
     {
         // SingleAxis3D, BarChart2D, BarChart3D, BarMap3D, PCP2D, PCP3D, ScatterXY2D, ScatterXYZ3D, LineXY2D
         var suitables = ListPossibleVisualizations(dataSetID, attributes);
 
-        bool suitable;
+        bool suitable = true;
 
-        switch(visType)
+        foreach(var t in visTypes)
         {
-            case VisualizationType.AXIS:
-                suitable = (suitables.Contains("SingleAxis3D"));
-                break;
-            case VisualizationType.BAR_CHART:
-                suitable = (suitables.Contains("BarChart2D") || suitables.Contains("BarChart3D"));
-                break;
-            case VisualizationType.BAR_MAP:
-                suitable = (suitables.Contains("BarMap3D"));
-                break;
-            case VisualizationType.LINE_CHART:
-                suitable = (suitables.Contains("LineXY2D"));
-                break;
-            case VisualizationType.SCATTER_PLOT_2D:
-                suitable = (suitables.Contains("ScatterXY2D"));
-                break;
-            case VisualizationType.SCATTER_PLOT_3D:
-                suitable = (suitables.Contains("ScatterXYZ3D"));
-                break;
-            case VisualizationType.PCP:
-                suitable = (suitables.Contains("PCP2D") || suitables.Contains("PCP3D"));
-                break;
-            default:
-                suitable = false;
-                break;
+            suitable &= suitables.Contains(t);
         }
 
         return suitable;
@@ -609,7 +600,7 @@ public class VisualizationFactory : MonoBehaviour
     
 }
 
-public enum VisualizationType
+public enum VisType
 {
-    AXIS, BAR_CHART, BAR_MAP, LINE_CHART, SCATTER_PLOT_2D, SCATTER_PLOT_3D, PCP
+    SingleAxis, BarChart2D, BarChart3D, BarMap3D, LineChartXY2D, ScatterPlot2D, ScatterPlot3D, PCP2D, PCP3D
 }

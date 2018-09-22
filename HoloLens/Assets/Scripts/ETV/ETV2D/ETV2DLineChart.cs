@@ -38,8 +38,7 @@ public class ETV2DLineChart : AETV2D
 
     public override void UpdateETV()
     {
-        SetUpAxis();
-        DrawGraph();
+
     }
 
     public override void SetUpAxis()

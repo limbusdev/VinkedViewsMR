@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4362107388968740}
   - component: {fileID: 114055060894504564}
+  - component: {fileID: 114271166118036448}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -89,6 +90,19 @@ MonoBehaviour:
   Factory3DETV: {fileID: 114945476759806656}
   Factory2DETV: {fileID: 114484183617782816}
   visualizationFactory: {fileID: 0}
+  etvManager: {fileID: 114271166118036448}
+--- !u!114 &114271166118036448
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1084506249481002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5d7c09998fdb7649b88c433cb853091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AutoPositioningSlots: {fileID: 0}
 --- !u!114 &114484183617782816
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -165,10 +179,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ETVAnchor: {fileID: 1626009144967710, guid: 1fd7ca43b384af645b20e838dc0aef49, type: 2}
   etv3DBarChart: {fileID: 1609755241933270, guid: 47b892c86c8a58b49a108da03d68cbf5,
-    type: 2}
-  etv3DGroupedBarChart: {fileID: 1060095881637280, guid: a31c6d974c345d446a0f75c60e652783,
-    type: 2}
-  barChartLegend3D: {fileID: 1833554834293496, guid: c6a3dc7c7bbb725468bf4594ff9b5087,
     type: 2}
   ETV3DScatterPlotPrefab: {fileID: 1671202286137060, guid: 136568680d8318a43a8d61beaf7282c1,
     type: 2}

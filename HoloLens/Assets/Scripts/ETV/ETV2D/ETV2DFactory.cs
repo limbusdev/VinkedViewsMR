@@ -28,8 +28,6 @@ public class ETV2DFactory : AETVFactory
 
         lineChart.GetComponent<ETV2DLineChart>().Init(data, attributeNameA, attributeNameB);
         lineChart.GetComponent<ETV2DLineChart>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
-        lineChart.GetComponent<ETV2DLineChart>().UpdateETV();
-        
 
         return lineChart;
     }

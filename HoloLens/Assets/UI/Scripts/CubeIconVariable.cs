@@ -146,7 +146,7 @@ public class CubeIconVariable : InteractionReceiver
             lr.endWidth = .01f;
             
             visButtonsAnchor.SetActive(true);
-            string[] viss = ServiceLocator.instance.visualizationFactory.ListPossibleVisualizations(dataSetID, varNames);
+            VisType[] viss = ServiceLocator.instance.visualizationFactory.ListPossibleVisualizations(dataSetID, varNames);
 
             lr.positionCount = viss.Length * 2;
             var poss = new List<Vector3>();
@@ -156,8 +156,8 @@ public class CubeIconVariable : InteractionReceiver
                 var key = viss[i];
                 var button = Instantiate(HoloButtonPrefab);
                 button.transform.parent = visButtonsAnchor.transform;
-                button.name = key;
-                button.GetComponent<CompoundButtonText>().Text = key;
+                button.name = key.ToString();
+                button.GetComponent<CompoundButtonText>().Text = key.ToString();
                 button.transform.localPosition = new Vector3(.15f * i, 0, 0);
                 button.transform.localRotation = Quaternion.Euler(Vector3.zero);
                 interactables.Add(button);

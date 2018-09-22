@@ -4,11 +4,13 @@ public class ServiceLocator : MonoBehaviour {
 
     public static ServiceLocator instance = null;
 
-    public Graphical3DPrimitiveFactory Factory3DPrimitives; // Populate in editor
-    public Graphical2DPrimitiveFactory Factory2DPrimitives; // Populate in editor
-    public ETV3DFactory Factory3DETV;                       // Populate in editor
-    public ETV2DFactory Factory2DETV;                       // populate in editor
-    public VisualizationFactory visualizationFactory;       // Populate in editor
+    [SerializeField]
+    public Graphical3DPrimitiveFactory Factory3DPrimitives;
+    public Graphical2DPrimitiveFactory Factory2DPrimitives;
+    public ETV3DFactory Factory3DETV;                      
+    public ETV2DFactory Factory2DETV;                       
+    public VisualizationFactory visualizationFactory;       
+    public ETVManager etvManager;                           
     
 
     void Awake()

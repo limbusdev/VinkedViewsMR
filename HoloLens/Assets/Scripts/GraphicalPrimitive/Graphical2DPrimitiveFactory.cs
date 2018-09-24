@@ -13,6 +13,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     public GameObject XYLine2DPrefab;
     public GameObject ScatterDot2DPrefab;
     public GameObject TickPrefab;
+    public GameObject GridLinePrefab;
 
     public GameObject CreateEmptyAxis()
     {
@@ -111,21 +112,12 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         float x = Mathf.Ceil(Mathf.Log10(unroundedTickSize) - 1);
         float pow10x = Mathf.Pow(10, x);
         float tickResolution = Mathf.Ceil(unroundedTickSize / pow10x) * pow10x;
-
-        float diameter = .005f;
-
+        
         int tickCounter = 0;
         for(float i = 0; i <= max; i += tickResolution)
         {
-            GameObject tick = new GameObject("Tick");
-            var lineRend = tick.AddComponent<LineRenderer>();
-            lineRend.useWorldSpace = false;
-            lineRend.alignment = LineAlignment.TransformZ;
-            lineRend.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-            lineRend.startColor = Color.white;
-            lineRend.endColor = Color.white;
-            lineRend.startWidth = diameter;
-            lineRend.endWidth = diameter;
+            GameObject tick = Instantiate(GridLinePrefab);
+            var lineRend = tick.GetComponent<LineRenderer>();
             lineRend.SetPosition(0, Vector3.zero);
             lineRend.SetPosition(1, axisDir * length);
 
@@ -150,23 +142,15 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         float x = Mathf.Ceil(Mathf.Log10(unroundedTickSize) - 1);
         float pow10x = Mathf.Pow(10, x);
         float tickResolution = Mathf.Ceil(unroundedTickSize / pow10x) * pow10x;
-
-        float diameter = .005f;
-
+        
         int tickCounter = 0;
         for(float i = min; i <= max; i += tickResolution)
         {
-            GameObject tick = new GameObject("Tick");
-            var lineRend = tick.AddComponent<LineRenderer>();
-            lineRend.useWorldSpace = false;
-            lineRend.material = new Material(Shader.Find("Particles/Alpha Blended Premultiply"));
-            lineRend.startColor = color;
-            lineRend.endColor = color;
-            lineRend.startWidth = diameter;
-            lineRend.endWidth = diameter;
+            GameObject tick = Instantiate(GridLinePrefab);
+            var lineRend = tick.GetComponent<LineRenderer>();
             lineRend.SetPosition(0, Vector3.zero);
             lineRend.SetPosition(1, axisDir * length);
-            
+
             tick.transform.parent = grid.transform;
             tick.transform.localPosition = expansionDir * (tickCounter * tickResolution) / (max-min);
             ticks.Add(tick);

@@ -41,7 +41,7 @@ namespace Model
             {
                 DateTime date = new DateTime(1899, 12, 30, 0, 0, 0, 0, DateTimeKind.Utc);
                 date.AddDays(value);
-                return date.ToShortDateString();
+                return date.ToString("d");
             } 
         }
 

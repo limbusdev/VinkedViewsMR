@@ -73,10 +73,16 @@ public class ToolBarInteractionReceiver : InteractionReceiver
                 Targets[0].SetActive(false); // Disable Toolbar
                 try
                 {
-                    GameObject tools = Targets[1];
-                    ETVAnchorTools etvAT = tools.GetComponent<ETVAnchorTools>();
-                    etvAT.DisableAllTools();
-                    Rotatable.transform.localRotation = Quaternion.Euler(0,0,0);
+                    try
+                    {
+                        GameObject tools = Targets[1];
+                        ETVAnchorTools etvAT = tools.GetComponent<ETVAnchorTools>();
+                        etvAT.DisableAllTools();
+                        Targets[3].GetComponent<ETVAnchor>().resetRotation = true;
+                    } catch(Exception e)
+                    {
+                        Debug.Log(e);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -92,6 +98,17 @@ public class ToolBarInteractionReceiver : InteractionReceiver
                     etvAT.DisableAllTools();
                 }
                 catch (Exception e)
+                {
+                    Debug.Log(e);
+                }
+                break;
+            case "HolographicButtonDeactivate":
+                Targets[0].SetActive(false); // Disable ETV
+                try
+                {
+                    GameObject tools = Targets[2];
+                    tools.SetActive(!tools.activeSelf);
+                } catch(Exception e)
                 {
                     Debug.Log(e);
                 }

@@ -7601,6 +7601,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Disk: {fileID: 1189923836175208}
+  Handle: {fileID: 1847170152090208}
+  notHoldMat: {fileID: 2100000, guid: e4c59bfc2c91ffc4e9848473ec09ddef, type: 2}
+  HoldMat: {fileID: 2100000, guid: 72e18e0d02c99274e9e3b31c87729790, type: 2}
 --- !u!114 &114165634071943496
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7615,6 +7618,7 @@ MonoBehaviour:
   hostTransform: {fileID: 4879788160285060}
   rotationConstraint: 1
   RotationSensitivity: 5
+  hold: 0
 --- !u!114 &114169635538331560
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7711,6 +7715,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Disk: {fileID: 1353159236781788}
+  Handle: {fileID: 1926677768565820}
+  notHoldMat: {fileID: 2100000, guid: e4c59bfc2c91ffc4e9848473ec09ddef, type: 2}
+  HoldMat: {fileID: 2100000, guid: 72e18e0d02c99274e9e3b31c87729790, type: 2}
 --- !u!114 &114256359827525990
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7839,6 +7846,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Disk: {fileID: 1891044472084832}
+  Handle: {fileID: 1364840415573726}
+  notHoldMat: {fileID: 2100000, guid: e4c59bfc2c91ffc4e9848473ec09ddef, type: 2}
+  HoldMat: {fileID: 2100000, guid: 72e18e0d02c99274e9e3b31c87729790, type: 2}
 --- !u!114 &114545198251167244
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7884,6 +7894,7 @@ MonoBehaviour:
   hostTransform: {fileID: 4879788160285060}
   rotationConstraint: 3
   RotationSensitivity: 5
+  hold: 0
 --- !u!114 &114663299241473800
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7992,6 +8003,7 @@ MonoBehaviour:
   hostTransform: {fileID: 4879788160285060}
   rotationConstraint: 2
   RotationSensitivity: 5
+  hold: 0
 --- !u!114 &114815692745156408
 MonoBehaviour:
   m_ObjectHideFlags: 1

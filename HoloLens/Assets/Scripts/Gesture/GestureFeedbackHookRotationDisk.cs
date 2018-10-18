@@ -8,8 +8,11 @@ namespace Gestures
     public class GestureFeedbackHookRotationDisk : AGestureFeedbackHook, INavigationHandler
     {
         public GameObject Disk;
+        public GameObject Handle;
 
-        
+        public Material notHoldMat, HoldMat;
+
+
         public void OnNavigationCanceled(NavigationEventData eventData)
         {
             FeedbackEnd();
@@ -33,6 +36,7 @@ namespace Gestures
         public override void FeedbackStart()
         {
             Disk.SetActive(true);
+            Handle.GetComponent<MeshRenderer>().material = HoldMat;
         }
 
         public override void FeedbackUpdate()
@@ -43,6 +47,7 @@ namespace Gestures
         public override void FeedbackEnd()
         {
             Disk.SetActive(false);
+            Handle.GetComponent<MeshRenderer>().material = notHoldMat;
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class ETVManager : MonoBehaviour
 {
@@ -48,16 +49,22 @@ public class ETVManager : MonoBehaviour
 
         bool success = false;
 
-        
-        foreach(var slot in slots.Keys)
+        try
         {
-            if(slots[slot] == VACANT)
+            foreach(var slot in slots.Keys)
             {
-                ETV.transform.position = slot.transform.position;
-                ETV.transform.rotation = slot.transform.rotation;
-                slots[slot] = OCCUPIED;
-                return success = true;
+                if(slots[slot] == VACANT)
+                {
+                    ETV.transform.position = slot.transform.position;
+                    var rot = Quaternion.Euler(slot.transform.rotation.eulerAngles.x, slot.transform.eulerAngles.y + 180, slot.transform.eulerAngles.z);
+                    ETV.transform.GetChild(0).GetChild(1).transform.rotation = rot;
+                    slots[slot] = OCCUPIED;
+                    return success = true;
+                }
             }
+        } catch(Exception e)
+        {
+            Debug.LogError(e.Message);
         }
 
         return success;

@@ -1,5 +1,6 @@
 ﻿using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.InputModule.Utilities.Interactions;
+using System;
 using UnityEngine;
 
 namespace Gestures
@@ -18,6 +19,10 @@ namespace Gestures
 
         public bool hasFocus = false;
         public bool isTapped = false;
+
+        public GameObject Handle;
+
+        public Material notHoldMat, HoldMat;
 
 
 
@@ -94,6 +99,14 @@ namespace Gestures
             {
                 isTapped = true;
                 InputManager.Instance.OverrideFocusedObject = gameObject;
+                try
+                {
+                    Handle.GetComponent<MeshRenderer>().material = HoldMat;
+                } catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                }
+                
             }
         }
 
@@ -101,6 +114,13 @@ namespace Gestures
         {
             isTapped = false;
             InputManager.Instance.OverrideFocusedObject = null;
+            try
+            {
+                Handle.GetComponent<MeshRenderer>().material = notHoldMat;
+            } catch(Exception e)
+            {
+                Debug.LogError(e.Message);
+            }
         }
 
         public void OnFocusEnter()

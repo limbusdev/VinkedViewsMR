@@ -45,11 +45,11 @@ namespace Gestures
                 switch(rotationConstraint)
                 {
                     case AxisAndPlaneConstraint.X_AXIS_ONLY:
-                        rotationFactor = eventData.NormalizedOffset.y * RotationSensitivity;
+                        rotationFactor = eventData.NormalizedOffset.x * RotationSensitivity;
                         rotationVector.x = -1 * rotationFactor;
                         break;
                     case AxisAndPlaneConstraint.Z_AXIS_ONLY:
-                        rotationFactor = eventData.NormalizedOffset.y * RotationSensitivity;
+                        rotationFactor = eventData.NormalizedOffset.x * RotationSensitivity;
                         rotationVector.z = -1 * rotationFactor;
                         break;
                     default: // case: Y_AXIS_ONLY:
@@ -78,12 +78,16 @@ namespace Gestures
         public void OnInputDown(InputEventData eventData)
         {
             if(hasFocus)
+            {
                 isTapped = true;
+                InputManager.Instance.OverrideFocusedObject = gameObject;
+            }
         }
 
         public void OnInputUp(InputEventData eventData)
         {
             isTapped = false;
+            InputManager.Instance.OverrideFocusedObject = null;
         }
 
         public void OnFocusEnter()

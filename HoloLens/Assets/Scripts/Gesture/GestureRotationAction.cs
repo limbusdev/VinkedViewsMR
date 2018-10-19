@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Gestures
 {
-    public class GestureRotationAction : AConstrainedGesture, INavigationHandler, IHoldHandler
+    public class GestureRotationAction : AConstrainedGesture, INavigationHandler, IFocusable, IInputHandler
     {
         [SerializeField]
         [Tooltip("Transform that will be dragged. Default is the components GameObject.")]
@@ -17,23 +17,28 @@ namespace Gestures
         [SerializeField]
         private float RotationSensitivity = 10.0f;
 
-        public bool hold = false;
-        
+        public bool hasFocus = false;
+        public bool isTapped = false;
 
 
         void Awake()
         {
-            if (hostTransform == null) hostTransform = transform;
+            if(hostTransform == null)
+                hostTransform = transform;
         }
 
         void INavigationHandler.OnNavigationStarted(NavigationEventData eventData)
         {
-            InputManager.Instance.PushModalInputHandler(gameObject);
+            if(isTapped)
+            {
+                InputManager.Instance.PushModalInputHandler(gameObject);
+                eventData.Use();
+            }
         }
 
         void INavigationHandler.OnNavigationUpdated(NavigationEventData eventData)
         {
-            if(true /*hold*/)
+            if(isTapped)
             {
                 Vector3 rotationVector = new Vector3();
                 float rotationFactor = 1f;
@@ -60,31 +65,35 @@ namespace Gestures
 
         void INavigationHandler.OnNavigationCompleted(NavigationEventData eventData)
         {
-            InputManager.Instance.PopModalInputHandler();
+                InputManager.Instance.PopModalInputHandler();
+                eventData.Use();
         }
 
         void INavigationHandler.OnNavigationCanceled(NavigationEventData eventData)
         {
             InputManager.Instance.PopModalInputHandler();
+            eventData.Use();
         }
 
-        // HoldHandler
-        public void OnHoldStarted(HoldEventData eventData)
+        public void OnInputDown(InputEventData eventData)
         {
-            eventData.Use();
-            hold = true;
+            if(hasFocus)
+                isTapped = true;
         }
 
-        public void OnHoldCompleted(HoldEventData eventData)
+        public void OnInputUp(InputEventData eventData)
         {
-            eventData.Use();
-            hold = false;
+            isTapped = false;
         }
 
-        public void OnHoldCanceled(HoldEventData eventData)
+        public void OnFocusEnter()
         {
-            eventData.Use();
-            //hold = false;
+            hasFocus = true;
+        }
+
+        public void OnFocusExit()
+        {
+            hasFocus = false;
         }
     }
 }

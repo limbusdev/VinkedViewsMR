@@ -16,7 +16,8 @@ namespace VisBridge
         public AGraphicalPrimitive origin { get; set; }
         public AGraphicalPrimitive target { get; set; }
 
-        private bool initialized;
+        private bool initialized = false;
+        private bool paused = false;
 
         private CurvedLinePoint[] curvedLinePoints;
 
@@ -40,7 +41,7 @@ namespace VisBridge
 
             LineRenderer lr = gameObject.GetComponent<LineRenderer>();
             lr.startColor = Color.green;
-            lr.endColor = Color.yellow;
+            lr.endColor = Color.green;
             lr.material = material;
             lr.startWidth = 0.01f;
             lr.endWidth = 0.01f;
@@ -54,8 +55,25 @@ namespace VisBridge
         {
             if(initialized)
             {
-                UpdatePorts();
-                UpdatePadding();
+                LineRenderer lr = gameObject.GetComponent<LineRenderer>();
+
+                // check if one port is inactive
+                if(origin.isActiveAndEnabled && target.isActiveAndEnabled)
+                {
+                    paused = false;
+                    
+                    lr.enabled = true;
+                } else
+                {
+                    paused = true;
+                    lr.enabled = false;
+                }
+
+                if(!paused)
+                {
+                    UpdatePorts();
+                    UpdatePadding();
+                }
             }
         }
 

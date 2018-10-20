@@ -99,6 +99,7 @@ public class VisualizationFactory : MonoBehaviour
         } catch(Exception e)
         {
             Debug.LogError("TESTSetupFBI failed.");
+            Debug.LogError(e.StackTrace);
         }
     }
 
@@ -162,40 +163,58 @@ public class VisualizationFactory : MonoBehaviour
     /// <param name="obj">InformationObject in question</param>
     public void DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(InfoObject obj)
     {
-        AGraphicalPrimitive primOrigin, primTarget;
-
-
-        foreach(IList<GameObject> listOrigins in obj.representativeGameObjectsByAttributeName.Values)
+        var numberOfRepresentativeObjects = 0;
+        foreach(var listOrigins in obj.representativeGameObjectsByAttributeName.Values)
         {
-            foreach(GameObject origin in listOrigins)
+            numberOfRepresentativeObjects += listOrigins.Count;
+        }
+
+        var primitives = new AGraphicalPrimitive[numberOfRepresentativeObjects];
+
+        int counter = 0;
+        foreach(var listOrigins in obj.representativeGameObjectsByAttributeName.Values)
+        {
+            foreach(var prim in listOrigins)
             {
-                primOrigin = origin.GetComponent<AGraphicalPrimitive>();
-
-                // For each list of GameObjects, that represent the same attribute of the given InformationObject 
-                foreach(IList<GameObject> listTargets in obj.representativeGameObjectsByAttributeName.Values)
-                {
-                    // For every other GameObject in that list
-                    foreach(GameObject target in listTargets)
-                    {
-                        if(origin != target)
-                        {
-                            primTarget = target.GetComponent<AGraphicalPrimitive>();
-
-                            if(!(activeVisBridges.Contains(new ObjectBasedVisBridge(primOrigin, primTarget))))
-                            {
-                                if(primOrigin != primTarget)
-                                {
-                                    // Create a VisBridge between them
-                                    var visBridge = CreateObjectBasedVisBridge(primOrigin, primTarget);
-                                    // Add it to a list to update the bridges, when the visualizations move
-                                    activeVisBridges.Add(visBridge.GetComponent<ObjectBasedVisBridge>());
-                                }
-                            }
-                        }
-                    }
-                }
+                primitives[counter] = prim.GetComponent<AGraphicalPrimitive>();
+                counter++;
             }
         }
+
+        GenerateVisBridgeFor(primitives);
+
+
+        //foreach(IList<GameObject> listOrigins in obj.representativeGameObjectsByAttributeName.Values)
+        //{
+        //    foreach(GameObject origin in listOrigins)
+        //    {
+        //        primOrigin = origin.GetComponent<AGraphicalPrimitive>();
+
+        //        // For each list of GameObjects, that represent the same attribute of the given InformationObject 
+        //        foreach(IList<GameObject> listTargets in obj.representativeGameObjectsByAttributeName.Values)
+        //        {
+        //            // For every other GameObject in that list
+        //            foreach(GameObject target in listTargets)
+        //            {
+        //                if(origin != target)
+        //                {
+        //                    primTarget = target.GetComponent<AGraphicalPrimitive>();
+
+        //                    if(!(activeVisBridges.Contains(new ObjectBasedVisBridge(primOrigin, primTarget))))
+        //                    {
+        //                        if(primOrigin != primTarget)
+        //                        {
+        //                            // Create a VisBridge between them
+        //                            var visBridge = CreateObjectBasedVisBridge(primOrigin, primTarget);
+        //                            // Add it to a list to update the bridges, when the visualizations move
+        //                            activeVisBridges.Add(visBridge.GetComponent<ObjectBasedVisBridge>());
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
 
     }
@@ -204,8 +223,19 @@ public class VisualizationFactory : MonoBehaviour
     {
         var visBridge = Instantiate(ObjectBasedVisBridgePrefab);
         visBridge.GetComponent<ObjectBasedVisBridge>().Init(origin, target);
-        origin.Brush(Color.yellow);
-        target.Brush(Color.yellow);
+        origin.Brush(Color.green);
+        target.Brush(Color.green);
+
+        return visBridge;
+    }
+
+    public GameObject visBridgePrefab;
+
+    private GameObject GenerateVisBridgeFor(AGraphicalPrimitive[] primitives)
+    {
+        var visBridge = Instantiate(visBridgePrefab);
+
+        visBridge.GetComponent<MultiVisBridge>().Init(primitives);
 
         return visBridge;
     }

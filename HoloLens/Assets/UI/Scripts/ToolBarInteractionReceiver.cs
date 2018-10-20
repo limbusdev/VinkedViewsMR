@@ -16,7 +16,10 @@ public class ToolBarInteractionReceiver : InteractionReceiver
         switch (obj.name)
         {
             case "HolographicButtonSwitchMode":
-                Targets[0].SetActive(!Targets[0].activeSelf); // Toggle Toolbar
+                if(Targets[0] != null)
+                {
+                    Targets[0].SetActive(!Targets[0].activeSelf); // Toggle Toolbar
+                }
                 break;
             case "HolographicButtonTranslateFreely":
                 Targets[0].SetActive(false); // Disable Toolbar

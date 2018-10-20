@@ -29,24 +29,43 @@ public class ETVAnchorTools : MonoBehaviour {
     public void EnableTool(Tools tool)
     {
         DisableAllTools();
-        ToolAnchorSphere.SetActive(true);
+
+        if(ToolAnchorSphere != null)
+            ToolAnchorSphere.SetActive(true);
 
         switch (tool)
         {
-            case Tools.ROTATE: GadgetRotate.SetActive(true); break;
-            case Tools.SCALE: GadgetScale.SetActive(true); break;
-            case Tools.TRANSLATEFREELY: GadgetTranslateFreely.SetActive(true); break;
-            default: GadgetTranslate.SetActive(true); break;
+            case Tools.ROTATE:
+                if(GadgetRotate != null)
+                    GadgetRotate.SetActive(true);
+                break;
+            case Tools.SCALE:
+                if(GadgetScale != null)
+                    GadgetScale.SetActive(true);
+                break;
+            case Tools.TRANSLATEFREELY:
+                if(GadgetTranslateFreely != null)
+                    GadgetTranslateFreely.SetActive(true);
+                break;
+            default:
+                if(GadgetTranslate != null)
+                    GadgetTranslate.SetActive(true);
+                break;
                 
         }
     }
 
     public void DisableAllTools()
     {
-        GadgetTranslate.SetActive(false);
-        GadgetScale.SetActive(false);
-        GadgetRotate.SetActive(false);
-        GadgetTranslateFreely.SetActive(false);
-        ToolAnchorSphere.SetActive(false);
+        if(GadgetTranslate != null)
+            GadgetTranslate.SetActive(false);
+        if(GadgetScale != null)
+            GadgetScale.SetActive(false);
+        if(GadgetRotate != null)
+            GadgetRotate.SetActive(false);
+        if(GadgetTranslateFreely != null)
+            GadgetTranslateFreely.SetActive(false);
+        if(ToolAnchorSphere != null)
+            ToolAnchorSphere.SetActive(false);
     }
 }

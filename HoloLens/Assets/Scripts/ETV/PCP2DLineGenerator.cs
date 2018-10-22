@@ -124,6 +124,7 @@ namespace ETV
 
             pcpComp.visBridgePort.transform.localPosition = polyline[0];
             pcpComp.lineRenderer.SetPositions(polyline);
+            pcpComp.GenerateCollider();
 
             return pcpComp;
         }

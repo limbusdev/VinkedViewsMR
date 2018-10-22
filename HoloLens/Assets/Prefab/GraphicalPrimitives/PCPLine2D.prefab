@@ -291,6 +291,7 @@ MonoBehaviour:
   - {fileID: 1133730312231774}
   - {fileID: 1001539398984900}
   lineRenderer: {fileID: 120824457726959600}
+  pivot: {fileID: 1003593955051684}
 --- !u!120 &120824457726959600
 LineRenderer:
   m_ObjectHideFlags: 1

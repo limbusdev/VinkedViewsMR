@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HoloToolkit.Unity.InputModule;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace GraphicalPrimitive
 {
-    public class AGraphicalPrimitive : MonoBehaviour
+    public class AGraphicalPrimitive : MonoBehaviour, IFocusable
     {
         public GameObject pivot;
         public GameObject label;
@@ -31,5 +32,17 @@ namespace GraphicalPrimitive
         }
 
         public virtual void ApplyColor(Color color) { }
+
+
+        // .................................................................... IFocusable
+        public void OnFocusEnter()
+        {
+            Brush(Color.yellow);
+        }
+
+        public void OnFocusExit()
+        {
+            Unbrush();
+        }
     }
 }

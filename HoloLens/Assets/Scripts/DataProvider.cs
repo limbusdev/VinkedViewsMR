@@ -14,6 +14,7 @@ public class DataProvider : MonoBehaviour
     public TextAsset[] csvFiles;
     public DictFile[] ordinalDicts;
     public DataSet[] dataSets;
+    public static int dataSetIDs = 0;
     
     private void Awake()
     {
@@ -22,6 +23,7 @@ public class DataProvider : MonoBehaviour
         for(int i=0; i<csvFiles.Length; i++)
         {
             dataSets[i] = ImportDataSet(csvFiles[i]);
+            dataSetIDs++;
         }
     }
 
@@ -242,7 +244,7 @@ public class DataProvider : MonoBehaviour
             }
 
             // Create new information object
-            var obj = new InfoObject(nomAtts, ordAtts, ivlAtts, ratAtts);
+            var obj = new InfoObject(nomAtts, ordAtts, ivlAtts, ratAtts, dataSetIDs);
             
             infoObjs.Add(obj);
         }

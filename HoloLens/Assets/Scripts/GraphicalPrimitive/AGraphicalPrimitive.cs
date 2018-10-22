@@ -1,4 +1,5 @@
 ﻿using HoloToolkit.Unity.InputModule;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +8,27 @@ using UnityEngine;
 
 namespace GraphicalPrimitive
 {
-    public class AGraphicalPrimitive : MonoBehaviour, IFocusable
+    public class AGraphicalPrimitive : MonoBehaviour, IFocusable, IInputClickHandler
     {
         public GameObject pivot;
         public GameObject label;
         public GameObject visBridgePort;
         public GameObject[] visBridgePortPadding;
+        public IList<InfoObject> representedInformationObjects = new List<InfoObject>();
+
+        private bool highlighted = false;
 
         private Color primitiveColor = Color.white;
+
+        public void AddRepresentedInformationObjects(InfoObject[] objs)
+        {
+            foreach(var o in objs)
+            {
+                if(!representedInformationObjects.Contains(o))
+                   representedInformationObjects.Add(o);
+            }
+                
+        }
 
         public void SetColor(Color color)
         {
@@ -33,16 +47,42 @@ namespace GraphicalPrimitive
 
         public virtual void ApplyColor(Color color) { }
 
+        public virtual void Highlight()
+        {
+            highlighted = true;
+            Brush(Color.yellow);
+        }
+
+        public virtual void Unhighlight()
+        {
+            highlighted = false;
+            Unbrush();
+        }
+
 
         // .................................................................... IFocusable
         public void OnFocusEnter()
         {
-            Brush(Color.yellow);
+            if(!highlighted) Highlight();
         }
 
         public void OnFocusExit()
         {
-            Unbrush();
+            Unhighlight();
+        }
+
+        public void OnInputClicked(InputClickedEventData eventData)
+        {
+            Debug.Log("Input Clicked");
+
+            eventData.Use();
+            foreach(var o in representedInformationObjects)
+            {
+                Debug.Log("Hello");
+                ServiceLocator.instance.visualizationFactory.ToggleVisBridgesBetweenAllRepresentativeGameObjectsOf(o); 
+            }
+
+            
         }
     }
 }

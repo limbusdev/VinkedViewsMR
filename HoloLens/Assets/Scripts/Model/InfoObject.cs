@@ -1,4 +1,5 @@
-﻿using Model.Attributes;
+﻿using GraphicalPrimitive;
+using Model.Attributes;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +40,7 @@ namespace Model
         // .................................................................... Lookup tables
         public IDictionary<string, int> attributeIDsByName;
         public IDictionary<string, LoM> attributeLoMs;
+        public int dataSetID;
 
         // .................................................................... Attribute values
         public Attribute<string>[] nomAttribVals;
@@ -56,8 +58,10 @@ namespace Model
             Attribute<string>[] attributesNom,
             Attribute<int>[] attributesOrd,
             Attribute<int>[] attributesIvl,
-            Attribute<float>[] attributesRat)
+            Attribute<float>[] attributesRat,
+            int dataSetID)
         {
+            this.dataSetID = dataSetID;
             this.representativeGameObjectsByAttributeName 
                 = new Dictionary<string, IList<GameObject>>();
             this.nomAttribVals = attributesNom;
@@ -113,7 +117,14 @@ namespace Model
                     attributeName, new List<GameObject>());
             }
             representativeGameObjectsByAttributeName[attributeName].Add(o);
+
+            var gp = o.GetComponent<AGraphicalPrimitive>();
+            if(gp != null)
+            {
+                gp.AddRepresentedInformationObjects(new InfoObject[] { this });
+            }
         }
+        
 
         // .................................................................... Getters & Setters
 

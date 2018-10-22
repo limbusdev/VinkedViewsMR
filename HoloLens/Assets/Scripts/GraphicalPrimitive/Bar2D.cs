@@ -11,6 +11,7 @@ namespace GraphicalPrimitive
         public GameObject barFront;
         public GameObject barBack;
 
+        
         public override void ApplyColor(Color color)
         {
             Renderer rend = barBack.GetComponent<Renderer>();

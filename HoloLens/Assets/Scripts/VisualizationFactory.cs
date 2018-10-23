@@ -29,6 +29,7 @@ using VisBridge;
 using System.Linq;
 using System;
 using Model;
+using ETV;
 
 /// <summary>
 /// Main class for visualization generation from databases.
@@ -93,6 +94,13 @@ public class VisualizationFactory : MonoBehaviour
 
             var etvTimeMurder = GenerateLineplot2DFrom(0, new string[] { "Year", "Murder/MS." });
             etvMan.AutoPlaceETV(etvTimeMurder);
+
+            var etvAxisMurder = GenerateSingle3DAxisFrom(0, "Murder/MS.");
+            etvAxisMurder.transform.position = new Vector3(1,0,0);
+
+            var etvAxisPopulation = GenerateSingle3DAxisFrom(0, "Population");
+            etvAxisPopulation.transform.position = new Vector3(1.5f, 0, 0);
+            
 
             DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[0].infoObjects[7]);
 
@@ -307,9 +315,12 @@ public class VisualizationFactory : MonoBehaviour
             var type = ds.GetTypeOf(variable);
 
             var vis = factory.CreateSingleAxis(ds, ds.GetIDOf(variable), type);
+            
             vis = ServiceLocator.instance.Factory3DETV.PutETVOnAnchor(vis);
 
             vis.transform.position = NewETVPosition.transform.position;
+
+            
 
             return vis;
         } catch(Exception e)

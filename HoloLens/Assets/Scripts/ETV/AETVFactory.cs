@@ -1,4 +1,5 @@
-﻿using Model;
+﻿using GraphicalPrimitive;
+using Model;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,4 +22,14 @@ public abstract class AETVFactory : MonoBehaviour {
     public abstract GameObject CreateETVBarChart(DataSet data, string attributeName);
     public abstract GameObject CreateETVScatterPlot(DataSet data, string[] attIDs);
     public abstract GameObject PutETVOnAnchor(GameObject ETV);
+
+    public void LetMetaVisSystemObserveAxes(AAxis[] axes)
+    {
+        // Tell MetaVisSystem about new axis
+        foreach(var axis in axes)
+        {
+            ServiceLocator.instance.metaVisSystem.ObserveAxis(axis);
+        }
+        
+    }
 }

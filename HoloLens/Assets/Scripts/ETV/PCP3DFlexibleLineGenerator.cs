@@ -15,7 +15,9 @@ namespace ETV
             int[] ordinalIDs,
             int[] intervalIDs,
             int[] ratioIDs,
-            IDictionary<int, AAxis> axes
+            IDictionary<int, AAxis> axes,
+            bool global = true,
+            LineAlignment align = LineAlignment.View
             )
         {
             bool missing = false;
@@ -50,6 +52,9 @@ namespace ETV
             pcpComp.lineRenderer.endWidth = 0.02f;
             //int dimension = ratioIDs.Length + nominalIDs.Length + ordinalIDs.Length + intervalIDs.Length;
             //pcpComp.lineRenderer.positionCount = dimension;
+
+            pcpComp.lineRenderer.alignment = align;
+            pcpComp.lineRenderer.useWorldSpace = global;
 
             int dimension = 2;
             pcpComp.lineRenderer.positionCount = dimension;

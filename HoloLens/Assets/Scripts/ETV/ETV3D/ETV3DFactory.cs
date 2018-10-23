@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using ETV;
+using GraphicalPrimitive;
 using Model;
 using UnityEngine;
 
@@ -27,7 +28,11 @@ public class ETV3DFactory : AETVFactory
     public override GameObject CreateSingleAxis(DataSet data, int attributeID, LoM lom)
     {
         GameObject singleAxis3D = Instantiate(ETV3DSingleAxisPrefab);
-        singleAxis3D.GetComponent<ETV3DSingleAxis>().Init(data, attributeID, lom);
+        var axisComp = singleAxis3D.GetComponent<ETV3DSingleAxis>();
+        axisComp.Init(data, attributeID, lom);
+
+        // Tell MetaVisSystem about new axis
+        LetMetaVisSystemObserveAxes(new AAxis[] { axisComp.GetAxis(AxisDirection.Y) });
 
         return singleAxis3D;
     }

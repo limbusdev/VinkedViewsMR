@@ -36,12 +36,12 @@ public class MetaVisSystem : MonoBehaviour
     public static float triggerMetaVisDistance = 2f;
 
     private IList<AAxis> axes;
-    private IList<GameObject> metaVisualizations;
+    private IDictionary<MetaVisKey,GameObject> metaVisualizations;
 
     private void Awake()
     {
         axes = new List<AAxis>();
-        metaVisualizations = new List<GameObject>();
+        metaVisualizations = new Dictionary<MetaVisKey, GameObject>();
     }
 
     // Use this for initialization
@@ -58,15 +58,20 @@ public class MetaVisSystem : MonoBehaviour
         {
             foreach(var axisB in axes)
             {
-                // If they're not identical and not representing the same data dimension
-                // and are near enough to each other
-                if(CheckIfNearEnough(axisA, axisB))
+                // Check if there isn't a MetaVis with both axes already
+                if(!metaVisualizations.ContainsKey(new MetaVisKey(axisA, axisB)))
                 {
-                    int dataSetID;
-                    if(CheckIfCompatible(axisA, axisB, out dataSetID))
+                    // If they're not identical and not representing the same data dimension
+                    // and are near enough to each other
+                    if(CheckIfNearEnough(axisA, axisB))
                     {
-                        // span a new metavisualization between them
-                        SpanMetaVisBetween(axisA, axisB, dataSetID);
+                        int dataSetID;
+                        if(CheckIfCompatible(axisA, axisB, out dataSetID))
+                        {
+                            // span a new metavisualization between them
+                            Debug.Log("AAA");
+                            metaVisualizations.Add(new MetaVisKey(axisA, axisB), SpanMetaVisBetween(axisA, axisB, dataSetID));
+                        }
                     }
                 }
             }
@@ -212,6 +217,43 @@ public class MetaVisSystem : MonoBehaviour
             Debug.LogError(e.Message);
             Debug.LogError(e.StackTrace);
             return new GameObject("Creation Failed");
+        }
+    }
+
+    // ........................................................................ INNER CLASSES
+    public class MetaVisKey
+    {
+        public AAxis axisA, axisB;
+
+        public MetaVisKey(AAxis axisA, AAxis axisB)
+        {
+            this.axisA = axisA;
+            this.axisB = axisB;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if(obj is MetaVisKey)
+            {
+                var other = obj as MetaVisKey;
+                if(other.axisA.Equals(axisA) && other.axisB.Equals(axisB))
+                    return true;
+                else if(other.axisA.Equals(axisB) && other.axisB.Equals(axisA))
+                    return true;
+                else
+                    return false;
+            } else
+            {
+                return false;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -624926263;
+            hashCode = hashCode + EqualityComparer<AAxis>.Default.GetHashCode(axisA);
+            hashCode = hashCode + EqualityComparer<AAxis>.Default.GetHashCode(axisB);
+            return hashCode;
         }
     }
 }

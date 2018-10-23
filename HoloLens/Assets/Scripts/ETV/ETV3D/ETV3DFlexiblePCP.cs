@@ -62,7 +62,7 @@ namespace ETV
             int counter = 0;
             foreach(var infoO in data.infoObjects)
             {
-                var line = pcpLineGenerator.CreateLine(infoO, Color.white, data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs, axes);
+                var line = pcpLineGenerator.CreateLine(infoO, Color.white, data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs, axes, true, LineAlignment.View);
                 if(line != null)
                 {
                     notNaNPrimitives.Add(line);

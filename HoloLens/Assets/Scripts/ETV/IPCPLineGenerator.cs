@@ -15,7 +15,9 @@ namespace ETV
             int[] ordinalIDs, 
             int[] intervalIDs, 
             int[] ratioIDs,
-            IDictionary<int, AAxis> axes
+            IDictionary<int, AAxis> axes,
+            bool global=false,
+            LineAlignment align = LineAlignment.TransformZ
             );
     }
 }

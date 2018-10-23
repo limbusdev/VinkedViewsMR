@@ -1,12 +1,13 @@
 ﻿using GraphicalPrimitive;
 using Model;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ETV
 {
-    public class ETV3DFlexiblePCP : AETV3D
+    public class ETV3DFlexiblePCP : AETV3D, IObserver<AAxis>
     {
         // Hook
         private IPCPLineGenerator pcpLineGenerator;
@@ -41,7 +42,7 @@ namespace ETV
         public void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs, AAxis axisA, AAxis axisB)
         {
             base.Init(data);
-            this.pcpLineGenerator = new PCP2DLineGenerator();
+            this.pcpLineGenerator = new PCP3DFlexibleLineGenerator();
 
             this.nominalIDs = nominalIDs;
             this.ordinalIDs = ordinalIDs;
@@ -50,6 +51,9 @@ namespace ETV
 
             this.axisA = axisA;
             this.axisB = axisB;
+
+            axisA.Subscribe(this);
+            axisB.Subscribe(this);
         }
 
         public override void DrawGraph()
@@ -78,10 +82,58 @@ namespace ETV
             return ServiceLocator.instance.Factory2DPrimitives;
         }
 
-        
+
+        public override void ChangeColoringScheme(ETVColorSchemes scheme)
+        {
+            switch(scheme)
+            {
+                case ETVColorSchemes.Rainbow:
+                    for(int i = 0; i < linePrimitives.Length; i++)
+                    {
+                        Color color = Color.HSVToRGB(((float)i) / linePrimitives.Length, 1, 1);
+                        linePrimitives[i].SetColor(color);
+                        linePrimitives[i].ApplyColor(color);
+                    }
+                    break;
+                case ETVColorSchemes.SplitHSV:
+                    for(int i = 0; i < linePrimitives.Length; i++)
+                    {
+                        Color color = Color.HSVToRGB((((float)i) / linePrimitives.Length) / 2f + .5f, 1, 1);
+                        linePrimitives[i].SetColor(color);
+                        linePrimitives[i].ApplyColor(color);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
 
         // .................................................................... Useless in this MetaVis
         public override void SetUpAxis() { /*Unneccessary*/ }
-        public override void ChangeColoringScheme(ETVColorSchemes scheme) { /*Unneccessary*/ }
+
+
+        // .................................................................... IObserver
+        public void OnCompleted()
+        {
+            // Nothing
+        }
+
+        public void OnError(Exception error)
+        {
+            // Nothing
+        }
+
+        public void OnNext(AAxis value)
+        {
+            foreach(var line in linePrimitives)
+            {
+                // Remove objects from representative elements in InfoObject first
+                Destroy(line.gameObject);
+            }
+
+            DrawGraph();
+            ChangeColoringScheme(ETVColorSchemes.SplitHSV);
+        }
     }
 }

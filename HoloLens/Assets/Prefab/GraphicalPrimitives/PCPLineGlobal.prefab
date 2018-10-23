@@ -97,7 +97,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4589634578831062}
-  - component: {fileID: 114097214150501594}
   - component: {fileID: 114626347639244248}
   m_Layer: 0
   m_Name: PCPLineGlobal
@@ -245,24 +244,6 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4294967295
---- !u!114 &114097214150501594
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1946564849909792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c23fdf3dcd498094a85faa627a2d7fc4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pivot: {fileID: 1464658291560658}
-  label: {fileID: 1705412967129416}
-  visBridgePort: {fileID: 1355821100657462}
-  visBridgePortPadding:
-  - {fileID: 1835782222761088}
-  - {fileID: 1572305394067142}
-  lineRenderer: {fileID: 120443201537399906}
 --- !u!114 &114626347639244248
 MonoBehaviour:
   m_ObjectHideFlags: 1

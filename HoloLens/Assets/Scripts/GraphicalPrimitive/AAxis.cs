@@ -12,8 +12,10 @@ namespace GraphicalPrimitive
         X,Y,Z
     }
 
-    public abstract class AAxis : MonoBehaviour
+    public abstract class AAxis : MonoBehaviour, IObservable<AAxis>
     {
+        private IList<IObserver<AAxis>> observers;
+
         protected Vector3 direction = Vector3.up;
         public string labelVariableText { get; set; }
 
@@ -34,9 +36,23 @@ namespace GraphicalPrimitive
 
         // InformationObject Data
         public AttributeStats attributeStats;
+        
+
+        void FixedUpdate()
+        {
+            if(transform.hasChanged)
+            {
+                transform.hasChanged = false; // Otherwise it get's called forever
+                foreach(var observer in observers)
+                {
+                    observer.OnNext(this);
+                }
+            }
+        }
 
         public void Init(string name, AxisDirection dir = AxisDirection.Y)
         {
+            this.observers = new List<IObserver<AAxis>>();
             this.labelVariableText = name;
             this.ticks = new List<Tick>();
             axisDirection = dir;
@@ -125,6 +141,32 @@ namespace GraphicalPrimitive
             if(max - min == 0)
                 return 0f;
             return (value / length) * (max - min) + min;
+        }
+
+
+        public IDisposable Subscribe(IObserver<AAxis> observer)
+        {
+            if(!observers.Contains(observer))
+                observers.Add(observer);
+            return new Unsubscriber(observers, observer);
+        }
+
+        private class Unsubscriber : IDisposable
+        {
+            private IList<IObserver<AAxis>> _observers;
+            private IObserver<AAxis> _observer;
+
+            public Unsubscriber(IList<IObserver<AAxis>> observers, IObserver<AAxis> observer)
+            {
+                this._observers = observers;
+                this._observer = observer;
+            }
+
+            public void Dispose()
+            {
+                if(_observer != null && _observers.Contains(_observer))
+                    _observers.Remove(_observer);
+            }
         }
     }
 }

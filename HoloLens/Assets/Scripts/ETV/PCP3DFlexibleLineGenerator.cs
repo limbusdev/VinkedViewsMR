@@ -48,8 +48,8 @@ namespace ETV
             var pcpComp = pcpLine.GetComponent<PCPLine2D>();
             pcpComp.lineRenderer.startColor = color;
             pcpComp.lineRenderer.endColor = color;
-            pcpComp.lineRenderer.startWidth = 0.02f;
-            pcpComp.lineRenderer.endWidth = 0.02f;
+            pcpComp.lineRenderer.startWidth = 0.01f;
+            pcpComp.lineRenderer.endWidth = 0.01f;
             //int dimension = ratioIDs.Length + nominalIDs.Length + ordinalIDs.Length + intervalIDs.Length;
             //pcpComp.lineRenderer.positionCount = dimension;
 

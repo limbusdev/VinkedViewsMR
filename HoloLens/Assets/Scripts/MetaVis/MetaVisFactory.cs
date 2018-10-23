@@ -29,9 +29,9 @@ public class MetaVisFactory : MonoBehaviour
         AttributeProcessor.ExtractAttributeIDs(data, attIDs, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
 
         metaVis.GetComponent<ETV3DFlexiblePCP>().Init(data, nomIDs, ordIDs, ivlIDs, ratIDs, axisA, axisB);
-        metaVis.GetComponent<ETV3DFlexiblePCP>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
         metaVis.GetComponent<ETV3DFlexiblePCP>().DrawGraph();
-
+        metaVis.GetComponent<ETV3DFlexiblePCP>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
+        
         return metaVis;
     }
 }

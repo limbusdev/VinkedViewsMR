@@ -32,6 +32,9 @@ namespace GraphicalPrimitive
 
         public AxisDirection axisDirection = AxisDirection.Y;
 
+        // InformationObject Data
+        public AttributeStats attributeStats;
+
         public void Init(string name, AxisDirection dir = AxisDirection.Y)
         {
             this.labelVariableText = name;
@@ -51,10 +54,11 @@ namespace GraphicalPrimitive
                     break;
             }
         }
-
-        public void Init(AttributeStats m, AxisDirection dir=AxisDirection.Y)
+        
+        public void Init(AttributeStats stats, AxisDirection dir = AxisDirection.Y)
         {
-            Init(m.name, dir);
+            Init(stats.name, dir);
+            this.attributeStats = stats;
         }
 
         public void CalculateTickResolution()
@@ -83,6 +87,26 @@ namespace GraphicalPrimitive
                     break;
             }
             return tickDirection;
+        }
+
+        public Vector3 GetAxisBaseGlobal()
+        {
+            return gameObject.transform.position;
+        }
+
+        public Vector3 GetAxisTipGlobal()
+        {
+            return transform.TransformPoint(direction);
+        }
+
+        public Vector3 GetAxisDirectionGlobal()
+        {
+            return transform.TransformDirection(direction);
+        }
+
+        public Vector3 GetLocalValueInGlobalSpace(float value)
+        {
+            return transform.TransformPoint(new Vector3(0, TransformToAxisSpace(value), 0));
         }
 
 

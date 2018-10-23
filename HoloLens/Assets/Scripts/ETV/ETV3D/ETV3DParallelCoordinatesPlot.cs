@@ -18,7 +18,7 @@ namespace ETV
             intervalIDs,
             ratioIDs;
 
-        private IDictionary<int, Axis2D> PCPAxesFront, PCPAxesBack;
+        private IDictionary<int, AAxis> PCPAxesFront, PCPAxesBack;
 
         private PCPLine2D[] linePrimitives;
 
@@ -51,8 +51,8 @@ namespace ETV
         
         public override void SetUpAxis()
         {
-            PCPAxesFront = new Dictionary<int, Axis2D>();
-            PCPAxesBack = new Dictionary<int, Axis2D>();
+            PCPAxesFront = new Dictionary<int, AAxis>();
+            PCPAxesBack = new Dictionary<int, AAxis>();
 
             GameObject axesFront = GenerateAxes(true, PCPAxesFront);
             axesFront.transform.parent = Anchor.transform;
@@ -62,7 +62,7 @@ namespace ETV
             axesBack.transform.localPosition = new Vector3(0,0, data.infoObjects.Count * pcpLength);
         }
 
-        private GameObject GenerateAxes(bool withGrid, IDictionary<int, Axis2D> axes)
+        private GameObject GenerateAxes(bool withGrid, IDictionary<int, AAxis> axes)
         {
             AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
 

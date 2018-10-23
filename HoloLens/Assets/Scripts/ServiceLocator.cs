@@ -8,9 +8,11 @@ public class ServiceLocator : MonoBehaviour {
     public Graphical3DPrimitiveFactory Factory3DPrimitives;
     public Graphical2DPrimitiveFactory Factory2DPrimitives;
     public ETV3DFactory Factory3DETV;                      
-    public ETV2DFactory Factory2DETV;                       
+    public ETV2DFactory Factory2DETV;
+    public MetaVisFactory FactoryMetaVis;
     public VisualizationFactory visualizationFactory;       
-    public ETVManager etvManager;                           
+    public ETVManager etvManager;
+    public MetaVisSystem metaVisSystem;
     
 
     void Awake()

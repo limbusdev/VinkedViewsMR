@@ -15,7 +15,7 @@ namespace ETV
             int[] ordinalIDs, 
             int[] intervalIDs, 
             int[] ratioIDs,
-            IDictionary<int, Axis2D> axes
+            IDictionary<int, AAxis> axes
             );
     }
 }

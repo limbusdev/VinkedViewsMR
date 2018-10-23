@@ -17,7 +17,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D
 
     private GameObject allAxesGO;
 
-    private IDictionary<int, Axis2D> PCPAxes;
+    private IDictionary<int, AAxis> PCPAxes;
 
     private PCPLine2D[] linePrimitives;
 
@@ -37,7 +37,7 @@ public class ETV2DParallelCoordinatesPlot : AETV2D
 
     public override void SetUpAxis()
     {
-        PCPAxes = new Dictionary<int, Axis2D>();
+        PCPAxes = new Dictionary<int, AAxis>();
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
         int counter = 0;

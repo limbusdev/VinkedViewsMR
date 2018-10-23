@@ -1,23 +1,19 @@
 ﻿using GraphicalPrimitive;
 using Model;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace ETV
 {
-    public class PCP2DLineGenerator : IPCPLineGenerator
+    public class PCP3DFlexibleLineGenerator : IPCPLineGenerator
     {
         public PCPLine2D CreateLine(
-            InfoObject o, 
-            Color color, 
-            DataSet data, 
-            int[] nominalIDs, 
-            int[] ordinalIDs, 
-            int[] intervalIDs, 
+            InfoObject o,
+            Color color,
+            DataSet data,
+            int[] nominalIDs,
+            int[] ordinalIDs,
+            int[] intervalIDs,
             int[] ratioIDs,
             IDictionary<int, AAxis> axes
             )
@@ -52,7 +48,10 @@ namespace ETV
             pcpComp.lineRenderer.endColor = color;
             pcpComp.lineRenderer.startWidth = 0.02f;
             pcpComp.lineRenderer.endWidth = 0.02f;
-            int dimension = ratioIDs.Length + nominalIDs.Length + ordinalIDs.Length + intervalIDs.Length;
+            //int dimension = ratioIDs.Length + nominalIDs.Length + ordinalIDs.Length + intervalIDs.Length;
+            //pcpComp.lineRenderer.positionCount = dimension;
+
+            int dimension = 2;
             pcpComp.lineRenderer.positionCount = dimension;
 
             // Assemble Polyline
@@ -69,8 +68,7 @@ namespace ETV
                     return null;
                 }
 
-                polyline[counter] = new Vector3(.5f * counter, axes[counter].TransformToAxisSpace(m.valueIDs[a.value]), 0);
-                o.AddRepresentativeObject(a.name, pcpLine);
+                polyline[counter] = axes[counter].GetLocalValueInGlobalSpace(m.valueIDs[a.value]);
                 counter++;
             }
 
@@ -85,7 +83,7 @@ namespace ETV
                     return null;
                 }
 
-                polyline[counter] = new Vector3(.5f * counter, axes[counter].TransformToAxisSpace(a.value), 0);
+                polyline[counter] = axes[counter].GetLocalValueInGlobalSpace(a.value);
                 o.AddRepresentativeObject(a.name, pcpLine);
                 counter++;
             }
@@ -101,7 +99,7 @@ namespace ETV
                     return null;
                 }
 
-                polyline[counter] = new Vector3(.5f * counter, axes[counter].TransformToAxisSpace(a.value), 0);
+                polyline[counter] = axes[counter].GetLocalValueInGlobalSpace(a.value);
                 o.AddRepresentativeObject(a.name, pcpLine);
                 counter++;
             }
@@ -117,7 +115,7 @@ namespace ETV
                     return null;
                 }
 
-                polyline[counter] = new Vector3(.5f * counter, axes[counter].TransformToAxisSpace(a.value), 0);
+                polyline[counter] = axes[counter].GetLocalValueInGlobalSpace(a.value);
                 o.AddRepresentativeObject(a.name, pcpLine);
                 counter++;
             }

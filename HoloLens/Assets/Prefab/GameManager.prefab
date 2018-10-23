@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4362107388968740}
   - component: {fileID: 114055060894504564}
   - component: {fileID: 114271166118036448}
+  - component: {fileID: 114390853081256346}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -40,6 +41,7 @@ GameObject:
   - component: {fileID: 114876645080609092}
   - component: {fileID: 114945476759806656}
   - component: {fileID: 114484183617782816}
+  - component: {fileID: 114678076042742618}
   m_Layer: 0
   m_Name: Factories
   m_TagString: Untagged
@@ -89,8 +91,10 @@ MonoBehaviour:
   Factory2DPrimitives: {fileID: 114515392309124868}
   Factory3DETV: {fileID: 114945476759806656}
   Factory2DETV: {fileID: 114484183617782816}
+  FactoryMetaVis: {fileID: 114678076042742618}
   visualizationFactory: {fileID: 0}
   etvManager: {fileID: 114271166118036448}
+  metaVisSystem: {fileID: 114390853081256346}
 --- !u!114 &114271166118036448
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -103,6 +107,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AutoPositioningSlots: {fileID: 0}
+--- !u!114 &114390853081256346
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1084506249481002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35003d8c6b661fa41b4b6f983b28629c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dataProvider: {fileID: 0}
 --- !u!114 &114484183617782816
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -148,6 +164,19 @@ MonoBehaviour:
     type: 2}
   TickPrefab: {fileID: 1966629896501752, guid: b1c36d1c9a172aa4a875cc7fe5d941af, type: 2}
   GridLinePrefab: {fileID: 1347270854832024, guid: 0a74383a57ae68746bad9e42379b8fde,
+    type: 2}
+--- !u!114 &114678076042742618
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1194252209344432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be0d1f34cb87aad4d9d0535d43480e5d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ETV3DFlexiblePCPPrefab: {fileID: 1971805496130914, guid: 5ea6c019e52b9d640b3822b1d8c5ea55,
     type: 2}
 --- !u!114 &114876645080609092
 MonoBehaviour:

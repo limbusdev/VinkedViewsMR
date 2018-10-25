@@ -127,7 +127,7 @@ public class ETV2DPCP : AETV2D
             }
         }
 
-        this.FastStaticLR.Apply();
+        FastStaticLR.Apply();
         lines = notNaNPrimitives.ToArray();
     }
 

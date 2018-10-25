@@ -5,7 +5,7 @@ using UnityEngine;
 public interface IEuclideanTransformableView
 {
     void ChangeColoringScheme(ETVColorSchemes scheme);
-    void SetUpAxis();
+    void SetUpAxes();
     void AddBarChartAxis(string attributeName, AxisDirection dir);
     void AddAxis(string attributeName, LoM lom, AxisDirection dir);
     void AddAggregatedAxis(string attributeName, LoM lom, AxisDirection dir, out float max, out float length);

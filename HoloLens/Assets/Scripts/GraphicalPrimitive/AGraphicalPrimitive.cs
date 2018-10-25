@@ -73,16 +73,11 @@ namespace GraphicalPrimitive
 
         public void OnInputClicked(InputClickedEventData eventData)
         {
-            Debug.Log("Input Clicked");
-
             eventData.Use();
             foreach(var o in representedInformationObjects)
             {
-                Debug.Log("Hello");
                 ServiceLocator.instance.visualizationFactory.ToggleVisBridgesBetweenAllRepresentativeGameObjectsOf(o); 
             }
-
-            
         }
     }
 }

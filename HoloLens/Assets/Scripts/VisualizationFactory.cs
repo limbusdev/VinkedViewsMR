@@ -80,29 +80,29 @@ public class VisualizationFactory : MonoBehaviour
             var etvYearPopulationCrimePCP2D = GeneratePCP2DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
             etvMan.AutoPlaceETV(etvYearPopulationCrimePCP2D);
 
-            var etvYearPopulationCrimePCP3D = GeneratePCP3DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
-            etvMan.AutoPlaceETV(etvYearPopulationCrimePCP3D);
+            //var etvYearPopulationCrimePCP3D = GeneratePCP3DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
+            //etvMan.AutoPlaceETV(etvYearPopulationCrimePCP3D);
 
-            var etvYearMurderScatterplot2D = GenerateScatterplot2DFrom(0, new string[] { "Year", "Murder/MS." });
-            etvMan.AutoPlaceETV(etvYearMurderScatterplot2D);
+            //var etvYearMurderScatterplot2D = GenerateScatterplot2DFrom(0, new string[] { "Year", "Murder/MS." });
+            //etvMan.AutoPlaceETV(etvYearMurderScatterplot2D);
 
-            var etvYearCrimeMurderScatterplot3D = GenerateScatterplot3DFrom(0, new string[] { "Year", "Murder/MS.", "Violent crime" });
-            etvMan.AutoPlaceETV(etvYearCrimeMurderScatterplot3D);
+            //var etvYearCrimeMurderScatterplot3D = GenerateScatterplot3DFrom(0, new string[] { "Year", "Murder/MS.", "Violent crime" });
+            //etvMan.AutoPlaceETV(etvYearCrimeMurderScatterplot3D);
 
-            var etvTimeRape = GenerateLineplot2DFrom(0, new string[] { "Year", "Rape (legacy)"});
-            etvMan.AutoPlaceETV(etvTimeRape);
+            //var etvTimeRape = GenerateLineplot2DFrom(0, new string[] { "Year", "Rape (legacy)"});
+            //etvMan.AutoPlaceETV(etvTimeRape);
 
-            var etvTimeMurder = GenerateLineplot2DFrom(0, new string[] { "Year", "Murder/MS." });
-            etvMan.AutoPlaceETV(etvTimeMurder);
+            //var etvTimeMurder = GenerateLineplot2DFrom(0, new string[] { "Year", "Murder/MS." });
+            //etvMan.AutoPlaceETV(etvTimeMurder);
 
-            var etvAxisMurder = GenerateSingle3DAxisFrom(0, "Murder/MS.");
-            etvAxisMurder.transform.position = new Vector3(1,0,0);
+            //var etvAxisMurder = GenerateSingle3DAxisFrom(0, "Murder/MS.");
+            //etvAxisMurder.transform.position = new Vector3(1,0,0);
 
-            var etvAxisPopulation = GenerateSingle3DAxisFrom(0, "Population");
-            etvAxisPopulation.transform.position = new Vector3(1.5f, 0, 0);
+            //var etvAxisPopulation = GenerateSingle3DAxisFrom(0, "Population");
+            //etvAxisPopulation.transform.position = new Vector3(1.5f, 0, 0);
             
 
-            DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[0].infoObjects[7]);
+            //DrawVisBridgesBetweenAllRepresentativeGameObjectsOf(dataProvider.dataSets[0].infoObjects[7]);
 
         } catch(Exception e)
         {
@@ -222,7 +222,7 @@ public class VisualizationFactory : MonoBehaviour
 
         
 
-        Debug.Log("Draw new Bridge");
+        if(!GlobalSettings.onHoloLens) Debug.Log("Draw new Bridge");
 
         if(multiBridgesByDataSet.ContainsKey(obj.dataSetID))
         {

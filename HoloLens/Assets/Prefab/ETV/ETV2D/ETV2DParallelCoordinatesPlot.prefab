@@ -81,3 +81,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Anchor: {fileID: 4066165708556398}
+  fastLRPrefab: {fileID: 11492168, guid: 5f26093ada0a8a04c8d319d50a8bcd6e, type: 2}

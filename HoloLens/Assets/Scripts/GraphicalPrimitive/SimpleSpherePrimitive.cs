@@ -8,18 +8,6 @@ namespace GraphicalPrimitive
     {
         public MeshRenderer rend;
 
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-        
         public override void ApplyColor(Color color)
         {
             rend.material.color = color;

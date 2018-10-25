@@ -164,7 +164,7 @@ namespace ETV
 
             if(max > 0)
             {
-                SetUpAxis();
+                SetUpAxes();
                 DrawGraph();
 
                 foreach(var o in data.infoObjects)
@@ -239,7 +239,7 @@ namespace ETV
         /// <summary>
         /// Generates axes from the calculated values.
         /// </summary>
-        public override void SetUpAxis()
+        public override void SetUpAxes()
         {
             var factory3D = ServiceLocator.instance.Factory3DPrimitives;
             var factory2D = ServiceLocator.instance.Factory2DPrimitives;

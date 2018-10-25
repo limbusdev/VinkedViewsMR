@@ -36,7 +36,7 @@ namespace ETV
 
             bars = new Dictionary<string, Bar3D>();
 
-            SetUpAxis();
+            SetUpAxes();
 
             // .................................................................... initialize
             switch(lom)
@@ -114,7 +114,7 @@ namespace ETV
             return bar;
         }
 
-        public override void SetUpAxis()
+        public override void SetUpAxes()
         {
             float max, length;
             AddBarChartAxis(attributeName, AxisDirection.X);

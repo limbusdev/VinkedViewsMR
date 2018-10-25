@@ -69,7 +69,6 @@ public class MetaVisSystem : MonoBehaviour
                         if(CheckIfCompatible(axisA, axisB, out dataSetID))
                         {
                             // span a new metavisualization between them
-                            Debug.Log("AAA");
                             metaVisualizations.Add(new MetaVisKey(axisA, axisB), SpanMetaVisBetween(axisA, axisB, dataSetID));
                         }
                     }

@@ -13,10 +13,51 @@ public class ServiceLocator : MonoBehaviour {
     public VisualizationFactory visualizationFactory;       
     public ETVManager etvManager;
     public MetaVisSystem metaVisSystem;
-    
+
+    public static Graphical3DPrimitiveFactory PrimitivePlant3D()
+    {
+        return instance.Factory3DPrimitives;
+    }
+
+    public static Graphical2DPrimitiveFactory PrimitivePlant2D()
+    {
+        return instance.Factory2DPrimitives;
+    }
+
+    public static ETV3DFactory ETVPlant3D()
+    {
+        return instance.Factory3DETV;
+    }
+
+    public static ETV2DFactory ETVPlant2D()
+    {
+        return instance.Factory2DETV;
+    }
+
+    public static MetaVisSystem MetaVisSystem()
+    {
+        return instance.metaVisSystem;
+    }
+
+    public static MetaVisFactory MetaVisPlant()
+    {
+        return instance.FactoryMetaVis;
+    }
+
+    public static VisualizationFactory VisPlant()
+    {
+        return instance.visualizationFactory;
+    }
+
+    public static ETVManager ETVMan()
+    {
+        return instance.etvManager;
+    }
+
 
     void Awake()
     {
+        Physics.autoSimulation = false;
         // SINGLETON
 
         //Check if instance already exists

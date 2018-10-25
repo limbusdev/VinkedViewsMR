@@ -22,7 +22,7 @@ namespace VisBridge
 
         }
 
-        void FixedUpdate()
+        void Update()
         {
             if(initialized)
             {

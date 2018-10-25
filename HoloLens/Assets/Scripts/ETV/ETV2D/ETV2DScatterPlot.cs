@@ -18,17 +18,17 @@ public class ETV2DScatterPlot : AETV2D
         this.lomA = data.GetTypeOf(attributeNameA);
         this.lomB = data.GetTypeOf(attributeNameB);
 
-        SetUpAxis();
+        SetUpAxes();
         DrawGraph();
     }
 
     public override void UpdateETV()
     {
-        SetUpAxis();
+        SetUpAxes();
         DrawGraph();
     }
 
-    public override void SetUpAxis()
+    public override void SetUpAxes()
     {
         AddAxis(attributeA, lomA, AxisDirection.X);
         AddAxis(attributeB, lomB, AxisDirection.Y);

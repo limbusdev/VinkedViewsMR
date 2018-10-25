@@ -43,13 +43,13 @@ namespace ETV
             else
                 pcpLength = .1f;
 
-            SetUpAxis();
+            SetUpAxes();
             DrawGraph();
         }
 
         
         
-        public override void SetUpAxis()
+        public override void SetUpAxes()
         {
             PCPAxesFront = new Dictionary<int, AAxis>();
             PCPAxesBack = new Dictionary<int, AAxis>();
@@ -159,11 +159,21 @@ namespace ETV
             int counter = 0;
             foreach(var infoO in data.infoObjects)
             {
-                var line = pcpLineGenerator.CreateLine(infoO, Color.white, data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs, PCPAxesFront);
+                float zOffset = counter * pcpLength - .002f;
+                var line = pcpLineGenerator.CreateLine(
+                    infoO, 
+                    FastStaticLR, 
+                    Color.white, 
+                    data, 
+                    nominalIDs, 
+                    ordinalIDs, 
+                    intervalIDs, 
+                    ratioIDs, 
+                    PCPAxesFront, 
+                    false, 
+                    zOffset);
                 if(line != null)
                 {
-                    line.transform.parent = Anchor.transform;
-                    line.transform.localPosition = new Vector3(0, 0, counter * pcpLength - .002f);
                     notNaNPrimitives.Add(line);
                 }
                 counter++;
@@ -193,7 +203,7 @@ namespace ETV
 
         public override void UpdateETV()
         {
-            SetUpAxis();
+            SetUpAxes();
             DrawGraph();
         }
         

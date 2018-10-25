@@ -12,7 +12,7 @@ namespace GraphicalPrimitive
         public Material lineMaterial;
 
         public LoM type;
-
+        
         public void Init(string name, float max, AxisDirection dir = AxisDirection.Y)
         {
             base.Init(name, dir);
@@ -164,23 +164,25 @@ namespace GraphicalPrimitive
             // Draw ticks
             for(int i=0; i<=m.max; i++)
             {
-                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
-
-                
-                tick.lr.SetPosition(1, tickDir * diameter * 4f);
-
-                tick.SetDirection(axisDirection);
-                tick.label.text = m.uniqueValues[i];
-
-                tick.transform.parent = Anchor.transform;
-                if(manualTickRes)
+                if(!GlobalSettings.onHoloLens || (i == m.min || i == m.max))
                 {
-                    tick.transform.localPosition = direction * (tickRes * i);
-                } else
-                {
-                    tick.transform.localPosition = direction * .15f * (i + 1);
+                    var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick(true);
+
+                    tick.lr.SetPosition(1, tickDir * diameter * 4f);
+
+                    tick.SetDirection(axisDirection);
+                    tick.label.text = m.uniqueValues[i];
+
+                    tick.transform.parent = Anchor.transform;
+                    if(manualTickRes)
+                    {
+                        tick.transform.localPosition = direction * (tickRes * i);
+                    } else
+                    {
+                        tick.transform.localPosition = direction * .15f * (i + 1);
+                    }
+                    ticks.Add(tick);
                 }
-                ticks.Add(tick);
             }
         }
 
@@ -191,20 +193,23 @@ namespace GraphicalPrimitive
             // Draw ticks
             for(int i = 0; i <= m.max; i++)
             {
-                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
-                tick.lr.SetPosition(1, tickDir * diameter * 4f);
-                tick.SetDirection(axisDirection);
-                tick.label.text = m.uniqueValues[i];
+                if(!GlobalSettings.onHoloLens || (i == m.min || i == m.max))
+                {
+                    var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick(true);
+                    tick.lr.SetPosition(1, tickDir * diameter * 4f);
+                    tick.SetDirection(axisDirection);
+                    tick.label.text = m.uniqueValues[i];
 
-                tick.transform.parent = Anchor.transform;
-                if(manualTickRes)
-                {
-                    tick.transform.localPosition = direction * tickRes * i;
-                } else
-                {
-                    tick.transform.localPosition = direction * .15f * (i + 1);
+                    tick.transform.parent = Anchor.transform;
+                    if(manualTickRes)
+                    {
+                        tick.transform.localPosition = direction * tickRes * i;
+                    } else
+                    {
+                        tick.transform.localPosition = direction * .15f * (i + 1);
+                    }
+                    ticks.Add(tick);
                 }
-                ticks.Add(tick);
             }
         }
 
@@ -215,14 +220,17 @@ namespace GraphicalPrimitive
             // Draw ticks
             for(int i = m.min; i <= m.max; i++)
             {
-                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
-                tick.lr.SetPosition(1, tickDir * diameter * 4f);
-                tick.SetDirection(axisDirection);
-                tick.label.text = IntervalValueConverters.Translate(i, m.intervalTranslator);
+                if(!GlobalSettings.onHoloLens || (i == m.min || i == m.max))
+                {
+                    var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick(true);
+                    tick.lr.SetPosition(1, tickDir * diameter * 4f);
+                    tick.SetDirection(axisDirection);
+                    tick.label.text = IntervalValueConverters.Translate(i, m.intervalTranslator);
 
-                tick.transform.parent = Anchor.transform;
-                tick.transform.localPosition = direction * TransformToAxisSpace(i);
-                ticks.Add(tick);
+                    tick.transform.parent = Anchor.transform;
+                    tick.transform.localPosition = direction * TransformToAxisSpace(i);
+                    ticks.Add(tick);
+                }
             }
         }
 
@@ -234,14 +242,17 @@ namespace GraphicalPrimitive
             // Draw ticks
             for(float i = min; i <= max; i += tickResolution)
             {
-                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick();
-                tick.lr.SetPosition(1, tickDir * diameter * 4f);
-                tick.SetDirection(axisDirection);
-                tick.label.text = i.ToString(i % 1 == 0 ? "N0" : ("N" + decimals));
+                if(!GlobalSettings.onHoloLens || (tickCounter == 0 || (i + tickResolution) >= max))
+                {
+                    var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick(true);
+                    tick.lr.SetPosition(1, tickDir * diameter * 4f);
+                    tick.SetDirection(axisDirection);
+                    tick.label.text = i.ToString(i % 1 == 0 ? "N0" : ("N" + decimals));
 
-                tick.transform.parent = Anchor.transform;
-                tick.transform.localPosition = direction * TransformToAxisSpace(tickCounter*tickResolution);
-                ticks.Add(tick);
+                    tick.transform.parent = Anchor.transform;
+                    tick.transform.localPosition = direction * TransformToAxisSpace(tickCounter * tickResolution);
+                    ticks.Add(tick);
+                }
                 tickCounter++;
             }
         }

@@ -9,7 +9,7 @@ Material:
   m_Name: simple_circle_white
   m_Shader: {fileID: 4800000, guid: d45c0efca53019e43891b0f610f8146e, type: 3}
   m_ShaderKeywords: _ALPHABLEND_ON _ALPHAPREMULTIPLY_ON _BORDER_LIGHT_USES_HOVER_COLOR
-    _DIRECTIONAL_LIGHT _HOVER_LIGHT _REFLECTIONS _SPECULAR_HIGHLIGHTS
+    _SPECULAR_HIGHLIGHTS
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -73,11 +73,11 @@ Material:
     - _ClippingPlaneBorder: 0
     - _ClippingPlaneBorderWidth: 0.025
     - _ColorWriteMask: 15
-    - _CullMode: 2
+    - _CullMode: 1
     - _CustomMode: 2
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DirectionalLight: 1
+    - _DirectionalLight: 0
     - _DstBlend: 10
     - _EdgeSmoothingValue: 0.002
     - _EnableEmission: 0
@@ -92,7 +92,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _HoverLight: 1
+    - _HoverLight: 0
     - _HoverLightOpaque: 0
     - _InnerGlow: 0
     - _Metallic: 0
@@ -100,7 +100,7 @@ Material:
     - _NearPlaneFade: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _Reflections: 1
+    - _Reflections: 0
     - _Refraction: 0
     - _RefractiveIndex: 0
     - _RenderQueueOverride: -1
@@ -109,7 +109,7 @@ Material:
     - _RoundCornerMargin: 0.01
     - _RoundCornerRadius: 0.25
     - _RoundCorners: 0
-    - _Smoothness: 0.5
+    - _Smoothness: 1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 5

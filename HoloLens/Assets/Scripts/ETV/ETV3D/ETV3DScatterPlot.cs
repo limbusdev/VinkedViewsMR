@@ -22,12 +22,12 @@ public class ETV3DScatterPlot : AETV3D
         this.lomB = data.GetTypeOf(attB);
         this.lomC = data.GetTypeOf(attC);
 
-        SetUpAxis();
+        SetUpAxes();
         DrawGraph();
         this.initialized = true;
     }
     
-    public override void SetUpAxis()
+    public override void SetUpAxes()
     {
         AddAxis(attributeA, lomA, AxisDirection.X);
         AddAxis(attributeB, lomB, AxisDirection.Y);
@@ -77,19 +77,19 @@ public class ETV3DScatterPlot : AETV3D
 
     public override void UpdateETV()
     {
-        SetUpAxis();
+        SetUpAxes();
         DrawGraph();
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
         if(initialized)
         {
+            var camera = GameObject.FindGameObjectWithTag("MainCamera");
             // Let point sprites face camera
             foreach(var dot in dots)
             {
-                var camera = GameObject.FindGameObjectWithTag("MainCamera");
                 dot.gameObject.transform.LookAt(camera.transform);
             }
         }

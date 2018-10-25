@@ -38,7 +38,7 @@ namespace GraphicalPrimitive
         public AttributeStats attributeStats;
         
 
-        void FixedUpdate()
+        void Update()
         {
             if(transform.hasChanged)
             {

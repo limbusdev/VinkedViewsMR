@@ -11,7 +11,10 @@ public class ToolBarInteractionReceiver : InteractionReceiver
 
     protected override void InputDown(GameObject obj, InputEventData eventData)
     {
-        Debug.Log(obj.name + " : InputDown");
+        // Debug.Log(obj.name + " : InputDown");
+
+        if(obj == null || obj.name == null)
+            return;
 
         switch (obj.name)
         {

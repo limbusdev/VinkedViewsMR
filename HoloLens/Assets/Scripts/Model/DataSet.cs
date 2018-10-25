@@ -155,6 +155,37 @@ namespace Model
             }
         }   
 
+        /// <summary>
+        /// Checks whether the given information object has values for
+        /// each dimension. If not, it is considered incomplete and not
+        /// fit for visualization.
+        /// </summary>
+        /// <param name="o">Object to test on completeness.</param>
+        /// <param name="attIDs">Attributes to check for completeness.</param>
+        /// <returns>if information object is complete</returns>
+        public bool IsInfoObjectCompleteRegarding(InfoObject o, int[] nomIDs, int[] ordIDs, int[] ivlIDs, int[] ratIDs)
+        {
+            bool missing = false;
+            foreach(var id in nomIDs)
+            {
+                missing |= IsValueMissing(o, nomAttribNames[id], LoM.NOMINAL);
+            }
+            foreach(var id in ordIDs)
+            {
+                missing |= IsValueMissing(o, ordAttribNames[id], LoM.ORDINAL);
+            }
+            foreach(var id in ivlIDs)
+            {
+                missing |= IsValueMissing(o, ivlAttribNames[id], LoM.INTERVAL);
+            }
+            foreach(var id in ratIDs)
+            {
+                missing |= IsValueMissing(o, ratAttribNames[id], LoM.RATIO);
+            }
+
+            return missing;
+        }
+
         public float GetValue(InfoObject infO, string attributeName, LoM lom)
         {
             float val;

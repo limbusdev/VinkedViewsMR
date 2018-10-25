@@ -1,6 +1,6 @@
-﻿using GraphicalPrimitive;
+﻿using DigitalRuby.FastLineRenderer;
+using GraphicalPrimitive;
 using Model;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -170,7 +170,8 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
 
     public GameObject CreatePCPLine()
     {
-        return Instantiate(PCPLine2DPrefab);
+        var line = Instantiate(PCPLine2DPrefab);
+        return line;
     }
 
     public GameObject CreateXYLine()
@@ -190,8 +191,15 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         return Instantiate(ScatterDot2DPrefab);
     }
 
-    public Tick CreateTick()
+    public Tick CreateTick(bool withLabel)
     {
-        return (Instantiate(TickPrefab).GetComponent<Tick>());
+        if(withLabel)
+            return Instantiate(TickPrefab).GetComponent<Tick>();
+        else
+        {
+            var tick = Instantiate(TickPrefab).GetComponent<Tick>();
+            tick.label.gameObject.SetActive(false);
+            return tick;
+        }
     }
 }

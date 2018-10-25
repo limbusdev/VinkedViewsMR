@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using DigitalRuby.FastLineRenderer;
 using GraphicalPrimitive;
 using Model;
 using UnityEngine;
@@ -13,17 +10,46 @@ namespace ETV
     {
         [SerializeField]
         public Transform Anchor;
+        
+        private FastLineRenderer fastStaticLR;  // Backing store
+        public FastLineRenderer FastStaticLR    // Accessor
+        {
+            get
+            {
+                if(fastStaticLR == null)
+                {
+                    fastStaticLR = ServiceLocator.instance.Factory2DPrimitives.GetNewFastLineRenderer();
+                    fastStaticLR.transform.parent = this.transform;
+                }
+                return fastStaticLR;     
+            }
+        }
 
+        private FastLineRenderer fastDynamicLR;  // Backing store
+        public FastLineRenderer FastDynamicLR   // Accessor
+        {
+            get
+            {
+                if(fastDynamicLR == null)
+                {
+                    fastDynamicLR = ServiceLocator.instance.Factory2DPrimitives.GetNewFastLineRenderer();
+                    fastDynamicLR.transform.parent = this.transform;
+                }
+                return fastDynamicLR;
+            }
+        }
+        
         protected DataSet data { get; set; }
 
         public IDictionary<AxisDirection, AAxis> axes { get; set; }
 
         public abstract void ChangeColoringScheme(ETVColorSchemes scheme);
         public abstract void DrawGraph();
-        public abstract void SetUpAxis();
+        public abstract void SetUpAxes();
         public abstract void UpdateETV();
         public abstract AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory();
-
+        
+        
         public virtual void Awake()
         {
             axes = new Dictionary<AxisDirection, AAxis>();

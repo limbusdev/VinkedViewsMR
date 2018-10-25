@@ -21,18 +21,7 @@ namespace ETV
         private PCPLine2D[] linePrimitives;
 
         private AAxis axisA, axisB;
-
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            UpdateETV();
-        }
+        
 
         public override void UpdateETV()
         {
@@ -42,7 +31,7 @@ namespace ETV
         public void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs, AAxis axisA, AAxis axisB)
         {
             base.Init(data);
-            this.pcpLineGenerator = new PCP3DFlexibleLineGenerator();
+            this.pcpLineGenerator = new PCP2DLineGenerator();
 
             this.nominalIDs = nominalIDs;
             this.ordinalIDs = ordinalIDs;
@@ -66,7 +55,7 @@ namespace ETV
             int counter = 0;
             foreach(var infoO in data.infoObjects)
             {
-                var line = pcpLineGenerator.CreateLine(infoO, Color.white, data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs, axes, true, LineAlignment.View);
+                var line = pcpLineGenerator.CreateLine(infoO, FastDynamicLR, Color.white, data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs, axes, true);
                 if(line != null)
                 {
                     notNaNPrimitives.Add(line);
@@ -110,7 +99,7 @@ namespace ETV
 
 
         // .................................................................... Useless in this MetaVis
-        public override void SetUpAxis() { /*Unneccessary*/ }
+        public override void SetUpAxes() { /*Unneccessary*/ }
 
 
         // .................................................................... IObserver

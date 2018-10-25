@@ -39,7 +39,7 @@ public class ETV3DSingleAxis : AETV3D
                 break;
         }
 
-        SetUpAxis();
+        SetUpAxes();
 
         SetAxisLabels(AxisDirection.Y, attributeName);
     }
@@ -50,7 +50,7 @@ public class ETV3DSingleAxis : AETV3D
         throw new System.NotImplementedException();
     }
     
-    public override void SetUpAxis()
+    public override void SetUpAxes()
     {
         AddAxis(attributeName, lom, AxisDirection.Y);
     }

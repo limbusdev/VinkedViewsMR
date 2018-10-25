@@ -20,7 +20,7 @@ public class ETV2DLineChart : AETV2D
         this.lomA = data.GetTypeOf(attributeA);
         this.lomB = data.GetTypeOf(attributeB);
 
-        SetUpAxis();
+        SetUpAxes();
         DrawGraph();
     }
 
@@ -41,7 +41,7 @@ public class ETV2DLineChart : AETV2D
 
     }
 
-    public override void SetUpAxis()
+    public override void SetUpAxes()
     {
         AddAxis(attributeA, lomA, AxisDirection.X);
         AddAxis(attributeB, lomB, AxisDirection.Y);

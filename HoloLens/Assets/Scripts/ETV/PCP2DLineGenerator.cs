@@ -1,4 +1,5 @@
-﻿using GraphicalPrimitive;
+﻿using DigitalRuby.FastLineRenderer;
+using GraphicalPrimitive;
 using Model;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,26 @@ namespace ETV
 {
     public class PCP2DLineGenerator : IPCPLineGenerator
     {
+        /// <summary>
+        /// Creates a new line in the given FastLineRenderer. After
+        /// the last call FastLineRenderer.Apply() must be called
+        /// seperately.
+        /// </summary>
+        /// <param name="o">InfoObject to represent</param>
+        /// <param name="etv">Base ETV</param>
+        /// <param name="color">color for this line</param>
+        /// <param name="data">data set this InfoObject came from</param>
+        /// <param name="nominalIDs">nominal IDs to map</param>
+        /// <param name="ordinalIDs">ordinal IDs to map</param>
+        /// <param name="intervalIDs">interval IDs to map</param>
+        /// <param name="ratioIDs">rational IDs to map</param>
+        /// <param name="axes">axes to map the values to</param>
+        /// <param name="global">will lines reside in local or global space</param>
+        /// <param name="zOffset">in which z plane, relative to linerenderer, should the line reside</param>
+        /// <returns></returns>
         public PCPLine2D CreateLine(
-            InfoObject o, 
+            InfoObject o,
+            FastLineRenderer fastLR,
             Color color, 
             DataSet data, 
             int[] nominalIDs, 
@@ -16,115 +35,77 @@ namespace ETV
             int[] intervalIDs, 
             int[] ratioIDs,
             IDictionary<int, AAxis> axes,
-            bool global=false,
-            LineAlignment align = LineAlignment.TransformZ
+            bool global,
+            float zOffset = 0f
             )
         {
-            bool missing = false;
-            foreach(var id in nominalIDs)
-            {
-                missing |= data.IsValueMissing(o, data.nomAttribNames[id], LoM.NOMINAL);
-            }
-            foreach(var id in ordinalIDs)
-            {
-                missing |= data.IsValueMissing(o, data.ordAttribNames[id], LoM.ORDINAL);
-            }
-            foreach(var id in intervalIDs)
-            {
-                missing |= data.IsValueMissing(o, data.ivlAttribNames[id], LoM.INTERVAL);
-            }
-            foreach(var id in ratioIDs)
-            {
-                missing |= data.IsValueMissing(o, data.ratAttribNames[id], LoM.RATIO);
-            }
-
+            bool missing = data.IsInfoObjectCompleteRegarding(o, nominalIDs, ordinalIDs, intervalIDs, ratioIDs);
             if(missing)
             {
                 return null;
             }
 
-            var factory = ServiceLocator.instance.Factory2DPrimitives;
+            var factory = ServiceLocator.PrimitivePlant2D();
             var pcpLine = factory.CreatePCPLine();
-            var pcpComp = pcpLine.GetComponent<PCPLine2D>();
-            pcpComp.lineRenderer.startColor = color;
-            pcpComp.lineRenderer.endColor = color;
-            pcpComp.lineRenderer.startWidth = 0.02f;
-            pcpComp.lineRenderer.endWidth = 0.02f;
-            int dimension = ratioIDs.Length + nominalIDs.Length + ordinalIDs.Length + intervalIDs.Length;
-            pcpComp.lineRenderer.positionCount = dimension;
 
-            pcpComp.lineRenderer.alignment = align;
-            pcpComp.lineRenderer.useWorldSpace = global;
+            IDictionary<string, float> axisValues = new Dictionary<string, float>();
+            List<Vector3> points = new List<Vector3>();
+            
+            foreach(var id in nominalIDs)
+            {
+                var name = data.nomAttribNames[id];
+                var value = data.GetValue(o, name, LoM.NOMINAL);
+                axisValues.Add(name, value);
+            }
 
-            // Assemble Polyline
-            Vector3[] polyline = new Vector3[dimension];
+            foreach(var id in ordinalIDs)
+            {
+                var name = data.ordAttribNames[id];
+                var value = data.GetValue(o, name, LoM.ORDINAL);
+                axisValues.Add(name, value);
+            }
+
+            foreach(var id in intervalIDs)
+            {
+                var name = data.ivlAttribNames[id];
+                var value = data.GetValue(o, name, LoM.INTERVAL);
+                axisValues.Add(name, value);
+            }
+
+            foreach(var id in ratioIDs)
+            {
+                var name = data.ratAttribNames[id];
+                var value = data.GetValue(o, name, LoM.RATIO);
+                axisValues.Add(name, value);
+            }
 
             int counter = 0;
-            foreach(int attID in nominalIDs)
+            foreach(var name in axisValues.Keys)
             {
-                var m = data.nominalAttribStats[data.nomAttribNames[attID]];
-                var a = o.nomAttribVals[attID];
+                float value;
 
-                if(a.value.Equals("missingValue"))
+                if(global)
                 {
-                    return null;
+                    points.Add(axes[counter].GetLocalValueInGlobalSpace(axisValues[name]));
+                } else
+                {
+                    value = axes[counter].TransformToAxisSpace(axisValues[name]);
+                    points.Add(new Vector3(.5f * counter, value, zOffset));
                 }
-
-                polyline[counter] = new Vector3(.5f * counter, axes[counter].TransformToAxisSpace(m.valueIDs[a.value]), 0);
-                o.AddRepresentativeObject(a.name, pcpLine);
+                o.AddRepresentativeObject(name, pcpLine);
                 counter++;
             }
 
-            foreach(var attID in ordinalIDs)
-            {
-                var m = data.ordinalAttribStats[data.ordAttribNames[attID]];
-                var a = o.ordAttribVals[attID];
-
-                // If NaN
-                if(a.value == int.MinValue)
-                {
-                    return null;
-                }
-
-                polyline[counter] = new Vector3(.5f * counter, axes[counter].TransformToAxisSpace(a.value), 0);
-                o.AddRepresentativeObject(a.name, pcpLine);
-                counter++;
-            }
-
-            foreach(var attID in intervalIDs)
-            {
-                var m = data.intervalAttribStats[data.ivlAttribNames[attID]];
-                var a = o.ivlAttribVals[attID];
-
-                // If NaN
-                if(a.value == int.MinValue)
-                {
-                    return null;
-                }
-
-                polyline[counter] = new Vector3(.5f * counter, axes[counter].TransformToAxisSpace(a.value), 0);
-                o.AddRepresentativeObject(a.name, pcpLine);
-                counter++;
-            }
-
-            foreach(var attID in ratioIDs)
-            {
-                var m = data.ratioAttribStats[data.ratAttribNames[attID]];
-                var a = o.ratAttribVals[attID];
-
-                // If NaN
-                if(float.IsNaN(a.value))
-                {
-                    return null;
-                }
-
-                polyline[counter] = new Vector3(.5f * counter, axes[counter].TransformToAxisSpace(a.value), 0);
-                o.AddRepresentativeObject(a.name, pcpLine);
-                counter++;
-            }
-
-            pcpComp.visBridgePort.transform.localPosition = polyline[0];
-            pcpComp.lineRenderer.SetPositions(polyline);
+            // Set up FastLineRenderer
+            var props = new FastLineRendererProperties();
+            props.Radius = 0.005f;
+            props.LineJoin = FastLineRendererLineJoin.Round;
+            props.Color = color;
+            fastLR.AddLine(props, points, null, true, true);
+            
+            var pcpComp = pcpLine.GetComponent<PCPLine2D>();
+            pcpComp.visBridgePort.transform.localPosition = points[0];
+            pcpComp.points = points.ToArray();
             pcpComp.GenerateCollider();
 
             return pcpComp;

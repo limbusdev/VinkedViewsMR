@@ -29,7 +29,7 @@ public class ETV2DBarChart : AETV2D
         this.bounds = new float[] { 0, 0, 0 };
         bars = new Dictionary<string, Bar2D>();
 
-        SetUpAxis();
+        SetUpAxes();
 
         // .................................................................... initialize
         switch(lom)
@@ -103,7 +103,7 @@ public class ETV2DBarChart : AETV2D
         return bar;
     }
     
-    public override void SetUpAxis()
+    public override void SetUpAxes()
     {
         float max, length;
         AddBarChartAxis(attributeName, AxisDirection.X);

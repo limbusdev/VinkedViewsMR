@@ -1,7 +1,6 @@
-﻿using GraphicalPrimitive;
+﻿using DigitalRuby.FastLineRenderer;
+using GraphicalPrimitive;
 using Model;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
@@ -23,4 +22,14 @@ public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
     public virtual GameObject CreateFixedLengthAutoTickedAxis(string name, float length, AxisDirection direction, DataSet data) { return new GameObject("Dummy Axis"); }
 
     public virtual GameObject CreateAutoGrid(float max, Vector3 axisDir, Vector3 expansionDir, float length) { return new GameObject("Dummy Grid"); }
+
+    // explicit methods
+    public FastLineRenderer fastLineRendererPrefab;
+
+    public FastLineRenderer GetNewFastLineRenderer()
+    {
+        var fastLR = Instantiate(fastLineRendererPrefab);
+        fastLR.Reset();
+        return fastLR;
+    }
 }

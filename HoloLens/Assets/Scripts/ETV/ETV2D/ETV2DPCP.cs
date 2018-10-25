@@ -4,10 +4,11 @@ using Model;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ETV2DParallelCoordinatesPlot : AETV2D
+public class ETV2DPCP : AETV2D
 {
+    // ........................................................................ PARAMETERS
     // Hook
-    private IPCPLineGenerator pcpLineGenerator;
+    private IPCPLineGenerator pcpLineGen;
     
     private int[]
             nominalIDs,
@@ -19,23 +20,26 @@ public class ETV2DParallelCoordinatesPlot : AETV2D
 
     private IDictionary<int, AAxis> PCPAxes;
 
-    private PCPLine2D[] linePrimitives;
+    private PCPLine2D[] lines;
+
+
+    // ........................................................................ CONSTRUCTOR / INITIALIZER
 
     public void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs)
     {
         base.Init(data);
-        this.pcpLineGenerator = new PCP2DLineGenerator();
+        this.pcpLineGen = new PCP2DLineGenerator();
         
         this.nominalIDs = nominalIDs;
         this.ordinalIDs = ordinalIDs;
         this.intervalIDs = intervalIDs;
         this.ratioIDs = ratioIDs;
 
-        SetUpAxis();
+        SetUpAxes();
         DrawGraph();
     }
 
-    public override void SetUpAxis()
+    public override void SetUpAxes()
     {
         PCPAxes = new Dictionary<int, AAxis>();
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
@@ -96,21 +100,35 @@ public class ETV2DParallelCoordinatesPlot : AETV2D
         allAxesGO.transform.parent = Anchor.transform;
     }
 
+    // ........................................................................ DRAW CALLS
+
     public override void DrawGraph()
     {
         var notNaNPrimitives = new List<PCPLine2D>();
         
         foreach(var infoO in data.infoObjects)
         {
-            var line = pcpLineGenerator.CreateLine(infoO, Color.white, data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs, PCPAxes);
+            var line = pcpLineGen.CreateLine(
+                infoO, 
+                FastStaticLR, 
+                Color.white, 
+                data, 
+                nominalIDs, 
+                ordinalIDs, 
+                intervalIDs, 
+                ratioIDs, 
+                PCPAxes, 
+                false);
             if(line != null)
             {
+
                 line.transform.parent = Anchor.transform;
                 notNaNPrimitives.Add(line);
             }
         }
 
-        linePrimitives = notNaNPrimitives.ToArray();
+        this.FastStaticLR.Apply();
+        lines = notNaNPrimitives.ToArray();
     }
 
     public override void ChangeColoringScheme(ETVColorSchemes scheme)
@@ -118,34 +136,33 @@ public class ETV2DParallelCoordinatesPlot : AETV2D
         switch(scheme)
         {
             case ETVColorSchemes.Rainbow:
-                for(int i=0; i<linePrimitives.Length; i++)
+                for(int i=0; i<lines.Length; i++)
                 {
-                    Color color = Color.HSVToRGB(((float)i) / linePrimitives.Length, 1, 1);
-                    linePrimitives[i].SetColor(color);
-                    linePrimitives[i].ApplyColor(color);
+                    Color color = Color.HSVToRGB(((float)i) / lines.Length, 1, 1);
+                    lines[i].SetColor(color);
+                    lines[i].ApplyColor(color);
                 }
                 break;
             case ETVColorSchemes.SplitHSV:
-                for(int i = 0; i < linePrimitives.Length; i++)
+                for(int i = 0; i < lines.Length; i++)
                 {
-                    Color color = Color.HSVToRGB((((float)i) / linePrimitives.Length)/2f+.5f, 1, 1);
-                    linePrimitives[i].SetColor(color);
-                    linePrimitives[i].ApplyColor(color);
+                    Color color = Color.HSVToRGB((((float)i) / lines.Length)/2f+.5f, 1, 1);
+                    lines[i].SetColor(color);
+                    lines[i].ApplyColor(color);
                 }
                 break;
             default:
                 break;
         }
     }
+    
+    public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
+    {
+        return ServiceLocator.PrimitivePlant2D();
+    }
 
     public override void UpdateETV()
     {
-        SetUpAxis();
-        DrawGraph();
-    }
-
-    public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-    {
-        return ServiceLocator.instance.Factory2DPrimitives;
+        // Nothing
     }
 }

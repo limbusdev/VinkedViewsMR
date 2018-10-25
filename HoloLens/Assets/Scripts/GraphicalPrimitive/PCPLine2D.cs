@@ -1,88 +1,63 @@
-﻿using ETV;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GraphicalPrimitive
 {
+    /// <summary>
+    /// Represents a 2D line by storing it's points. For better
+    /// performance draw calls are combined in fast line renderer.
+    /// </summary>
     public class PCPLine2D : AGraphicalPrimitive
     {
-        [SerializeField]
-        public LineRenderer lineRenderer;
-
-        public override void ApplyColor(Color color)
-        {
-            if(lineRenderer != null)
-            {
-                lineRenderer.startColor = color;
-                lineRenderer.endColor = color;
-            }
-        }
+        public Vector3[] points;
 
         public void GenerateCollider()
         {
-            Vector3[] positions = new Vector3[lineRenderer.positionCount];
+            if(points == null)
+            {
+                Debug.LogWarning("Tried to generate PCPLine2D-Colliders, but line is empty.");
+                return;
+            }
 
-            lineRenderer.GetPositions(positions);
-            int[] triangles = new int[(positions.Length-1)*6*4+12]; // two triangles for every line segment makes 6 vertices for every segment
+            int[] triangles = new int[(points.Length-1)*6*4+12]; // two triangles for every line segment makes 6 vertices for every segment
 
             var collider = pivot.AddComponent<MeshCollider>();
 
             // Generate path
-            Vector3[] path1 = new Vector3[positions.Length * 2];
-            Vector3[] path2 = new Vector3[positions.Length * 2];
-            Vector3[] path3 = new Vector3[positions.Length * 2];
-            Vector3[] path4 = new Vector3[positions.Length * 2];
+            Vector3[] path1 = new Vector3[points.Length * 2];
+            Vector3[] path2 = new Vector3[points.Length * 2];
+            Vector3[] path3 = new Vector3[points.Length * 2];
+            Vector3[] path4 = new Vector3[points.Length * 2];
 
-            for(int i=0; i<positions.Length; i++)
+            for(int i=0; i< points.Length; i++)
             {
-                path1[i] = new Vector3(positions[i].x, positions[i].y + .01f, positions[i].z + .01f);
-                path2[i] = new Vector3(positions[i].x, positions[i].y + .01f, positions[i].z - .01f);
-                path3[i] = new Vector3(positions[i].x, positions[i].y - .01f, positions[i].z - .01f);
-                path4[i] = new Vector3(positions[i].x, positions[i].y - .01f, positions[i].z + .01f);
+                path1[i] = new Vector3(points[i].x, points[i].y + .01f, points[i].z + .01f);
+                path2[i] = new Vector3(points[i].x, points[i].y + .01f, points[i].z - .01f);
+                path3[i] = new Vector3(points[i].x, points[i].y - .01f, points[i].z - .01f);
+                path4[i] = new Vector3(points[i].x, points[i].y - .01f, points[i].z + .01f);
             }
 
-            var path = new Vector3[positions.Length*4];
-            for(int i = 0; i<positions.Length; i++)
+            var path = new Vector3[points.Length*4];
+            for(int i = 0; i< points.Length; i++)
             {
-                path[i + positions.Length * 0] = path1[i];
-                path[i + positions.Length * 1] = path2[i];
-                path[i + positions.Length * 2] = path3[i];
-                path[i + positions.Length * 3] = path4[i];
+                path[i + points.Length * 0] = path1[i];
+                path[i + points.Length * 1] = path2[i];
+                path[i + points.Length * 2] = path3[i];
+                path[i + points.Length * 3] = path4[i];
             }
             
             var mesh = new Mesh();
 
             mesh.vertices = path;
 
-            int length = positions.Length;
+            int length = points.Length;
             int trianglesPerSide = (length - 1) * 2;
             int start;
-            // Start Cap
-            //int start = trianglesPerSide * 3 * 4;
-            //triangles[start + 2] = length * 2;
-            //triangles[start + 1] = length * 1;
-            //triangles[start] = 0;
-
-            //triangles[start + 3] = length * 2;
-            //triangles[start + 5] = length * 3;
-            //triangles[start + 4] = length * 1;
-
-            // End Cap
-            //start = trianglesPerSide * 3 * 4;
-            //triangles[start] = 0;
-            //triangles[start + 2] = length * 2;
-            //triangles[start + 1] = length * 1;
-
-            //triangles[start + 3] = length * 2;
-            //triangles[start + 5] = length * 3;
-            //triangles[start + 4] = length * 1;
 
 
             int triangleID = 0;
             
 
-            for(int i=0; i<positions.Length-1; i++)
+            for(int i=0; i< points.Length-1; i++)
             {
                 // STRIP 1
                 // Triangle 1
@@ -132,55 +107,12 @@ namespace GraphicalPrimitive
 
                 triangleID += 2;
             }
-
             
-
             mesh.triangles = triangles;
             mesh.RecalculateBounds();
             mesh.RecalculateNormals();
 
             collider.sharedMesh = mesh;
-               
         }
-
-        //public static int[] GenerateTriangleStrip(Vector3[] positions, float yAlteration, float zAlteration, out Vector3[] stripPositions)
-        //{
-        //    int[] indizes = new int[(positions.Length-1)*2*4+12];
-        //    stripPositions = new Vector3[positions.Length];
-
-        //    int triangleIndexCounter = 0;
-        //    int indexCounter = 0;
-
-        //    // Strip 1
-        //    for(int i=0; i<positions.Length; i++)
-        //    {
-        //        stripPositions[indexCounter] = new Vector3(positions[i].x, positions[i].y + yAlteration, positions[i].z + zAlteration);
-        //        indizes[triangleIndexCounter] = indexCounter;
-        //        indexCounter++;
-        //        triangleIndexCounter++;
-
-        //        stripPositions[indexCounter] = new Vector3(positions[i+1].x, positions[i+1].y + yAlteration, positions[i+1].z + zAlteration);
-        //        indizes[triangleIndexCounter] = indexCounter;
-        //        indexCounter++;
-        //        triangleIndexCounter++;
-
-        //        stripPositions[indexCounter] = new Vector3(positions[i].x, positions[i].y + yAlteration, positions[i].z - zAlteration);
-        //        indizes[triangleIndexCounter] = indexCounter;
-        //        indexCounter++;
-        //        triangleIndexCounter++;
-
-        //        indizes[triangleIndexCounter] = indexCounter-1;
-        //        triangleIndexCounter++;
-
-        //        indizes[triangleIndexCounter] = indexCounter-2;
-        //        triangleIndexCounter++;
-
-        //        stripPositions[indexCounter] = new Vector3(positions[i+1].x, positions[i+1].y + yAlteration, positions[i+1].z - zAlteration);
-        //        indizes[triangleIndexCounter] = indexCounter;
-        //        indexCounter++;
-        //        triangleIndexCounter++;
-        //    }
-        //    return indizes;
-        //}
     }
 }

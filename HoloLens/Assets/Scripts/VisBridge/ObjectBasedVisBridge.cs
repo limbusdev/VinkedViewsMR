@@ -43,6 +43,7 @@ namespace VisBridge
             lr.startColor = Color.green;
             lr.endColor = Color.green;
             lr.material = material;
+            lr.material.color = Color.green;
             lr.startWidth = 0.01f;
             lr.endWidth = 0.01f;
 
@@ -51,7 +52,7 @@ namespace VisBridge
             initialized = false;
         }
 
-        void FixedUpdate()
+        void Update()
         {
             if(initialized)
             {
@@ -149,6 +150,8 @@ namespace VisBridge
             return optimum;
         }
 
+
+
         public override bool Equals(object other)
         {
             if(other is ObjectBasedVisBridge)
@@ -160,6 +163,14 @@ namespace VisBridge
             {
                 return false;
             }
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -1493433867;
+            hashCode = hashCode + EqualityComparer<AGraphicalPrimitive>.Default.GetHashCode(origin);
+            hashCode = hashCode + EqualityComparer<AGraphicalPrimitive>.Default.GetHashCode(target);
+            return hashCode;
         }
     }
 }

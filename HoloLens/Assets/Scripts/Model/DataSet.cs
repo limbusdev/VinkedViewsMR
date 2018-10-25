@@ -1,5 +1,6 @@
 ﻿using Model.Attributes;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Model
 {
@@ -22,6 +23,7 @@ namespace Model
 
         public IDictionary<string, IDictionary<int, string>> dicts;
         public IDictionary<string, string> intervalTranslators;
+        public IDictionary<InfoObject, Color> colorTable;
 
         public DataSet(string title, IList<InfoObject> dataObjects, IDictionary<string, IDictionary<int, string>> dicts, IDictionary<string, string> intervalTranslators)
         {
@@ -109,6 +111,15 @@ namespace Model
             {
                 ratAttribNames[i] = infoObj.ratAttribVals[i].name;
                 attributeIDsByName.Add(ratAttribNames[i], i);
+            }
+
+            // Color table
+            colorTable = new Dictionary<InfoObject, Color>();
+            int counter = 0;
+            foreach(var o in dataObjects)
+            {
+                colorTable.Add(o, Color.HSVToRGB((((float)counter) / dataObjects.Count) / 2f + .5f, 1, 1));
+                counter++;
             }
         }
 

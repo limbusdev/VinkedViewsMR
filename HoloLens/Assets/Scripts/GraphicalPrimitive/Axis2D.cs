@@ -126,35 +126,7 @@ namespace GraphicalPrimitive
 
         private void DrawBaseAxis()
         {
-            var lr = Axis.GetComponent<LineRenderer>();
-            if(axisDirection == AxisDirection.Z)
-            {
-                lr.alignment = LineAlignment.View;
-            }
-
-            lr.startWidth = diameter;
-            lr.endWidth = diameter;
-            lr.SetPosition(0, Vector3.zero);
-
-            if(tipped)
-            {
-                lr.SetPosition(1, (length - diameter / length * 4) * direction);
-                Tip.SetActive(true);
-                var lrTip = Tip.GetComponent<LineRenderer>();
-                lrTip.startWidth = diameter * 3;
-                lrTip.endWidth = 0;
-                lrTip.SetPosition(0, lr.GetPosition(1));
-                lrTip.SetPosition(1, length * direction);
-
-                if(axisDirection == AxisDirection.Z)
-                {
-                    lrTip.alignment = LineAlignment.View;
-                }
-            } else
-            {
-                lr.SetPosition(1, length * direction);
-                Tip.SetActive(false);
-            }
+            
         }
         
         private void GenerateNominalTicks(NominalAttributeStats m, bool manualTickRes=false, float tickRes=.15f)

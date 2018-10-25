@@ -154,6 +154,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fastLineRendererPrefab: {fileID: 114537018403411326, guid: 46e1107717d27ea46bf3e5aa07d1d02c,
     type: 2}
+  fastAxesLineRendererPrefab: {fileID: 114537018403411326, guid: 13e91da7fdd310349b67a330b128f0e8,
+    type: 2}
   bar2D: {fileID: 1407780082100994, guid: a247774af56768b40a121d512d42d824, type: 2}
   label: {fileID: 1340621660906316, guid: a8914cdd4e0184542a0251c684fb596d, type: 2}
   Axis2DPrefab: {fileID: 1131818127915714, guid: b3c5ed6b532d28e4f92871287f6ff18c,
@@ -192,6 +194,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fastLineRendererPrefab: {fileID: 114537018403411326, guid: 46e1107717d27ea46bf3e5aa07d1d02c,
+    type: 2}
+  fastAxesLineRendererPrefab: {fileID: 114537018403411326, guid: 13e91da7fdd310349b67a330b128f0e8,
     type: 2}
   cone: {fileID: 1235091312533442, guid: a7ac7c0156811924185a33f61cda2f6b, type: 2}
   bar3D: {fileID: 1851467595003564, guid: 77a7171990d32c74688c6f030fc34754, type: 2}

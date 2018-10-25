@@ -99,7 +99,7 @@ namespace ETV
             // Set up FastLineRenderer
             var props = new FastLineRendererProperties();
             props.Radius = 0.005f;
-            props.LineJoin = FastLineRendererLineJoin.Round;
+            props.LineJoin = FastLineRendererLineJoin.AdjustPosition;
             props.Color = color;
             fastLR.AddLine(props, points, null, true, true);
             
@@ -109,6 +109,21 @@ namespace ETV
             pcpComp.GenerateCollider();
 
             return pcpComp;
+        }
+
+        public void CreatePureAxis(FastLineRenderer fastAxisLR, Color color, Vector3 from, Vector3 to, Vector3 offset)
+        {
+            // Set up FastLineRenderer
+            var props = new FastLineRendererProperties();
+            props.Radius = 0.005f;
+            props.LineJoin = FastLineRendererLineJoin.None;
+            props.Color = color;
+
+            var points = new List<Vector3>();
+            points.Add(from+offset);
+            points.Add(to+offset);
+
+            fastAxisLR.AddLine(props, points, null, true, true);
         }
     }
 }

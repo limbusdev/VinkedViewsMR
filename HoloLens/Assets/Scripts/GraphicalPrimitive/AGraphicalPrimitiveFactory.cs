@@ -32,4 +32,13 @@ public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
         fastLR.Reset();
         return fastLR;
     }
+
+    public FastLineRenderer fastAxesLineRendererPrefab;
+
+    public FastLineRenderer GetNewFastAxesLR()
+    {
+        var fastAxesLR = Instantiate(fastAxesLineRendererPrefab);
+        fastAxesLR.Reset();
+        return fastAxesLR;
+    }
 }

@@ -21,5 +21,13 @@ namespace ETV
             bool global,
             float zOffset=0f
             );
+
+        void CreatePureAxis(
+            FastLineRenderer fastAxisLR,
+            Color color,
+            Vector3 from,
+            Vector3 to,
+            Vector3 offset
+            );
     }
 }

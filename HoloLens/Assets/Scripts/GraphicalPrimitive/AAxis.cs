@@ -1,8 +1,6 @@
 ﻿using Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace GraphicalPrimitive
@@ -118,6 +116,16 @@ namespace GraphicalPrimitive
         public Vector3 GetAxisDirectionGlobal()
         {
             return transform.TransformDirection(direction);
+        }
+
+        public Vector3 GetAxisBaseLocal()
+        {
+            return Vector3.zero;
+        }
+
+        public Vector3 GetAxisTipLocal()
+        {
+            return direction;
         }
 
         public Vector3 GetLocalValueInGlobalSpace(float value)

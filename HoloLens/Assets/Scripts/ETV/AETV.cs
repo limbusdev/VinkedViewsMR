@@ -38,18 +38,38 @@ namespace ETV
                 return fastDynamicLR;
             }
         }
+
+        private FastLineRenderer fastAxisLR;    // Backing store
+        public FastLineRenderer FastAxisLR
+        {
+            get
+            {
+                if(fastAxisLR == null)
+                {
+                    fastAxisLR = ServiceLocator.PrimitivePlant2D().GetNewFastAxesLR();
+                    fastAxisLR.transform.parent = this.transform;
+                }
+                return fastAxisLR;
+            }
+        }
         
         protected DataSet data { get; set; }
 
         public IDictionary<AxisDirection, AAxis> axes { get; set; }
 
-        public abstract void ChangeColoringScheme(ETVColorSchemes scheme);
+        
         public abstract void DrawGraph();
         public abstract void SetUpAxes();
         public abstract void UpdateETV();
         public abstract AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory();
-        
-        
+
+        public ETVColorSchemes colorScheme { get; set; }
+
+        public virtual void ChangeColoringScheme(ETVColorSchemes scheme)
+        {
+            this.colorScheme = scheme;
+        }
+
         public virtual void Awake()
         {
             axes = new Dictionary<AxisDirection, AAxis>();

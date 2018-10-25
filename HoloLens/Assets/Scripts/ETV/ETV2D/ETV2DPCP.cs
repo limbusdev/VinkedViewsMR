@@ -43,9 +43,12 @@ public class ETV2DPCP : AETV2D
     {
         PCPAxes = new Dictionary<int, AAxis>();
         AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
+        var lineGen = new PCP2DLineGenerator();
 
         int counter = 0;
         allAxesGO = new GameObject("Axes-Set");
+        FastAxisLR.transform.parent = allAxesGO.transform;
+        var offset = Vector3.zero;
 
         // Setup nominal axes
         foreach(int attID in nominalIDs)
@@ -53,8 +56,14 @@ public class ETV2DPCP : AETV2D
             string attributeName = data.nomAttribNames[attID];
             var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, data);
             xAxis.transform.parent = allAxesGO.transform;
+            offset.x = .5f*counter;
+
             xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
             PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+            
+        
+            var axisComp = xAxis.GetComponent<Axis2D>();
+            lineGen.CreatePureAxis(FastAxisLR, Color.white, axisComp.GetAxisBaseLocal(), axisComp.GetAxisTipLocal(), offset);
 
             counter++;
         }
@@ -68,6 +77,10 @@ public class ETV2DPCP : AETV2D
             xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
             PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
 
+            offset.x = .5f * counter;
+            var axisComp = xAxis.GetComponent<Axis2D>();
+            lineGen.CreatePureAxis(FastAxisLR, Color.white, axisComp.GetAxisBaseLocal(), axisComp.GetAxisTipLocal(), offset);
+
             counter++;
         }
 
@@ -79,6 +92,10 @@ public class ETV2DPCP : AETV2D
             xAxis.transform.parent = allAxesGO.transform;
             xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
             PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+
+            offset.x = .5f * counter;
+            var axisComp = xAxis.GetComponent<Axis2D>();
+            lineGen.CreatePureAxis(FastAxisLR, Color.white, axisComp.GetAxisBaseLocal(), axisComp.GetAxisTipLocal(), offset);
 
             counter++;
         }
@@ -93,11 +110,17 @@ public class ETV2DPCP : AETV2D
             xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
             PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
 
+            offset.x = .5f * counter;
+            var axisComp = xAxis.GetComponent<Axis2D>();
+            lineGen.CreatePureAxis(FastAxisLR, Color.white, axisComp.GetAxisBaseLocal(), axisComp.GetAxisTipLocal(), offset);
+
             counter++;
         }
 
         allAxesGO.transform.localPosition = new Vector3(0, 0, -.002f);
         allAxesGO.transform.parent = Anchor.transform;
+
+        FastAxisLR.Apply();
     }
 
     // ........................................................................ DRAW CALLS
@@ -110,8 +133,8 @@ public class ETV2DPCP : AETV2D
         {
             var line = pcpLineGen.CreateLine(
                 infoO, 
-                FastStaticLR, 
-                Color.white, 
+                FastStaticLR,
+                data.colorTable[infoO], 
                 data, 
                 nominalIDs, 
                 ordinalIDs, 
@@ -129,31 +152,6 @@ public class ETV2DPCP : AETV2D
 
         FastStaticLR.Apply();
         lines = notNaNPrimitives.ToArray();
-    }
-
-    public override void ChangeColoringScheme(ETVColorSchemes scheme)
-    {
-        switch(scheme)
-        {
-            case ETVColorSchemes.Rainbow:
-                for(int i=0; i<lines.Length; i++)
-                {
-                    Color color = Color.HSVToRGB(((float)i) / lines.Length, 1, 1);
-                    lines[i].SetColor(color);
-                    lines[i].ApplyColor(color);
-                }
-                break;
-            case ETVColorSchemes.SplitHSV:
-                for(int i = 0; i < lines.Length; i++)
-                {
-                    Color color = Color.HSVToRGB((((float)i) / lines.Length)/2f+.5f, 1, 1);
-                    lines[i].SetColor(color);
-                    lines[i].ApplyColor(color);
-                }
-                break;
-            default:
-                break;
-        }
     }
     
     public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()

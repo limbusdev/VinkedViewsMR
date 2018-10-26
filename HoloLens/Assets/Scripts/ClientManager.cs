@@ -1,18 +1,55 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class ClientManager : MonoBehaviour
 {
     public GameObject etvPosition;
     public VisualizationFactory fact;
+    public Canvas canvas;
+    public CanvasScaler scaler;
+    public RectTransform canvasRect;
+    public RectTransform freeSpaceRect;
+
+    public float scale, widthPix, heightPix, padding;
+    public Vector2 blPix, brPix, tlPix, trPix;
+    public Vector3 bl, br, tl, tr;
+    float pixel2cm, etvWidthCM, etvHeightCM, anchorSideLengthInCM;
 
     private void Start()
     {
-        var fact2 = ServiceLocator.instance.Factory2DETV;
-        var prim2Dfactory = ServiceLocator.instance.Factory2DPrimitives;
+        padding = 48;
+
+        var fact2 = ServiceLocator.ETVPlant2D();
+        var prim2Dfactory = ServiceLocator.PrimitivePlant2D();
 
         var etvYearPopulationCrimePCP2D = fact.GeneratePCP2DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
         etvYearPopulationCrimePCP2D.transform.parent = etvPosition.transform;
+        
+        scale = canvasRect.localScale.x;
 
-        etvYearPopulationCrimePCP2D.transform.localScale = Vector3.one;
+        blPix = (new Vector2(padding, padding))*scale;
+        widthPix = canvasRect.rect.width;
+        heightPix = canvasRect.rect.height;
+        brPix = (new Vector2(widthPix-padding, padding)) * scale;
+        tlPix = (new Vector2(padding, heightPix-padding)) * scale;
+        trPix = (new Vector2(widthPix-padding, heightPix-padding));
+
+        
+        bl = canvas.worldCamera.ScreenPointToRay(blPix).origin;
+        br = canvas.worldCamera.ScreenPointToRay(brPix).origin;
+        tl = canvas.worldCamera.ScreenPointToRay(tlPix).origin;
+        tr = canvas.worldCamera.ScreenPointToRay(trPix).origin;
+
+        bl.z = br.z = tl.z = tr.z = 0;
+
+        etvPosition.transform.position = bl;
+
+        pixel2cm = 2.54f/Screen.dpi;
+        var screenWidthInCm = Screen.width * pixel2cm;
+        var screenHeightInCm = Screen.height * pixel2cm;
+
+        anchorSideLengthInCM = padding * scale * pixel2cm;
+        etvWidthCM = (widthPix-2*padding) * scale * pixel2cm;
+        etvHeightCM = (heightPix-2*padding) * scale * pixel2cm;
     }
 }

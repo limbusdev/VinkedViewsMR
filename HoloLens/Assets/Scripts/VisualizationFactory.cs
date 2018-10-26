@@ -66,7 +66,7 @@ public class VisualizationFactory : MonoBehaviour
 
     void Start()
     {
-        TESTSetupFBI();
+        //TESTSetupFBI();
     }
 
     private void TESTSetupFBI()

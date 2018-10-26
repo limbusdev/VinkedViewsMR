@@ -12,6 +12,7 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
     public GameObject label;
     public GameObject ScatterDot3DPrefab;
     public GameObject Axis3DPrefab;
+    public APCPLine PCPLine3DPrefab;
 
     public override GameObject CreateAxis(Color color, string variableName, string variableEntity,
         AxisDirection axisDirection, float length, float width = 0.01F, bool tipped = true, bool ticked = false)
@@ -91,5 +92,11 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
     public override GameObject CreateScatterDot()
     {
         return Instantiate(ScatterDot3DPrefab);
+    }
+
+    public override APCPLine CreatePCPLine()
+    {
+        var line = Instantiate(PCPLine3DPrefab);
+        return line;
     }
 }

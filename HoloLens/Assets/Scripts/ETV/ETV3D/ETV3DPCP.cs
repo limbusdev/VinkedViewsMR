@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace ETV
 {
-    public class ETV3DParallelCoordinatesPlot : AETV3D
+    public class ETV3DPCP : AETV3D
     {
         // Hook
-        private IPCPLineGenerator pcpLineGenerator;
+        private APCPLineGenerator pcpLineGenerator;
 
-        float pcpLength;
+        float accordionLength;
         
         private int[]
             nominalIDs,
@@ -20,12 +20,12 @@ namespace ETV
 
         private IDictionary<int, AAxis> PCPAxesFront, PCPAxesBack;
 
-        private PCPLine2D[] linePrimitives;
+        private APCPLine[] lines;
 
         public void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs)
         {
             base.Init(data);
-            this.pcpLineGenerator = new PCP2DLineGenerator();
+            this.pcpLineGenerator = new PCP3DLineGenerator();
 
             this.data = data;
             this.nominalIDs = nominalIDs;
@@ -35,13 +35,13 @@ namespace ETV
             
             int numberOfObjects = data.infoObjects.Count;
             if(numberOfObjects > 20)
-                pcpLength = 2f / numberOfObjects;
+                accordionLength = 2f / numberOfObjects;
             else if(numberOfObjects > 100)
-                pcpLength = 3f / numberOfObjects;
+                accordionLength = 3f / numberOfObjects;
             else if(numberOfObjects > 1000)
-                pcpLength = 5f / numberOfObjects;
+                accordionLength = 5f / numberOfObjects;
             else
-                pcpLength = .1f;
+                accordionLength = .1f;
 
             SetUpAxes();
             DrawGraph();
@@ -59,7 +59,7 @@ namespace ETV
 
             GameObject axesBack = GenerateAxes(false, PCPAxesBack);
             axesBack.transform.parent = Anchor.transform;
-            axesBack.transform.localPosition = new Vector3(0,0, data.infoObjects.Count * pcpLength);
+            axesBack.transform.localPosition = new Vector3(0,0, data.infoObjects.Count * accordionLength);
         }
 
         private GameObject GenerateAxes(bool withGrid, IDictionary<int, AAxis> axes)
@@ -154,15 +154,14 @@ namespace ETV
 
         public override void DrawGraph()
         {
-            var notNaNPrimitives = new List<PCPLine2D>();
+            var notNaNPrimitives = new List<APCPLine>();
 
             int counter = 0;
             foreach(var infoO in data.infoObjects)
             {
-                float zOffset = counter * pcpLength - .002f;
+                float zOffset = counter * accordionLength - .005f;
                 var line = pcpLineGenerator.CreateLine(
-                    infoO, 
-                    FastStaticLR, 
+                    infoO,
                     Color.white, 
                     data, 
                     nominalIDs, 
@@ -174,12 +173,13 @@ namespace ETV
                     zOffset);
                 if(line != null)
                 {
+                    line.transform.parent = Anchor.transform;
                     notNaNPrimitives.Add(line);
                 }
                 counter++;
             }
 
-            linePrimitives = notNaNPrimitives.ToArray();
+            lines = notNaNPrimitives.ToArray();
         }
 
 
@@ -191,7 +191,7 @@ namespace ETV
                     new Color(1, 1, 1, .5f),
                     Vector3.forward,
                     Vector3.up,
-                    data.infoObjects.Count * pcpLength,
+                    data.infoObjects.Count * accordionLength,
                     .005f,
                     min,
                     max
@@ -212,19 +212,19 @@ namespace ETV
             switch(scheme)
             {
                 case ETVColorSchemes.Rainbow:
-                    for(int i = 0; i < linePrimitives.Length; i++)
+                    for(int i = 0; i < lines.Length; i++)
                     {
-                        Color color = Color.HSVToRGB(((float)i) / linePrimitives.Length, 1, 1);
-                        linePrimitives[i].SetColor(color);
-                        linePrimitives[i].ApplyColor(color);
+                        Color color = Color.HSVToRGB(((float)i) / lines.Length, 1, 1);
+                        lines[i].SetColor(color);
+                        lines[i].ApplyColor(color);
                     }
                     break;
                 case ETVColorSchemes.SplitHSV:
-                    for(int i = 0; i < linePrimitives.Length; i++)
+                    for(int i = 0; i < lines.Length; i++)
                     {
-                        Color color = Color.HSVToRGB((((float)i) / linePrimitives.Length) / 2f + .5f, 1, 1);
-                        linePrimitives[i].SetColor(color);
-                        linePrimitives[i].ApplyColor(color);
+                        Color color = Color.HSVToRGB((((float)i) / lines.Length) / 2f + .5f, 1, 1);
+                        lines[i].SetColor(color);
+                        lines[i].ApplyColor(color);
                     }
                     break;
                 default:

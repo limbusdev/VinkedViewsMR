@@ -9,7 +9,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
     public GameObject bar2D;
     public GameObject label;
     public GameObject Axis2DPrefab;
-    public GameObject PCPLine2DPrefab;
+    public APCPLine PCPLine2DPrefab;
     public GameObject XYLine2DPrefab;
     public GameObject ScatterDot2DPrefab;
     public GameObject TickPrefab;
@@ -168,7 +168,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         return bar;
     }
 
-    public GameObject CreatePCPLine()
+    public override APCPLine CreatePCPLine()
     {
         var line = Instantiate(PCPLine2DPrefab);
         return line;

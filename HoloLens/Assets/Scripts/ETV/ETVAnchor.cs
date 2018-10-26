@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ETVAnchor : MonoBehaviour {
-
+public class ETVAnchor : MonoBehaviour
+{
     public GameObject VisAnchor;
     public GameObject Rotatable;
     public bool resetRotation = false;
@@ -14,12 +14,7 @@ public class ETVAnchor : MonoBehaviour {
         ETV.transform.localScale = new Vector3(.5f, .5f, .5f);
         ETV.transform.parent = VisAnchor.transform;
     }
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
+    
 	// Update is called once per frame
 	void Update ()
     {

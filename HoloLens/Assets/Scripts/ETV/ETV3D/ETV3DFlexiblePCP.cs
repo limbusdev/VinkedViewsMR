@@ -10,7 +10,7 @@ namespace ETV
     public class ETV3DFlexiblePCP : AETV3D, IObserver<AAxis>
     {
         // Hook
-        private IPCPLineGenerator pcpLineGenerator;
+        private APCPLineGenerator pcpLineGenerator;
 
         private int[]
             nominalIDs,
@@ -18,7 +18,7 @@ namespace ETV
             intervalIDs,
             ratioIDs;
 
-        private PCPLine2D[] linePrimitives;
+        private APCPLine[] linePrimitives;
 
         private AAxis axisA, axisB;
         
@@ -47,7 +47,7 @@ namespace ETV
 
         public override void DrawGraph()
         {
-            var notNaNPrimitives = new List<PCPLine2D>();
+            var notNaNPrimitives = new List<APCPLine>();
             var axes = new Dictionary<int, AAxis>();
             axes.Add(0, axisA);
             axes.Add(1, axisB);
@@ -55,7 +55,7 @@ namespace ETV
             int counter = 0;
             foreach(var infoO in data.infoObjects)
             {
-                var line = pcpLineGenerator.CreateLine(infoO, FastDynamicLR, Color.white, data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs, axes, true);
+                var line = pcpLineGenerator.CreateLine(infoO, Color.white, data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs, axes, true);
                 if(line != null)
                 {
                     notNaNPrimitives.Add(line);

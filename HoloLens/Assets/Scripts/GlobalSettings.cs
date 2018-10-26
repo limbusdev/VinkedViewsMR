@@ -1,4 +1,5 @@
 ﻿public class GlobalSettings
 {
-    public static bool onHoloLens = true;
+    public static bool onHoloLens = false;
+    public static bool DEBUG = false;
 }

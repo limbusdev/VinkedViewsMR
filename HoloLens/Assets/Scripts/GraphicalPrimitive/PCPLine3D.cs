@@ -2,11 +2,11 @@
 
 namespace GraphicalPrimitive
 {
-    public class PCPLine2D : APCPLine
+    public class PCPLine3D : APCPLine
     {
         public override LineRenderer GetNewProperLineRenderer()
         {
-            return ServiceLocator.PrimitivePlant2D().GetNew2DLineRenderer();
+            return ServiceLocator.PrimitivePlant3D().GetNew3DLineRenderer();
         }
     }
 }

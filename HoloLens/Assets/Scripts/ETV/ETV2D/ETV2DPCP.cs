@@ -4,163 +4,148 @@ using Model;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ETV2DPCP : AETV2D
+namespace ETV
 {
-    // ........................................................................ PARAMETERS
-    // Hook
-    private IPCPLineGenerator pcpLineGen;
-    
-    private int[]
-            nominalIDs,
-            ordinalIDs,
-            intervalIDs,
-            ratioIDs;
-
-    private GameObject allAxesGO;
-
-    private IDictionary<int, AAxis> PCPAxes;
-
-    private PCPLine2D[] lines;
-
-
-    // ........................................................................ CONSTRUCTOR / INITIALIZER
-
-    public void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs)
+    public class ETV2DPCP : AETV2D
     {
-        base.Init(data);
-        this.pcpLineGen = new PCP2DLineGenerator();
-        
-        this.nominalIDs = nominalIDs;
-        this.ordinalIDs = ordinalIDs;
-        this.intervalIDs = intervalIDs;
-        this.ratioIDs = ratioIDs;
+        // ........................................................................ PARAMETERS
+        // Hook
+        private APCPLineGenerator pcpLineGen;
 
-        SetUpAxes();
-        DrawGraph();
-    }
+        private int[]
+                nominalIDs,
+                ordinalIDs,
+                intervalIDs,
+                ratioIDs;
 
-    public override void SetUpAxes()
-    {
-        PCPAxes = new Dictionary<int, AAxis>();
-        AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
-        var lineGen = new PCP2DLineGenerator();
+        private GameObject allAxesGO;
 
-        int counter = 0;
-        allAxesGO = new GameObject("Axes-Set");
-        FastAxisLR.transform.parent = allAxesGO.transform;
-        var offset = Vector3.zero;
+        private IDictionary<int, AAxis> PCPAxes;
 
-        // Setup nominal axes
-        foreach(int attID in nominalIDs)
+        private APCPLine[] lines;
+
+
+        // ........................................................................ CONSTRUCTOR / INITIALIZER
+
+        public void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs)
         {
-            string attributeName = data.nomAttribNames[attID];
-            var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, data);
-            xAxis.transform.parent = allAxesGO.transform;
-            offset.x = .5f*counter;
+            base.Init(data);
+            this.pcpLineGen = new PCP2DLineGenerator();
 
-            xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
-            PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
-            
-        
-            var axisComp = xAxis.GetComponent<Axis2D>();
-            lineGen.CreatePureAxis(FastAxisLR, Color.white, axisComp.GetAxisBaseLocal(), axisComp.GetAxisTipLocal(), offset);
+            this.nominalIDs = nominalIDs;
+            this.ordinalIDs = ordinalIDs;
+            this.intervalIDs = intervalIDs;
+            this.ratioIDs = ratioIDs;
 
-            counter++;
+            SetUpAxes();
+            DrawGraph();
         }
 
-        // Setup ordinal axes
-        foreach(int attID in ordinalIDs)
+        public override void SetUpAxes()
         {
-            string attributeName = data.ordAttribNames[attID];
-            var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, data);
-            xAxis.transform.parent = allAxesGO.transform;
-            xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
-            PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+            PCPAxes = new Dictionary<int, AAxis>();
+            AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
+            var lineGen = new PCP2DLineGenerator();
 
-            offset.x = .5f * counter;
-            var axisComp = xAxis.GetComponent<Axis2D>();
-            lineGen.CreatePureAxis(FastAxisLR, Color.white, axisComp.GetAxisBaseLocal(), axisComp.GetAxisTipLocal(), offset);
+            int counter = 0;
+            allAxesGO = new GameObject("Axes-Set");
+            string attName;
+            GameObject xAxis;
+            var offset = .5f;
 
-            counter++;
-        }
-
-        // Setup interval axes
-        foreach(int attID in intervalIDs)
-        {
-            string attributeName = data.ivlAttribNames[attID];
-            var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, data);
-            xAxis.transform.parent = allAxesGO.transform;
-            xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
-            PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
-
-            offset.x = .5f * counter;
-            var axisComp = xAxis.GetComponent<Axis2D>();
-            lineGen.CreatePureAxis(FastAxisLR, Color.white, axisComp.GetAxisBaseLocal(), axisComp.GetAxisTipLocal(), offset);
-
-            counter++;
-        }
-
-
-        // Setup ratio axes
-        foreach(int attID in ratioIDs)
-        {
-            string attributeName = data.ratAttribNames[attID];
-            var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, data);
-            xAxis.transform.parent = allAxesGO.transform;
-            xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
-            PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
-
-            offset.x = .5f * counter;
-            var axisComp = xAxis.GetComponent<Axis2D>();
-            lineGen.CreatePureAxis(FastAxisLR, Color.white, axisComp.GetAxisBaseLocal(), axisComp.GetAxisTipLocal(), offset);
-
-            counter++;
-        }
-
-        allAxesGO.transform.localPosition = new Vector3(0, 0, -.002f);
-        allAxesGO.transform.parent = Anchor.transform;
-
-        FastAxisLR.Apply();
-    }
-
-    // ........................................................................ DRAW CALLS
-
-    public override void DrawGraph()
-    {
-        var notNaNPrimitives = new List<PCPLine2D>();
-        
-        foreach(var infoO in data.infoObjects)
-        {
-            var line = pcpLineGen.CreateLine(
-                infoO, 
-                FastStaticLR,
-                data.colorTable[infoO], 
-                data, 
-                nominalIDs, 
-                ordinalIDs, 
-                intervalIDs, 
-                ratioIDs, 
-                PCPAxes, 
-                false);
-            if(line != null)
+            // Setup nominal axes
+            foreach(int attID in nominalIDs)
             {
+                attName = data.nomAttribNames[attID];
+                xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attName, 1f, AxisDirection.Y, data);
+                xAxis.transform.parent = allAxesGO.transform;
+                xAxis.transform.localPosition = new Vector3(offset * counter, 0, 0);
+                PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
 
-                line.transform.parent = Anchor.transform;
-                notNaNPrimitives.Add(line);
+                counter++;
             }
+
+            // Setup ordinal axes
+            foreach(int attID in ordinalIDs)
+            {
+                attName = data.ordAttribNames[attID];
+                xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attName, 1f, AxisDirection.Y, data);
+                xAxis.transform.parent = allAxesGO.transform;
+                xAxis.transform.localPosition = new Vector3(offset * counter, 0, 0);
+                PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+
+                counter++;
+            }
+
+            // Setup interval axes
+            foreach(int attID in intervalIDs)
+            {
+                attName = data.ivlAttribNames[attID];
+                xAxis = factory2D.CreateAutoTickedAxis(attName, AxisDirection.Y, data);
+                xAxis.transform.parent = allAxesGO.transform;
+                xAxis.transform.localPosition = new Vector3(offset * counter, 0, 0);
+                PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+
+                counter++;
+            }
+
+
+            // Setup ratio axes
+            foreach(int attID in ratioIDs)
+            {
+                attName = data.ratAttribNames[attID];
+                xAxis = factory2D.CreateAutoTickedAxis(attName, AxisDirection.Y, data);
+                xAxis.transform.parent = allAxesGO.transform;
+                xAxis.transform.localPosition = new Vector3(offset * counter, 0, 0);
+                PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+
+                counter++;
+            }
+
+            allAxesGO.transform.localPosition = new Vector3(0, 0, -.002f);
+            allAxesGO.transform.parent = Anchor.transform;
         }
 
-        FastStaticLR.Apply();
-        lines = notNaNPrimitives.ToArray();
-    }
-    
-    public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-    {
-        return ServiceLocator.PrimitivePlant2D();
-    }
+        // ........................................................................ DRAW CALLS
 
-    public override void UpdateETV()
-    {
-        // Nothing
+        public override void DrawGraph()
+        {
+            var notNaNPrimitives = new List<APCPLine>();
+
+            int counter = 0;
+            foreach(var infoO in data.infoObjects)
+            {
+                var line = pcpLineGen.CreateLine(
+                    infoO,
+                    data.colorTable[infoO],
+                    data,
+                    nominalIDs,
+                    ordinalIDs,
+                    intervalIDs,
+                    ratioIDs,
+                    PCPAxes,
+                    false,
+                    counter * .0001f);
+                if(line != null)
+                {
+
+                    line.transform.parent = Anchor.transform;
+                    notNaNPrimitives.Add(line);
+                }
+                counter++;
+            }
+
+            lines = notNaNPrimitives.ToArray();
+        }
+
+        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
+        {
+            return ServiceLocator.PrimitivePlant2D();
+        }
+
+        public override void UpdateETV()
+        {
+            // Nothing
+        }
     }
 }

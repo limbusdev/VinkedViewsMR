@@ -9875,6 +9875,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cac92fbfacb2e4d46a1265d628b05623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Anchor: {fileID: 0}
   VisAnchor: {fileID: 267761417}
   Rotatable: {fileID: 191457097}
   resetRotation: 0
@@ -10796,21 +10797,21 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114055060894504564, guid: 4521923cd81be95449facd799830f5e3,
-        type: 2}
-      propertyPath: visualizationFactory
-      value: 
-      objectReference: {fileID: 1110436903}
-    - target: {fileID: 114271166118036448, guid: 4521923cd81be95449facd799830f5e3,
-        type: 2}
-      propertyPath: AutoPositioningSlots
-      value: 
-      objectReference: {fileID: 106958150}
     - target: {fileID: 114390853081256346, guid: 4521923cd81be95449facd799830f5e3,
         type: 2}
       propertyPath: dataProvider
       value: 
       objectReference: {fileID: 1165258502}
+    - target: {fileID: 114271166118036448, guid: 4521923cd81be95449facd799830f5e3,
+        type: 2}
+      propertyPath: AutoPositioningSlots
+      value: 
+      objectReference: {fileID: 106958150}
+    - target: {fileID: 114055060894504564, guid: 4521923cd81be95449facd799830f5e3,
+        type: 2}
+      propertyPath: visualizationFactory
+      value: 
+      objectReference: {fileID: 1110436903}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4521923cd81be95449facd799830f5e3, type: 2}
   m_IsPrefabAsset: 0

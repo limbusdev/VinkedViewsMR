@@ -23,7 +23,49 @@ public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
 
     public virtual GameObject CreateAutoGrid(float max, Vector3 axisDir, Vector3 expansionDir, float length) { return new GameObject("Dummy Grid"); }
 
+    public abstract APCPLine CreatePCPLine();
+
+    public APCPLine CreatePCPLine(Color color, float width = .02f)
+    {
+        var line = CreatePCPLine();
+        line.SetWidth(width);
+        line.ApplyColor(color);
+
+        return line;
+    }
+
+    public APCPLine CreatePCPLine(Color color, Vector3[] points, float width = .02f)
+    {
+        var line = CreatePCPLine(color, width);
+        line.Init(points);
+
+        return line;
+    }
+
+
     // explicit methods
+    public LineRenderer lineRenderer2DPrefab;
+
+    public LineRenderer GetNew2DLineRenderer()
+    {
+        return Instantiate(lineRenderer2DPrefab);
+    }
+
+    public LineRenderer lineRenderer3DPrefab;
+
+    public LineRenderer GetNew3DLineRenderer()
+    {
+        return Instantiate(lineRenderer3DPrefab);
+    }
+
+    public LineRenderer axisLineRendererPrefab;
+
+    public LineRenderer GetNewAxisLineRenderer()
+    {
+        return Instantiate(axisLineRendererPrefab);
+    }
+
+
     public FastLineRenderer fastLineRendererPrefab;
 
     public FastLineRenderer GetNewFastLineRenderer()

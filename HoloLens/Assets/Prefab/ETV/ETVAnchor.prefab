@@ -8104,6 +8104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cac92fbfacb2e4d46a1265d628b05623, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Anchor: {fileID: 0}
   VisAnchor: {fileID: 1695480551096436}
   Rotatable: {fileID: 1047188252262090}
   resetRotation: 0

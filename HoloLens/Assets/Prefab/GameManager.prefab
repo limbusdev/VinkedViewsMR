@@ -152,6 +152,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 487874d19d4f6ce41a77f333a97b5412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lineRenderer2DPrefab: {fileID: 120044633361305660, guid: 6f1a4cb4fd75e3d4ea6e81f6272db034,
+    type: 2}
+  lineRenderer3DPrefab: {fileID: 120542317666993458, guid: acec9d3cf213b19488b46535ae60e4a4,
+    type: 2}
+  axisLineRendererPrefab: {fileID: 120686247906450020, guid: f44069bbb4822a943a11c9b7dedddd05,
+    type: 2}
   fastLineRendererPrefab: {fileID: 114537018403411326, guid: 46e1107717d27ea46bf3e5aa07d1d02c,
     type: 2}
   fastAxesLineRendererPrefab: {fileID: 114537018403411326, guid: 13e91da7fdd310349b67a330b128f0e8,
@@ -160,7 +166,7 @@ MonoBehaviour:
   label: {fileID: 1340621660906316, guid: a8914cdd4e0184542a0251c684fb596d, type: 2}
   Axis2DPrefab: {fileID: 1131818127915714, guid: b3c5ed6b532d28e4f92871287f6ff18c,
     type: 2}
-  PCPLine2DPrefab: {fileID: 1216460618247502, guid: ed887ec68ec8bbf448693605a4bd8558,
+  PCPLine2DPrefab: {fileID: 114715835383305446, guid: ed887ec68ec8bbf448693605a4bd8558,
     type: 2}
   XYLine2DPrefab: {fileID: 1946303620594004, guid: b708eac9b556220449bbb4a602d530cf,
     type: 2}
@@ -193,6 +199,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62f4d2ecddff9c542aa796977a891002, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lineRenderer2DPrefab: {fileID: 120044633361305660, guid: 6f1a4cb4fd75e3d4ea6e81f6272db034,
+    type: 2}
+  lineRenderer3DPrefab: {fileID: 120542317666993458, guid: acec9d3cf213b19488b46535ae60e4a4,
+    type: 2}
+  axisLineRendererPrefab: {fileID: 120686247906450020, guid: f44069bbb4822a943a11c9b7dedddd05,
+    type: 2}
   fastLineRendererPrefab: {fileID: 114537018403411326, guid: 46e1107717d27ea46bf3e5aa07d1d02c,
     type: 2}
   fastAxesLineRendererPrefab: {fileID: 114537018403411326, guid: 13e91da7fdd310349b67a330b128f0e8,
@@ -204,6 +216,8 @@ MonoBehaviour:
   ScatterDot3DPrefab: {fileID: 1474547056978956, guid: f68d7b6bf18ba4549962492f0703fc84,
     type: 2}
   Axis3DPrefab: {fileID: 1213320104624410, guid: d42f4c6b07da3134e9da74c7459174a0,
+    type: 2}
+  PCPLine3DPrefab: {fileID: 114497857252881378, guid: bf974e0cd709ad1409e241059d7bf532,
     type: 2}
 --- !u!114 &114945476759806656
 MonoBehaviour:

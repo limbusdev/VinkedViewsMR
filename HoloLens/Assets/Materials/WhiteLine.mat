@@ -7,15 +7,16 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: WhiteLine
-  m_Shader: {fileID: 207, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: _ALPHABLEND_ON _BORDER_LIGHT_USES_HOVER_COLOR _COLORCOLOR_ON _DISABLE_ALBEDO_MAP
+  m_Shader: {fileID: 211, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: _BORDER_LIGHT_USES_HOVER_COLOR _COLORCOLOR_ON _DISABLE_ALBEDO_MAP
     _SMOOTHNESS_TEXTURE_ALBEDO_CHANNEL_A _SPECULAR_HIGHLIGHTS _USEMAINTEX_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - ALWAYS
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -82,7 +83,7 @@ Material:
     - _ClippingPlaneBorderWidth: 0.025
     - _ColorMode: 4
     - _ColorWriteMask: 15
-    - _Cull: 2
+    - _Cull: 0
     - _CullMode: 2
     - _CustomMode: 2
     - _Cutoff: 0.5
@@ -92,7 +93,7 @@ Material:
     - _DistortionEnabled: 0
     - _DistortionStrength: 1
     - _DistortionStrengthScaled: 0
-    - _DstBlend: 10
+    - _DstBlend: 0
     - _EdgeSmoothingValue: 0.002
     - _EmissionEnabled: 0
     - _EnableEmission: 0
@@ -115,7 +116,7 @@ Material:
     - _LightIntensity: 1
     - _LightingEnabled: 0
     - _Metallic: 0
-    - _Mode: 2
+    - _Mode: 0
     - _NearPlaneFade: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
@@ -134,14 +135,14 @@ Material:
     - _SoftParticlesFarFadeDistance: 1
     - _SoftParticlesNearFadeDistance: 0
     - _SpecularHighlights: 1
-    - _SrcBlend: 5
+    - _SrcBlend: 1
     - _UVSec: 0
     - _UseColor: 0
     - _UseEmissionTex: 0
     - _UseMainTex: 1
     - _WireThickness: 100
     - _ZTest: 4
-    - _ZWrite: 0
+    - _ZWrite: 1
     m_Colors:
     - _CameraFadeParams: {r: 0, g: Infinity, b: 0, a: 0}
     - _ClipPlane: {r: 0, g: 1, b: 0, a: 0}

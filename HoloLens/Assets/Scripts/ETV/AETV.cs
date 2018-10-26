@@ -11,48 +11,6 @@ namespace ETV
         [SerializeField]
         public Transform Anchor;
         
-        private FastLineRenderer fastStaticLR;  // Backing store
-        public FastLineRenderer FastStaticLR    // Accessor
-        {
-            get
-            {
-                if(fastStaticLR == null)
-                {
-                    fastStaticLR = ServiceLocator.instance.Factory2DPrimitives.GetNewFastLineRenderer();
-                    fastStaticLR.transform.parent = this.transform;
-                }
-                return fastStaticLR;     
-            }
-        }
-
-        private FastLineRenderer fastDynamicLR;  // Backing store
-        public FastLineRenderer FastDynamicLR   // Accessor
-        {
-            get
-            {
-                if(fastDynamicLR == null)
-                {
-                    fastDynamicLR = ServiceLocator.instance.Factory2DPrimitives.GetNewFastLineRenderer();
-                    fastDynamicLR.transform.parent = this.transform;
-                }
-                return fastDynamicLR;
-            }
-        }
-
-        private FastLineRenderer fastAxisLR;    // Backing store
-        public FastLineRenderer FastAxisLR
-        {
-            get
-            {
-                if(fastAxisLR == null)
-                {
-                    fastAxisLR = ServiceLocator.PrimitivePlant2D().GetNewFastAxesLR();
-                    fastAxisLR.transform.parent = this.transform;
-                }
-                return fastAxisLR;
-            }
-        }
-        
         protected DataSet data { get; set; }
 
         public IDictionary<AxisDirection, AAxis> axes { get; set; }

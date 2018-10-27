@@ -6,6 +6,7 @@
 Assets/AssetStoreTools*
 StoreAssets/
 App/
+Client/
 
 # Visual Studio cache directory
 .vs/

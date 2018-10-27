@@ -9,43 +9,43 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1355788086752280}
+  m_RootGameObject: {fileID: 1708525836076484}
   m_IsPrefabAsset: 1
---- !u!1 &1355788086752280
+--- !u!1 &1708525836076484
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4985283437575896}
-  - component: {fileID: 114265245014436742}
+  - component: {fileID: 4236567680819948}
+  - component: {fileID: 114310939735793438}
   m_Layer: 0
-  m_Name: NetworkCloneSource
+  m_Name: EnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4985283437575896
+--- !u!4 &4236567680819948
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1355788086752280}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 1708525836076484}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114265245014436742
+--- !u!114 &114310939735793438
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1355788086752280}
+  m_GameObject: {fileID: 1708525836076484}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
@@ -54,21 +54,21 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 44
-    i1: 187
-    i2: 3
-    i3: 168
-    i4: 73
-    i5: 249
-    i6: 184
+    i0: 218
+    i1: 26
+    i2: 104
+    i3: 33
+    i4: 115
+    i5: 250
+    i6: 42
     i7: 36
-    i8: 139
-    i9: 142
-    i10: 93
-    i11: 171
-    i12: 105
-    i13: 216
-    i14: 70
-    i15: 156
-  m_ServerOnly: 0
+    i8: 26
+    i9: 62
+    i10: 119
+    i11: 225
+    i12: 208
+    i13: 193
+    i14: 15
+    i15: 218
+  m_ServerOnly: 1
   m_LocalPlayerAuthority: 0

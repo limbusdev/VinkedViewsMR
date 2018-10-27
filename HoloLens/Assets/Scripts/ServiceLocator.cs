@@ -57,7 +57,7 @@ public class ServiceLocator : MonoBehaviour {
 
     void Awake()
     {
-        Physics.autoSimulation = false;
+        //Physics.autoSimulation = false;
         // SINGLETON
 
         //Check if instance already exists

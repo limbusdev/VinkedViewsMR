@@ -67,12 +67,4 @@ public class ETV2DFactory : AETVFactory
     {
         return Instantiate(ETV2DVirtualDevicePrefab);
     }
-
-    public override GameObject PutETVOnAnchor(GameObject ETV)
-    {
-        GameObject Anchor = Instantiate(ETVAnchor);
-        Anchor.GetComponent<ETVAnchor>().PutETVintoAnchor(ETV);
-        return Anchor;
-    }
-    
 }

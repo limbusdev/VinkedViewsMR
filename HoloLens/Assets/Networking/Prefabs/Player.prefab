@@ -1153,7 +1153,7 @@ MonoBehaviour:
   shellPrefab: {fileID: 1123441183622854, guid: f8ef981c36445f44ba6f492b694145d9,
     type: 2}
   shellSpawn: {fileID: 4170368554960484}
-  Anchor: {fileID: 0}
+  Anchor: {fileID: 1243101539350756}
 --- !u!114 &114265245014436742
 MonoBehaviour:
   m_ObjectHideFlags: 1

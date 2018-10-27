@@ -74,11 +74,4 @@ public class ETV3DFactory : AETVFactory
 
         return bm;
     }
-
-    public override GameObject PutETVOnAnchor(GameObject ETV)
-    {
-        GameObject Anchor = Instantiate(ETVAnchor);
-        Anchor.GetComponent<ETVAnchor>().PutETVintoAnchor(ETV);
-        return Anchor;
-    }
 }

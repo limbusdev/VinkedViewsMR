@@ -29,7 +29,7 @@ using VisBridge;
 using System.Linq;
 using System;
 using Model;
-using ETV;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Main class for visualization generation from databases.
@@ -43,11 +43,13 @@ public class VisualizationFactory : MonoBehaviour
     public GameObject NewETVPosition;
     public GameObject ObjectCollection;
     public GameObject CubeIconVariable;
+    public GameObject NetworkAnchorPrefab;
 
     [SerializeField]
     public DataProvider dataProvider;
     public VisFactoryInteractionReceiver interactionReceiver;
     public Material lineMaterial;
+
 
 
     // ........................................................................ Private properties
@@ -66,7 +68,12 @@ public class VisualizationFactory : MonoBehaviour
 
     void Start()
     {
-       // TESTSetupFBI();
+
+    }
+
+    public void StartTestSetup()
+    {
+        TESTSetupFBI();
     }
 
     private void TESTSetupFBI()
@@ -319,8 +326,9 @@ public class VisualizationFactory : MonoBehaviour
             vis = ServiceLocator.instance.Factory3DETV.PutETVOnAnchor(vis);
 
             vis.transform.position = NewETVPosition.transform.position;
+            AddNetworkAnchor(vis, dataSetID, new string[] { variable }, VisType.SingleAxis);
 
-            
+
 
             return vis;
         } catch(Exception e)
@@ -354,6 +362,7 @@ public class VisualizationFactory : MonoBehaviour
             vis = factory.PutETVOnAnchor(vis);
 
             vis.transform.position = NewETVPosition.transform.position;
+            AddNetworkAnchor(vis, dataSetID, new string[] { variable }, VisType.BarChart2D);
 
             return vis;
         } catch(Exception e)
@@ -387,6 +396,7 @@ public class VisualizationFactory : MonoBehaviour
             vis = factory.PutETVOnAnchor(vis);
 
             vis.transform.position = NewETVPosition.transform.position;
+            AddNetworkAnchor(vis, dataSetID, new string[] { variable }, VisType.BarChart3D);
 
             return vis;
         } catch(Exception e)
@@ -421,6 +431,7 @@ public class VisualizationFactory : MonoBehaviour
             vis = factory.PutETVOnAnchor(vis);
 
             vis.transform.position = NewETVPosition.transform.position;
+            AddNetworkAnchor(vis, dataSetID, variables, VisType.BarMap3D);
 
             return vis;
         } catch(Exception e)
@@ -454,12 +465,14 @@ public class VisualizationFactory : MonoBehaviour
             vis = factory.PutETVOnAnchor(vis);
 
             vis.transform.position = NewETVPosition.transform.position;
+            AddNetworkAnchor(vis, dataSetID, variables, VisType.PCP2D);
 
             return vis;
         } catch(Exception e)
         {
             Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
             Debug.LogError(e.Message);
+            Debug.LogError(e.StackTrace);
             return new GameObject("Creation Failed");
         }
     }
@@ -487,6 +500,7 @@ public class VisualizationFactory : MonoBehaviour
             vis = factory.PutETVOnAnchor(vis);
 
             vis.transform.position = NewETVPosition.transform.position;
+            AddNetworkAnchor(vis, dataSetID, variables, VisType.PCP3D);
 
             return vis;
         } catch(Exception e)
@@ -521,6 +535,7 @@ public class VisualizationFactory : MonoBehaviour
             vis = factory.PutETVOnAnchor(vis);
 
             vis.transform.position = NewETVPosition.transform.position;
+            AddNetworkAnchor(vis, dataSetID, variables, VisType.ScatterPlot2D);
 
             return vis;
         } catch(Exception e)
@@ -554,6 +569,7 @@ public class VisualizationFactory : MonoBehaviour
             vis = factory.PutETVOnAnchor(vis);
 
             vis.transform.position = NewETVPosition.transform.position;
+            AddNetworkAnchor(vis, dataSetID, variables, VisType.ScatterPlot3D);
 
             return vis;
         } catch(Exception e)
@@ -587,12 +603,79 @@ public class VisualizationFactory : MonoBehaviour
             vis = factory.PutETVOnAnchor(vis);
 
             vis.transform.position = NewETVPosition.transform.position;
+            AddNetworkAnchor(vis, dataSetID, variables, VisType.LineChartXY2D);
 
             return vis;
 
         } catch(Exception e)
         {
             Debug.Log("Creation of requested Visualization for variable " + variables + " failed.");
+            Debug.LogError(e.Message);
+            Debug.LogError(e.StackTrace);
+            return new GameObject("Creation Failed");
+        }
+    }
+
+    public void AddNetworkAnchor(GameObject etv, int dataSetID, string[] attributes, VisType visType)
+    {
+        var networkAnchor = Instantiate(NetworkAnchorPrefab);
+        if(networkAnchor.GetComponent<NetworkAnchor>() != null)
+        {
+            NetworkServer.Spawn(networkAnchor);
+            networkAnchor.GetComponent<NetworkAnchor>().Init(dataSetID, attributes, visType);
+        }
+
+    }
+
+
+    public GameObject GenerateVisFrom(int dataSetID, string[] variables, VisType visType)
+    {
+        try
+        {
+            if(!CheckIfSuitable(dataSetID, variables, visType))
+            {
+                return new GameObject("Not Suitable");
+            }
+
+            var ds = dataProvider.dataSets[dataSetID];
+
+            // SWITCH create vis
+            GameObject vis;
+
+            switch(visType)
+            {
+                case VisType.SingleAxis:
+                    return GenerateSingle3DAxisFrom(dataSetID, variables[0]);
+                case VisType.ScatterPlot2D:
+                    return GenerateScatterplot2DFrom(dataSetID, variables);
+                case VisType.ScatterPlot3D:
+                    return GenerateScatterplot3DFrom(dataSetID, variables);
+                case VisType.PCP2D:
+                    return GeneratePCP2DFrom(dataSetID, variables);
+                case VisType.PCP3D:
+                    return GeneratePCP2DFrom(dataSetID, variables);
+                case VisType.LineChartXY2D:
+                    return GenerateLineplot2DFrom(dataSetID, variables);
+                case VisType.BarChart2D:
+                    return GenerateBarChart2DFrom(dataSetID, variables[0]);
+                case VisType.BarChart3D:
+                    return GenerateBarChart2DFrom(dataSetID, variables[0]);
+                case VisType.BarMap3D:
+                    return GenerateBarMap3DFrom(dataSetID, variables);
+                default:
+                    vis = new GameObject("Failed");
+                    break;
+            }
+
+
+            vis = ServiceLocator.ETVPlant2D().PutETVOnAnchor(vis);
+            vis.transform.position = NewETVPosition.transform.position;
+
+            return vis;
+        } 
+        catch(Exception e)
+        {
+            Debug.Log("Creation of requested Visualization failed.");
             Debug.LogError(e.Message);
             Debug.LogError(e.StackTrace);
             return new GameObject("Creation Failed");

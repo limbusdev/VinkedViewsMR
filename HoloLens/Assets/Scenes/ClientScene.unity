@@ -337,6 +337,48 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &585335462
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4696236381270750, guid: 6fb8114d67e53a34a898049b826a6d91, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4696236381270750, guid: 6fb8114d67e53a34a898049b826a6d91, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4696236381270750, guid: 6fb8114d67e53a34a898049b826a6d91, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4696236381270750, guid: 6fb8114d67e53a34a898049b826a6d91, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4696236381270750, guid: 6fb8114d67e53a34a898049b826a6d91, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4696236381270750, guid: 6fb8114d67e53a34a898049b826a6d91, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4696236381270750, guid: 6fb8114d67e53a34a898049b826a6d91, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4696236381270750, guid: 6fb8114d67e53a34a898049b826a6d91, type: 2}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 6fb8114d67e53a34a898049b826a6d91, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1001 &586885637
 Prefab:
   m_ObjectHideFlags: 0
@@ -590,6 +632,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167da45d2e28f284d99dbe80ea601020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ETVAnchorPrefab: {fileID: 1061612864874110, guid: ec934a8981401de40acb80195dbb37f9,
+    type: 2}
   ETVAnchor: {fileID: 1061612864874110, guid: ec934a8981401de40acb80195dbb37f9, type: 2}
   etv3DBarChart: {fileID: 1609755241933270, guid: 47b892c86c8a58b49a108da03d68cbf5,
     type: 2}
@@ -612,6 +656,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e55a92929e37c184a9f70abd70c2c3d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ETVAnchorPrefab: {fileID: 1061612864874110, guid: ec934a8981401de40acb80195dbb37f9,
+    type: 2}
   ETVAnchor: {fileID: 1061612864874110, guid: ec934a8981401de40acb80195dbb37f9, type: 2}
   ETV2DBarChartPrefab: {fileID: 1651200660064012, guid: b4b68d01b65cd3042b41df4c564f1891,
     type: 2}
@@ -704,6 +750,8 @@ MonoBehaviour:
   NewETVPosition: {fileID: 1302615699}
   ObjectCollection: {fileID: 0}
   CubeIconVariable: {fileID: 0}
+  NetworkAnchorPrefab: {fileID: 1341272817190920, guid: 6fb8114d67e53a34a898049b826a6d91,
+    type: 2}
   dataProvider: {fileID: 1542916657}
   interactionReceiver: {fileID: 0}
   lineMaterial: {fileID: 0}
@@ -840,12 +888,14 @@ MonoBehaviour:
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 0}
-  m_AutoCreatePlayer: 0
+  m_PlayerPrefab: {fileID: 1355788086752280, guid: 2cbb03a849f9b8248b8e5dab69d8469c,
+    type: 2}
+  m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
   m_OfflineScene: 
   m_OnlineScene: 
-  m_SpawnPrefabs: []
+  m_SpawnPrefabs:
+  - {fileID: 1836349302284128, guid: 97db2d1010db91642a5e2101d54d1d2e, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:

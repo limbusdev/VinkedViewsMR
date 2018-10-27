@@ -24,6 +24,7 @@ public class NetworkController : NetworkManager
 
         Debug.Log("Server started");
     }
+    
 
     // Called on the server when a new client connects.
     public override void OnServerConnect(NetworkConnection conn)
@@ -45,5 +46,7 @@ public class NetworkController : NetworkManager
 
         Debug.Log("A pETV disconnected, with ID: " + conn.connectionId);
     }
+
+
 
 }

@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4494969406881094}
   - component: {fileID: 114623702032700470}
   - component: {fileID: 114370123141760844}
+  - component: {fileID: 114663405549789384}
   m_Layer: 0
   m_Name: NetworkAnchor
   m_TagString: Untagged
@@ -92,5 +93,19 @@ MonoBehaviour:
     i13: 77
     i14: 29
     i15: 46
-  m_ServerOnly: 0
+  m_ServerOnly: 1
   m_LocalPlayerAuthority: 0
+--- !u!114 &114663405549789384
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1836349302284128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cdd7e3ca27389043b43b2585c977e56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  observedAnchor: {fileID: 0}
+  dataSetID: 0
+  visType: 0

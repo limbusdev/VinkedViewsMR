@@ -15,23 +15,7 @@ public class ETVManager : MonoBehaviour
 
     private bool initialized = false;
     private IDictionary<GameObject, bool> slots;
-
-    void Awake()
-    {
-        
-    }
-
-    // Use this for initialization
-    void Start ()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update ()
-    {
-		
-	}
+    
 
     /// <summary>
     /// Takes an ET visualization object and puts it at an empty

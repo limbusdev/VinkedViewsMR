@@ -2,9 +2,11 @@
 using GraphicalPrimitive;
 using Model;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public abstract class AETVFactory : MonoBehaviour
 {
+    public GameObject ETVAnchorPrefab;
     
 
     public abstract GameObject CreateSingleAxis(DataSet data, int attributeID, LoM lom);
@@ -12,9 +14,14 @@ public abstract class AETVFactory : MonoBehaviour
     public abstract GameObject CreateETVLineChart(DataSet data, string attributeNameA, string attributeNameB);
     public abstract GameObject CreateETVBarChart(DataSet data, string attributeName);
     public abstract GameObject CreateETVScatterPlot(DataSet data, string[] attIDs);
-    public abstract GameObject PutETVOnAnchor(GameObject ETV);
 
-    
+
+    public GameObject PutETVOnAnchor(GameObject ETV)
+    {
+        GameObject Anchor = Instantiate(ETVAnchorPrefab);
+        Anchor.GetComponent<ETVAnchor>().PutETVintoAnchor(ETV);
+        return Anchor;
+    }
 
     public void LetMetaVisSystemObserveAxes(AAxis[] axes)
     {

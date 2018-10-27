@@ -130,6 +130,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e55a92929e37c184a9f70abd70c2c3d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ETVAnchorPrefab: {fileID: 1626009144967710, guid: 1fd7ca43b384af645b20e838dc0aef49,
+    type: 2}
   ETVAnchor: {fileID: 1626009144967710, guid: 1fd7ca43b384af645b20e838dc0aef49, type: 2}
   ETV2DBarChartPrefab: {fileID: 1651200660064012, guid: b4b68d01b65cd3042b41df4c564f1891,
     type: 2}
@@ -230,6 +232,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 167da45d2e28f284d99dbe80ea601020, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ETVAnchorPrefab: {fileID: 1626009144967710, guid: 1fd7ca43b384af645b20e838dc0aef49,
+    type: 2}
   ETVAnchor: {fileID: 1626009144967710, guid: 1fd7ca43b384af645b20e838dc0aef49, type: 2}
   etv3DBarChart: {fileID: 1609755241933270, guid: 47b892c86c8a58b49a108da03d68cbf5,
     type: 2}

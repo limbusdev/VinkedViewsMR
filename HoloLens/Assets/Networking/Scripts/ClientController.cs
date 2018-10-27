@@ -7,6 +7,16 @@ public class ClientController : NetworkBehaviour
 {
     public GameObject shellPrefab;
     public Transform shellSpawn;
+    public GameObject Anchor;
+
+    private void Start()
+    {
+        if(isLocalPlayer)
+        {
+            // Only show the anchor on the server
+            Anchor.SetActive(false);
+        }
+    }
 
     void Update()
     {
@@ -27,7 +37,7 @@ public class ClientController : NetworkBehaviour
         }
     }
 
-    // [Command] methods begind with Cmd and are called by the client, but run on the server
+    // [Command] methods begin with Cmd and are called by the client, but run on the server
     [Command]
     void CmdFire()
     {

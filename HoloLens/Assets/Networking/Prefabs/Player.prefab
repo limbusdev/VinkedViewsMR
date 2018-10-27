@@ -80,7 +80,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &1275476014658954
 GameObject:
   m_ObjectHideFlags: 1
@@ -112,7 +112,7 @@ GameObject:
   - component: {fileID: 114857756470474160}
   - component: {fileID: 114763004776967812}
   m_Layer: 0
-  m_Name: PlayerPrefab
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -168,7 +168,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1465106159650734
 GameObject:
   m_ObjectHideFlags: 1
@@ -402,7 +402,7 @@ Transform:
   m_GameObject: {fileID: 1243101539350756}
   m_LocalRotation: {x: -0, y: -0, z: 1, w: 0}
   m_LocalPosition: {x: -0.05, y: -0.05, z: -0.05}
-  m_LocalScale: {x: 0.099999994, y: 0.099999994, z: 0.099999994}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_Children:
   - {fileID: 4022302509932176}
   m_Father: {fileID: 4985283437575896}
@@ -1153,6 +1153,7 @@ MonoBehaviour:
   shellPrefab: {fileID: 1123441183622854, guid: f8ef981c36445f44ba6f492b694145d9,
     type: 2}
   shellSpawn: {fileID: 4170368554960484}
+  Anchor: {fileID: 0}
 --- !u!114 &114265245014436742
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1196,6 +1197,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d86cdebaf5ba1044a98da9fe0b05c95b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  destroyOnDeath: 0
+  currentHealth: 100
 --- !u!114 &114857756470474160
 MonoBehaviour:
   m_ObjectHideFlags: 1

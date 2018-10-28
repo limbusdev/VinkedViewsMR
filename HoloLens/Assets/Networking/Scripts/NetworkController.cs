@@ -31,7 +31,7 @@ public class NetworkController : NetworkManager
     {
         base.OnServerConnect(conn);
         
-        pETVIDs.Add(conn.connectionId, Instantiate(pETVAnchorPrefab)); // Show ConnectionID on anchor and on physical device
+        pETVIDs.Add(conn.connectionId, null); // Show ConnectionID on anchor and on physical device
 
         Debug.Log("A new pETV connected, with ID: " + conn.connectionId);
     }
@@ -41,7 +41,7 @@ public class NetworkController : NetworkManager
     {
         base.OnServerDisconnect(conn);
 
-        Destroy(pETVIDs[conn.connectionId]); // TODO manage removal in VisualizationFactory
+        //Destroy(pETVIDs[conn.connectionId]); // TODO manage removal in VisualizationFactory
         pETVIDs.Remove(conn.connectionId);
 
         Debug.Log("A pETV disconnected, with ID: " + conn.connectionId);

@@ -14,6 +14,9 @@ public class ServiceLocator : MonoBehaviour {
     public ETVManager etvManager;
     public MetaVisSystem metaVisSystem;
 
+
+    public ClientManager clientManager;
+
     public static Graphical3DPrimitiveFactory PrimitivePlant3D()
     {
         return instance.Factory3DPrimitives;

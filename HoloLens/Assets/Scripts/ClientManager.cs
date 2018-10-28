@@ -4,6 +4,24 @@ using UnityEngine.UI;
 public class ClientManager : MonoBehaviour
 {
     public GameObject etvPosition;
+
+
+    private GameObject currentlyBoundETV;
+    public GameObject CurrentlyBoundETV
+    {
+        get
+        {
+            return currentlyBoundETV;
+        }
+        set
+        {
+            Destroy(currentlyBoundETV);
+            currentlyBoundETV = value;
+            value.transform.parent = etvPosition.transform;
+            value.transform.position = Vector3.zero;
+        }
+    }
+
     public VisualizationFactory fact;
     public Canvas canvas;
     public CanvasScaler scaler;
@@ -17,6 +35,8 @@ public class ClientManager : MonoBehaviour
 
     private void Start()
     {
+        ServiceLocator.instance.clientManager = this;
+
         padding = 48;
 
         var fact2 = ServiceLocator.ETVPlant2D();
@@ -24,6 +44,7 @@ public class ClientManager : MonoBehaviour
 
         var etvYearPopulationCrimePCP2D = fact.GeneratePCP2DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
         etvYearPopulationCrimePCP2D.transform.parent = etvPosition.transform;
+        ServiceLocator.instance.clientManager.currentlyBoundETV = etvYearPopulationCrimePCP2D;
         
         scale = canvasRect.localScale.x;
 
@@ -51,5 +72,7 @@ public class ClientManager : MonoBehaviour
         anchorSideLengthInCM = padding * scale * pixel2cm;
         etvWidthCM = (widthPix-2*padding) * scale * pixel2cm;
         etvHeightCM = (heightPix-2*padding) * scale * pixel2cm;
+
+        
     }
 }

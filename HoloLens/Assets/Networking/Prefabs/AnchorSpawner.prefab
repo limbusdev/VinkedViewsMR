@@ -9,43 +9,57 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1708525836076484}
+  m_RootGameObject: {fileID: 1248125000257888}
   m_IsPrefabAsset: 1
---- !u!1 &1708525836076484
+--- !u!1 &1248125000257888
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4236567680819948}
-  - component: {fileID: 114310939735793438}
+  - component: {fileID: 4400185328465830}
+  - component: {fileID: 114088497367312002}
+  - component: {fileID: 114232695626493020}
   m_Layer: 0
-  m_Name: EnemySpawner
+  m_Name: AnchorSpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4236567680819948
+--- !u!4 &4400185328465830
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1708525836076484}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_GameObject: {fileID: 1248125000257888}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114310939735793438
+--- !u!114 &114088497367312002
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1708525836076484}
+  m_GameObject: {fileID: 1248125000257888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa0fae4e44794504da131b4101c820c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AnchorPrefab: {fileID: 1836349302284128, guid: 97db2d1010db91642a5e2101d54d1d2e,
+    type: 2}
+--- !u!114 &114232695626493020
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1248125000257888}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
@@ -54,21 +68,21 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 218
-    i1: 26
-    i2: 104
-    i3: 33
-    i4: 115
-    i5: 250
-    i6: 42
-    i7: 36
-    i8: 26
-    i9: 62
-    i10: 119
-    i11: 225
-    i12: 208
-    i13: 193
-    i14: 15
-    i15: 218
+    i0: 144
+    i1: 208
+    i2: 35
+    i3: 157
+    i4: 11
+    i5: 38
+    i6: 165
+    i7: 116
+    i8: 155
+    i9: 55
+    i10: 179
+    i11: 105
+    i12: 139
+    i13: 35
+    i14: 35
+    i15: 180
   m_ServerOnly: 1
   m_LocalPlayerAuthority: 0

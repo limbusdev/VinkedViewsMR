@@ -30,7 +30,7 @@ namespace GraphicalPrimitive
             GenerateCollider();
         }
 
-        public void ApplyColor(Color color)
+        public override void ApplyColor(Color color)
         {
             if(LR != null)
             {

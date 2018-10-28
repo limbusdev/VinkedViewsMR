@@ -5,58 +5,36 @@ using UnityEngine.Networking;
 
 public class NetworkAnchor : NetworkBehaviour
 {
-    public GameObject observedAnchor;
-
-
     [SyncVar]
-    public int dataSetID;
-
+    public int syncedDataSetID;
     [SyncVar]
-    public SyncListString attributes;
-
+    public int syncedVisType;
     [SyncVar]
-    public int visType;
+    public string syncedHint;
+    
+    public SyncListString syncedAttributes = new SyncListString();
+    
 
-    private void Start()
-    {
-        this.attributes = new SyncListString();
-    }
-
+    [Server]
     public void Init(int dataSetID, string[] attributes, VisType visType)
     {
-        this.dataSetID = dataSetID;
+        this.syncedHint = "Sync works!";
+        this.syncedDataSetID = dataSetID;
 
         for(int i = 0; i < attributes.Length; i++)
         {
-            this.attributes.Add(attributes[i]);
+            syncedAttributes.Add(attributes[i]);
+            syncedAttributes.Dirty(i);
         }
 
-        this.visType = (int)visType;
+        this.syncedVisType = (int)visType;
     }
+    
 
-    [ClientRpc]
-    public void RpcEnableVis()
+    public string[] GetAttributesAsStrings()
     {
-        string[] atts = new string[attributes.Count];
-
-        int counter = 0;
-        foreach(var a in attributes)
-        {
-            atts[counter] = a;
-            counter++;
-        }
-
-        ServiceLocator.VisPlant().GenerateVisFrom(dataSetID, atts, (VisType)visType);
-    }
-
-    [TargetRpc]
-    public void TargetEnableVisOn(NetworkConnection target, int dataSetID, string[] attributes, int visType)
-    {
-        ServiceLocator.VisPlant().GenerateVisFrom(dataSetID, attributes, (VisType)visType);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        var otherAnchor = collision.gameObject.GetComponent<NetworkAnchor>();
+        string[] atts = new string[syncedAttributes.Count];
+        syncedAttributes.CopyTo(atts,0);
+        return atts;
     }
 }

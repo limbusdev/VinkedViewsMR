@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114623702032700470}
   - component: {fileID: 114370123141760844}
   - component: {fileID: 114663405549789384}
+  - component: {fileID: 65036416552519080}
   m_Layer: 0
   m_Name: NetworkAnchor
   m_TagString: Untagged
@@ -42,6 +43,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &65036416552519080
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1836349302284128}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.6, y: 0.6, z: 0.1}
+  m_Center: {x: 0.25, y: 0.25, z: 0}
 --- !u!114 &114370123141760844
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -93,7 +106,7 @@ MonoBehaviour:
     i13: 77
     i14: 29
     i15: 46
-  m_ServerOnly: 1
+  m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &114663405549789384
 MonoBehaviour:

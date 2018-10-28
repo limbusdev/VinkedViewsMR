@@ -6,8 +6,8 @@ using UnityEngine.Networking;
 public class ClientController : NetworkBehaviour
 {
     public GameObject shellPrefab;
-    public Transform shellSpawn;
     public GameObject Anchor;
+    public GameObject Frame;
 
     private void Start()
     {
@@ -15,9 +15,10 @@ public class ClientController : NetworkBehaviour
         {
             // Only show the anchor on the server
             Anchor.SetActive(false);
+            Frame.SetActive(false);
         }
     }
-
+    
     void Update()
     {
         if(!isLocalPlayer)
@@ -25,38 +26,59 @@ public class ClientController : NetworkBehaviour
             return;
         }
 
-        var x = Input.GetAxis("Horizontal") * Time.deltaTime * 150.0f;
-        var z = Input.GetAxis("Vertical") * Time.deltaTime * 3.0f;
+        var x = Input.GetAxis("Horizontal") * Time.deltaTime * 3f;
+        var y = Input.GetAxis("Vertical") * Time.deltaTime * 3f;
+        var z = Input.GetAxis("Fire1") * Time.deltaTime * 3f;
+        transform.position += new Vector3(x,z,y);
 
-        transform.Rotate(0, x, 0);
-        transform.Translate(0, 0, z);
+        var r = Input.GetAxis("Fire2") * Time.deltaTime * 50.0f;
+        var s = Input.GetAxis("Fire3") * Time.deltaTime * 50.0f;
+        var t = Input.GetAxis("Jump") * Time.deltaTime * 50.0f;
+        
+        transform.Rotate(r, s, t, Space.World);
 
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            CmdFire();
+            CmdDoOnServer();
         }
     }
 
     // [Command] methods begin with Cmd and are called by the client, but run on the server
     [Command]
-    void CmdFire()
+    void CmdDoOnServer()
     {
-        // Create the Bullet from the Shell Prefab
-        var bullet = (GameObject)Instantiate(shellPrefab, shellSpawn.position, shellSpawn.rotation);
-
-        // Add velocity to the bullet
-        bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 6;
-
+        // Create the Shell from the Shell Prefab
+        var shell = (GameObject)Instantiate(shellPrefab);
+        
         // Spawn the shell on all clients
-        NetworkServer.Spawn(bullet);
-
-        // Destroy the bullet after 2 seconds
-        Destroy(bullet, 2.0f);
+        NetworkServer.Spawn(shell);
     }
 
     public override void OnStartLocalPlayer()
     {
-        foreach(var c in GetComponentsInChildren<MeshRenderer>())
-            c.material.color = Color.blue;
+        // Do something only for the local player prefab instance
+    }
+
+    private void OnTriggerEnter(Collider collider)
+    {
+        Debug.Log("Collision with: " + collider.gameObject.name);
+        if(isLocalPlayer)
+        {
+            Debug.Log("Collision with: " + collider.gameObject.name);
+            var otherAnchor = collider.gameObject.GetComponent<NetworkAnchor>();
+
+            if(otherAnchor != null)
+            {
+                int dataSetID = otherAnchor.syncedDataSetID;
+                string[] attributes = otherAnchor.GetAttributesAsStrings();
+                var visType = (VisType)otherAnchor.syncedVisType;
+
+                Debug.Log(attributes.Length);
+                
+                var vis = ServiceLocator.VisPlant().GenerateVisFrom(dataSetID, attributes, visType);
+
+                ServiceLocator.instance.clientManager.CurrentlyBoundETV = vis;
+            }
+        }
     }
 }

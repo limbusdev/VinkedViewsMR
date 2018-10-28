@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
 /// <summary>
 /// NetworkManager derivation for the server
 /// </summary>
-public class NetworkController : NetworkManager
+public class NetworkManagerServer : NetworkManager
 {
     public GameObject pETVAnchorPrefab; 
 

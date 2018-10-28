@@ -1,7 +1,14 @@
-﻿using UnityEngine;
+﻿using ETV;
+using MetaVisualization;
+using UnityEngine;
 
-public class ServiceLocator : MonoBehaviour {
-
+/// <summary>
+/// Service locator. Loose implementation of the design pattern 
+/// Service Locator. Gives access to all important system services
+/// and singletons. Populate in editor!
+/// </summary>
+public class ServiceLocator : MonoBehaviour
+{ 
     public static ServiceLocator instance = null;
 
     [SerializeField]
@@ -9,11 +16,10 @@ public class ServiceLocator : MonoBehaviour {
     public Graphical2DPrimitiveFactory Factory2DPrimitives;
     public ETV3DFactory Factory3DETV;                      
     public ETV2DFactory Factory2DETV;
-    public MetaVisFactory FactoryMetaVis;
     public VisualizationFactory visualizationFactory;       
-    public ETVManager etvManager;
-    public MetaVisSystem metaVisSystem;
-
+    public AETVManager etvManager;
+    public AMetaVisSystem metaVisSystem;
+    public AMetaVisFactory FactoryMetaVis;
 
     public ClientManager clientManager;
 
@@ -37,12 +43,12 @@ public class ServiceLocator : MonoBehaviour {
         return instance.Factory2DETV;
     }
 
-    public static MetaVisSystem MetaVisSystem()
+    public static AMetaVisSystem MetaVisSystem()
     {
         return instance.metaVisSystem;
     }
 
-    public static MetaVisFactory MetaVisPlant()
+    public static AMetaVisFactory MetaVisPlant()
     {
         return instance.FactoryMetaVis;
     }
@@ -52,7 +58,7 @@ public class ServiceLocator : MonoBehaviour {
         return instance.visualizationFactory;
     }
 
-    public static ETVManager ETVMan()
+    public static AETVManager ETVMan()
     {
         return instance.etvManager;
     }

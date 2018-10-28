@@ -1,37 +1,29 @@
 ﻿using ETV;
 using GraphicalPrimitive;
 using Model;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class MetaVisFactory : MonoBehaviour
+namespace MetaVisualization
 {
-    [SerializeField]
-    public GameObject ETV3DFlexiblePCPPrefab;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
-    public GameObject CreateFlexiblePCP(DataSet data, string[] attIDs, AAxis axisA, AAxis axisB)
+    public class MetaVisFactory : AMetaVisFactory
     {
-        var metaVis = Instantiate(ETV3DFlexiblePCPPrefab);
-
-        int[] nomIDs, ordIDs, ivlIDs, ratIDs;
-
-        AttributeProcessor.ExtractAttributeIDs(data, attIDs, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
-
-        metaVis.GetComponent<ETV3DFlexiblePCP>().Init(data, nomIDs, ordIDs, ivlIDs, ratIDs, axisA, axisB);
-        metaVis.GetComponent<ETV3DFlexiblePCP>().DrawGraph();
-        metaVis.GetComponent<ETV3DFlexiblePCP>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
+        [SerializeField]
+        public GameObject ETV3DFlexiblePCPPrefab;
         
-        return metaVis;
+        public override GameObject CreateFlexiblePCP(DataSet data, string[] attIDs, AAxis axisA, AAxis axisB)
+        {
+            var metaVis = Instantiate(ETV3DFlexiblePCPPrefab);
+
+            // Get attribute IDs of the given attributes.
+            int[] nomIDs, ordIDs, ivlIDs, ratIDs;
+            AttributeProcessor.ExtractAttributeIDs(data, attIDs, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
+
+            var flexPCP = metaVis.GetComponent<ETV3DFlexiblePCP>();
+            flexPCP.Init(data, nomIDs, ordIDs, ivlIDs, ratIDs, axisA, axisB);
+            flexPCP.DrawGraph();
+            flexPCP.ChangeColoringScheme(ETVColorSchemes.SplitHSV);
+
+            return metaVis;
+        }
     }
 }

@@ -34,7 +34,7 @@ using UnityEngine.Networking;
 /// <summary>
 /// Main class for visualization generation from databases.
 /// </summary>
-public class VisualizationFactory : MonoBehaviour
+public class VisualizationFactory : NetworkBehaviour
 {
     // ........................................................................ Field to populate in editor
 
@@ -334,7 +334,7 @@ public class VisualizationFactory : MonoBehaviour
         } catch(Exception e)
         {
             Debug.Log("Creation of requested Visualization for variable " + variable + " failed.");
-            Debug.LogError(e.Message);
+            Debug.LogException(e);
             return new GameObject("Creation Failed");
         }
     }

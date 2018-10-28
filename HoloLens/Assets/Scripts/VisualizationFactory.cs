@@ -623,6 +623,7 @@ public class VisualizationFactory : MonoBehaviour
         {
             NetworkServer.Spawn(networkAnchor);
             networkAnchor.GetComponent<NetworkAnchor>().Init(dataSetID, attributes, visType);
+            networkAnchor.GetComponent<NetworkAnchor>().ETV = etv;
         }
 
     }

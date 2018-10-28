@@ -5,6 +5,17 @@ using UnityEngine.Networking;
 
 public class NetworkAnchor : NetworkBehaviour
 {
+    public GameObject ETV;
+
+    void Update()
+    {
+        if(ETV.transform.hasChanged)
+        {
+            gameObject.transform.position = ETV.transform.position;
+            ETV.transform.hasChanged = false;
+        }
+    }
+
     [SyncVar]
     public int syncedDataSetID;
     [SyncVar]

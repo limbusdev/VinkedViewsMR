@@ -18,7 +18,7 @@ public class ClientManager : MonoBehaviour
             Destroy(currentlyBoundETV);
             currentlyBoundETV = value;
             value.transform.parent = etvPosition.transform;
-            value.transform.position = Vector3.zero;
+            value.transform.localPosition = Vector3.zero;
         }
     }
 

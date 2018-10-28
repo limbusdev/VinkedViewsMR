@@ -1,11 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 
+/// <summary>
+/// Part of the player prefab. Player prefab represents the physical display
+/// and it's position and rotation. With it, the client can position the pETV
+/// correctly (using keyboard), so physical displays and pETV are aligned.
+/// </summary>
 public class ClientController : NetworkBehaviour
 {
-    public GameObject shellPrefab;
     public GameObject Anchor;
     public GameObject Frame;
 
@@ -13,7 +15,7 @@ public class ClientController : NetworkBehaviour
     {
         if(isLocalPlayer)
         {
-            // Only show the anchor on the server
+            // Hide anchor and frame on client
             Anchor.SetActive(false);
             Frame.SetActive(false);
         }
@@ -21,25 +23,31 @@ public class ClientController : NetworkBehaviour
     
     void Update()
     {
-        if(!isLocalPlayer)
+        // The local player can steer pETV-object with keyboard
+        if(isLocalPlayer)
         {
-            return;
-        }
+            // WASD define global position
+            var x = Input.GetAxis("Horizontal") * Time.deltaTime * 3f;
+            var y = Input.GetAxis("Vertical") * Time.deltaTime * 3f;
+            var z = Input.GetAxis("Fire1") * Time.deltaTime * 3f;
+            transform.position += new Vector3(x, z, y);
 
-        var x = Input.GetAxis("Horizontal") * Time.deltaTime * 3f;
-        var y = Input.GetAxis("Vertical") * Time.deltaTime * 3f;
-        var z = Input.GetAxis("Fire1") * Time.deltaTime * 3f;
-        transform.position += new Vector3(x,z,y);
+            // F/V, G/B, H/N define global rotation
+            var r = Input.GetAxis("Fire2") * Time.deltaTime * 50.0f;
+            var s = Input.GetAxis("Fire3") * Time.deltaTime * 50.0f;
+            var t = Input.GetAxis("Jump") * Time.deltaTime * 50.0f;
+            transform.Rotate(r, s, t, Space.World);
 
-        var r = Input.GetAxis("Fire2") * Time.deltaTime * 50.0f;
-        var s = Input.GetAxis("Fire3") * Time.deltaTime * 50.0f;
-        var t = Input.GetAxis("Jump") * Time.deltaTime * 50.0f;
-        
-        transform.Rotate(r, s, t, Space.World);
+            // Mouse Scrollwheel defines ETV scale
+            var scale = ServiceLocator.instance.clientManager.CurrentlyBoundETV.transform.localScale.x;
+            scale += Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * 10f;
+            ServiceLocator.instance.clientManager.CurrentlyBoundETV.transform.localScale = new Vector3(scale, scale, scale);
 
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            CmdDoOnServer();
+            // Space triggers action on server
+            if(Input.GetKeyDown(KeyCode.Space))
+            {
+                CmdDoOnServer();
+            }
         }
     }
 
@@ -47,11 +55,9 @@ public class ClientController : NetworkBehaviour
     [Command]
     void CmdDoOnServer()
     {
-        // Create the Shell from the Shell Prefab
-        var shell = (GameObject)Instantiate(shellPrefab);
-        
-        // Spawn the shell on all clients
-        NetworkServer.Spawn(shell);
+        // Disable ETV-View on Server, align it to pETV for proper 
+        // VisBridges
+        // Hide Anchor and Frame on Server
     }
 
     public override void OnStartLocalPlayer()
@@ -59,12 +65,17 @@ public class ClientController : NetworkBehaviour
         // Do something only for the local player prefab instance
     }
 
+    /// <summary>
+    /// Is triggered when an ETV anchor and pETV collide.
+    /// This usually means, the ETVs visualization gets
+    /// bound to pETV and disabled in the HoloLens App.
+    /// </summary>
+    /// <param name="collider"></param>
     private void OnTriggerEnter(Collider collider)
     {
-        Debug.Log("Collision with: " + collider.gameObject.name);
+        // If collision is detected on Client (physical display)
         if(isLocalPlayer)
         {
-            Debug.Log("Collision with: " + collider.gameObject.name);
             var otherAnchor = collider.gameObject.GetComponent<NetworkAnchor>();
 
             if(otherAnchor != null)
@@ -79,6 +90,12 @@ public class ClientController : NetworkBehaviour
 
                 ServiceLocator.instance.clientManager.CurrentlyBoundETV = vis;
             }
+        }
+
+        // If collision is detected on the server
+        if(isServer)
+        {
+            // Disable the visualization in HoloLens and align it with pETV
         }
     }
 }

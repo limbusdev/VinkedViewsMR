@@ -9,10 +9,13 @@ public class NetworkAnchor : NetworkBehaviour
 
     void Update()
     {
-        if(ETV.transform.hasChanged)
+        if(isServer)
         {
-            gameObject.transform.position = ETV.transform.position;
-            ETV.transform.hasChanged = false;
+            if(ETV.transform.hasChanged)
+            {
+                gameObject.transform.position = ETV.transform.position;
+                ETV.transform.hasChanged = false;
+            }
         }
     }
 

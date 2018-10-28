@@ -7,8 +7,6 @@ using UnityEngine.Networking;
 /// </summary>
 public class NetworkManagerServer : NetworkManager
 {
-    public GameObject pETVAnchorPrefab; 
-
     IDictionary<int, GameObject> pETVIDs;
 
     private int pETVcounter = 0;
@@ -40,12 +38,8 @@ public class NetworkManagerServer : NetworkManager
     {
         base.OnServerDisconnect(conn);
 
-        //Destroy(pETVIDs[conn.connectionId]); // TODO manage removal in VisualizationFactory
         pETVIDs.Remove(conn.connectionId);
 
         Debug.Log("A pETV disconnected, with ID: " + conn.connectionId);
     }
-
-
-
 }

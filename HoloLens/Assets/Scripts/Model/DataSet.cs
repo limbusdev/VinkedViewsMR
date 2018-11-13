@@ -1,144 +1,145 @@
 ﻿using Model.Attributes;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Model
 {
     public class DataSet
     {
         public string title { get; set; }
+        public int ID { get; }
 
         public IList<InfoObject> infoObjects { get; set; }
-        public IDictionary<string, NominalAttributeStats> nominalAttribStats { get; set; }
-        public IDictionary<string, OrdinalAttributeStats> ordinalAttribStats { get; set; }
-        public IDictionary<string, IntervalAttributeStats> intervalAttribStats { get; set; }
-        public IDictionary<string, RatioAttributeStats> ratioAttribStats { get; set; }
+        public IDictionary<string, NominalAttributeStats> nominalStatistics { get; set; }
+        public IDictionary<string, OrdinalAttributeStats> ordinalStatistics { get; set; }
+        public IDictionary<string, IntervalAttributeStats> intervalStatistics { get; set; }
+        public IDictionary<string, RatioAttributeStats> rationalStatistics { get; set; }
 
-        public IDictionary<string, int> attributeIDsByName { get; set; }
+        // Lookup Tables
+        public IDictionary<string, int> attIDbyNAME { get; set; }
+        public IDictionary<string, LoM> attLOMbyNAME;
+
+        public IDictionary<string, int> nominalAttributeIDsByName;
+        public IDictionary<string, int> ordinalAttributeIDsByName;
+        public IDictionary<string, int> intervalAttributeIDsByName;
+        public IDictionary<string, int> rationalAttributeIDsByName;
 
         public string[] nomAttribNames { get; set; }
         public string[] ordAttribNames { get; set; }
         public string[] ivlAttribNames { get; set; }
         public string[] ratAttribNames { get; set; }
 
-        public IDictionary<string, IDictionary<int, string>> dicts;
+        public IDictionary<string, IDictionary<int, string>> dictionaries;
         public IDictionary<string, string> intervalTranslators;
         public IDictionary<InfoObject, Color> colorTable;
 
-        public DataSet(string title, IList<InfoObject> dataObjects, IDictionary<string, IDictionary<int, string>> dicts, IDictionary<string, string> intervalTranslators)
+        public DataSet(
+            string title,
+            int ID,
+            IDictionary<string, int> nominalAttributeIDsByName,
+            IDictionary<string, int> ordinalAttributeIDsByName,
+            IDictionary<string, int> intervalAttributeIDsByName,
+            IDictionary<string, int> rationalAttributeIDsByName,
+            IDictionary<string, int> attributeIDbyName,
+            IDictionary<string, LoM> attributeLoMbyName,
+            IList<InfoObject> infoObjects, 
+            IDictionary<string, IDictionary<int, string>> dictionaries, 
+            IDictionary<string, string> intervalTranslators
+            )
         {
+            this.ID = ID;
             this.title = title;
-            this.infoObjects = dataObjects;
+            this.infoObjects = infoObjects;
 
-            this.dicts = dicts;
+            this.dictionaries = dictionaries;
             this.intervalTranslators = intervalTranslators;
 
-            this.nominalAttribStats = new Dictionary<string, NominalAttributeStats>();
-            this.ordinalAttribStats = new Dictionary<string, OrdinalAttributeStats>();
-            this.intervalAttribStats = new Dictionary<string, IntervalAttributeStats>();
-            this.ratioAttribStats = new Dictionary<string, RatioAttributeStats>();
+            this.nominalAttributeIDsByName = nominalAttributeIDsByName;
+            this.ordinalAttributeIDsByName = ordinalAttributeIDsByName;
+            this.intervalAttributeIDsByName = intervalAttributeIDsByName;
+            this.rationalAttributeIDsByName = rationalAttributeIDsByName;
+            this.attIDbyNAME = attributeIDbyName;
+            this.attLOMbyNAME = attributeLoMbyName;
 
-            this.attributeIDsByName = new Dictionary<string, int>();
+            this.nominalStatistics = new Dictionary<string, NominalAttributeStats>();
+            this.ordinalStatistics = new Dictionary<string, OrdinalAttributeStats>();
+            this.intervalStatistics = new Dictionary<string, IntervalAttributeStats>();
+            this.rationalStatistics = new Dictionary<string, RatioAttributeStats>();
+
+
 
             // CALCULATE
+            this.nomAttribNames = new string[nominalAttributeIDsByName.Count];
+            this.ordAttribNames = new string[ordinalAttributeIDsByName.Count];
+            this.ivlAttribNames = new string[intervalAttributeIDsByName.Count];
+            this.ratAttribNames = new string[rationalAttributeIDsByName.Count];
 
             // Calculate Data Measures for nominal attributes
-            int nominalCounter = 0;
-            foreach(Attribute<string> attribute in dataObjects[0].nomAttribVals)
+            foreach(var key in nominalAttributeIDsByName.Keys)
             {
-                NominalAttributeStats measure;
-                measure = AttributeProcessor.Nominal.CalculateStats(dataObjects, nominalCounter);
-                nominalAttribStats.Add(attribute.name, measure);
-                nominalCounter++;
+                var measure = AttributeProcessor.Nominal.CalculateStats(
+                    infoObjects, nominalAttributeIDsByName[key]);
+                nominalStatistics.Add(key, measure);
+                nomAttribNames[nominalAttributeIDsByName[key]] = key;
             }
 
             // Calculate Data Measures for ordinal attributes
-            int ordinalCounter = 0;
-            foreach(Attribute<int> attribute in dataObjects[0].ordAttribVals)
+            foreach(var key in ordinalAttributeIDsByName.Keys)
             {
-                OrdinalAttributeStats measure;
-                measure = AttributeProcessor.Ordinal.CalculateStats(dataObjects, ordinalCounter, dicts[attribute.name]);
-                ordinalAttribStats.Add(attribute.name, measure);
-                nominalCounter++;
+                var measure = AttributeProcessor.Ordinal.CalculateStats(
+                    infoObjects, ordinalAttributeIDsByName[key], dictionaries[key]);
+                ordinalStatistics.Add(key, measure);
+                ordAttribNames[ordinalAttributeIDsByName[key]] = key;
             }
 
             // Calculate Data Measures for interval Attributes
-            int intervalCounter = 0;
-            foreach(Attribute<int> attribute in dataObjects[0].ivlAttribVals)
+            foreach(var key in intervalAttributeIDsByName.Keys)
             {
-                IntervalAttributeStats measure;
-                measure = AttributeProcessor.Interval.CalculateStats(dataObjects, intervalCounter, intervalTranslators);
-                intervalAttribStats.Add(attribute.name, measure);
-                intervalCounter++;
+                var measure = AttributeProcessor.Interval.CalculateStats(
+                    infoObjects, intervalAttributeIDsByName[key], intervalTranslators);
+                intervalStatistics.Add(key, measure);
+                ivlAttribNames[intervalAttributeIDsByName[key]] = key;
             }
 
             // Calculate Data Measures for ratio Attributes
-            int ratioCounter = 0;
-            foreach(Attribute<float> attribute in dataObjects[0].ratAttribVals)
+            foreach(var key in rationalAttributeIDsByName.Keys)
             {
-                RatioAttributeStats measure;
-                measure = AttributeProcessor.Ratio.CalculateStats(dataObjects, ratioCounter);
-                ratioAttribStats.Add(attribute.name, measure);
-                ratioCounter++;
+                var measure = AttributeProcessor.Ratio.CalculateStats(
+                    infoObjects, rationalAttributeIDsByName[key]);
+                rationalStatistics.Add(key, measure);
+                ratAttribNames[rationalAttributeIDsByName[key]] = key;
             }
 
-            // Fill variable names
-            var infoObj = dataObjects[0];
+            GenerateLookupTables();
 
-            nomAttribNames = new string[infoObj.nomAttribVals.Length];
-            for(int i = 0; i < dataObjects[0].nomAttribVals.Length; i++)
+            foreach(var o in infoObjects)
             {
-                nomAttribNames[i] = infoObj.nomAttribVals[i].name;
-                attributeIDsByName.Add(nomAttribNames[i], i);
+                o.Init(this);
             }
+        }
 
-            ordAttribNames = new string[infoObj.ordAttribVals.Length];
-            for(int i = 0; i < dataObjects[0].ordAttribVals.Length; i++)
-            {
-                ordAttribNames[i] = infoObj.ordAttribVals[i].name;
-                attributeIDsByName.Add(ordAttribNames[i], i);
-            }
-
-            ivlAttribNames = new string[infoObj.ivlAttribVals.Length];
-            for(int i = 0; i < dataObjects[0].ivlAttribVals.Length; i++)
-            {
-                ivlAttribNames[i] = infoObj.ivlAttribVals[i].name;
-                attributeIDsByName.Add(ivlAttribNames[i], i);
-            }
-
-            ratAttribNames = new string[infoObj.ratAttribVals.Length];
-            for(int i = 0; i < dataObjects[0].ratAttribVals.Length; i++)
-            {
-                ratAttribNames[i] = infoObj.ratAttribVals[i].name;
-                attributeIDsByName.Add(ratAttribNames[i], i);
-            }
-
+       
+        public void GenerateLookupTables()
+        {
             // Color table
             colorTable = new Dictionary<InfoObject, Color>();
             int counter = 0;
-            foreach(var o in dataObjects)
+            foreach(var o in infoObjects)
             {
-                colorTable.Add(o, Color.HSVToRGB((((float)counter) / dataObjects.Count) / 2f + .5f, 1, 1));
+                colorTable.Add(o, Color.HSVToRGB((((float)counter) / infoObjects.Count) / 2f + .5f, 1, 1));
                 counter++;
             }
         }
 
-        public LoM GetTypeOf(string varName)
+        public LoM TypeOf(string varName)
         {
-            if(nominalAttribStats.ContainsKey(varName))
-                return LoM.NOMINAL;
-            if(ordinalAttribStats.ContainsKey(varName))
-                return LoM.ORDINAL;
-            if(intervalAttribStats.ContainsKey(varName))
-                return LoM.INTERVAL;
-            else
-                return LoM.RATIO;
-
+            return attLOMbyNAME[varName];
         }
 
-        public int GetIDOf(string varName)
+        public int IDOf(string varName)
         {
-            return attributeIDsByName[varName];
+            return attIDbyNAME[varName];
         }
 
         public override string ToString()
@@ -155,9 +156,9 @@ namespace Model
             return outString;
         }
 
-        public bool IsValueMissing(InfoObject infO, string attributeName, LoM lom)
+        public bool IsValueMissing(InfoObject infO, string attributeName)
         {
-            if(float.IsNaN(GetValue(infO, attributeName, lom)))
+            if(float.IsNaN(ValueOf(infO, attributeName)))
             {
                 return true;
             } else
@@ -179,52 +180,54 @@ namespace Model
             bool missing = false;
             foreach(var id in nomIDs)
             {
-                missing |= IsValueMissing(o, nomAttribNames[id], LoM.NOMINAL);
+                missing |= IsValueMissing(o, nomAttribNames[id]);
             }
             foreach(var id in ordIDs)
             {
-                missing |= IsValueMissing(o, ordAttribNames[id], LoM.ORDINAL);
+                missing |= IsValueMissing(o, ordAttribNames[id]);
             }
             foreach(var id in ivlIDs)
             {
-                missing |= IsValueMissing(o, ivlAttribNames[id], LoM.INTERVAL);
+                missing |= IsValueMissing(o, ivlAttribNames[id]);
             }
             foreach(var id in ratIDs)
             {
-                missing |= IsValueMissing(o, ratAttribNames[id], LoM.RATIO);
+                missing |= IsValueMissing(o, ratAttribNames[id]);
             }
 
             return missing;
         }
 
-        public float GetValue(InfoObject infO, string attributeName, LoM lom)
+        public float ValueOf(InfoObject infO, string attributeName)
         {
             float val;
+            var lom = TypeOf(attributeName);
+
             switch(lom)
             {
                 case LoM.NOMINAL:
-                    var mN = nominalAttribStats[attributeName];
-                    if(infO.GetNomValue(attributeName).Equals("missingValue"))
+                    var mN = nominalStatistics[attributeName];
+                    if(infO.NomValueOf(attributeName).Equals("missingValue"))
                         val = float.NaN;
                     else
-                        val = mN.valueIDs[infO.GetNomValue(attributeName)];
+                        val = mN.valueIDs[infO.NomValueOf(attributeName)];
                     break;
                 case LoM.ORDINAL:
-                    int valO = infO.GetOrdValue(attributeName);
+                    int valO = infO.OrdValueOf(attributeName);
                     if(valO == int.MinValue)
                         val = float.NaN;
                     else
                         val = valO;
                     break;
                 case LoM.INTERVAL:
-                    int valI = infO.GetIvlValue(attributeName);
+                    int valI = infO.IvlValueOf(attributeName);
                     if(valI == int.MinValue)
                         val = float.NaN;
                     else
                         val = valI;
                     break;
                 default: /* RATIO */
-                    val = infO.GetRatValue(attributeName);
+                    val = infO.RatValueOf(attributeName);
                     break;
             }
 

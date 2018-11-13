@@ -176,10 +176,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         DataSet ds = dataProvider.dataSets[dbID];
 
         var ms = new List<AttributeStats>();
-        ms.AddRange(ds.nominalAttribStats.Values);
-        ms.AddRange(ds.ordinalAttribStats.Values);
-        ms.AddRange(ds.intervalAttribStats.Values);
-        ms.AddRange(ds.ratioAttribStats.Values);
+        ms.AddRange(ds.nominalStatistics.Values);
+        ms.AddRange(ds.ordinalStatistics.Values);
+        ms.AddRange(ds.intervalStatistics.Values);
+        ms.AddRange(ds.rationalStatistics.Values);
 
         var keys = new List<IconKey>();
 
@@ -198,10 +198,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         DataSet ds = dataProvider.dataSets[dbID];
 
         var ms = new List<AttributeStats>();
-        ms.AddRange(ds.nominalAttribStats.Values);
-        ms.AddRange(ds.ordinalAttribStats.Values);
-        ms.AddRange(ds.intervalAttribStats.Values);
-        ms.AddRange(ds.ratioAttribStats.Values);
+        ms.AddRange(ds.nominalStatistics.Values);
+        ms.AddRange(ds.ordinalStatistics.Values);
+        ms.AddRange(ds.intervalStatistics.Values);
+        ms.AddRange(ds.rationalStatistics.Values);
 
         var keys = new List<IconKey2D>();
 
@@ -228,10 +228,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         DataSet ds = dataProvider.dataSets[dbID];
         
         var ms = new List<AttributeStats>();
-        ms.AddRange(ds.nominalAttribStats.Values);
-        ms.AddRange(ds.ordinalAttribStats.Values);
-        ms.AddRange(ds.intervalAttribStats.Values);
-        ms.AddRange(ds.ratioAttribStats.Values);
+        ms.AddRange(ds.nominalStatistics.Values);
+        ms.AddRange(ds.ordinalStatistics.Values);
+        ms.AddRange(ds.intervalStatistics.Values);
+        ms.AddRange(ds.rationalStatistics.Values);
 
         var keys = new List<IconKey>();
 
@@ -264,25 +264,25 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         // 1 Icon for all variables
         var allVars = new List<string>();
         var allLoms = new List<LoM>();
-        foreach(string key in ds.nominalAttribStats.Keys)
+        foreach(string key in ds.nominalStatistics.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.nominalAttribStats[key].type);
+            allLoms.Add(ds.nominalStatistics[key].type);
         }
-        foreach(string key in ds.ordinalAttribStats.Keys)
+        foreach(string key in ds.ordinalStatistics.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.ordinalAttribStats[key].type);
+            allLoms.Add(ds.ordinalStatistics[key].type);
         }
-        foreach(string key in ds.intervalAttribStats.Keys)
+        foreach(string key in ds.intervalStatistics.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.intervalAttribStats[key].type);
+            allLoms.Add(ds.intervalStatistics[key].type);
         }
-        foreach(string key in ds.ratioAttribStats.Keys)
+        foreach(string key in ds.rationalStatistics.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.ratioAttribStats[key].type);
+            allLoms.Add(ds.rationalStatistics[key].type);
         }
 
         if(allVars.Count > 0)
@@ -292,10 +292,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         allVars.Clear();
         allLoms.Clear();
 
-        foreach(string key in ds.nominalAttribStats.Keys)
+        foreach(string key in ds.nominalStatistics.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.nominalAttribStats[key].type);
+            allLoms.Add(ds.nominalStatistics[key].type);
         }
 
         if(allVars.Count > 0)
@@ -305,10 +305,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         allVars.Clear();
         allLoms.Clear();
 
-        foreach(string key in ds.ordinalAttribStats.Keys)
+        foreach(string key in ds.ordinalStatistics.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.ordinalAttribStats[key].type);
+            allLoms.Add(ds.ordinalStatistics[key].type);
         }
 
         if(allVars.Count > 0)
@@ -318,10 +318,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         allVars.Clear();
         allLoms.Clear();
 
-        foreach(string key in ds.intervalAttribStats.Keys)
+        foreach(string key in ds.intervalStatistics.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.intervalAttribStats[key].type);
+            allLoms.Add(ds.intervalStatistics[key].type);
         }
 
         if(allVars.Count > 0)
@@ -331,10 +331,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         allVars.Clear();
         allLoms.Clear();
 
-        foreach(string key in ds.ratioAttribStats.Keys)
+        foreach(string key in ds.rationalStatistics.Keys)
         {
             allVars.Add(key);
-            allLoms.Add(ds.ratioAttribStats[key].type);
+            allLoms.Add(ds.rationalStatistics[key].type);
         }
 
         if(allVars.Count > 0)

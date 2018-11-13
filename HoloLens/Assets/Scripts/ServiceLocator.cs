@@ -1,6 +1,7 @@
 ﻿using ETV;
 using MetaVisualization;
 using UnityEngine;
+using VisBridge;
 
 /// <summary>
 /// Service locator. Loose implementation of the design pattern 
@@ -20,8 +21,18 @@ public class ServiceLocator : MonoBehaviour
     public AETVManager etvManager;
     public AMetaVisSystem metaVisSystem;
     public AMetaVisFactory FactoryMetaVis;
+    public AVisBridgeSystem VisBridgeSystem;
 
     public ClientManager clientManager;
+
+    public static AVisBridgeSystem VisBridges()
+    {
+        if(instance.VisBridgeSystem == null)
+        {
+            instance.VisBridgeSystem = new NullVisBridgeSystem();
+        }
+        return instance.VisBridgeSystem;
+    }
 
     public static Graphical3DPrimitiveFactory PrimitivePlant3D()
     {

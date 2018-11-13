@@ -391,6 +391,7 @@ GameObject:
   - component: {fileID: 749537375}
   - component: {fileID: 749537376}
   - component: {fileID: 749537377}
+  - component: {fileID: 749537378}
   m_Layer: 0
   m_Name: ServiceLocator
   m_TagString: Untagged
@@ -417,6 +418,7 @@ MonoBehaviour:
   etvManager: {fileID: 749537377}
   metaVisSystem: {fileID: 749537375}
   FactoryMetaVis: {fileID: 749537376}
+  VisBridgeSystem: {fileID: 749537378}
   clientManager: {fileID: 1658362863}
 --- !u!4 &749537374
 Transform:
@@ -462,6 +464,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b0c71b39cb8226d45a29e0b5d0dd3f7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &749537378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 749537372}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32486b3153d0d3b419c14a06504a7beb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &933307835
@@ -660,15 +673,15 @@ MonoBehaviour:
   ETVAnchorPrefab: {fileID: 1061612864874110, guid: ec934a8981401de40acb80195dbb37f9,
     type: 2}
   ETVAnchor: {fileID: 1061612864874110, guid: ec934a8981401de40acb80195dbb37f9, type: 2}
-  etv3DBarChart: {fileID: 1609755241933270, guid: 47b892c86c8a58b49a108da03d68cbf5,
+  etv3DBarChart: {fileID: 114238831780192620, guid: 47b892c86c8a58b49a108da03d68cbf5,
     type: 2}
-  ETV3DScatterPlotPrefab: {fileID: 1671202286137060, guid: 136568680d8318a43a8d61beaf7282c1,
+  ETV3DScatterPlotPrefab: {fileID: 114507488717902384, guid: 136568680d8318a43a8d61beaf7282c1,
     type: 2}
-  ETV3DParallelCoordinatesPlotPrefab: {fileID: 1624213207364540, guid: 1ea11e69e61ebb347adfcd37b485156e,
+  ETV3DParallelCoordinatesPlotPrefab: {fileID: 114014963162377230, guid: 1ea11e69e61ebb347adfcd37b485156e,
     type: 2}
-  ETV3DBarMapPrefab: {fileID: 1719707709088542, guid: 4db5577ed2b42ea47ab9aaf79d7d313d,
+  ETV3DBarMapPrefab: {fileID: 114674254035258224, guid: 4db5577ed2b42ea47ab9aaf79d7d313d,
     type: 2}
-  ETV3DSingleAxisPrefab: {fileID: 1839437423778656, guid: edf08bf8f25b6b64eb5a745a1bcca232,
+  ETV3DSingleAxisPrefab: {fileID: 114795917934611982, guid: edf08bf8f25b6b64eb5a745a1bcca232,
     type: 2}
 --- !u!114 &1542916653
 MonoBehaviour:
@@ -684,15 +697,15 @@ MonoBehaviour:
   ETVAnchorPrefab: {fileID: 1061612864874110, guid: ec934a8981401de40acb80195dbb37f9,
     type: 2}
   ETVAnchor: {fileID: 1061612864874110, guid: ec934a8981401de40acb80195dbb37f9, type: 2}
-  ETV2DBarChartPrefab: {fileID: 1651200660064012, guid: b4b68d01b65cd3042b41df4c564f1891,
+  ETV2DBarChartPrefab: {fileID: 114160997588826796, guid: b4b68d01b65cd3042b41df4c564f1891,
     type: 2}
-  ETV2DLineChartPrefab: {fileID: 1131613118678104, guid: f8138f01c2156484d9e7acced3e42ec7,
+  ETV2DLineChartPrefab: {fileID: 114191012681724024, guid: f8138f01c2156484d9e7acced3e42ec7,
     type: 2}
   ETV2DVirtualDevicePrefab: {fileID: 1574644527077756, guid: eb9053d283853c648b2381549d56f630,
     type: 2}
-  ETV2DScatterPlotPrefab: {fileID: 1752467886236462, guid: 888d14bbc4cf14d4586f0fcf5832dfe6,
+  ETV2DScatterPlotPrefab: {fileID: 114745068558630630, guid: 888d14bbc4cf14d4586f0fcf5832dfe6,
     type: 2}
-  ETV2DParallelCoordinatesPlotPrefab: {fileID: 1193521869361126, guid: 26c1067c4e899784fadc65afb8d107c5,
+  ETV2DParallelCoordinatesPlotPrefab: {fileID: 114990772440683688, guid: 26c1067c4e899784fadc65afb8d107c5,
     type: 2}
 --- !u!114 &1542916654
 MonoBehaviour:
@@ -770,8 +783,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49f1168a70109a745bc5a6787d633ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectBasedVisBridgePrefab: {fileID: 1735373077562916, guid: 98a88dda044fca740b4e24a346788676,
-    type: 2}
   NewETVPosition: {fileID: 1302615699}
   ObjectCollection: {fileID: 0}
   CubeIconVariable: {fileID: 0}
@@ -780,8 +791,6 @@ MonoBehaviour:
   dataProvider: {fileID: 1542916657}
   interactionReceiver: {fileID: 0}
   lineMaterial: {fileID: 0}
-  visBridgePrefab: {fileID: 1704824630967644, guid: 6549b96df8efde14d909ff0b278669f4,
-    type: 2}
 --- !u!114 &1542916657
 MonoBehaviour:
   m_ObjectHideFlags: 0

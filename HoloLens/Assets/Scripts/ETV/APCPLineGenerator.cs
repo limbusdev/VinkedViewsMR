@@ -2,15 +2,17 @@
 using Model;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace ETV
 {
+    /// <summary>
+    /// Generates PCP lines for visualizations.
+    /// </summary>
     public abstract class APCPLineGenerator
     {
         /// <summary>
-        /// Creates a new line in the given FastLineRenderer. After
-        /// the last call FastLineRenderer.Apply() must be called
-        /// seperately.
+        /// Creates a new PCP line with a LineRenderer and colliders.
         /// </summary>
         /// <param name="o">InfoObject to represent</param>
         /// <param name="etv">Base ETV</param>
@@ -37,45 +39,96 @@ namespace ETV
             float zOffset = 0f
             )
         {
+            // Check whether a value of one dimension is missing. If yes, abort.
             bool missing = data.IsInfoObjectCompleteRegarding(o, nominalIDs, ordinalIDs, intervalIDs, ratioIDs);
-            if(missing)
-            {
-                return null;
-            }
+            if(missing) return null;
 
-            IDictionary<string, float> axisValues = new Dictionary<string, float>();
-            List<Vector3> points = new List<Vector3>();
+
+            // ...................................................... geometry calculation .. START
+            // Generate a list of positions, to be connected with the PCP line
+
+            var axisValues = CalculatePCPPoints(o, data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs);
+            var points = AssemblePolyline(axes, axisValues, global, zOffset);
+            // ...................................................... geometry calculation .. END
+
+            var factory = GetProperFactory();
+            var pcpLine = factory.CreatePCPLine(color, points.ToArray(), axisValues, .01f);
+            pcpLine.LR.useWorldSpace = global;
+            pcpLine.visBridgePort.transform.localPosition = points[0];
+
+            return pcpLine;
+        }
+        
+
+        /// <summary>
+        /// Converts every attribute instance into a float value and concatenates them to a list.
+        /// </summary>
+        /// <param name="o">information object to use</param>
+        /// <param name="data">data set the information object originates from</param>
+        /// <param name="nominalIDs">IDs of the nominal attributes to represent</param>
+        /// <param name="ordinalIDs">IDs of the ordinal attributes to represent</param>
+        /// <param name="intervalIDs">IDs of the interval attributes to represent</param>
+        /// <param name="ratioIDs">IDs of the rational attributes to represent</param>
+        /// <returns>a dictionary of attribute instances by attribute names</returns>
+        private static IDictionary<string, float> CalculatePCPPoints(
+            InfoObject o,
+            DataSet data,
+            int[] nominalIDs,
+            int[] ordinalIDs,
+            int[] intervalIDs,
+            int[] ratioIDs)
+        {
+            var axisValues = new Dictionary<string, float>();
 
             foreach(var id in nominalIDs)
             {
                 var name = data.nomAttribNames[id];
-                var value = data.GetValue(o, name, LoM.NOMINAL);
+                var value = data.ValueOf(o, name);
                 axisValues.Add(name, value);
             }
 
             foreach(var id in ordinalIDs)
             {
                 var name = data.ordAttribNames[id];
-                var value = data.GetValue(o, name, LoM.ORDINAL);
+                var value = data.ValueOf(o, name);
                 axisValues.Add(name, value);
             }
 
             foreach(var id in intervalIDs)
             {
                 var name = data.ivlAttribNames[id];
-                var value = data.GetValue(o, name, LoM.INTERVAL);
+                var value = data.ValueOf(o, name);
                 axisValues.Add(name, value);
             }
 
             foreach(var id in ratioIDs)
             {
                 var name = data.ratAttribNames[id];
-                var value = data.GetValue(o, name, LoM.RATIO);
+                var value = data.ValueOf(o, name);
                 axisValues.Add(name, value);
             }
 
+            return axisValues;
+        }
+
+        /// <summary>
+        /// Takes a list of attribute instances as floats and transforms them into the axis space of their axis.
+        /// </summary>
+        /// <param name="axes">list of dimensional axes</param>
+        /// <param name="axisValues">list of attribute instances as floats</param>
+        /// <param name="global">whether to reside in global or local space</param>
+        /// <param name="zOffset">offset from PCP to PCP line</param>
+        /// <returns>list of 3D vector positions, resembling the anchor points of the pcp line at the various axes</returns>
+        private static IList<Vector3> AssemblePolyline(
+            IDictionary<int, AAxis> axes, 
+            IDictionary<string, float> axisValues, 
+            bool global,
+            float zOffset
+            )
+        {
+            var points = new List<Vector3>();
             // Assemble Polyline
-            Vector3[] polyline = new Vector3[axisValues.Count];
+            var polyline = new Vector3[axisValues.Count];
 
             int counter = 0;
             foreach(var name in axisValues.Keys)
@@ -93,17 +146,50 @@ namespace ETV
                 counter++;
             }
 
-            var factory = GetProperFactory();
-            var pcpLine = factory.CreatePCPLine(color, points.ToArray(), .02f);
-            pcpLine.LR.useWorldSpace = global;
-            pcpLine.visBridgePort.transform.localPosition = points[0];
-
-            foreach(var name in axisValues.Keys)
-                o.AddRepresentativeObject(name, pcpLine.gameObject);
-
-            return pcpLine;
+            return points;
         }
 
+        public static void UpdatePolyline(
+            APCPLine line,
+            IDictionary<int, AAxis> axes,
+            bool global,
+            float zOffset = 0f
+            )
+        {
+            var points = new Vector3[line.Values.Count];
+            // Assemble Polyline
+
+            int counter = 0;
+            foreach(var key in line.Values.Keys)
+            {
+                var value = line.Values[key];
+                if(global)
+                {
+                    points[counter] = axes[counter].GetLocalValueInGlobalSpace(value);
+                } else
+                {
+                    var val = axes[counter].TransformToAxisSpace(value);
+                    points[counter] = new Vector3(.5f * counter, value, zOffset);
+                }
+                counter++;
+            }
+
+            line.UpdatePoints(points);
+
+            if(global)
+            {
+                line.visBridgePort.transform.position = points[0];
+            } else
+            {
+                line.visBridgePort.transform.localPosition = points[0];
+            }
+        }
+
+        /// <summary>
+        /// Abstract method for inheriting classes to override and provide the best primitive factory.
+        /// Simply call ServiceLocator.
+        /// </summary>
+        /// <returns></returns>
         public abstract AGraphicalPrimitiveFactory GetProperFactory();
     }
 }

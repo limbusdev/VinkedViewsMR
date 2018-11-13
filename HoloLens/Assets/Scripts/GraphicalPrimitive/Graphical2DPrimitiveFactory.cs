@@ -1,17 +1,16 @@
-﻿using DigitalRuby.FastLineRenderer;
-using GraphicalPrimitive;
+﻿using GraphicalPrimitive;
 using Model;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
 {
-    public GameObject bar2D;
+    public ABar bar2D;
     public GameObject label;
     public GameObject Axis2DPrefab;
     public APCPLine PCPLine2DPrefab;
     public GameObject XYLine2DPrefab;
-    public GameObject ScatterDot2DPrefab;
+    public AScatterDot ScatterDot2DPrefab;
     public GameObject TickPrefab;
     public GameObject GridLinePrefab;
 
@@ -53,19 +52,19 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         GameObject axis = Instantiate(Axis2DPrefab);
         Axis2D axis2Dcomp = axis.GetComponent<Axis2D>();
         
-        switch(data.GetTypeOf(name))
+        switch(data.TypeOf(name))
         {
             case LoM.NOMINAL:
-                axis2Dcomp.Init(data.nominalAttribStats[name], direction);
+                axis2Dcomp.Init(data.nominalStatistics[name], direction);
                 break;
             case LoM.ORDINAL:
-                axis2Dcomp.Init(data.ordinalAttribStats[name], direction);
+                axis2Dcomp.Init(data.ordinalStatistics[name], direction);
                 break;
             case LoM.INTERVAL:
-                axis2Dcomp.Init(data.intervalAttribStats[name], direction);
+                axis2Dcomp.Init(data.intervalStatistics[name], direction);
                 break;
             default: // RATIO
-                axis2Dcomp.Init(data.ratioAttribStats[name], direction);
+                axis2Dcomp.Init(data.rationalStatistics[name], direction);
                 break;
         }
         
@@ -74,7 +73,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
 
     public override GameObject CreateFixedLengthAutoTickedAxis(string name, float length, AxisDirection direction, DataSet data)
     {
-        if(data.GetTypeOf(name) == LoM.INTERVAL || data.GetTypeOf(name) == LoM.RATIO)
+        if(data.TypeOf(name) == LoM.INTERVAL || data.TypeOf(name) == LoM.RATIO)
         {
             return CreateAutoTickedAxis(name, direction, data);
         } else
@@ -83,13 +82,13 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
             GameObject axis = Instantiate(Axis2DPrefab);
             Axis2D axis2Dcomp = axis.GetComponent<Axis2D>();
 
-            switch(data.GetTypeOf(name))
+            switch(data.TypeOf(name))
             {
                 case LoM.NOMINAL:
-                    axis2Dcomp.Init(data.nominalAttribStats[name], direction, true, length);
+                    axis2Dcomp.Init(data.nominalStatistics[name], direction, true, length);
                     break;
                 case LoM.ORDINAL:
-                    axis2Dcomp.Init(data.ordinalAttribStats[name], direction, true, length);
+                    axis2Dcomp.Init(data.ordinalStatistics[name], direction, true, length);
                     break;
                 default:
                     axis = new GameObject("Creation Failed");
@@ -160,10 +159,10 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         return grid;
     }
 
-    public override GameObject CreateBar(float value, float width, float depth=1f)
+    public override ABar CreateBar(float value, float width, float depth=1f)
     {
-        GameObject bar = Instantiate(bar2D);
-        bar.GetComponent<Bar2D>().SetSize(width, value);
+        var bar = Instantiate(bar2D);
+        bar.SetSize(width, value, depth);
 
         return bar;
     }
@@ -186,7 +185,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
         return newLabel;
     }
 
-    public override GameObject CreateScatterDot()
+    public override AScatterDot CreateScatterDot()
     {
         return Instantiate(ScatterDot2DPrefab);
     }

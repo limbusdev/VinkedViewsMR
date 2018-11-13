@@ -5,8 +5,9 @@ using UnityEngine;
 
 namespace ETV
 {
-    public class ETV3DPCP : AETV3D
+    public class ETV3DPCP : AETVPCP
     {
+        // ........................................................................ PARAMETERS
         // Hook
         private APCPLineGenerator pcpLineGenerator;
 
@@ -22,12 +23,14 @@ namespace ETV
 
         private APCPLine[] lines;
 
-        public void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs)
+        // ........................................................................ CONSTRUCTOR / INITIALIZER
+
+        public override void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs, bool isMetaVis = false)
         {
-            base.Init(data);
+            base.Init(data, isMetaVis);
             this.pcpLineGenerator = new PCP3DLineGenerator();
 
-            this.data = data;
+            this.Data = data;
             this.nominalIDs = nominalIDs;
             this.ordinalIDs = ordinalIDs;
             this.intervalIDs = intervalIDs;
@@ -59,7 +62,7 @@ namespace ETV
 
             GameObject axesBack = GenerateAxes(false, PCPAxesBack);
             axesBack.transform.parent = Anchor.transform;
-            axesBack.transform.localPosition = new Vector3(0,0, data.infoObjects.Count * accordionLength);
+            axesBack.transform.localPosition = new Vector3(0,0, Data.infoObjects.Count * accordionLength);
         }
 
         private GameObject GenerateAxes(bool withGrid, IDictionary<int, AAxis> axes)
@@ -72,8 +75,8 @@ namespace ETV
             // Setup nominal axes
             foreach(int attID in nominalIDs)
             {
-                string attributeName = data.nomAttribNames[attID];
-                var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, data);
+                string attributeName = Data.nomAttribNames[attID];
+                var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
                 axes.Add(counter, xAxis.GetComponent<Axis2D>());
@@ -85,14 +88,15 @@ namespace ETV
                     grid.transform.localPosition = Vector3.zero;
                 }
 
+                RegisterAxis(xAxis.GetComponent<AAxis>());
                 counter++;
             }
 
             // Setup ordinal axes
             foreach(int attID in ordinalIDs)
             {
-                string attributeName = data.ordAttribNames[attID];
-                var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, data);
+                string attributeName = Data.ordAttribNames[attID];
+                var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
                 axes.Add(counter, xAxis.GetComponent<Axis2D>());
@@ -104,14 +108,15 @@ namespace ETV
                     grid.transform.localPosition = Vector3.zero;
                 }
 
+                RegisterAxis(xAxis.GetComponent<AAxis>());
                 counter++;
             }
 
             // Setup interval axes
             foreach(int attID in intervalIDs)
             {
-                string attributeName = data.ivlAttribNames[attID];
-                var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, data);
+                string attributeName = Data.ivlAttribNames[attID];
+                var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
                 axes.Add(counter, xAxis.GetComponent<Axis2D>());
@@ -123,6 +128,7 @@ namespace ETV
                     grid.transform.localPosition = Vector3.zero;
                 }
 
+                RegisterAxis(xAxis.GetComponent<AAxis>());
                 counter++;
             }
 
@@ -130,8 +136,8 @@ namespace ETV
             // Setup ratio axes
             foreach(int attID in ratioIDs)
             {
-                string attributeName = data.ratAttribNames[attID];
-                var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, data);
+                string attributeName = Data.ratAttribNames[attID];
+                var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
                 axes.Add(counter, xAxis.GetComponent<Axis2D>());
@@ -143,6 +149,7 @@ namespace ETV
                     grid.transform.localPosition = Vector3.zero;
                 }
 
+                RegisterAxis(xAxis.GetComponent<AAxis>());
                 counter++;
             }
 
@@ -150,20 +157,22 @@ namespace ETV
 
             return allAxesGO;
         }
-        
+
+
+        // ........................................................................ DRAW CALLS
 
         public override void DrawGraph()
         {
             var notNaNPrimitives = new List<APCPLine>();
 
             int counter = 0;
-            foreach(var infoO in data.infoObjects)
+            foreach(var infO in Data.infoObjects)
             {
                 float zOffset = counter * accordionLength - .005f;
                 var line = pcpLineGenerator.CreateLine(
-                    infoO,
-                    Color.white, 
-                    data, 
+                    infO,
+                    Data.colorTable[infO], 
+                    Data, 
                     nominalIDs, 
                     ordinalIDs, 
                     intervalIDs, 
@@ -175,6 +184,7 @@ namespace ETV
                 {
                     line.transform.parent = Anchor.transform;
                     notNaNPrimitives.Add(line);
+                    RememberRelationOf(infO, line);
                 }
                 counter++;
             }
@@ -191,7 +201,7 @@ namespace ETV
                     new Color(1, 1, 1, .5f),
                     Vector3.forward,
                     Vector3.up,
-                    data.infoObjects.Count * accordionLength,
+                    Data.infoObjects.Count * accordionLength,
                     .005f,
                     min,
                     max
@@ -205,31 +215,6 @@ namespace ETV
         {
             SetUpAxes();
             DrawGraph();
-        }
-        
-        public override void ChangeColoringScheme(ETVColorSchemes scheme)
-        {
-            switch(scheme)
-            {
-                case ETVColorSchemes.Rainbow:
-                    for(int i = 0; i < lines.Length; i++)
-                    {
-                        Color color = Color.HSVToRGB(((float)i) / lines.Length, 1, 1);
-                        lines[i].SetColor(color);
-                        lines[i].ApplyColor(color);
-                    }
-                    break;
-                case ETVColorSchemes.SplitHSV:
-                    for(int i = 0; i < lines.Length; i++)
-                    {
-                        Color color = Color.HSVToRGB((((float)i) / lines.Length) / 2f + .5f, 1, 1);
-                        lines[i].SetColor(color);
-                        lines[i].ApplyColor(color);
-                    }
-                    break;
-                default:
-                    break;
-            }
         }
 
         public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()

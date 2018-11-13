@@ -1,16 +1,14 @@
 ﻿using GraphicalPrimitive;
 using Model;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
 {
     public GameObject cone;
-    public GameObject bar3D;
+    public ABar bar3D;
     public GameObject axis3D;
     public GameObject label;
-    public GameObject ScatterDot3DPrefab;
+    public AScatterDot ScatterDot3DPrefab;
     public GameObject Axis3DPrefab;
     public APCPLine PCPLine3DPrefab;
 
@@ -48,24 +46,51 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
         GameObject axis = Instantiate(Axis3DPrefab);
         var axis3Dcomp = axis.GetComponent<Axis3D>();
         
-        switch(data.GetTypeOf(name))
+        switch(data.TypeOf(name))
         {
             case LoM.NOMINAL:
-                axis3Dcomp.Init(data.nominalAttribStats[name], direction);
+                axis3Dcomp.Init(data.nominalStatistics[name], direction);
                 break;
             case LoM.ORDINAL:
-                axis3Dcomp.Init(data.ordinalAttribStats[name], direction);
+                axis3Dcomp.Init(data.ordinalStatistics[name], direction);
                 break;
             case LoM.INTERVAL:
-                axis3Dcomp.Init(data.intervalAttribStats[name], direction);
+                axis3Dcomp.Init(data.intervalStatistics[name], direction);
                 break;
             default: // RATIO
-                axis3Dcomp.Init(data.ratioAttribStats[name], direction);
+                axis3Dcomp.Init(data.rationalStatistics[name], direction);
                 break;
         }
         
         return axis;
     }
+
+    public override GameObject CreateFixedLengthAutoTickedAxis(string name, float length, AxisDirection direction, DataSet data)
+    {
+        var axis = Instantiate(Axis3DPrefab);
+        var axisComp = axis.GetComponent<AAxis>();
+
+        switch(data.TypeOf(name))
+        {
+            case LoM.NOMINAL:
+                axisComp.Init(data.nominalStatistics[name], direction, true, 1f);
+                break;
+            case LoM.ORDINAL:
+                axisComp.Init(data.ordinalStatistics[name], direction, true, 1f);
+                break;
+            case LoM.INTERVAL:
+                axisComp.Init(data.intervalStatistics[name], direction);
+                break;
+            default: // RATIO
+                axisComp.Init(data.rationalStatistics[name], direction);
+                break;
+        }
+
+        // TODO set length
+
+        return axis;
+    }
+
 
 
     public override GameObject CreateGrid(Color color, Vector3 axisDir, Vector3 expansionDir, float length, float width, float min, float max)
@@ -73,10 +98,10 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
         throw new System.NotImplementedException();
     }
 
-    public override GameObject CreateBar(float value, float width=.1f, float depth=.1f)
+    public override ABar CreateBar(float value, float width=.1f, float depth=.1f)
     {
-        GameObject bar = Instantiate(bar3D);
-        bar.GetComponent<Bar3D>().SetSize(width, value, depth);
+        var bar = Instantiate(bar3D);
+        bar.SetSize(width, value, depth);
         
         return bar;
     }
@@ -89,7 +114,7 @@ public class Graphical3DPrimitiveFactory : AGraphicalPrimitiveFactory
         return newLabel;
     }
 
-    public override GameObject CreateScatterDot()
+    public override AScatterDot CreateScatterDot()
     {
         return Instantiate(ScatterDot3DPrefab);
     }

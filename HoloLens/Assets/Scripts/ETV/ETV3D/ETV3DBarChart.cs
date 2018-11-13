@@ -13,7 +13,7 @@ using UnityEngine;
 /// </summary>
 namespace ETV
 {
-    public class ETV3DBarChart : AETV3D
+    public class ETV3DBarChart : AETVBarChart
     {
         // ........................................................................ Populate in Editor
 
@@ -21,25 +21,23 @@ namespace ETV
 
         private string attributeName;
         private int attributeID;
-        private LoM lom;
 
         private IDictionary<string, Bar3D> bars;
 
 
         // ........................................................................ Initializers
-        public void Init(DataSet data, string attributeName)
+        public override void Init(DataSet data, string attributeName, bool isMetaVis = false)
         {
-            base.Init(data);
+            base.Init(data, isMetaVis);
             this.attributeName = attributeName;
-            this.attributeID = data.GetIDOf(attributeName);
-            this.lom = data.GetTypeOf(attributeName);
+            this.attributeID = data.IDOf(attributeName);
 
             bars = new Dictionary<string, Bar3D>();
 
             SetUpAxes();
 
             // .................................................................... initialize
-            switch(lom)
+            switch(data.TypeOf(attributeName))
             {
                 case LoM.NOMINAL:
                     InitNominal(data, attributeName);
@@ -55,7 +53,7 @@ namespace ETV
 
         private void InitNominal(DataSet data, string attributeName)
         {
-            var measures = data.nominalAttribStats[attributeName];
+            var measures = data.nominalStatistics[attributeName];
             var factory = ServiceLocator.instance.Factory2DPrimitives;
 
             for(int i = 0; i < measures.numberOfUniqueValues; i++)
@@ -66,19 +64,19 @@ namespace ETV
 
             foreach(var o in data.infoObjects)
             {
-                bool valMissing = data.IsValueMissing(o, attributeName, lom);
+                bool valMissing = data.IsValueMissing(o, attributeName);
                 if(!valMissing)
                 {
-                    string value = o.nomAttribVals[attributeID].value;
+                    string value = o.nomVALbyID[attributeID].value;
                     var bar = bars[value];
-                    o.AddRepresentativeObject(attributeName, bar.gameObject);
+                    RememberRelationOf(o, bar);
                 }
             }
         }
 
         private void InitOrdinal(DataSet data, string attributeName)
         {
-            var measures = data.ordinalAttribStats[attributeName];
+            var measures = data.ordinalStatistics[attributeName];
             var factory = ServiceLocator.instance.Factory2DPrimitives;
 
             for(int i = 0; i < measures.numberOfUniqueValues; i++)
@@ -88,12 +86,12 @@ namespace ETV
 
             foreach(var o in data.infoObjects)
             {
-                bool valMissing = data.IsValueMissing(o, attributeName, lom);
+                bool valMissing = data.IsValueMissing(o, attributeName);
                 if(!valMissing)
                 {
-                    int value = o.ordAttribVals[attributeID].value;
+                    int value = o.ordVALbyID[attributeID].value;
                     var bar = bars[measures.uniqueValues[value]];
-                    o.AddRepresentativeObject(attributeName, bar.gameObject);
+                    RememberRelationOf(o, bar);
                 }
             }
         }
@@ -118,7 +116,7 @@ namespace ETV
         {
             float max, length;
             AddBarChartAxis(attributeName, AxisDirection.X);
-            AddAggregatedAxis(attributeName, lom, AxisDirection.Y, out max, out length);
+            AddAggregatedAxis(attributeName, AxisDirection.Y, out max, out length);
 
             var factory = GetGraphicalPrimitiveFactory();
 
@@ -139,7 +137,6 @@ namespace ETV
                     {
                         Color color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
                         bar.SetColor(color);
-                        bar.ApplyColor(color);
                         category++;
                     }
                     break;
@@ -149,7 +146,6 @@ namespace ETV
                     {
                         Color color = (even) ? Color.gray : Color.white;
                         bar.SetColor(color);
-                        bar.ApplyColor(color);
                         even = !even;
                         category++;
                     }
@@ -159,7 +155,6 @@ namespace ETV
                     {
                         Color color = Color.HSVToRGB((((float)category) / numberOfCategories) / 2f + .5f, 1, 1);
                         bar.SetColor(color);
-                        bar.ApplyColor(color);
                         category++;
                     }
                     break;

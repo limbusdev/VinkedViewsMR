@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GraphicalPrimitive
 {
@@ -10,7 +6,7 @@ namespace GraphicalPrimitive
     {
         public GameObject geometry;
 
-        public override void ApplyColor(Color newColor)
+        protected override void ApplyColor(Color newColor)
         {
             geometry.GetComponent<Renderer>().material.color = newColor;
         }

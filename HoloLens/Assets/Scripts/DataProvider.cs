@@ -181,75 +181,114 @@ public class DataProvider : MonoBehaviour
 
     private static DataSet AssembleDataSet(
         string[] variables, 
-        IDictionary<string,string[]> nomVars,
-        IDictionary<string, int[]> ordVars,
-        IDictionary<string, int[]> ivlVars,
-        IDictionary<string, float[]> ratioVars,
-        IDictionary<string, IDictionary<int, string>> dicts,
+        IDictionary<string,string[]> nominalSamples,
+        IDictionary<string, int[]> ordinalSamples,
+        IDictionary<string, int[]> intervalSamples,
+        IDictionary<string, float[]> rationalSamples,
+        IDictionary<string, IDictionary<int, string>> dictionaries,
         IDictionary<string, string> intervalTranslators)
     {
-        int sampleCount = ratioVars.First().Value.Length;
-        int nomVarsCount = nomVars.Count;
-        int ordVarsCount = ordVars.Count;
-        int ivlVarsCount = ivlVars.Count;
-        int ratioVarsCount = ratioVars.Count;
+        int sampleCount = rationalSamples.First().Value.Length;
+
+        // Note down lookup tables by attribute name
+        var nominalAttributeIDsByName = new Dictionary<string, int>();
+        var ordinalAttributeIDsByName = new Dictionary<string, int>();
+        var intervalAttributeIDsByName = new Dictionary<string, int>();
+        var rationalAttributeIDsByName = new Dictionary<string, int>();
+
+        var attributeIDbyName = new Dictionary<string, int>();
+        var attributeLoMbyName = new Dictionary<string, LoM>();
+
+        var attributeID = 0;
+        foreach(var attributeName in nominalSamples.Keys)
+        {
+            nominalAttributeIDsByName.Add(attributeName, attributeID);
+            attributeIDbyName.Add(attributeName, attributeID);
+            attributeLoMbyName.Add(attributeName, LoM.NOMINAL);
+            attributeID++;
+        }
+        attributeID = 0;
+        foreach(var attributeName in ordinalSamples.Keys)
+        {
+            ordinalAttributeIDsByName.Add(attributeName, attributeID);
+            attributeIDbyName.Add(attributeName, attributeID);
+            attributeLoMbyName.Add(attributeName, LoM.ORDINAL);
+            attributeID++;
+        }
+        attributeID = 0;
+        foreach(var attributeName in intervalSamples.Keys)
+        {
+            intervalAttributeIDsByName.Add(attributeName, attributeID);
+            attributeIDbyName.Add(attributeName, attributeID);
+            attributeLoMbyName.Add(attributeName, LoM.INTERVAL);
+            attributeID++;
+        }
+        attributeID = 0;
+        foreach(var attributeName in rationalSamples.Keys)
+        {
+            rationalAttributeIDsByName.Add(attributeName, attributeID);
+            attributeIDbyName.Add(attributeName, attributeID);
+            attributeLoMbyName.Add(attributeName, LoM.RATIO);
+            attributeID++;
+        }
 
         var infoObjs = new List<InfoObject>();
 
         for(int sample = 0; sample < sampleCount; sample++)
         {
-            var nomAtts = new Attribute<string>[nomVarsCount];
-            var ordAtts = new Attribute<int>[ordVarsCount];
-            var ivlAtts = new Attribute<int>[ivlVarsCount];
-            var ratAtts = new Attribute<float>[ratioVarsCount];
+            var nomAtts = new Attribute<string>[nominalAttributeIDsByName.Count];
+            var ordAtts = new Attribute<int>[ordinalAttributeIDsByName.Count];
+            var ivlAtts = new Attribute<int>[intervalAttributeIDsByName.Count];
+            var ratAtts = new Attribute<float>[rationalAttributeIDsByName.Count];
 
             // Fill new information object's nominal attributes
-            int variable = 0;
-            foreach(string attName in nomVars.Keys)
+            foreach(var key in nominalAttributeIDsByName.Keys)
             {
-                var newAttribute = new Attribute<string>(
-                    attName, nomVars[attName][sample], LoM.NOMINAL);
-                nomAtts[variable] = newAttribute;
-                variable++;
+                var newAttribute = new Attribute<string>(key, nominalSamples[key][sample], LoM.NOMINAL);
+                var id = nominalAttributeIDsByName[key];
+                nomAtts[id] = newAttribute;
             }
 
-            // Fill new information object's ordinal attributes
-            variable = 0;
-            foreach(string attName in ordVars.Keys)
+            foreach(var key in ordinalAttributeIDsByName.Keys)
             {
-                var newAttribute = new Attribute<int>(
-                    attName, ordVars[attName][sample], LoM.ORDINAL);
-                ordAtts[variable] = newAttribute;
-                variable++;
+                var newAttribute = new Attribute<int>(key, ordinalSamples[key][sample], LoM.ORDINAL);
+                var id = ordinalAttributeIDsByName[key];
+                ordAtts[id] = newAttribute;
             }
 
-            // Fill new information object's interval attributes
-            variable = 0;
-            foreach(string attName in ivlVars.Keys)
+            foreach(var key in intervalAttributeIDsByName.Keys)
             {
-                var newAttribute = new Attribute<int>(
-                    attName, ivlVars[attName][sample], LoM.INTERVAL);
-                ivlAtts[variable] = newAttribute;
-                variable++;
+                var newAttribute = new Attribute<int>(key, intervalSamples[key][sample], LoM.INTERVAL);
+                var id = intervalAttributeIDsByName[key];
+                ivlAtts[id] = newAttribute;
             }
 
-            // Fill new information object's ratio attributes
-            variable = 0;
-            foreach(string attName in ratioVars.Keys)
+            foreach(var key in rationalAttributeIDsByName.Keys)
             {
-                var newFloatAttribute = new Attribute<float>(
-                    attName, ratioVars[attName][sample], LoM.RATIO);
-                ratAtts[variable] = newFloatAttribute;
-                variable++;
+                var newAttribute = new Attribute<float>(key, rationalSamples[key][sample], LoM.RATIO);
+                var id = rationalAttributeIDsByName[key];
+                ratAtts[id] = newAttribute;
             }
 
+            
             // Create new information object
             var obj = new InfoObject(nomAtts, ordAtts, ivlAtts, ratAtts, dataSetIDs);
             
             infoObjs.Add(obj);
         }
 
-        var dataSet = new DataSet("DataSet", infoObjs, dicts, intervalTranslators);
+        var dataSet = new DataSet(
+            "DataSet", 
+            dataSetIDs, 
+            nominalAttributeIDsByName, 
+            ordinalAttributeIDsByName, 
+            intervalAttributeIDsByName, 
+            rationalAttributeIDsByName, 
+            attributeIDbyName,
+            attributeLoMbyName,
+            infoObjs, 
+            dictionaries, 
+            intervalTranslators);
 
         return dataSet;
     }

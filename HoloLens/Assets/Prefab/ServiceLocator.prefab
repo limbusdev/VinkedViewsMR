@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 114026579268108180}
   - component: {fileID: 114138395107268154}
   - component: {fileID: 114407415702384088}
+  - component: {fileID: 114142987378369518}
   m_Layer: 0
   m_Name: ServiceLocator
   m_TagString: Untagged
@@ -61,6 +62,7 @@ MonoBehaviour:
   etvManager: {fileID: 114138395107268154}
   metaVisSystem: {fileID: 114407415702384088}
   FactoryMetaVis: {fileID: 0}
+  VisBridgeSystem: {fileID: 114142987378369518}
   clientManager: {fileID: 0}
 --- !u!114 &114138395107268154
 MonoBehaviour:
@@ -74,6 +76,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AutoPositioningSlots: {fileID: 0}
+--- !u!114 &114142987378369518
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1969132908291730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c5a438486575dc4ba8e4c62db502d97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  visBridgePrefab: {fileID: 114514605450555464, guid: 6549b96df8efde14d909ff0b278669f4,
+    type: 2}
 --- !u!114 &114407415702384088
 MonoBehaviour:
   m_ObjectHideFlags: 1

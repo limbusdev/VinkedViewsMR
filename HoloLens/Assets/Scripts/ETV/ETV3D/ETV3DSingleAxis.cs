@@ -1,76 +1,50 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using GraphicalPrimitive;
+﻿using GraphicalPrimitive;
 using Model;
 using UnityEngine;
 
-public class ETV3DSingleAxis : AETV3D
+namespace ETV
 {
-    // ........................................................................ Editor Variables
-
-    // ........................................................................ Private Variables
-
-    private LoM lom;
-    private int attributeID;
-    private GameObject axis;
-    private string attributeName;
-
-
-    // ........................................................................ AETV3D Methods
-    public void Init(DataSet data, int attributeID, LoM type)
+    public class ETV3DSingleAxis : AETVSingleAxis
     {
-        base.Init(data);
-        this.attributeID = attributeID;
-        this.lom = type;
-        
-        switch(type)
+        // .................................................................... Private Variables
+        private GameObject axis;
+        private string attributeName;
+
+
+        // .................................................................... AETV3D Methods
+        public override void Init(DataSet data, string attributeName, bool isMetaVis = false)
         {
-            case LoM.NOMINAL:
-                this.attributeName = data.nomAttribNames[attributeID];
-                break;
-            case LoM.ORDINAL:
-                this.attributeName = data.ordAttribNames[attributeID];
-                break;
-            case LoM.INTERVAL:
-                this.attributeName = data.ivlAttribNames[attributeID];
-                break;
-            default: //case LevelOfMeasurement.RATIO:
-                this.attributeName = data.ratAttribNames[attributeID];
-                break;
+            base.Init(data, isMetaVis);
+            this.attributeName = attributeName;
+
+            SetUpAxes();
+
+            SetAxisLabels(AxisDirection.Y, attributeName);
+        }
+        
+
+        public override void SetUpAxes()
+        {
+            AddAxis(attributeName, AxisDirection.Y);
         }
 
-        SetUpAxes();
+        public override void UpdateETV()
+        {
+            // Nothing yet
+        }
 
-        SetAxisLabels(AxisDirection.Y, attributeName);
+        public override void DrawGraph()
+        {
+            // Nothing yet
+        }
+
+        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
+        {
+            return ServiceLocator.instance.Factory3DPrimitives;
+        }
+
+
+        // .................................................................... MonoBehaviour Methods
+
     }
-
-
-    public override void ChangeColoringScheme(ETVColorSchemes scheme)
-    {
-        throw new System.NotImplementedException();
-    }
-    
-    public override void SetUpAxes()
-    {
-        AddAxis(attributeName, lom, AxisDirection.Y);
-    }
-
-    public override void UpdateETV()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void DrawGraph()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-    {
-        return ServiceLocator.instance.Factory3DPrimitives;
-    }
-
-
-    // ........................................................................ MonoBehaviour Methods
-
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GraphicalPrimitive
 {
@@ -12,7 +8,7 @@ namespace GraphicalPrimitive
         public GameObject barBack;
 
         
-        public override void ApplyColor(Color color)
+        protected override void ApplyColor(Color color)
         {
             Renderer rend = barBack.GetComponent<Renderer>();
             rend.material = new Material(Shader.Find("Specular"));

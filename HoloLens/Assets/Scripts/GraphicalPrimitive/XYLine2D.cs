@@ -8,7 +8,7 @@ namespace GraphicalPrimitive
     {
         public LineRenderer lineRenderer;
 
-        public override void ApplyColor(Color color)
+        protected override void ApplyColor(Color color)
         {
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;

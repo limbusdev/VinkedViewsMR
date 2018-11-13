@@ -1,77 +1,74 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using ETV;
+﻿using ETV;
 using GraphicalPrimitive;
 using Model;
 using UnityEngine;
 
-public class ETV3DFactory : AETVFactory
+namespace ETV
 {
-    public GameObject ETVAnchor;
-
-    public GameObject etv3DBarChart;
-    public GameObject ETV3DScatterPlotPrefab;
-    public GameObject ETV3DParallelCoordinatesPlotPrefab;
-    public GameObject ETV3DBarMapPrefab;
-    public GameObject ETV3DSingleAxisPrefab;
-
-    public override GameObject CreateETVBarChart(DataSet data, string attributeName)
+    public class ETV3DFactory : AETVFactory
     {
-        GameObject barChart = Instantiate(etv3DBarChart);
+        public GameObject ETVAnchor;
 
-        barChart.GetComponent<ETV3DBarChart>().Init(data, attributeName);
-        barChart.GetComponent<ETV3DBarChart>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
+        public AETVBarChart etv3DBarChart;
+        public AETVScatterPlot ETV3DScatterPlotPrefab;
+        public AETVPCP ETV3DParallelCoordinatesPlotPrefab;
+        public AETVHeatMap ETV3DBarMapPrefab;
+        public AETVSingleAxis ETV3DSingleAxisPrefab;
 
-        return barChart;
-    }
+        public override AETVBarChart CreateBarChart(DataSet data, string attributeName, bool isMetaVis = false)
+        {
+            var barChart = Instantiate(etv3DBarChart);
 
-    public override GameObject CreateSingleAxis(DataSet data, int attributeID, LoM lom)
-    {
-        GameObject singleAxis3D = Instantiate(ETV3DSingleAxisPrefab);
-        var axisComp = singleAxis3D.GetComponent<ETV3DSingleAxis>();
-        axisComp.Init(data, attributeID, lom);
+            barChart.Init(data, attributeName, isMetaVis);
+            barChart.ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
-        // Tell MetaVisSystem about new axis
-        LetMetaVisSystemObserveAxes(new AAxis[] { axisComp.GetAxis(AxisDirection.Y) });
+            return barChart;
+        }
 
-        return singleAxis3D;
-    }
+        public override AETVSingleAxis CreateSingleAxis(DataSet data, string attributeName, bool isMetaVis = false)
+        {
+            var singleAxis3D = Instantiate(ETV3DSingleAxisPrefab);
+            singleAxis3D.Init(data, attributeName, isMetaVis);
 
-    public override GameObject CreateETVLineChart(DataSet data, string attributeNameA, string attributeNameB)
-    {
-        throw new System.NotImplementedException();
-    }
+            return singleAxis3D;
+        }
 
-    public override GameObject CreateETVScatterPlot(DataSet data, string[] attIDs)
-    {
-        GameObject scatterPlot3D = Instantiate(ETV3DScatterPlotPrefab);
-        scatterPlot3D.GetComponent<ETV3DScatterPlot>().Init(data, attIDs[0], attIDs[1], attIDs[2]);
-        scatterPlot3D.GetComponent<ETV3DScatterPlot>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
+        public override AETVLineChart CreateLineChart(DataSet data, string attributeNameA, string attributeNameB, bool isMetaVis = false)
+        {
+            throw new System.NotImplementedException();
+        }
 
-        return scatterPlot3D;
-    }
+        public override AETVScatterPlot CreateScatterplot(DataSet data, string[] attIDs, bool isMetaVis = false)
+        {
+            var scatterPlot3D = Instantiate(ETV3DScatterPlotPrefab);
+            scatterPlot3D.Init(data, attIDs, isMetaVis);
+            scatterPlot3D.ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
-    public override GameObject CreateETVParallelCoordinatesPlot(DataSet data, string[] attIDs)
-    {
-        GameObject pcp = Instantiate(ETV3DParallelCoordinatesPlotPrefab);
+            return scatterPlot3D;
+        }
 
-        int[] nomIDs, ordIDs, ivlIDs, ratIDs;
+        public override AETVPCP CreatePCP(DataSet data, string[] attIDs, bool isMetaVis = false)
+        {
+            var pcp = Instantiate(ETV3DParallelCoordinatesPlotPrefab);
 
-        AttributeProcessor.ExtractAttributeIDs(data, attIDs, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
+            int[] nomIDs, ordIDs, ivlIDs, ratIDs;
 
-        pcp.GetComponent<ETV3DPCP>().Init(data, nomIDs, ordIDs, ivlIDs, ratIDs);
-        pcp.GetComponent<ETV3DPCP>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
+            AttributeProcessor.ExtractAttributeIDs(data, attIDs, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
 
-        return pcp;
-    }
+            pcp.Init(data, nomIDs, ordIDs, ivlIDs, ratIDs, isMetaVis);
+            pcp.ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
-    public GameObject CreateETVBarMap(DataSet data, string a1, string a2)
-    {
-        GameObject bm = Instantiate(ETV3DBarMapPrefab);
+            return pcp;
+        }
 
-        bm.GetComponent<ETV3DBarMap>().Init(data, a1, a2);
-        bm.GetComponent<ETV3DBarMap>().ChangeColoringScheme(ETVColorSchemes.SplitHSV);
+        public AETVHeatMap CreateETVBarMap(DataSet data, string a1, string a2, bool manualLength = false, float lengthA = 1f, float lengthB = 1f, bool isMetaVis = false)
+        {
+            var bm = Instantiate(ETV3DBarMapPrefab);
 
-        return bm;
+            bm.Init(data, a1, a2, lengthA, lengthB, isMetaVis);
+            bm.ChangeColoringScheme(ETVColorSchemes.SplitHSV);
+
+            return bm;
+        }
     }
 }

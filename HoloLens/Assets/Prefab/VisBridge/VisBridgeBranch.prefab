@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4410977006842142}
   - component: {fileID: 114144909111898696}
   m_Layer: 0
-  m_Name: ObjectBasedVisBridge
+  m_Name: VisBridgeBranch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

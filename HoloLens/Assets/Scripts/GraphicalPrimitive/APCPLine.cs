@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace GraphicalPrimitive
@@ -23,14 +22,21 @@ namespace GraphicalPrimitive
         public abstract LineRenderer GetNewProperLineRenderer();
 
         public Vector3[] points;
+        public IDictionary<string,float> Values;
 
-        public void Init(Vector3[] points)
+        public void Init(Vector3[] points, IDictionary<string, float> values)
+        {
+            Values = values;
+            UpdatePoints(points);
+        }
+
+        public void UpdatePoints(Vector3[] points)
         {
             SetPoints(points);
             GenerateCollider();
         }
 
-        public override void ApplyColor(Color color)
+        protected override void ApplyColor(Color color)
         {
             if(LR != null)
             {
@@ -62,6 +68,10 @@ namespace GraphicalPrimitive
 
             int[] triangles = new int[(points.Length - 1) * 6 * 4 + 12]; // two triangles for every line segment makes 6 vertices for every segment
 
+            if(pivot.GetComponent<MeshCollider>() != null)
+            {
+                Destroy(pivot.GetComponent<MeshCollider>());
+            }
             var collider = pivot.AddComponent<MeshCollider>();
 
             // Generate path

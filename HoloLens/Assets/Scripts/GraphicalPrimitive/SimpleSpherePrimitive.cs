@@ -8,7 +8,7 @@ namespace GraphicalPrimitive
     {
         public MeshRenderer rend;
 
-        public override void ApplyColor(Color color)
+        protected override void ApplyColor(Color color)
         {
             rend.material.color = color;
         }

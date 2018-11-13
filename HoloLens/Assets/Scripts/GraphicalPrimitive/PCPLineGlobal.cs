@@ -1,7 +1,4 @@
-﻿using ETV;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace GraphicalPrimitive
 {
@@ -10,7 +7,7 @@ namespace GraphicalPrimitive
         [SerializeField]
         public LineRenderer lineRenderer;
 
-        public override void ApplyColor(Color color)
+        protected override void ApplyColor(Color color)
         {
             if(lineRenderer != null)
             {

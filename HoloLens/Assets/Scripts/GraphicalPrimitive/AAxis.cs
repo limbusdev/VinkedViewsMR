@@ -1,23 +1,27 @@
-﻿using Model;
+﻿using ETV;
+using Model;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace GraphicalPrimitive
 {
-    public enum AxisDirection
+    /// <summary>
+    /// Abstract Axis class to represent a data dimension. AAxis is observable,
+    /// which is important for meta visualizations to appear, according to
+    /// their position and orientation to each other.
+    /// AAxis inform their oberservers, if their position or orientation has
+    /// changed.
+    /// </summary>
+    public abstract class AAxis : MonoBehaviour, IObservableGP<AETV, AAxis>, IDisposable
     {
-        X,Y,Z
-    }
-
-    public abstract class AAxis : MonoBehaviour, IObservable<AAxis>
-    {
-        private IList<IObserver<AAxis>> observers;
+        private IList<IGPObserver<AAxis>> observers;
 
         protected Vector3 direction = Vector3.up;
         public string labelVariableText { get; set; }
 
         public GameObject labelVariable;
+        public string attributeName { get; private set; }
 
         public float diameter {get; set;} = 0.01f;
         public float min { get; set; } = 0.0f;
@@ -29,13 +33,18 @@ namespace GraphicalPrimitive
         public bool ticked { get; set; } = false;
         public Color color { get; set; } = Color.white;
         public int decimals { get; set; } = 2;
-
+        
         public AxisDirection axisDirection = AxisDirection.Y;
 
         // InformationObject Data
-        public AttributeStats attributeStats;
+        public AttributeStats stats;
+
+        public bool visible { get; private set; } = true;
         
 
+        /// <summary>
+        /// Tells observer, if axis transform has changed.
+        /// </summary>
         void Update()
         {
             if(transform.hasChanged)
@@ -43,14 +52,20 @@ namespace GraphicalPrimitive
                 transform.hasChanged = false; // Otherwise it get's called forever
                 foreach(var observer in observers)
                 {
-                    observer.OnNext(this);
+                    observer.Notify(this);
                 }
             }
         }
 
+        /// <summary>
+        /// Generic axis initializer.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="dir"></param>
         public void Init(string name, AxisDirection dir = AxisDirection.Y)
         {
-            this.observers = new List<IObserver<AAxis>>();
+            this.attributeName = name;
+            this.observers = new List<IGPObserver<AAxis>>();
             this.labelVariableText = name;
             this.ticks = new List<Tick>();
             axisDirection = dir;
@@ -69,11 +84,159 @@ namespace GraphicalPrimitive
             }
         }
         
+        /// <summary>
+        /// Generic axis initializer.
+        /// </summary>
+        /// <param name="stats"></param>
+        /// <param name="dir"></param>
         public void Init(AttributeStats stats, AxisDirection dir = AxisDirection.Y)
         {
             Init(stats.name, dir);
-            this.attributeStats = stats;
+            this.stats = stats;
         }
+        
+        /// <summary>
+        /// Numerical axis initializer.
+        /// </summary>
+        public void Init(string name, float max, AxisDirection dir = AxisDirection.Y)
+        {
+            Init(name, dir);
+            this.min = 0;
+            this.max = max;
+            this.length = 1f;
+            this.tipped = true;
+            this.ticked = true;
+            CalculateTickResolution();
+            AssembleRatioAxis();
+        }
+
+        /// <summary>
+        /// Nominal axis initializer.
+        /// </summary>
+        public void Init(
+            NominalAttributeStats stats, 
+            AxisDirection dir = AxisDirection.Y, 
+            bool manualLength = false, 
+            float length = 1)
+        {
+            Init(stats as AttributeStats, dir);
+            this.min = 0;
+            this.max = stats.max;
+            
+            if(manualLength)
+            {
+                this.length = length;
+                this.tickResolution = 1f / (stats.numberOfUniqueValues - 1);
+            } else
+            {
+                this.length = .15f * stats.numberOfUniqueValues + .15f;
+                this.tickResolution = .15f;
+            }
+
+            this.tipped = false;
+            this.ticked = true;
+            AssembleNominalAxis(stats, manualLength, this.tickResolution);
+        }
+
+        /// <summary>
+        /// Ordinal axis initializer.
+        /// </summary>
+        public void Init(OrdinalAttributeStats m, AxisDirection dir = AxisDirection.Y, bool manualLength = false, float length = 1)
+        {
+            Init(m as AttributeStats, dir);
+            this.min = m.min;
+            this.max = m.max;
+
+            if(manualLength)
+            {
+                this.length = length;
+                this.tickResolution = 1f / (m.numberOfUniqueValues - 1);
+            } else
+            {
+                this.length = .15f * m.numberOfUniqueValues + .15f;
+                this.tickResolution = .15f;
+            }
+
+            this.tipped = true;
+            this.ticked = true;
+            AssembleOrdinalAxis(m, manualLength, this.tickResolution);
+        }
+
+        /// <summary>
+        /// Interval axis initializer.
+        /// </summary>
+        /// <param name="name">name of interval scaled attribute</param>
+        /// <param name="max"></param>
+        /// <param name="dir"></param>
+        public void Init(IntervalAttributeStats m, AxisDirection dir = AxisDirection.Y)
+        {
+            Init(m as AttributeStats, dir);
+            this.min = m.min;
+            this.max = m.max;
+            this.length = 1f;
+            this.tipped = true;
+            this.ticked = true;
+            CalculateTickResolution();
+            AssembleIntervalAxis(m);
+        }
+
+        /// <summary>
+        /// Rational axis initializer.
+        /// </summary>
+        /// <param name="name">name of rational scaled attribute</param>
+        /// <param name="max"></param>
+        /// <param name="dir"></param>
+        public void Init(RatioAttributeStats m, AxisDirection dir = AxisDirection.Y)
+        {
+            Init(m as AttributeStats, dir);
+            this.min = m.zeroBoundMin;
+            this.max = m.zeroBoundMax;
+            this.length = 1f;
+            this.tipped = true;
+            this.ticked = true;
+            CalculateTickResolution();
+            AssembleRatioAxis();
+        }
+
+        // (HELPER METHOD)
+        private void AssembleNominalAxis(NominalAttributeStats m, bool manualLength = false, float tickRes = .15f)
+        {
+            DrawBaseAxis();
+            GenerateNominalTicks(m, manualLength, tickRes);
+            UpdateLabels();
+        }
+
+        // (HELPER METHOD)
+        private void AssembleOrdinalAxis(OrdinalAttributeStats m, bool manualLength = false, float tickRes = .15f)
+        {
+            DrawBaseAxis();
+            GenerateOrdinalTicks(m, manualLength, tickRes);
+            UpdateLabels();
+        }
+
+        // (HELPER METHOD)
+        private void AssembleIntervalAxis(IntervalAttributeStats m)
+        {
+            DrawBaseAxis();
+            GenerateIntervalTicks(m);
+            UpdateLabels();
+        }
+
+        // (HELPER METHOD)
+        private void AssembleRatioAxis()
+        {
+            DrawBaseAxis();
+            GenerateRatioTicks();
+            UpdateLabels();
+        }
+
+        // Template methods
+        protected abstract void DrawBaseAxis();
+        protected abstract void GenerateNominalTicks(NominalAttributeStats m, bool manualTickRes = false, float tickRes = .15f);
+        protected abstract void GenerateOrdinalTicks(OrdinalAttributeStats m, bool manualTickRes = false, float tickRes = .15f);
+        protected abstract void GenerateIntervalTicks(IntervalAttributeStats m);
+        protected abstract void GenerateRatioTicks();
+        protected abstract void UpdateLabels();
 
         public void CalculateTickResolution()
         {
@@ -128,15 +291,51 @@ namespace GraphicalPrimitive
             return direction;
         }
 
+        /// <summary>
+        /// Returns a three dimensional position vector of the axis position, which represents
+        /// the given attribute value.
+        /// </summary>
+        /// <param name="value">attribute value to locate on the axis in global space</param>
+        /// <returns>global 3D position vector of axis position, representing the given attribute value</returns>
         public Vector3 GetLocalValueInGlobalSpace(float value)
         {
-            return transform.TransformPoint(new Vector3(0, TransformToAxisSpace(value), 0));
+            return transform.TransformPoint(direction * TransformToAxisSpace(value));
+        }
+
+        public void SetVisibility(bool visible)
+        {
+            // Only do work, if neccessary
+            if(this.visible == visible) return;
+
+            this.visible = visible;
+
+            foreach(var mr in GetComponents<MeshRenderer>())
+            {
+                mr.enabled = visible;
+            }
+            foreach(var mr in GetComponentsInChildren<MeshRenderer>())
+            {
+                mr.enabled = visible;
+            }
+            foreach(var mr in GetComponents<LineRenderer>())
+            {
+                mr.enabled = visible;
+            }
+            foreach(var mr in GetComponentsInChildren<LineRenderer>())
+            {
+                mr.enabled = visible;
+            }
         }
 
 
         // Abstract Methods
         public abstract void UpdateAxis();
 
+        /// <summary>
+        /// Transforms the given attribute value to it's 1 dimensional position on the axis.
+        /// </summary>
+        /// <param name="value">attribute value to map to the axis</param>
+        /// <returns>position on the axis</returns>
         public float TransformToAxisSpace(float value)
         {
             if(max - min == 0)
@@ -144,6 +343,11 @@ namespace GraphicalPrimitive
             return ((value - min) / (max - min)) * length;
         }
 
+        /// <summary>
+        /// Transforms the 1 dimensional position the the according attribute value.
+        /// </summary>
+        /// <param name="value">position on the axis</param>
+        /// <returns>represented attribute value</returns>
         public float TransformFromAxisSpace(float value)
         {
             if(max - min == 0)
@@ -152,29 +356,20 @@ namespace GraphicalPrimitive
         }
 
 
-        public IDisposable Subscribe(IObserver<AAxis> observer)
+        public IDisposable Subscribe(IGPObserver<AAxis> observer)
         {
             if(!observers.Contains(observer))
                 observers.Add(observer);
-            return new Unsubscriber(observers, observer);
+            return this;
         }
 
-        private class Unsubscriber : IDisposable
+        public void Dispose()
         {
-            private IList<IObserver<AAxis>> _observers;
-            private IObserver<AAxis> _observer;
-
-            public Unsubscriber(IList<IObserver<AAxis>> observers, IObserver<AAxis> observer)
+            foreach(var obs in observers)
             {
-                this._observers = observers;
-                this._observer = observer;
+                obs.OnDispose(this);
             }
-
-            public void Dispose()
-            {
-                if(_observer != null && _observers.Contains(_observer))
-                    _observers.Remove(_observer);
-            }
+            Destroy(gameObject);
         }
     }
 }

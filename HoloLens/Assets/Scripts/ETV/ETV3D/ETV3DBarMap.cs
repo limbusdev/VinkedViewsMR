@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GraphicalPrimitive;
 using Model;
 using UnityEngine;
-using System.Linq;
 using System;
 
 /// <summary>
@@ -14,7 +12,7 @@ using System;
 /// </summary>
 namespace ETV
 {
-    public class ETV3DBarMap : AETV3D
+    public class ETV3DBarMap : AETVHeatMap
     {
         // ........................................................................ Populate in Editor
 
@@ -35,6 +33,7 @@ namespace ETV
         private IDictionary<string, int> dictA2, dictB2;
 
         float max;
+        private float lengthA, lengthB;
 
 
         private IDictionary<AxisDirection, GameObject> axis;
@@ -42,16 +41,18 @@ namespace ETV
 
 
         // ........................................................................ Initializers
-        public void Init(DataSet data, string attributeNameX, string attributeNameY)
+        public override void Init(DataSet data, string attributeNameX, string attributeNameY, float lengthA=1f, float lengthB=1f, bool isMetaVis = false)
         {
-            base.Init(data);
+            base.Init(data, isMetaVis);
             this.attributeNameA = attributeNameX;
             this.attributeNameB = attributeNameY;
-            this.attributeIDA = data.GetIDOf(attributeNameX);
-            this.attributeIDB = data.GetIDOf(attributeNameY);
-            this.lomA = data.GetTypeOf(attributeNameX);
-            this.lomB = data.GetTypeOf(attributeNameY);
+            this.attributeIDA = data.IDOf(attributeNameX);
+            this.attributeIDB = data.IDOf(attributeNameY);
+            this.lomA = data.TypeOf(attributeNameX);
+            this.lomB = data.TypeOf(attributeNameY);
             this.max = 0;
+            this.lengthA = lengthA;
+            this.lengthB = lengthB;
 
             dictA1 = new Dictionary<int, string>();
             dictB1 = new Dictionary<int, string>();
@@ -61,14 +62,14 @@ namespace ETV
             switch(lomA)
             {
                 case LoM.NOMINAL:
-                    var mN = data.nominalAttribStats[attributeNameX];
+                    var mN = data.nominalStatistics[attributeNameX];
                     uniqueValsA = mN.uniqueValues;
                     distributionA = mN.GetDistributionValues();
                     dictA1 = mN.idValues;
                     dictA2 = mN.valueIDs;
                     break;
                 case LoM.ORDINAL:
-                    var mO = data.ordinalAttribStats[attributeNameX];
+                    var mO = data.ordinalStatistics[attributeNameX];
                     uniqueValsA = mO.uniqueValues;
                     distributionA = mO.GetDistributionValues();
                     dictA1 = mO.orderedValueIDs;
@@ -81,14 +82,14 @@ namespace ETV
             switch(lomB)
             {
                 case LoM.NOMINAL:
-                    var mN = data.nominalAttribStats[attributeNameY];
+                    var mN = data.nominalStatistics[attributeNameY];
                     uniqueValsB = mN.uniqueValues;
                     distributionB = mN.GetDistributionValues();
                     dictB1 = mN.idValues;
                     dictB2 = mN.valueIDs;
                     break;
                 case LoM.ORDINAL:
-                    var mO = data.ordinalAttribStats[attributeNameY];
+                    var mO = data.ordinalStatistics[attributeNameY];
                     uniqueValsB = mO.uniqueValues;
                     distributionB = mO.GetDistributionValues();
                     dictB1 = mO.orderedValueIDs;
@@ -104,7 +105,7 @@ namespace ETV
             this.absMapValues = new int[dimA, dimB];
             this.barHeights = new float[dimA, dimB];
 
-            var factory3D = ServiceLocator.instance.Factory3DPrimitives;
+            var factory3D = ServiceLocator.PrimitivePlant3D();
 
             // For every possible value of attribute 1
             for(int vID1 = 0; vID1 < dimA; vID1++)
@@ -169,8 +170,8 @@ namespace ETV
 
                 foreach(var o in data.infoObjects)
                 {
-                    bool valAMissing = data.IsValueMissing(o, attributeNameA, lomA);
-                    bool valBMissing = data.IsValueMissing(o, attributeNameB, lomB);
+                    bool valAMissing = data.IsValueMissing(o, attributeNameA);
+                    bool valBMissing = data.IsValueMissing(o, attributeNameB);
 
                     if(!(valAMissing || valBMissing))
                     {
@@ -179,29 +180,29 @@ namespace ETV
                         if(lomA == LoM.NOMINAL && lomB == LoM.NOMINAL)
                         {
                             bar = bars[
-                                dictA2[o.GetNomValue(attributeNameA)],
-                                dictB2[o.GetNomValue(attributeNameB)]
+                                dictA2[o.NomValueOf(attributeNameA)],
+                                dictB2[o.NomValueOf(attributeNameB)]
                                 ];
 
                         } else if(lomA == LoM.ORDINAL && lomB == LoM.ORDINAL)
                         {
                             bar = bars[
-                                o.GetOrdValue(attributeNameA),
-                                o.GetOrdValue(attributeNameB)
+                                o.OrdValueOf(attributeNameA),
+                                o.OrdValueOf(attributeNameB)
                                 ];
 
                         } else if(lomA == LoM.NOMINAL && lomB == LoM.ORDINAL)
                         {
                             bar = bars[
-                                dictA2[o.GetNomValue(attributeNameA)],
-                                o.GetOrdValue(attributeNameB)
+                                dictA2[o.NomValueOf(attributeNameA)],
+                                o.OrdValueOf(attributeNameB)
                                 ];
 
                         } else if(lomA == LoM.ORDINAL && lomB == LoM.NOMINAL)
                         {
                             bar = bars[
-                                o.GetOrdValue(attributeNameA),
-                                dictB2[o.GetNomValue(attributeNameB)]
+                                o.OrdValueOf(attributeNameA),
+                                dictB2[o.NomValueOf(attributeNameB)]
                                 ];
 
                         } else
@@ -209,8 +210,7 @@ namespace ETV
                             bar = new Bar3D();
                         }
 
-                        o.AddRepresentativeObject(attributeNameA, bar.gameObject);
-                        o.AddRepresentativeObject(attributeNameB, bar.gameObject);
+                        RememberRelationOf(o, bar);
                     }
                 }
             }
@@ -221,16 +221,31 @@ namespace ETV
         /// </summary>
         public override void DrawGraph()
         {
+            float barGap = .01f;
+            float gapWidthA = (dimA - 1) * barGap;
+            float gapWidthB = (dimB - 1) * barGap;
+            float barWidthA = (lengthA-gapWidthA-.1f) / (dimA);
+            float barWidthB = (lengthB-gapWidthB-.1f) / (dimB);
+
+
             bars = new Bar3D[dimA, dimB];
+
+            float marginA = .05f + barWidthA/2;
+            float marginB = .05f + barWidthB/2;
 
             for(int i = 0; i < dimA; i++)
             {
                 for(int ii = 0; ii < dimB; ii++)
                 {
-                    bars[i, ii] = CreateBar(barHeights[i, ii], max);
+                    bars[i, ii] = CreateBar(barHeights[i, ii], max, barWidthA, barWidthB);
                     bars[i, ii].SetLabelText(absMapValues[i, ii].ToString());
-                    GameObject barGO = bars[i, ii].gameObject;
-                    barGO.transform.localPosition = new Vector3(((i + 1) * .15f), 0, ((ii + 1) * .15f));
+
+                    // Set bar's position
+                    var barGO = bars[i, ii].gameObject;
+                    barGO.transform.localPosition = new Vector3(
+                        marginA + i * (barWidthA+barGap), 
+                        0, 
+                        marginB + ii * (barWidthB+barGap));
                     barGO.transform.parent = Anchor.transform;
                 }
             }
@@ -241,15 +256,17 @@ namespace ETV
         /// </summary>
         public override void SetUpAxes()
         {
-            var factory3D = ServiceLocator.instance.Factory3DPrimitives;
-            var factory2D = ServiceLocator.instance.Factory2DPrimitives;
+            var factory3D = ServiceLocator.PrimitivePlant3D();
+            var factory2D = ServiceLocator.PrimitivePlant2D();
 
-            AddBarChartAxis(attributeNameA, AxisDirection.X);
+            // Categorical Axis A
+            AddAxis(attributeNameA, AxisDirection.X, lengthA);
             var xAxis = GetAxis(AxisDirection.X);
             xAxis.transform.parent = Anchor.transform;
             xAxis.transform.localRotation = Quaternion.Euler(90, 0, 0);
 
-            AddBarChartAxis(attributeNameB, AxisDirection.Z);
+            // Categorical Axis B
+            AddAxis(attributeNameB, AxisDirection.Z, lengthB);
             
             var yAxis = factory2D.CreateAutoTickedAxis("Amount", max);
             yAxis.transform.parent = Anchor;
@@ -260,11 +277,11 @@ namespace ETV
          * @param range         maximum - minimum value of this attribute
          * @param attributeID   which attribute
          * */
-        private Bar3D CreateBar(float value, float range)
+        private Bar3D CreateBar(float value, float range, float widthA=.1f, float widthB=.1f)
         {
             var factory3D = ServiceLocator.instance.Factory3DPrimitives;
 
-            Bar3D bar = factory3D.CreateBar(value, .1f, .1f).GetComponent<Bar3D>();
+            Bar3D bar = factory3D.CreateBar(value, widthA, widthB).GetComponent<Bar3D>();
 
             bar.SetLabelText(value.ToString());
 
@@ -289,7 +306,6 @@ namespace ETV
                                 (S / dimB) / 2f + .5f,
                                 1);
                             bars[row, col].SetColor(color);
-                            bars[row, col].ApplyColor(color);
                             S++;
                         }
                         H++;

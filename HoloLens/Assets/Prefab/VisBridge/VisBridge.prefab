@@ -645,8 +645,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68e8db74ad4e12e4cadff834b9f32b3f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  visBridgeCenterSphere: {fileID: 114692733446711514}
-  obvbPrefab: {fileID: 114144909111898696, guid: 98a88dda044fca740b4e24a346788676,
+  centerSphere: {fileID: 114692733446711514}
+  branchPrefab: {fileID: 114144909111898696, guid: 98a88dda044fca740b4e24a346788676,
     type: 2}
 --- !u!114 &114692733446711514
 MonoBehaviour:

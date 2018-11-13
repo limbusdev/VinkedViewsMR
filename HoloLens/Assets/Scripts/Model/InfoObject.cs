@@ -1,7 +1,6 @@
 ﻿using GraphicalPrimitive;
 using Model.Attributes;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Model
 {
@@ -38,20 +37,15 @@ namespace Model
     public class InfoObject
     {
         // .................................................................... Lookup tables
-        public IDictionary<string, int> attributeIDsByName;
-        public IDictionary<string, LoM> attributeLoMs;
         public int dataSetID;
+        public DataSet dataSet { get; private set; }
 
         // .................................................................... Attribute values
-        public Attribute<string>[] nomAttribVals;
-        public Attribute<int>[] ordAttribVals;
-        public Attribute<int>[] ivlAttribVals;
-        public Attribute<float>[] ratAttribVals;
-
-        // .................................................................... Observed representatives
-        public IDictionary<string, IList<GameObject>> 
-            representativeGameObjectsByAttributeName { get; }
-
+        public Attribute<string>[] nomVALbyID;
+        public Attribute<int>[] ordVALbyID;
+        public Attribute<int>[] ivlVALbyID;
+        public Attribute<float>[] ratVALbyID;
+        
 
         // .................................................................... Constructor
         public InfoObject(
@@ -62,90 +56,48 @@ namespace Model
             int dataSetID)
         {
             this.dataSetID = dataSetID;
-            this.representativeGameObjectsByAttributeName 
-                = new Dictionary<string, IList<GameObject>>();
-            this.nomAttribVals = attributesNom;
-            this.ordAttribVals = attributesOrd;
-            this.ivlAttribVals = attributesIvl;
-            this.ratAttribVals = attributesRat;
-
-            GenerateLookupTables();
+            this.nomVALbyID = attributesNom;
+            this.ordVALbyID = attributesOrd;
+            this.ivlVALbyID = attributesIvl;
+            this.ratVALbyID = attributesRat;
         }
 
-        // .................................................................... Initializer methods
-        private void GenerateLookupTables()
+        public void Init(DataSet dataSet)
         {
-            attributeIDsByName = new Dictionary<string, int>();
-            attributeLoMs = new Dictionary<string, LoM>();
-
-            for(int i = 0; i < nomAttribVals.Length; i++)
+            if(this.dataSet == null)
             {
-                var a = nomAttribVals[i];
-                attributeIDsByName.Add(a.name, i);
-                attributeLoMs.Add(a.name, a.lom);
-            }
-
-            for(int i = 0; i < ordAttribVals.Length; i++)
-            {
-                var a = ordAttribVals[i];
-                attributeIDsByName.Add(a.name, i);
-                attributeLoMs.Add(a.name, a.lom);
-            }
-
-            for(int i = 0; i < ivlAttribVals.Length; i++)
-            {
-                var a = ivlAttribVals[i];
-                attributeIDsByName.Add(a.name, i);
-                attributeLoMs.Add(a.name, a.lom);
-            }
-
-            for(int i = 0; i < ratAttribVals.Length; i++)
-            {
-                var a = ratAttribVals[i];
-                attributeIDsByName.Add(a.name, i);
-                attributeLoMs.Add(a.name, a.lom);
+                this.dataSet = dataSet;
             }
         }
 
 
         // .................................................................... Methods
-        public void AddRepresentativeObject(string attributeName, GameObject o)
-        {
-            if(!representativeGameObjectsByAttributeName.ContainsKey(attributeName))
-            {
-                representativeGameObjectsByAttributeName.Add(
-                    attributeName, new List<GameObject>());
-            }
-            representativeGameObjectsByAttributeName[attributeName].Add(o);
-
-            var gp = o.GetComponent<AGraphicalPrimitive>();
-            if(gp != null)
-            {
-                gp.AddRepresentedInformationObjects(new InfoObject[] { this });
-            }
-        }
         
 
         // .................................................................... Getters & Setters
-
-        public string GetNomValue(string attributeName)
+        public int Name2ID(string attributeName)
         {
-            return nomAttribVals[attributeIDsByName[attributeName]].value;
+            return dataSet.attIDbyNAME[attributeName];
+        }
+        
+        public string NomValueOf(string attName)
+        {
+            return nomVALbyID[dataSet.attIDbyNAME[attName]].value;
         }
 
-        public int GetOrdValue(string attributeName)
+        public int OrdValueOf(string attName)
         {
-            return ordAttribVals[attributeIDsByName[attributeName]].value;
+            return ordVALbyID[dataSet.attIDbyNAME[attName]].value;
         }
 
-        public int GetIvlValue(string attributeName)
+        public int IvlValueOf(string attName)
         {
-            return ivlAttribVals[attributeIDsByName[attributeName]].value;
+            return ivlVALbyID[dataSet.attIDbyNAME[attName]].value;
         }
 
-        public float GetRatValue(string attributeName)
+        public float RatValueOf(string attName)
         {
-            return ratAttribVals[attributeIDsByName[attributeName]].value;
+            return ratVALbyID[dataSet.attIDbyNAME[attName]].value;
         }
     }
 }

@@ -1,14 +1,10 @@
 ﻿using GraphicalPrimitive;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace VisBridge
 {
-    public class ObjectBasedVisBridge : MonoBehaviour
+    public class VisBridgeBranch : MonoBehaviour
     {
         [SerializeField]
         public Material material;
@@ -21,12 +17,12 @@ namespace VisBridge
 
         private CurvedLinePoint[] curvedLinePoints;
 
-        public ObjectBasedVisBridge()
+        public VisBridgeBranch()
         {
             
         }
 
-        public ObjectBasedVisBridge(AGraphicalPrimitive origin, AGraphicalPrimitive target)
+        public VisBridgeBranch(AGraphicalPrimitive origin, AGraphicalPrimitive target)
         {
             this.origin = origin;
             this.target = target;
@@ -59,7 +55,7 @@ namespace VisBridge
                 LineRenderer lr = gameObject.GetComponent<LineRenderer>();
 
                 // check if one port is inactive
-                if(origin.isActiveAndEnabled && target.isActiveAndEnabled)
+                if(origin != null && target != null && origin.isActiveAndEnabled && target.isActiveAndEnabled)
                 {
                     paused = false;
                     
@@ -154,9 +150,9 @@ namespace VisBridge
 
         public override bool Equals(object other)
         {
-            if(other is ObjectBasedVisBridge)
+            if(other is VisBridgeBranch)
             {
-                ObjectBasedVisBridge otherBridge = (other as ObjectBasedVisBridge);
+                VisBridgeBranch otherBridge = (other as VisBridgeBranch);
                 return ((otherBridge.origin.Equals(origin) && otherBridge.target.Equals(target)) ||
                         (otherBridge.origin.Equals(target) && otherBridge.target.Equals(origin)));
             } else

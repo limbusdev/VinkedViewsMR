@@ -65,7 +65,7 @@ MonoBehaviour:
     type: 2}
   fastAxesLineRendererPrefab: {fileID: 114537018403411326, guid: 13e91da7fdd310349b67a330b128f0e8,
     type: 2}
-  bar2D: {fileID: 1407780082100994, guid: a247774af56768b40a121d512d42d824, type: 2}
+  bar2D: {fileID: 114136709646360438, guid: a247774af56768b40a121d512d42d824, type: 2}
   label: {fileID: 1340621660906316, guid: a8914cdd4e0184542a0251c684fb596d, type: 2}
   Axis2DPrefab: {fileID: 1131818127915714, guid: b3c5ed6b532d28e4f92871287f6ff18c,
     type: 2}
@@ -73,7 +73,7 @@ MonoBehaviour:
     type: 2}
   XYLine2DPrefab: {fileID: 1946303620594004, guid: b708eac9b556220449bbb4a602d530cf,
     type: 2}
-  ScatterDot2DPrefab: {fileID: 1304509300456040, guid: 58364d502df45bb478ef6870ff9fb9e9,
+  ScatterDot2DPrefab: {fileID: 114827669489515190, guid: 58364d502df45bb478ef6870ff9fb9e9,
     type: 2}
   TickPrefab: {fileID: 1966629896501752, guid: b1c36d1c9a172aa4a875cc7fe5d941af, type: 2}
   GridLinePrefab: {fileID: 1347270854832024, guid: 0a74383a57ae68746bad9e42379b8fde,
@@ -92,15 +92,15 @@ MonoBehaviour:
   ETVAnchorPrefab: {fileID: 1626009144967710, guid: 1fd7ca43b384af645b20e838dc0aef49,
     type: 2}
   ETVAnchor: {fileID: 1626009144967710, guid: 1fd7ca43b384af645b20e838dc0aef49, type: 2}
-  etv3DBarChart: {fileID: 1609755241933270, guid: 47b892c86c8a58b49a108da03d68cbf5,
+  etv3DBarChart: {fileID: 114238831780192620, guid: 47b892c86c8a58b49a108da03d68cbf5,
     type: 2}
-  ETV3DScatterPlotPrefab: {fileID: 1671202286137060, guid: 136568680d8318a43a8d61beaf7282c1,
+  ETV3DScatterPlotPrefab: {fileID: 114507488717902384, guid: 136568680d8318a43a8d61beaf7282c1,
     type: 2}
-  ETV3DParallelCoordinatesPlotPrefab: {fileID: 1624213207364540, guid: 1ea11e69e61ebb347adfcd37b485156e,
+  ETV3DParallelCoordinatesPlotPrefab: {fileID: 114014963162377230, guid: 1ea11e69e61ebb347adfcd37b485156e,
     type: 2}
-  ETV3DBarMapPrefab: {fileID: 1719707709088542, guid: 4db5577ed2b42ea47ab9aaf79d7d313d,
+  ETV3DBarMapPrefab: {fileID: 114674254035258224, guid: 4db5577ed2b42ea47ab9aaf79d7d313d,
     type: 2}
-  ETV3DSingleAxisPrefab: {fileID: 1839437423778656, guid: edf08bf8f25b6b64eb5a745a1bcca232,
+  ETV3DSingleAxisPrefab: {fileID: 114795917934611982, guid: edf08bf8f25b6b64eb5a745a1bcca232,
     type: 2}
 --- !u!114 &114686547054253970
 MonoBehaviour:
@@ -116,15 +116,15 @@ MonoBehaviour:
   ETVAnchorPrefab: {fileID: 1626009144967710, guid: 1fd7ca43b384af645b20e838dc0aef49,
     type: 2}
   ETVAnchor: {fileID: 1626009144967710, guid: 1fd7ca43b384af645b20e838dc0aef49, type: 2}
-  ETV2DBarChartPrefab: {fileID: 1651200660064012, guid: b4b68d01b65cd3042b41df4c564f1891,
+  ETV2DBarChartPrefab: {fileID: 114160997588826796, guid: b4b68d01b65cd3042b41df4c564f1891,
     type: 2}
-  ETV2DLineChartPrefab: {fileID: 1131613118678104, guid: f8138f01c2156484d9e7acced3e42ec7,
+  ETV2DLineChartPrefab: {fileID: 114191012681724024, guid: f8138f01c2156484d9e7acced3e42ec7,
     type: 2}
   ETV2DVirtualDevicePrefab: {fileID: 1574644527077756, guid: eb9053d283853c648b2381549d56f630,
     type: 2}
-  ETV2DScatterPlotPrefab: {fileID: 1752467886236462, guid: 888d14bbc4cf14d4586f0fcf5832dfe6,
+  ETV2DScatterPlotPrefab: {fileID: 114745068558630630, guid: 888d14bbc4cf14d4586f0fcf5832dfe6,
     type: 2}
-  ETV2DParallelCoordinatesPlotPrefab: {fileID: 1193521869361126, guid: 26c1067c4e899784fadc65afb8d107c5,
+  ETV2DParallelCoordinatesPlotPrefab: {fileID: 114990772440683688, guid: 26c1067c4e899784fadc65afb8d107c5,
     type: 2}
 --- !u!114 &114947809599510296
 MonoBehaviour:
@@ -148,10 +148,10 @@ MonoBehaviour:
   fastAxesLineRendererPrefab: {fileID: 114537018403411326, guid: 13e91da7fdd310349b67a330b128f0e8,
     type: 2}
   cone: {fileID: 1235091312533442, guid: a7ac7c0156811924185a33f61cda2f6b, type: 2}
-  bar3D: {fileID: 1851467595003564, guid: 77a7171990d32c74688c6f030fc34754, type: 2}
+  bar3D: {fileID: 114065101787556358, guid: 77a7171990d32c74688c6f030fc34754, type: 2}
   axis3D: {fileID: 1213320104624410, guid: d42f4c6b07da3134e9da74c7459174a0, type: 2}
   label: {fileID: 1340621660906316, guid: a8914cdd4e0184542a0251c684fb596d, type: 2}
-  ScatterDot3DPrefab: {fileID: 1474547056978956, guid: f68d7b6bf18ba4549962492f0703fc84,
+  ScatterDot3DPrefab: {fileID: 114884204510470252, guid: f68d7b6bf18ba4549962492f0703fc84,
     type: 2}
   Axis3DPrefab: {fileID: 1213320104624410, guid: d42f4c6b07da3134e9da74c7459174a0,
     type: 2}
@@ -168,5 +168,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be0d1f34cb87aad4d9d0535d43480e5d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ETV3DFlexiblePCPPrefab: {fileID: 1971805496130914, guid: 5ea6c019e52b9d640b3822b1d8c5ea55,
+  ETV3DFlexiblePCPPrefab: {fileID: 114398217930250340, guid: 5ea6c019e52b9d640b3822b1d8c5ea55,
     type: 2}

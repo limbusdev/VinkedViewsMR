@@ -8952,19 +8952,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49f1168a70109a745bc5a6787d633ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjectBasedVisBridgePrefab: {fileID: 1735373077562916, guid: 98a88dda044fca740b4e24a346788676,
-    type: 2}
-  NewETVPosition: {fileID: 1682145877895716}
+  NewETVPlaceHolder: {fileID: 4369075689113050}
   ObjectCollection: {fileID: 1584293225478342}
   CubeIconVariable: {fileID: 1035978343418650, guid: 4f98e3a4eeb8a5d41846060d6b7189f0,
     type: 2}
   NetworkAnchorPrefab: {fileID: 1836349302284128, guid: 97db2d1010db91642a5e2101d54d1d2e,
     type: 2}
   dataProvider: {fileID: 0}
-  interactionReceiver: {fileID: 114358196427402574}
   lineMaterial: {fileID: 2100000, guid: e7b8d8b54700d454aa635da9f950cdab, type: 2}
-  visBridgePrefab: {fileID: 1704824630967644, guid: 6549b96df8efde14d909ff0b278669f4,
-    type: 2}
+  interactionReceiver: {fileID: 114358196427402574}
 --- !u!114 &114332511849747838
 MonoBehaviour:
   m_ObjectHideFlags: 1

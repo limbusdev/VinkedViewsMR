@@ -42,15 +42,24 @@ namespace ETV
                     if(slots[slot] == VACANT)
                     {
                         ETV.transform.position = slot.transform.position;
-                        var rot = Quaternion.Euler(slot.transform.rotation.eulerAngles.x, slot.transform.eulerAngles.y + 180, slot.transform.eulerAngles.z);
-                        ETV.transform.GetChild(0).GetChild(1).transform.rotation = rot;
+                        try
+                        { 
+                            var rot = Quaternion.Euler(
+                                slot.transform.rotation.eulerAngles.x, 
+                                slot.transform.eulerAngles.y + 180,
+                                slot.transform.eulerAngles.z);
+                            ETV.transform.GetChild(0).GetChild(1).transform.rotation = rot;
+                        } catch(Exception e)
+                        {
+                            Debug.LogWarning(e.Message + ", Could not rotate auto positioned ETV.");
+                        }
                         slots[slot] = OCCUPIED;
                         return success = true;
                     }
                 }
             } catch(Exception e)
             {
-                Debug.LogError(e.Message);
+                Debug.LogException(e);
             }
 
             return success;

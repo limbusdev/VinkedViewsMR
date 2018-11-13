@@ -13,7 +13,7 @@ public class ETV2DVirtualDevice : MonoBehaviour {
 
     public void BindVisualization(GameObject vis)
     {
-        SetSize(vis.GetComponent<AETV2D>().bounds[0], vis.GetComponent<AETV2D>().bounds[1]);
+        SetSize(1,1);
         vis.transform.parent = gameObject.transform;
         DeviceAnchor.transform.localPosition = new Vector3(-.3f, -.3f, .01f);
     }

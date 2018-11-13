@@ -8,22 +8,43 @@ namespace MetaVisualization
     public class MetaVisFactory : AMetaVisFactory
     {
         [SerializeField]
-        public GameObject ETV3DFlexiblePCPPrefab;
+        public ETV3DFlexiblePCP ETV3DFlexiblePCPPrefab;
         
-        public override GameObject CreateFlexiblePCP(DataSet data, string[] attIDs, AAxis axisA, AAxis axisB)
+        public override AETV CreateFlexiblePCP(DataSet data, string[] attIDs, AAxis axisA, AAxis axisB)
         {
-            var metaVis = Instantiate(ETV3DFlexiblePCPPrefab);
+            var flexPCP = Instantiate(ETV3DFlexiblePCPPrefab);
 
             // Get attribute IDs of the given attributes.
             int[] nomIDs, ordIDs, ivlIDs, ratIDs;
             AttributeProcessor.ExtractAttributeIDs(data, attIDs, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
-
-            var flexPCP = metaVis.GetComponent<ETV3DFlexiblePCP>();
-            flexPCP.Init(data, nomIDs, ordIDs, ivlIDs, ratIDs, axisA, axisB);
+            
+            flexPCP.Init(data, nomIDs, ordIDs, ivlIDs, ratIDs, axisA, axisB, true);
             flexPCP.DrawGraph();
-            flexPCP.ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
-            return metaVis;
+            return flexPCP;
+        }
+
+        public override AETV CreateMetaFlexibleLinedAxes(DataSet data, string[] attIDs, AAxis axisA, AAxis axisB)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override AETV CreateMetaHeatmap3D(DataSet data, string[] attIDs, bool manualLength = false, float lengthA = 1f, float lengthB = 1f)
+        {
+            // Create Visualization
+            var factory = ServiceLocator.ETVPlant3D();
+            var mVis = factory.CreateETVBarMap(data, attIDs[0], attIDs[1], manualLength, lengthA, lengthB, true);
+
+            return mVis;
+        }
+
+        public override AETV CreateMetaScatterplot2D(DataSet data, string[] attIDs)
+        {
+            // Create Visualization
+            var factory = ServiceLocator.ETVPlant2D();
+            var mVis = factory.CreateScatterplot(data, attIDs, true);
+            
+            return mVis;
         }
     }
 }

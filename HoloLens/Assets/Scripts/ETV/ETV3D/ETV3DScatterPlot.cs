@@ -1,102 +1,73 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using GraphicalPrimitive;
 using Model;
 using UnityEngine;
 
-public class ETV3DScatterPlot : AETV3D
+namespace ETV
 {
-    private ScatterDot3D[] dots;
-    private string attributeA, attributeB, attributeC;
-    private LoM lomA, lomB, lomC;
-    private bool initialized = false;
-    
-
-    public void Init(DataSet data, string attA, string attB, string attC)
+    public class ETV3DScatterPlot : AETVScatterPlot
     {
-        base.Init(data);
-        this.attributeA = attA;
-        this.attributeB = attB;
-        this.attributeC = attC;
-        this.lomA = data.GetTypeOf(attA);
-        this.lomB = data.GetTypeOf(attB);
-        this.lomC = data.GetTypeOf(attC);
+        private AScatterDot[] dots;
+        private string attributeA, attributeB, attributeC;
 
-        SetUpAxes();
-        DrawGraph();
-        this.initialized = true;
-    }
-    
-    public override void SetUpAxes()
-    {
-        AddAxis(attributeA, lomA, AxisDirection.X);
-        AddAxis(attributeB, lomB, AxisDirection.Y);
-        AddAxis(attributeC, lomC, AxisDirection.Z);
-    }
-
-    public override void DrawGraph()
-    {
-        var dotArray = new List<ScatterDot3D>();
-
-        foreach(var infO in data.infoObjects)
+        public override void Init(DataSet data, string[] attributes, bool isMetaVis = false)
         {
-            float valA = data.GetValue(infO, attributeA, lomA);
-            float valB = data.GetValue(infO, attributeB, lomB);
-            float valC = data.GetValue(infO, attributeC, lomC);
+            base.Init(data, isMetaVis);
+            this.attributeA = attributes[0];
+            this.attributeB = attributes[1];
+            this.attributeC = attributes[2];
 
-            if(!float.IsNaN(valA) && !float.IsNaN(valB) && !float.IsNaN(valC))
+            SetUpAxes();
+            DrawGraph();
+        }
+
+        public override void SetUpAxes()
+        {
+            AddAxis(attributeA, AxisDirection.X);
+            AddAxis(attributeB, AxisDirection.Y);
+            AddAxis(attributeC, AxisDirection.Z);
+        }
+
+        public override void DrawGraph()
+        {
+            var dotArray = new List<AScatterDot>();
+
+            foreach(var infO in Data.infoObjects)
             {
-                var pos = new Vector3(
-                    GetAxis(AxisDirection.X).TransformToAxisSpace(valA),
-                    GetAxis(AxisDirection.Y).TransformToAxisSpace(valB),
-                    GetAxis(AxisDirection.Z).TransformToAxisSpace(valC)
-                    );
+                float valA = Data.ValueOf(infO, attributeA);
+                float valB = Data.ValueOf(infO, attributeB);
+                float valC = Data.ValueOf(infO, attributeC);
 
-                GameObject dot = ServiceLocator.instance.Factory3DPrimitives.CreateScatterDot();
-                dot.transform.position = pos;
-                dot.transform.parent = Anchor.transform;
-                dotArray.Add(dot.GetComponent<ScatterDot3D>());
+                if(!float.IsNaN(valA) && !float.IsNaN(valB) && !float.IsNaN(valC))
+                {
+                    var pos = new Vector3(
+                        GetAxis(AxisDirection.X).TransformToAxisSpace(valA),
+                        GetAxis(AxisDirection.Y).TransformToAxisSpace(valB),
+                        GetAxis(AxisDirection.Z).TransformToAxisSpace(valC)
+                        );
 
-                infO.AddRepresentativeObject(attributeA, dot);
-                infO.AddRepresentativeObject(attributeB, dot);
-                infO.AddRepresentativeObject(attributeC, dot);
+                    var dot = ServiceLocator.PrimitivePlant3D().CreateScatterDot();
+                    dot.SetColor(Data.colorTable[infO]);
+                    dot.transform.position = pos;
+                    dot.transform.parent = Anchor.transform;
+                    dotArray.Add(dot);
+
+                    RememberRelationOf(infO, dot);
+                }
             }
+            dots = dotArray.ToArray();
         }
-        dots = dotArray.ToArray();
-    }
 
-    public override void ChangeColoringScheme(ETVColorSchemes scheme)
-    {
-        foreach(ScatterDot3D dot in dots)
+        public override void UpdateETV()
         {
-            Color color = Color.HSVToRGB(.5f, 1, 1);
-            dot.SetColor(color);
-            dot.ApplyColor(color);
+            SetUpAxes();
+            DrawGraph();
         }
-    }
+        
 
-    public override void UpdateETV()
-    {
-        SetUpAxes();
-        DrawGraph();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if(initialized)
+        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
         {
-            var camera = GameObject.FindGameObjectWithTag("MainCamera");
-            // Let point sprites face camera
-            foreach(var dot in dots)
-            {
-                dot.gameObject.transform.LookAt(camera.transform);
-            }
+            return ServiceLocator.PrimitivePlant2D();
         }
-    }
-
-    public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-    {
-        return ServiceLocator.instance.Factory2DPrimitives;
     }
 }

@@ -1,12 +1,11 @@
-﻿using ETV;
-using GraphicalPrimitive;
+﻿using GraphicalPrimitive;
 using Model;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace ETV
 {
-    public class ETV2DPCP : AETV2D
+    public class ETV2DPCP : AETVPCP
     {
         // ........................................................................ PARAMETERS
         // Hook
@@ -27,9 +26,9 @@ namespace ETV
 
         // ........................................................................ CONSTRUCTOR / INITIALIZER
 
-        public void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs)
+        public override void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs, bool isMetaVis = false)
         {
-            base.Init(data);
+            base.Init(data, isMetaVis);
             this.pcpLineGen = new PCP2DLineGenerator();
 
             this.nominalIDs = nominalIDs;
@@ -56,11 +55,12 @@ namespace ETV
             // Setup nominal axes
             foreach(int attID in nominalIDs)
             {
-                attName = data.nomAttribNames[attID];
-                xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attName, 1f, AxisDirection.Y, data);
+                attName = Data.nomAttribNames[attID];
+                xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attName, 1f, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(offset * counter, 0, 0);
                 PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+                RegisterAxis(xAxis.GetComponent<AAxis>());
 
                 counter++;
             }
@@ -68,11 +68,12 @@ namespace ETV
             // Setup ordinal axes
             foreach(int attID in ordinalIDs)
             {
-                attName = data.ordAttribNames[attID];
-                xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attName, 1f, AxisDirection.Y, data);
+                attName = Data.ordAttribNames[attID];
+                xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attName, 1f, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(offset * counter, 0, 0);
                 PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+                RegisterAxis(xAxis.GetComponent<AAxis>());
 
                 counter++;
             }
@@ -80,11 +81,12 @@ namespace ETV
             // Setup interval axes
             foreach(int attID in intervalIDs)
             {
-                attName = data.ivlAttribNames[attID];
-                xAxis = factory2D.CreateAutoTickedAxis(attName, AxisDirection.Y, data);
+                attName = Data.ivlAttribNames[attID];
+                xAxis = factory2D.CreateAutoTickedAxis(attName, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(offset * counter, 0, 0);
                 PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+                RegisterAxis(xAxis.GetComponent<AAxis>());
 
                 counter++;
             }
@@ -93,11 +95,12 @@ namespace ETV
             // Setup ratio axes
             foreach(int attID in ratioIDs)
             {
-                attName = data.ratAttribNames[attID];
-                xAxis = factory2D.CreateAutoTickedAxis(attName, AxisDirection.Y, data);
+                attName = Data.ratAttribNames[attID];
+                xAxis = factory2D.CreateAutoTickedAxis(attName, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(offset * counter, 0, 0);
                 PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+                RegisterAxis(xAxis.GetComponent<AAxis>());
 
                 counter++;
             }
@@ -106,6 +109,7 @@ namespace ETV
             allAxesGO.transform.parent = Anchor.transform;
         }
 
+
         // ........................................................................ DRAW CALLS
 
         public override void DrawGraph()
@@ -113,12 +117,12 @@ namespace ETV
             var notNaNPrimitives = new List<APCPLine>();
 
             int counter = 0;
-            foreach(var infoO in data.infoObjects)
+            foreach(var infO in Data.infoObjects)
             {
                 var line = pcpLineGen.CreateLine(
-                    infoO,
-                    data.colorTable[infoO],
-                    data,
+                    infO,
+                    Data.colorTable[infO],
+                    Data,
                     nominalIDs,
                     ordinalIDs,
                     intervalIDs,
@@ -128,9 +132,9 @@ namespace ETV
                     counter * .0001f);
                 if(line != null)
                 {
-
                     line.transform.parent = Anchor.transform;
                     notNaNPrimitives.Add(line);
+                    RememberRelationOf(infO, line);
                 }
                 counter++;
             }

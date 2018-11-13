@@ -3,114 +3,100 @@ using GraphicalPrimitive;
 using Model;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using System.Linq;
 
 namespace MetaVisualization
 {
+    
     public class MetaVisSystem : AMetaVisSystem, IGPObserver<AAxis>
     {
+        // .................................................................... EDITOR FIELDS
+
         [SerializeField]
         public DataProvider dataProvider;
+
+
+        // .................................................................... STATIC PARAMETERS
 
         public static float triggerMetaVisDistance = 1f;
         public static float triggerInvisibleDistance = .05f;
         public static float triggerInvisibleAngleDiscrepancy = 5;
 
+
+        // .................................................................... PRIVATE PROPERTIES
+
         private IDictionary<AETV, IList<AAxis>> axes = new Dictionary<AETV, IList<AAxis>>();
-        private IDictionary<MetaVisKey, AETV> metaVisualizations = new Dictionary<MetaVisKey, AETV>();
-        private IDictionary<MetaVisKey, AETV> Original2metaAxis = new Dictionary<MetaVisKey, AETV>();   // Maps original axes to their counterpart in the meta visualization
+        private IDictionary<AxisPair, AETV> metaVisualizations = new Dictionary<AxisPair, AETV>();
+        // Maps original axes to their (shadow) counterpart in the meta visualization
+        private IDictionary<AxisPair, AETV> Original2Shadow = new Dictionary<AxisPair, AETV>();   
+        
 
-
-        // Use this for initialization
-        void Start()
-        {
-
-        }
-
-
-
-        // Update is called once per frame
+        // .................................................................... UPDATE METHOD
         void Update()
         {
-            var newMetaVis = new Dictionary<MetaVisKey,AETV>();
-            var metaVisToBeRemoved = new Dictionary<MetaVisKey, AETV>();
-
-            foreach(var etvA in axes.Keys)
+            var toBeAdded = new Dictionary<AxisPair, AETV>();
+            var toBeShred = new Dictionary<AxisPair, AETV>();
+            
+            foreach(var etvs in DisjointPairsOf(axes.Keys, axes.Keys))
             {
-                foreach(var axisA in axes[etvA])
+                foreach(var axes in DisjointPairsOf(axes[etvs.A], axes[etvs.B]))
                 {
-                    foreach(var etvB in axes.Keys)
+                    // ................................................ CREATE NEW METAVIS
+                    int dataSetID;
+                    if(MetaVisShouldBeCreated(etvs, axes, out dataSetID))
                     {
-                        foreach(var axisB in axes[etvB])
+                        if(!toBeAdded.ContainsKey(axes))
                         {
-                            var key = new MetaVisKey(axisA, axisB);
-                            // Check if there isn't a MetaVis with both axes already
-
-                            // ................................................ CREATE NEW METAVIS
-                            if(!axisA.attributeName.Equals(axisB.attributeName) && !metaVisualizations.ContainsKey(key))
+                            var newVis = SpanMetaVisFor(axes, dataSetID);
+                            toBeAdded.Add(axes, newVis);
+                            try
                             {
-                                // If they're not identical and not representing the same data dimension
-                                // and are near enough to each other
-                                if(CheckIfNearEnough(axisA, axisB))
+                                if(newVis.registeredAxes.ContainsKey(axes.A.attributeName))
                                 {
-                                    int dataSetID;
-                                    if(CheckIfCompatible(etvA, etvB, axisA, axisB, out dataSetID))
-                                    {
-                                        // span a new metavisualization between them
-                                        if(!newMetaVis.ContainsKey(new MetaVisKey(axisA, axisB)))
-                                        {
-                                            var newVis = SpanMetaVisBetween(axisA, axisB, dataSetID);
-                                            newMetaVis.Add(new MetaVisKey(axisA, axisB), newVis);
-                                            try
-                                            {
-                                                if(newVis.registeredAxes.ContainsKey(axisA.attributeName))
-                                                {
-                                                    Original2metaAxis.Add(new MetaVisKey(axisA, newVis.registeredAxes[axisA.attributeName]), newVis);
-                                                }
-                                                if(newVis.registeredAxes.ContainsKey(axisB.attributeName))
-                                                {
-                                                    Original2metaAxis.Add(new MetaVisKey(axisB, newVis.registeredAxes[axisB.attributeName]), newVis);
-                                                }
-                                                
-                                            } catch(Exception e)
-                                            {
-                                                Debug.LogException(e);
-                                            }
-                                        }
-                                    }
-                                } 
-                            } 
-                            // ................................................ UPDATE EXISTING METAVIS
-                            else
-                            {
-                                // If there is a metavis and it is too far stretched
-                                if(!CheckIfNearEnough(axisA, axisB))
-                                {
-                                    // Check if there is a MetaVis already,
-                                    // and if so - remove it.
-                                    
-                                    if(metaVisualizations.ContainsKey(key) && !metaVisToBeRemoved.ContainsKey(key))
-                                    {
-                                        metaVisToBeRemoved.Add(key, metaVisualizations[key]);
-                                    }
+                                    var newKey = new AxisPair(axes.A, newVis.registeredAxes[axes.A.attributeName]);
+                                    Original2Shadow.Add(newKey, newVis);
                                 }
+                                if(newVis.registeredAxes.ContainsKey(axes.B.attributeName))
+                                {
+                                    var newKey = new AxisPair(axes.B, newVis.registeredAxes[axes.B.attributeName]);
+                                    Original2Shadow.Add(newKey, newVis);
+                                }
+
+                            } catch(Exception e)
+                            {
+                                Debug.LogException(e);
+                            }
+                        }
+                    }
+                    // ................................................ UPDATE EXISTING METAVIS
+                    else
+                    {
+                        // If there is a metavis and it is too far stretched
+                        if(!CheckIfNearEnough(axes))
+                        {
+                            // Check if there is a MetaVis already,
+                            // and if so - remove it.
+
+                            if(metaVisualizations.ContainsKey(axes) && !toBeShred.ContainsKey(axes))
+                            {
+                                toBeShred.Add(axes, metaVisualizations[axes]);
                             }
                         }
                     }
                 }
             }
-
+            
             // Hide very close axes of meta-visualizations
-            foreach(var axisPair in Original2metaAxis.Keys)
+            foreach(var axisPair in Original2Shadow.Keys)
             {
                 try
                 {
-                    var originalAxis = axisPair.axisA;
-                    var metaAxis = axisPair.axisB;
+                    var originalAxis = axisPair.A;
+                    var metaAxis = axisPair.B;
                     var showMetaAxis = !CheckIfNearEnoughToHideAxis(originalAxis, metaAxis);
 
-                    var metaVis = Original2metaAxis[axisPair];
+                    var metaVis = Original2Shadow[axisPair];
 
                     metaAxis.SetVisibility(showMetaAxis);
 
@@ -133,7 +119,7 @@ namespace MetaVisualization
             }
 
             // Apply made changes
-            foreach(var key in metaVisToBeRemoved.Keys)
+            foreach(var key in toBeShred.Keys)
             {
                 var metaVis = metaVisualizations[key];
                 metaVis.Dispose();
@@ -141,9 +127,9 @@ namespace MetaVisualization
                 metaVisualizations.Remove(key);
             }
 
-            foreach(var key in newMetaVis.Keys)
+            foreach(var key in toBeAdded.Keys)
             {
-                metaVisualizations.Add(key, newMetaVis[key]);
+                metaVisualizations.Add(key, toBeAdded[key]);
             } 
         }
 
@@ -179,36 +165,51 @@ namespace MetaVisualization
             axes[etv].Remove(axis);
         }
 
+        /// <summary>
+        /// (HELPER-MEHTOD)
+        /// Are all preconditions met, to span up a meta-visualization?
+        /// </summary>
+        private bool MetaVisShouldBeCreated(ETVPair etvs, AxisPair axes, out int dataSetID)
+        {
+            bool createIt = true;
 
-        public override AETV SpanMetaVisBetween(AAxis axisA, AAxis axisB, int dataSetID)
+            createIt &= !axes.A.attributeName.Equals(axes.B.attributeName);
+            createIt &= !metaVisualizations.ContainsKey(axes);
+            createIt &= CheckIfNearEnough(axes);
+            createIt &= CheckIfCompatible(etvs, axes, out dataSetID);
+
+            return createIt;
+        }
+
+        public override AETV SpanMetaVisFor(AxisPair axes, int dataSetID)
         {
             // calculate distance between their origins
-            var originDist = Vector3.Distance(axisA.GetAxisBaseGlobal(), axisB.GetAxisBaseGlobal());
+            var originDist = Vector3.Distance(axes.A.GetAxisBaseGlobal(), axes.B.GetAxisBaseGlobal());
             // use existing axes (if origins are very close to each other), or create duplicates?
             var createDuplicates = (originDist > .2f);
             
             // Which metavisualization will do?
-            switch(WhichMetaVis(axisA, axisB, dataSetID))
+            switch(WhichMetaVis(axes, dataSetID))
             {
                 case MetaVisType.Scatterplot2D:
-                    return SpanMetaVisScatterplot2D(axisA, axisB, dataSetID, createDuplicates);
+                    return SpanMetaVisScatterplot2D(axes, dataSetID, createDuplicates);
                 case MetaVisType.HeatMap:
-                    return SpanMetaVisHeatmap3D(axisA, axisB, dataSetID, createDuplicates);
+                    return SpanMetaVisHeatmap3D(axes, dataSetID, createDuplicates);
                 default:
-                    return SpanMetaVisImmersiveAxis(axisA, axisB, dataSetID);
+                    return SpanMetaVisImmersiveAxis(axes, dataSetID);
             }
         }
 
         // .................................................................... Controller Methods
 
-        public override bool CheckIfNearEnough(AAxis axisA, AAxis axisB)
+        public override bool CheckIfNearEnough(AxisPair axes)
         {
             if(
-                ((axisA.GetAxisBaseGlobal() - axisB.GetAxisBaseGlobal()).magnitude < triggerMetaVisDistance
-                || (axisA.GetAxisBaseGlobal() - axisB.GetAxisTipGlobal()).magnitude < triggerMetaVisDistance)
+                ((axes.A.GetAxisBaseGlobal() - axes.B.GetAxisBaseGlobal()).magnitude < triggerMetaVisDistance
+                || (axes.A.GetAxisBaseGlobal() - axes.B.GetAxisTipGlobal()).magnitude < triggerMetaVisDistance)
                 &&
-                ((axisA.GetAxisTipGlobal() - axisB.GetAxisTipGlobal()).magnitude < triggerMetaVisDistance
-                || (axisA.GetAxisTipGlobal() - axisB.GetAxisTipGlobal()).magnitude < triggerMetaVisDistance)
+                ((axes.A.GetAxisTipGlobal() - axes.B.GetAxisTipGlobal()).magnitude < triggerMetaVisDistance
+                || (axes.A.GetAxisTipGlobal() - axes.B.GetAxisTipGlobal()).magnitude < triggerMetaVisDistance)
                 )
             {
                 return true;
@@ -235,16 +236,16 @@ namespace MetaVisualization
             }
         }
 
-        public override bool CheckIfCompatible(AETV etvA, AETV etvB, AAxis axisA, AAxis axisB, out int dataSetID)
+        public override bool CheckIfCompatible(ETVPair etvs, AxisPair axes, out int dataSetID)
         {
-            if(axisA.stats.name == axisB.stats.name)
+            if(axes.A.stats.name == axes.B.stats.name)
             {
                 Debug.LogWarning("Given axes represent the same dimension and can't span a useful MetaVis.");
                 dataSetID = -1;
                 return false;
             }
 
-            if(etvA.Equals(etvB))
+            if(axes.A.Equals(axes.B))
             {
                 Debug.LogWarning("Given axes belong to the same visualization and are not connected by MetaVis'.");
                 dataSetID = -1;
@@ -256,14 +257,14 @@ namespace MetaVisualization
             {
                 var data = dataProvider.dataSets[id];
 
-                bool existsA = data.attIDbyNAME.ContainsKey(axisA.stats.name);
-                bool existsB = data.attIDbyNAME.ContainsKey(axisB.stats.name);
+                bool existsA = data.attIDbyNAME.ContainsKey(axes.A.stats.name);
+                bool existsB = data.attIDbyNAME.ContainsKey(axes.B.stats.name);
 
                 // If both variables exist in the same data set
                 if(existsA && existsB)
                 {
-                    bool correctLoMA = data.TypeOf(axisA.stats.name) == axisA.stats.type;
-                    bool correctLoMB = data.TypeOf(axisB.stats.name) == axisB.stats.type;
+                    bool correctLoMA = data.TypeOf(axes.A.stats.name) == axes.A.stats.type;
+                    bool correctLoMB = data.TypeOf(axes.B.stats.name) == axes.B.stats.type;
 
                     if(existsA && existsB && correctLoMA && correctLoMB)
                     {
@@ -277,7 +278,7 @@ namespace MetaVisualization
             return false;
         }
 
-        public override MetaVisType WhichMetaVis(AAxis axisA, AAxis axisB, int dataSetID)
+        public override MetaVisType WhichMetaVis(AxisPair axes, int dataSetID)
         {
             // Which MetaVis is defined by the implicit combination grammar?
 
@@ -287,13 +288,13 @@ namespace MetaVisualization
             // TODO - if enough time
 
             // calculate angle between axes
-            var angle = Vector3.Angle(axisA.GetAxisDirectionGlobal(), axisB.GetAxisDirectionGlobal());
+            var angle = Vector3.Angle(axes.A.GetAxisDirectionGlobal(), axes.B.GetAxisDirectionGlobal());
 
             // are axes orthogonal to each other? (between 85 and 95 degrees)
             var orthogonalCase = (Mathf.Abs(angle - 90) < 5);
 
-            var lomA = axisA.stats.type;
-            var lomB = axisB.stats.type;
+            var lomA = axes.A.stats.type;
+            var lomB = axes.B.stats.type;
 
             if(orthogonalCase) // ......................... ORTHOGONAL
             {
@@ -314,27 +315,27 @@ namespace MetaVisualization
             }
         }
 
-        public override AETV SpanMetaVisImmersiveAxis(AAxis axisA, AAxis axisB, int dataSetID)
+        public override AETV SpanMetaVisImmersiveAxis(AxisPair axes, int dataSetID)
         {
-            return GenerateImmersiveAxes(dataSetID, new string[] { axisA.stats.name, axisB.stats.name }, axisA, axisB);
+            return GenerateImmersiveAxes(dataSetID, new string[] { axes.A.stats.name, axes.B.stats.name }, axes);
         }
         
 
         // .................................................................... Factory Methods
 
-        public override AETV SpanMetaVisFlexibleLinedAxes(AAxis axisA, AAxis axisB, int dataSetID)
+        public override AETV SpanMetaVisFlexibleLinedAxes(AxisPair axes, int dataSetID)
         {
-            return GenerateFlexibleLinkedAxes(dataSetID, new string[] { axisA.stats.name, axisB.stats.name }, axisA, axisB);
+            return GenerateFlexibleLinkedAxes(dataSetID, new string[] { axes.A.stats.name, axes.B.stats.name }, axes);
         }
 
-        public override AETV SpanMetaVisScatterplot2D(AAxis axisA, AAxis axisB, int dataSetID, bool duplicateAxes)
+        public override AETV SpanMetaVisScatterplot2D(AxisPair axes, int dataSetID, bool duplicateAxes)
         {
-            return GenerateScatterplot2D(dataSetID, new string[] { axisA.stats.name, axisB.stats.name }, axisA, axisB, duplicateAxes);
+            return GenerateScatterplot2D(dataSetID, new string[] { axes.A.stats.name, axes.B.stats.name }, axes, duplicateAxes);
         }
 
-        public override AETV SpanMetaVisHeatmap3D(AAxis axisA, AAxis axisB, int dataSetID, bool duplicateAxes)
+        public override AETV SpanMetaVisHeatmap3D(AxisPair axes, int dataSetID, bool duplicateAxes)
         {
-            return GenerateHeatmap3D(dataSetID, new string[] { axisA.stats.name, axisB.stats.name }, axisA, axisB, duplicateAxes);
+            return GenerateHeatmap3D(dataSetID, new string[] { axes.A.stats.name, axes.B.stats.name }, axes, duplicateAxes);
         }
 
 
@@ -343,14 +344,14 @@ namespace MetaVisualization
         ///////////////////////////////////////////////////////////////////////////////////////////
         // ........................................................................ MetaVis FACTORY
 
-        public override AETV GenerateImmersiveAxes(int dataSetID, string[] variables, AAxis axisA, AAxis axisB)
+        public override AETV GenerateImmersiveAxes(int dataSetID, string[] variables, AxisPair axes)
         {
             try
             {
                 var ds = dataProvider.dataSets[dataSetID];
 
                 var factory = ServiceLocator.instance.FactoryMetaVis;
-                var vis = factory.CreateFlexiblePCP(ds, variables, axisA, axisB);
+                var vis = factory.CreateFlexiblePCP(ds, variables, axes.A, axes.B);
                 
                 return vis;
             } catch(Exception e)
@@ -363,7 +364,7 @@ namespace MetaVisualization
             }
         }
 
-        public override AETV GenerateScatterplot2D(int dataSetID, string[] variables, AAxis axisA, AAxis axisB, bool duplicateAxes)
+        public override AETV GenerateScatterplot2D(int dataSetID, string[] variables, AxisPair axes, bool duplicateAxes)
         {
             try
             {
@@ -372,18 +373,18 @@ namespace MetaVisualization
                 var plnt = ServiceLocator.MetaVisPlant();
                 var mVis = plnt.CreateMetaScatterplot2D(data, variables);
 
-                RotateAndScaleCorrectly(mVis, new AAxis[] { axisA, axisB });
+                RotateAndScaleCorrectly(mVis, new AAxis[] { axes.A, axes.B });
 
                 // Rotate and translate Meta-Visualization to match spanning axes
                 // look in direction of cross product
                 var cross = Vector3.Cross(
-                    axisA.GetAxisDirectionGlobal(),
-                    axisB.GetAxisDirectionGlobal());
+                    axes.A.GetAxisDirectionGlobal(),
+                    axes.B.GetAxisDirectionGlobal());
 
                 mVis.transform.forward = cross;
 
                 // move to point between axes' origins
-                mVis.transform.position = (axisA.GetAxisBaseGlobal() + axisB.GetAxisBaseGlobal()) / 2f;
+                mVis.transform.position = (axes.A.GetAxisBaseGlobal() + axes.B.GetAxisBaseGlobal()) / 2f;
 
                 
 
@@ -399,7 +400,7 @@ namespace MetaVisualization
             }
         }
 
-        public override AETV GenerateHeatmap3D(int dataSetID, string[] variables, AAxis axisA, AAxis axisB, bool duplicateAxes)
+        public override AETV GenerateHeatmap3D(int dataSetID, string[] variables, AxisPair axes, bool duplicateAxes)
         {
             try
             {
@@ -410,10 +411,10 @@ namespace MetaVisualization
                 // Rotate and translate Meta-Visualization to match spanning axes
                 // look in direction of cross product
                 var up = Vector3.Cross(
-                    axisA.GetAxisDirectionGlobal(),
-                    axisB.GetAxisDirectionGlobal());
+                    axes.A.GetAxisDirectionGlobal(),
+                    axes.B.GetAxisDirectionGlobal());
 
-                var angle = Vector3.SignedAngle(axisA.GetAxisDirectionGlobal(), axisB.GetAxisDirectionGlobal(), up);
+                var angle = Vector3.SignedAngle(axes.A.GetAxisDirectionGlobal(), axes.B.GetAxisDirectionGlobal(), up);
 
                 string[] vars = new string[2];
                 if(angle > 0)
@@ -431,22 +432,22 @@ namespace MetaVisualization
                 if(angle > 0)
                 {
                     var rot = new Quaternion();
-                    rot.SetLookRotation(axisA.GetAxisDirectionGlobal(), up);
+                    rot.SetLookRotation(axes.A.GetAxisDirectionGlobal(), up);
                     mVis.transform.rotation = rot;
                 } else
                 {
                     var rot = new Quaternion();
-                    rot.SetLookRotation(axisB.GetAxisDirectionGlobal(), up);
+                    rot.SetLookRotation(axes.B.GetAxisDirectionGlobal(), up);
                     mVis.transform.rotation = rot;
                 }
 
                 
 
 
-                RotateAndScaleCorrectly(mVis, new AAxis[] { axisA, axisB });
+                RotateAndScaleCorrectly(mVis, new AAxis[] { axes.A, axes.B });
 
                 // move to point between axes' origins
-                mVis.transform.position = (axisA.GetAxisBaseGlobal() + axisB.GetAxisBaseGlobal()) / 2f;
+                mVis.transform.position = (axes.A.GetAxisBaseGlobal() + axes.B.GetAxisBaseGlobal()) / 2f;
 
                 
 
@@ -461,7 +462,7 @@ namespace MetaVisualization
             }
         }
 
-        public override AETV GenerateFlexibleLinkedAxes(int dataSetID, string[] variables, AAxis axisA, AAxis axisB)
+        public override AETV GenerateFlexibleLinkedAxes(int dataSetID, string[] variables, AxisPair axes)
         {
             // Create Meta-Visualization
 
@@ -473,6 +474,24 @@ namespace MetaVisualization
         public void RotateAndScaleCorrectly(AETV mVis, AAxis[] axes)
         {
             mVis.transform.localScale = new Vector3(.5f, .5f, .5f);
+        }
+
+        // -------------------------------------------------------------------- HELPER METHODS
+
+        private IEnumerable<ETVPair> DisjointPairsOf(ICollection<AETV> etvs1, ICollection<AETV> etvs2)
+        {
+            return from etv1 in etvs1      // for each evt1 in axes.Keys
+                   from etv2 in etvs2      // and each etv2 in axes.Keys
+                   where (!etv1.Equals(etv2))  // if they are not the same
+                   select new ETVPair(etv1, etv2);  // make a tuple of them
+        }
+
+        private IEnumerable<AxisPair> DisjointPairsOf(ICollection<AAxis> axesA, ICollection<AAxis> axesB)
+        {
+            return from a in axesA              // for each evt1 in axes.Keys
+                   from b in axesB              // and each etv2 in axes.Keys
+                   where (!a.Equals(b))         // if they are not the same
+                   select new AxisPair(a, b);   // make a tuple of them
         }
 
 

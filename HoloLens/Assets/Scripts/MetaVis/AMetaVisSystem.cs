@@ -44,29 +44,43 @@ namespace MetaVisualization
         {
             FlexibleLinkedAxis, ImmersiveAxis, Scatterplot2D, Scatterplot3D, HeatMap
         }
+        
+        public struct ETVPair
+        {
+            public AETV A { get; private set; }
+            public AETV B { get; private set; }
+
+            public ETVPair(AETV a, AETV b) : this()
+            {
+                A = a;
+                B = b;
+            }
+        }
+
 
         /// <summary>
         /// Key to identify a metavisualization. Keys which contain the same axis
         /// in arbitrary order, are considered equal.
         /// </summary>
-        public class MetaVisKey
+        public class AxisPair
         {
-            public AAxis axisA, axisB;
+            public AAxis A { get; private set; }
+            public AAxis B { get; private set; }
 
-            public MetaVisKey(AAxis axisA, AAxis axisB)
+            public AxisPair(AAxis a, AAxis b)
             {
-                this.axisA = axisA;
-                this.axisB = axisB;
+                A = a;
+                B = b;
             }
 
             public override bool Equals(object obj)
             {
-                if(obj is MetaVisKey)
+                if(obj is AxisPair)
                 {
-                    var other = obj as MetaVisKey;
-                    if(other.axisA.Equals(axisA) && other.axisB.Equals(axisB))
+                    var other = obj as AxisPair;
+                    if(other.A.Equals(A) && other.B.Equals(B))
                         return true;
-                    else if(other.axisA.Equals(axisB) && other.axisB.Equals(axisA))
+                    else if(other.A.Equals(B) && other.B.Equals(A))
                         return true;
                     else
                         return false;
@@ -79,8 +93,8 @@ namespace MetaVisualization
             public override int GetHashCode()
             {
                 var hashCode = -624926263;
-                hashCode = hashCode + EqualityComparer<AAxis>.Default.GetHashCode(axisA);
-                hashCode = hashCode + EqualityComparer<AAxis>.Default.GetHashCode(axisB);
+                hashCode = hashCode + EqualityComparer<AAxis>.Default.GetHashCode(A);
+                hashCode = hashCode + EqualityComparer<AAxis>.Default.GetHashCode(B);
                 return hashCode;
             }
         }
@@ -107,7 +121,7 @@ namespace MetaVisualization
         /// <param name="axisA"></param>
         /// <param name="axisB"></param>
         /// <returns>A new metavisualization</returns>
-        public abstract AETV SpanMetaVisBetween(AAxis axisA, AAxis axisB, int dataSetID);
+        public abstract AETV SpanMetaVisFor(AxisPair pair, int dataSetID);
 
         /// <summary>
         /// Checks whether the given axis tips and bases are both nearer to each other
@@ -116,7 +130,7 @@ namespace MetaVisualization
         /// <param name="axisA"></param>
         /// <param name="axisB"></param>
         /// <returns>If they are near enough to span a MetaVis.</returns>
-        public abstract bool CheckIfNearEnough(AAxis axisA, AAxis axisB);
+        public abstract bool CheckIfNearEnough(AxisPair pair);
 
         /// <summary>
         /// Checks for a dataset which contains both represented attributes and 
@@ -126,7 +140,7 @@ namespace MetaVisualization
         /// <param name="axisA"></param>
         /// <param name="axisB"></param>
         /// <returns>Whether such a dataset exists</returns>
-        public abstract bool CheckIfCompatible(AETV etva, AETV etvB, AAxis axisA, AAxis axisB, out int dataSetID);
+        public abstract bool CheckIfCompatible(ETVPair etvPair, AxisPair axisPair, out int dataSetID);
 
         /// <summary>
         /// Checks, which meta-visualization form would be appropriate
@@ -145,7 +159,7 @@ namespace MetaVisualization
         /// <param name="axisB">second axis</param>
         /// <param name="dataSetID">data set ID of them</param>
         /// <returns>appropriate meta-visualization form</returns>
-        public abstract MetaVisType WhichMetaVis(AAxis axisA, AAxis axisB, int dataSetID);
+        public abstract MetaVisType WhichMetaVis(AxisPair pair, int dataSetID);
 
         /// <summary>
         /// Generates an immersive axis meta-visualization between the given axes of
@@ -155,7 +169,7 @@ namespace MetaVisualization
         /// <param name="axisB">secon axis</param>
         /// <param name="dataSetID">data set ID of them</param>
         /// <returns>new immersive axes meta-visualization</returns>
-        public abstract AETV SpanMetaVisImmersiveAxis(AAxis axisA, AAxis axisB, int dataSetID);
+        public abstract AETV SpanMetaVisImmersiveAxis(AxisPair pair, int dataSetID);
 
         /// <summary>
         /// Generates a Flexible Linked Axes visualization between the given axes
@@ -165,7 +179,7 @@ namespace MetaVisualization
         /// <param name="axisB">second axis</param>
         /// <param name="dataSetID">data set id of them</param>
         /// <returns>new FLA meta-visualization</returns>
-        public abstract AETV SpanMetaVisFlexibleLinedAxes(AAxis axisA, AAxis axisB, int dataSetID);
+        public abstract AETV SpanMetaVisFlexibleLinedAxes(AxisPair pair, int dataSetID);
         
         /// <summary>
         /// Generates a two dimensional scatterplot visualization between the
@@ -177,7 +191,7 @@ namespace MetaVisualization
         /// <param name="dataSetID">data set ID of them</param>
         /// <param name="duplicateAxes">if axes should be ducplicated, because they do not touch</param>
         /// <returns>new 2d scatterplot meta-visualization</returns>
-        public abstract AETV SpanMetaVisScatterplot2D(AAxis axisA, AAxis axisB, int dataSetID, bool duplicateAxes);
+        public abstract AETV SpanMetaVisScatterplot2D(AxisPair pair, int dataSetID, bool duplicateAxes);
 
         /// <summary>
         /// Generates a three dimensional heat map / bar chart, representing the relative
@@ -188,7 +202,7 @@ namespace MetaVisualization
         /// <param name="dataSetID">data set ID of them</param>
         /// <param name="duplicateAxes">if axes should be ducplicated</param>
         /// <returns>new 3d histogramm meta-visualization</returns>
-        public abstract AETV SpanMetaVisHeatmap3D(AAxis axisA, AAxis axisB, int dataSetID, bool duplicateAxes);
+        public abstract AETV SpanMetaVisHeatmap3D(AxisPair pair, int dataSetID, bool duplicateAxes);
 
 
 
@@ -201,7 +215,7 @@ namespace MetaVisualization
         /// <param name="dataSetID"></param>
         /// <param name="variables">Attributes to be present in the PCP.</param>
         /// <returns>GameObject containing the anchored visualization.</returns>
-        public abstract AETV GenerateImmersiveAxes(int dataSetID, string[] variables, AAxis axisA, AAxis axisB);
+        public abstract AETV GenerateImmersiveAxes(int dataSetID, string[] variables, AxisPair pair);
 
         /// <summary>
         /// (HELPER METHOD)
@@ -211,18 +225,7 @@ namespace MetaVisualization
         /// <param name="axisA"></param>
         /// <param name="axisB"></param>
         /// <returns></returns>
-        public abstract AETV GenerateFlexibleLinkedAxes(int dataSetID, string[] variables, AAxis axisA, AAxis axisB);
-
-        /// <summary>
-        /// (HELPER METHOD)
-        /// </summary>
-        /// <param name="dataSetID"></param>
-        /// <param name="variables"></param>
-        /// <param name="axisA"></param>
-        /// <param name="axisB"></param>
-        /// <param name="duplicateAxes"></param>
-        /// <returns></returns>
-        public abstract AETV GenerateScatterplot2D(int dataSetID, string[] variables, AAxis axisA, AAxis axisB, bool duplicateAxes);
+        public abstract AETV GenerateFlexibleLinkedAxes(int dataSetID, string[] variables, AxisPair pair);
 
         /// <summary>
         /// (HELPER METHOD)
@@ -233,6 +236,17 @@ namespace MetaVisualization
         /// <param name="axisB"></param>
         /// <param name="duplicateAxes"></param>
         /// <returns></returns>
-        public abstract AETV GenerateHeatmap3D(int dataSetID, string[] variables, AAxis axisA, AAxis axisB, bool duplicateAxes);
+        public abstract AETV GenerateScatterplot2D(int dataSetID, string[] variables, AxisPair pair, bool duplicateAxes);
+
+        /// <summary>
+        /// (HELPER METHOD)
+        /// </summary>
+        /// <param name="dataSetID"></param>
+        /// <param name="variables"></param>
+        /// <param name="axisA"></param>
+        /// <param name="axisB"></param>
+        /// <param name="duplicateAxes"></param>
+        /// <returns></returns>
+        public abstract AETV GenerateHeatmap3D(int dataSetID, string[] variables, AxisPair pair, bool duplicateAxes);
     }
 }

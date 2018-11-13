@@ -48,7 +48,7 @@ namespace MetaVisualization
                             // Check if there isn't a MetaVis with both axes already
 
                             // ................................................ CREATE NEW METAVIS
-                            if(!metaVisualizations.ContainsKey(key))
+                            if(!axisA.attributeName.Equals(axisB.attributeName) && !metaVisualizations.ContainsKey(key))
                             {
                                 // If they're not identical and not representing the same data dimension
                                 // and are near enough to each other

@@ -60,20 +60,32 @@ namespace GraphicalPrimitive
 
         private void GenerateCollider()
         {
+            // Return, when line is empty
             if(points == null)
             {
                 Debug.LogWarning("Tried to generate PCPLine2D-Colliders, but line is empty.");
                 return;
             }
 
-            var triangles = new int[(points.Length - 1) * 6 * 4 + 12]; // two triangles for every line segment makes 6 vertices for every segment
-
-            if(pivot.GetComponent<MeshCollider>() != null)
+            // create new collider, if there is none
+            MeshCollider collider = pivot.GetComponent<MeshCollider>();
+            if(collider == null)
             {
-                Destroy(pivot.GetComponent<MeshCollider>());
+                collider = pivot.AddComponent<MeshCollider>();
+                collider.sharedMesh = new Mesh();
             }
-            var collider = pivot.AddComponent<MeshCollider>();
+            // clear it otherwise
+            else
+            {
+                if(collider.sharedMesh != null)
+                {
+                    collider.sharedMesh.Clear();
+                }
+            }
 
+            // Create triangle store structure
+            var triangles = new int[(points.Length - 1) * 6 * 4 + 12]; // two triangles for every line segment makes 6 vertices for every segment
+            
             // Generate path
             var path1 = new Vector3[points.Length * 2];
             var path2 = new Vector3[points.Length * 2];
@@ -97,8 +109,7 @@ namespace GraphicalPrimitive
                 path[i + points.Length * 3] = path4[i];
             }
 
-            var mesh = new Mesh();
-            mesh.Clear();
+            var mesh = collider.sharedMesh;
 
             mesh.vertices = path;
 
@@ -164,8 +175,6 @@ namespace GraphicalPrimitive
             mesh.triangles = triangles;
             mesh.RecalculateBounds();
             mesh.RecalculateNormals();
-
-            collider.sharedMesh = mesh;
         }
     }
 }

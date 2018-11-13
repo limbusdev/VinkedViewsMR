@@ -16,12 +16,18 @@ namespace ETV
             ratioIDs;
         
         private AAxis axisA, axisB;
+
+        public string attributeA;
+        public string attributeB;
         
         
         public void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs, AAxis axisA, AAxis axisB, bool isMetaVis = false)
         {
             base.Init(data, isMetaVis);
             this.pcpLineGenerator = new PCP3DLineGenerator();
+
+            this.attributeA = axisA.attributeName;
+            this.attributeB = axisB.attributeName;
 
             this.nominalIDs = nominalIDs;
             this.ordinalIDs = ordinalIDs;
@@ -37,9 +43,9 @@ namespace ETV
 
         public override void DrawGraph()
         {
-            var axes = new Dictionary<int, AAxis>();
-            axes.Add(0, axisA);
-            axes.Add(1, axisB);
+            var axes = new Dictionary<string, AAxis>();
+            axes.Add(axisA.attributeName, axisA);
+            axes.Add(axisB.attributeName, axisB);
             
             foreach(var infoO in Data.infoObjects)
             {
@@ -56,9 +62,9 @@ namespace ETV
             if(disposed)
                 return;
 
-            var axes = new Dictionary<int, AAxis>();
-            axes.Add(0, axisA);
-            axes.Add(1, axisB);
+            var axes = new Dictionary<string, AAxis>();
+            axes.Add(axisA.attributeName, axisA);
+            axes.Add(axisB.attributeName, axisB);
 
             foreach(var key in infoObject2primitive.Keys)
             {

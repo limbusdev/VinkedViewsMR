@@ -19,7 +19,7 @@ namespace ETV
             intervalIDs,
             ratioIDs;
 
-        private IDictionary<int, AAxis> PCPAxesFront, PCPAxesBack;
+        private IDictionary<string, AAxis> PCPAxesFront, PCPAxesBack;
 
         private APCPLine[] lines;
 
@@ -54,18 +54,18 @@ namespace ETV
         
         public override void SetUpAxes()
         {
-            PCPAxesFront = new Dictionary<int, AAxis>();
-            PCPAxesBack = new Dictionary<int, AAxis>();
+            PCPAxesFront = new Dictionary<string, AAxis>();
+            PCPAxesBack = new Dictionary<string, AAxis>();
 
-            GameObject axesFront = GenerateAxes(true, PCPAxesFront);
+            var axesFront = GenerateAxes(true, PCPAxesFront);
             axesFront.transform.parent = Anchor.transform;
 
-            GameObject axesBack = GenerateAxes(false, PCPAxesBack);
+            var axesBack = GenerateAxes(false, PCPAxesBack);
             axesBack.transform.parent = Anchor.transform;
             axesBack.transform.localPosition = new Vector3(0,0, Data.infoObjects.Count * accordionLength);
         }
 
-        private GameObject GenerateAxes(bool withGrid, IDictionary<int, AAxis> axes)
+        private GameObject GenerateAxes(bool withGrid, IDictionary<string, AAxis> axes)
         {
             AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
 
@@ -79,7 +79,7 @@ namespace ETV
                 var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
-                axes.Add(counter, xAxis.GetComponent<Axis2D>());
+                axes.Add(Data.nomAttribNames[attID], xAxis.GetComponent<Axis2D>());
 
                 if(withGrid)
                 {
@@ -99,7 +99,7 @@ namespace ETV
                 var xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attributeName, 1f, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
-                axes.Add(counter, xAxis.GetComponent<Axis2D>());
+                axes.Add(Data.ordAttribNames[attID], xAxis.GetComponent<Axis2D>());
 
                 if(withGrid)
                 {
@@ -119,7 +119,7 @@ namespace ETV
                 var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
-                axes.Add(counter, xAxis.GetComponent<Axis2D>());
+                axes.Add(Data.ivlAttribNames[attID], xAxis.GetComponent<Axis2D>());
 
                 if(withGrid)
                 {
@@ -140,7 +140,7 @@ namespace ETV
                 var xAxis = factory2D.CreateAutoTickedAxis(attributeName, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(.5f * counter, 0, 0);
-                axes.Add(counter, xAxis.GetComponent<Axis2D>());
+                axes.Add(Data.ratAttribNames[attID], xAxis.GetComponent<Axis2D>());
 
                 if(withGrid)
                 {

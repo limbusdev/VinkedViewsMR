@@ -34,7 +34,7 @@ namespace ETV
             int[] ordinalIDs,
             int[] intervalIDs,
             int[] ratioIDs,
-            IDictionary<int, AAxis> axes,
+            IDictionary<string, AAxis> axes,
             bool global,
             float zOffset = 0f
             )
@@ -120,7 +120,7 @@ namespace ETV
         /// <param name="zOffset">offset from PCP to PCP line</param>
         /// <returns>list of 3D vector positions, resembling the anchor points of the pcp line at the various axes</returns>
         private static IList<Vector3> AssemblePolyline(
-            IDictionary<int, AAxis> axes, 
+            IDictionary<string, AAxis> axes, 
             IDictionary<string, float> axisValues, 
             bool global,
             float zOffset
@@ -134,13 +134,15 @@ namespace ETV
             foreach(var name in axisValues.Keys)
             {
                 float value;
+                var axis = axes[name];
 
                 if(global)
                 {
-                    points.Add(axes[counter].GetLocalValueInGlobalSpace(axisValues[name]));
+                    var point = axis.GetLocalValueInGlobalSpace(axisValues[name]);
+                    points.Add(point);
                 } else
                 {
-                    value = axes[counter].TransformToAxisSpace(axisValues[name]);
+                    value = axis.TransformToAxisSpace(axisValues[name]);
                     points.Add(new Vector3(.5f * counter, value, zOffset));
                 }
                 counter++;
@@ -151,7 +153,7 @@ namespace ETV
 
         public static void UpdatePolyline(
             APCPLine line,
-            IDictionary<int, AAxis> axes,
+            IDictionary<string, AAxis> axes,
             bool global,
             float zOffset = 0f
             )
@@ -165,10 +167,10 @@ namespace ETV
                 var value = line.Values[key];
                 if(global)
                 {
-                    points[counter] = axes[counter].GetLocalValueInGlobalSpace(value);
+                    points[counter] = axes[key].GetLocalValueInGlobalSpace(value);
                 } else
                 {
-                    var val = axes[counter].TransformToAxisSpace(value);
+                    var val = axes[key].TransformToAxisSpace(value);
                     points[counter] = new Vector3(.5f * counter, value, zOffset);
                 }
                 counter++;

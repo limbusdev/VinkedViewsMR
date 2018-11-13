@@ -66,7 +66,7 @@ namespace GraphicalPrimitive
                 return;
             }
 
-            int[] triangles = new int[(points.Length - 1) * 6 * 4 + 12]; // two triangles for every line segment makes 6 vertices for every segment
+            var triangles = new int[(points.Length - 1) * 6 * 4 + 12]; // two triangles for every line segment makes 6 vertices for every segment
 
             if(pivot.GetComponent<MeshCollider>() != null)
             {
@@ -75,10 +75,10 @@ namespace GraphicalPrimitive
             var collider = pivot.AddComponent<MeshCollider>();
 
             // Generate path
-            Vector3[] path1 = new Vector3[points.Length * 2];
-            Vector3[] path2 = new Vector3[points.Length * 2];
-            Vector3[] path3 = new Vector3[points.Length * 2];
-            Vector3[] path4 = new Vector3[points.Length * 2];
+            var path1 = new Vector3[points.Length * 2];
+            var path2 = new Vector3[points.Length * 2];
+            var path3 = new Vector3[points.Length * 2];
+            var path4 = new Vector3[points.Length * 2];
 
             for(int i = 0; i < points.Length; i++)
             {
@@ -98,6 +98,7 @@ namespace GraphicalPrimitive
             }
 
             var mesh = new Mesh();
+            mesh.Clear();
 
             mesh.vertices = path;
 

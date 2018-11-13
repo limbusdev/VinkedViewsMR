@@ -125,20 +125,20 @@ public class ARVisTools : NetworkBehaviour
             ///////////////////////////////////////////////////////////////////
             // DYNAMIC
 
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
 
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(3, 0, 0);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(3, 0, 0);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
 
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(3, 0, 0);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(3, 0, 0);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
 
-            //    etv.gameObject.AddComponent<Animation.LinearLeftRight>();
-            //}
+                etv.gameObject.AddComponent<Animation.LinearLeftRight>();
+            }
 
             {
                 var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
@@ -161,20 +161,20 @@ public class ARVisTools : NetworkBehaviour
             }
 
 
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
 
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(3, 0, 1);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(3, 0, 1);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
 
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(3, 0, 1);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(3, 0, 1);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
 
-            //    etv.Rotatable.AddComponent<Animation.Rotation>();
-            //}
+                etv.Rotatable.AddComponent<Animation.Rotation>();
+            }
 
             //{
             //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
@@ -306,7 +306,7 @@ public class ARVisTools : NetworkBehaviour
             //    var etvRapeLegacy = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy)");
             //    var etvRapeRev = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev)");
             //    var etvRobbery = visPlant.GenerateSingle3DAxisFrom(0, "Robbery");
-                
+
             //    etvYear.transform.position = new Vector3(-2, 0, -1);
             //    etvPopulation.transform.position = new Vector3(-2.7f, 0, -1);
             //    etvViolentCrime.transform.position = new Vector3(-1.3f, 0, -1);

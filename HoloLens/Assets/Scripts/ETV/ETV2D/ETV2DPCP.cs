@@ -19,7 +19,7 @@ namespace ETV
 
         private GameObject allAxesGO;
 
-        private IDictionary<int, AAxis> PCPAxes;
+        private IDictionary<string, AAxis> PCPAxes;
 
         private APCPLine[] lines;
 
@@ -42,7 +42,7 @@ namespace ETV
 
         public override void SetUpAxes()
         {
-            PCPAxes = new Dictionary<int, AAxis>();
+            PCPAxes = new Dictionary<string, AAxis>();
             AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
             var lineGen = new PCP2DLineGenerator();
 
@@ -59,7 +59,7 @@ namespace ETV
                 xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attName, 1f, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(offset * counter, 0, 0);
-                PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+                PCPAxes.Add(Data.nomAttribNames[attID], xAxis.GetComponent<Axis2D>());
                 RegisterAxis(xAxis.GetComponent<AAxis>());
 
                 counter++;
@@ -72,7 +72,7 @@ namespace ETV
                 xAxis = factory2D.CreateFixedLengthAutoTickedAxis(attName, 1f, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(offset * counter, 0, 0);
-                PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+                PCPAxes.Add(Data.ordAttribNames[attID], xAxis.GetComponent<Axis2D>());
                 RegisterAxis(xAxis.GetComponent<AAxis>());
 
                 counter++;
@@ -85,7 +85,7 @@ namespace ETV
                 xAxis = factory2D.CreateAutoTickedAxis(attName, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(offset * counter, 0, 0);
-                PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+                PCPAxes.Add(Data.ivlAttribNames[attID], xAxis.GetComponent<Axis2D>());
                 RegisterAxis(xAxis.GetComponent<AAxis>());
 
                 counter++;
@@ -99,7 +99,7 @@ namespace ETV
                 xAxis = factory2D.CreateAutoTickedAxis(attName, AxisDirection.Y, Data);
                 xAxis.transform.parent = allAxesGO.transform;
                 xAxis.transform.localPosition = new Vector3(offset * counter, 0, 0);
-                PCPAxes.Add(counter, xAxis.GetComponent<Axis2D>());
+                PCPAxes.Add(Data.ratAttribNames[attID], xAxis.GetComponent<Axis2D>());
                 RegisterAxis(xAxis.GetComponent<AAxis>());
 
                 counter++;

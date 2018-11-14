@@ -22,8 +22,7 @@ namespace ETV
 
         public override void UpdateETV()
         {
-            SetUpAxes();
-            DrawGraph();
+
         }
 
         public override void SetUpAxes()

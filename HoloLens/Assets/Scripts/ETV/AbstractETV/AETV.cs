@@ -86,10 +86,11 @@ namespace ETV
         public void RegisterAxis(AAxis axis)
         {
             registeredAxes.Add(axis.attributeName, axis);
+            axis.Assign(this);
 
             if(!isMetaVis)
             {
-                Services.MetaVisSys().ObserveAxis(this, axis.GetComponent<AAxis>());
+                Services.MetaVisSys().Observe(axis.GetComponent<AAxis>());
             }
         }
 
@@ -119,7 +120,9 @@ namespace ETV
 
             var yAxis = AxisFactory().CreateAutoTickedAxis("Amount", max);
             yAxis.transform.parent = Anchor;
-            
+            var comp = yAxis.GetComponent<AAxis>();
+
+            comp.Assign(this);
             Axes.Add(AxisDirection.Y, yAxis.GetComponent<AAxis>());
         }
 
@@ -137,7 +140,6 @@ namespace ETV
             foreach(var axisKey in Axes.Keys)
             {
                 var axis = Axes[axisKey];
-                Services.MetaVisSys().StopObservationOf(this, axis);
                 axis.Dispose();
             }
 

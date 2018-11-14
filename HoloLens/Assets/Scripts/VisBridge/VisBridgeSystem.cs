@@ -112,7 +112,7 @@ namespace VisBridge
             }            
         }
 
-        public override void Notify(AGraphicalPrimitive observable)
+        public override void OnChange(AGraphicalPrimitive observable)
         {
             // Remove visbridge twig, if prim is disabled,
             // leave it, if it is invisible

@@ -16,17 +16,12 @@ namespace MetaVisualization
     /// </summary>
     public class NullMetaVisSystem : AMetaVisSystem
     {
-        public override bool CheckIfCompatible(ETVPair etvs, AxisPair axes, out int dataSetID)
+        public override bool CheckIfCompatible(AxisPair axes, out int dataSetID)
         {
             dataSetID = 0;
             return false;
         }
-
-        public override bool CheckIfNearEnough(AxisPair axes)
-        {
-            return false;
-        }
-
+        
         public override AETV GenerateFlexibleLinkedAxes(int dataSetID, string[] variables, AxisPair axes)
         {
             throw new System.NotImplementedException();
@@ -48,11 +43,10 @@ namespace MetaVisualization
             throw new System.NotImplementedException();
         }
 
-        public override void ObserveAxis(AETV etv, AAxis axis) { }
-
-        public override AETV SpanMetaVisFor(AxisPair axes, int dataSetID)
+        public override AETV SpanMetaVisFor(AxisPair axes, int dataSetID, out MetaVisType type)
         {
             var o = new GameObject("Dummy MetaVis");
+            type = MetaVisType.FLEXIBLE_LINKED_AXES;
             return o.AddComponent<NullETV>();
         }
 
@@ -77,11 +71,34 @@ namespace MetaVisualization
             throw new System.NotImplementedException();
         }
 
-        public override void StopObservationOf(AETV etv, AAxis axis) { }
-
-        public override MetaVisType WhichMetaVis(AxisPair axes, int dataSetID)
+        public override void UseCombination(AxisPair key)
         {
-            return MetaVisType.FLEXIBLE_LINKED_AXES;
+            throw new System.NotImplementedException();
+        }
+
+        public override void ReleaseCombination(AxisPair key)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Observe(AAxis observable)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void Ignore(AAxis observable)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnDispose(AAxis observable)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnChange(AAxis observable)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

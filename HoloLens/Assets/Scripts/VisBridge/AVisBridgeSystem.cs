@@ -10,7 +10,7 @@ namespace VisBridge
     /// information objects. Such representations are graphical primitives in
     /// visualizations.
     /// </summary>
-    public abstract class AVisBridgeSystem : MonoBehaviour, IGPObserver<AGraphicalPrimitive>
+    public abstract class AVisBridgeSystem : MonoBehaviour, IPrimitiveObserver
     {
         private IList<AGraphicalPrimitive> subscriptions = new List<AGraphicalPrimitive>();
 
@@ -48,11 +48,16 @@ namespace VisBridge
             subscriptions.Remove(observable);
         }
 
-        public abstract void Notify(AGraphicalPrimitive observable);
+        public abstract void OnChange(AGraphicalPrimitive observable);
 
         public void Observe(AGraphicalPrimitive observable)
         {
             subscriptions.Add(observable);
+        }
+
+        public void Ignore(AGraphicalPrimitive observable)
+        {
+            subscriptions.Remove(observable);
         }
     }
 }

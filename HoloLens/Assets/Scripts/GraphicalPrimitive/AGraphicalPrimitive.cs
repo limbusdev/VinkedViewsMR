@@ -20,7 +20,7 @@ namespace GraphicalPrimitive
     /// they activate a VisBridge connecting them to all other graphical
     /// primitives representing the same information object(s).
     /// </summary>
-    public class AGraphicalPrimitive : MonoBehaviour, IFocusable, IInputClickHandler, IObservableGP<InfoObject, AGraphicalPrimitive>, IDisposable
+    public class AGraphicalPrimitive : MonoBehaviour, IFocusable, IInputClickHandler, IObservablePrimitive<InfoObject>, IDisposable
     {
         public enum Status { ENABLED, DISABLED }
         public enum Visibility { VISIBLE, INVISIBLE }
@@ -45,7 +45,7 @@ namespace GraphicalPrimitive
 
         public bool disposed { get; private set; } = false;
 
-        private IList<IGPObserver<AGraphicalPrimitive>> observers = new List<IGPObserver<AGraphicalPrimitive>>();
+        private IList<IObserver<AGraphicalPrimitive>> observers = new List<IObserver<AGraphicalPrimitive>>();
 
         // .................................................................... METHODS
 
@@ -132,16 +132,16 @@ namespace GraphicalPrimitive
             Destroy(gameObject);
         }
 
-        public IDisposable Subscribe(IGPObserver<AGraphicalPrimitive> observer)
+        public void Subscribe(IObserver<AGraphicalPrimitive> observer)
         {
             if(!observers.Contains(observer))
                 observers.Add(observer);
-            return this;
         }
 
-        public void Unsubscribe(IGPObserver<AGraphicalPrimitive> observer)
+        public void Unsubscribe(IObserver<AGraphicalPrimitive> observer)
         {
             observers.Remove(observer);
         }
+        
     }
 }

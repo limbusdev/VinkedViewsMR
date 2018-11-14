@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ETV
 {
-    public class ETV3DFlexiblePCP : MetaVis
+    public class ETV3DFlexiblePCP : AETV
     {
         // Hook
         private APCPLineGenerator pcpLineGenerator;
@@ -37,9 +37,6 @@ namespace ETV
             axes = new Dictionary<string, AAxis>();
             axes.Add(axisA.attributeName, axisA);
             axes.Add(axisB.attributeName, axisB);
-
-            axisA.Subscribe(this);
-            axisB.Subscribe(this);
         }
 
         public override void DrawGraph()

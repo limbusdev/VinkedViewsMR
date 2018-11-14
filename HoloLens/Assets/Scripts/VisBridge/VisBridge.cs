@@ -10,7 +10,7 @@ namespace VisBridge
     /// graphical primitives of one or more visualizations, if they
     /// directly or indirectly represent the same information object.
     /// </summary>
-    public class VisBridge : MonoBehaviour, IGPObserver<AGraphicalPrimitive>
+    public class VisBridge : MonoBehaviour, IObserver<AGraphicalPrimitive>
     {
         // .................................................................... Unit Components
         public AGraphicalPrimitive centerSphere;
@@ -153,7 +153,7 @@ namespace VisBridge
             RemovePrimitives(new List<AGraphicalPrimitive>() { observable });
         }
 
-        public void Notify(AGraphicalPrimitive observable)
+        public void OnChange(AGraphicalPrimitive observable)
         {
             // Nothing
         }
@@ -162,6 +162,11 @@ namespace VisBridge
         {
             observable.Subscribe(this);
             subscriptions.Add(observable);
+        }
+
+        public void Ignore(AGraphicalPrimitive observable)
+        {
+            subscriptions.Remove(observable);
         }
     }
 }

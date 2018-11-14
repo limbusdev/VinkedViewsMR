@@ -36,7 +36,7 @@ namespace VisBridge
             throw new System.NotImplementedException();
         }
 
-        public override void Notify(AGraphicalPrimitive observable)
+        public override void OnChange(AGraphicalPrimitive observable)
         {
             throw new System.NotImplementedException();
         }

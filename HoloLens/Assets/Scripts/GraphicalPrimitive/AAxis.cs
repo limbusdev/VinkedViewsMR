@@ -13,9 +13,11 @@ namespace GraphicalPrimitive
     /// AAxis inform their oberservers, if their position or orientation has
     /// changed.
     /// </summary>
-    public abstract class AAxis : MonoBehaviour, IObservableGP<AETV, AAxis>, IDisposable
+    public abstract class AAxis : MonoBehaviour, IObservableAxis, IDisposable, IETVComponent
     {
-        private IList<IGPObserver<AAxis>> observers;
+        private AETV etv;
+
+        private ISet<IObserver<AAxis>> observers;
 
         protected Vector3 direction = Vector3.up;
         public string labelVariableText { get; set; }
@@ -52,7 +54,7 @@ namespace GraphicalPrimitive
                 transform.hasChanged = false; // Otherwise it get's called forever
                 foreach(var observer in observers)
                 {
-                    observer.Notify(this);
+                    observer.OnChange(this);
                 }
             }
         }
@@ -65,7 +67,7 @@ namespace GraphicalPrimitive
         public void Init(string name, AxisDirection dir = AxisDirection.Y)
         {
             this.attributeName = name;
-            this.observers = new List<IGPObserver<AAxis>>();
+            this.observers = new HashSet<IObserver<AAxis>>();
             this.labelVariableText = name;
             this.ticks = new List<Tick>();
             axisDirection = dir;
@@ -356,11 +358,9 @@ namespace GraphicalPrimitive
         }
 
 
-        public IDisposable Subscribe(IGPObserver<AAxis> observer)
+        public void Subscribe(IObserver<AAxis> observer)
         {
-            if(!observers.Contains(observer))
-                observers.Add(observer);
-            return this;
+            observers.Add(observer);
         }
         
 
@@ -375,9 +375,19 @@ namespace GraphicalPrimitive
             Destroy(gameObject);
         }
 
-        public void Unsubscribe(IGPObserver<AAxis> observer)
+        public void Unsubscribe(IObserver<AAxis> observer)
         {
             observers.Remove(observer);
+        }
+
+        public void Assign(AETV etv)
+        {
+            this.etv = etv;
+        }
+
+        public AETV Base()
+        {
+            return etv;
         }
     }
 }

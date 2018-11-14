@@ -24,7 +24,7 @@ SOFTWARE.
 
 using ETV;
 using GraphicalPrimitive;
-using System.Collections.Generic;
+using Model;
 using UnityEngine;
 
 namespace MetaVisualization
@@ -34,81 +34,32 @@ namespace MetaVisualization
     /// are in a constellation, which implicitly indicates a meta-visualization
     /// to be spanned between them.
     /// </summary>
-    public abstract class AMetaVisSystem : MonoBehaviour
+    public abstract class AMetaVisSystem : MonoBehaviour, IAxisObserver
     {
-        // ........................................................................ INNER CLASSES
-        /// <summary>
-        /// Various meta-visualization forms.
-        /// </summary>
-        public enum MetaVisType
-        {
-            FLEXIBLE_LINKED_AXES, IMMERSIVE_AXES, SCATTERPLOT_2D, SCATTERPLOT_3D, HEATMAP
-        }
-        
-        public struct ETVPair
-        {
-            public AETV A { get; private set; }
-            public AETV B { get; private set; }
+        // .................................................................... STATIC PARAMETERS
 
-            public ETVPair(AETV a, AETV b)
-            {
-                A = a;
-                B = b;
-            }
-        }
+        public static float triggerMetaVisDistance = 1f;
+        public static float triggerInvisibleDistance = .05f;
+        public static float triggerInvisibleAngleDiscrepancy = 5;
 
 
         /// <summary>
-        /// Pairs which contain the same axis in arbitrary order, are considered equal.
+        /// Blocks combination from being registered with another meta-visualization.
         /// </summary>
-        public class AxisPair
-        {
-            public AAxis A { get; private set; }
-            public AAxis B { get; private set; }
-
-            public AxisPair(AAxis a, AAxis b)
-            {
-                A = a;
-                B = b;
-            }
-
-            public override bool Equals(object obj)
-            {
-                if(obj is AxisPair)
-                {
-                    var other = obj as AxisPair;
-                    return (
-                        other.A.Equals(A) && other.B.Equals(B)
-                        ||
-                        other.A.Equals(B) && other.B.Equals(A));
-                }
-                else return false;
-            }
-
-            public override int GetHashCode()
-            {
-                var hashCode = -624926263;
-                hashCode = hashCode + EqualityComparer<AAxis>.Default.GetHashCode(A);
-                hashCode = hashCode + EqualityComparer<AAxis>.Default.GetHashCode(B);
-                return hashCode;
-            }
-        }
-
+        /// <param name="key"></param>
+        public abstract void UseCombination(AxisPair key);
 
         /// <summary>
-        /// Adds the given axis to the list of permanently observed axes.
-        /// If observed, axis can span metavisualizations between them, if
-        /// they fullfill given factors.
+        /// Frees combination for new meta-visualizations.
         /// </summary>
-        /// <param name="axis"></param>
-        public abstract void ObserveAxis(AETV etv, AAxis axis);
+        /// <param name="key"></param>
+        public abstract void ReleaseCombination(AxisPair key);
 
         /// <summary>
         /// Removes the given axis from the list of permanently observed axes.
         /// Use this, when destroying or disabling a visualization.
         /// </summary>
         /// <param name="axis"></param>
-        public abstract void StopObservationOf(AETV etv, AAxis axis);
 
         /// <summary>
         /// Generate a metavisualization between the given axes.
@@ -116,7 +67,7 @@ namespace MetaVisualization
         /// <param name="axisA"></param>
         /// <param name="axisB"></param>
         /// <returns>A new metavisualization</returns>
-        public abstract AETV SpanMetaVisFor(AxisPair pair, int dataSetID);
+        public abstract AETV SpanMetaVisFor(AxisPair pair, int dataSetID, out MetaVisType type);
 
         /// <summary>
         /// Checks whether the given axis tips and bases are both nearer to each other
@@ -125,7 +76,45 @@ namespace MetaVisualization
         /// <param name="axisA"></param>
         /// <param name="axisB"></param>
         /// <returns>If they are near enough to span a MetaVis.</returns>
-        public abstract bool CheckIfNearEnough(AxisPair pair);
+        public static bool CheckIfNearEnough(AxisPair axes)
+        {
+            if(
+                ((axes.A.GetAxisBaseGlobal() - axes.B.GetAxisBaseGlobal()).magnitude < triggerMetaVisDistance
+                || (axes.A.GetAxisBaseGlobal() - axes.B.GetAxisTipGlobal()).magnitude < triggerMetaVisDistance)
+                &&
+                ((axes.A.GetAxisTipGlobal() - axes.B.GetAxisTipGlobal()).magnitude < triggerMetaVisDistance
+                || (axes.A.GetAxisTipGlobal() - axes.B.GetAxisTipGlobal()).magnitude < triggerMetaVisDistance)
+                )
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+
+        public static bool CheckIfNearEnoughToHideAxis(AAxis originalAxis, AAxis metaAxis)
+        {
+            if(
+                ((originalAxis.GetAxisBaseGlobal() - metaAxis.GetAxisBaseGlobal()).magnitude < triggerInvisibleDistance
+                || (originalAxis.GetAxisBaseGlobal() - metaAxis.GetAxisTipGlobal()).magnitude < triggerInvisibleDistance)
+                &&
+                ((originalAxis.GetAxisTipGlobal() - metaAxis.GetAxisTipGlobal()).magnitude < triggerInvisibleDistance
+                || (originalAxis.GetAxisTipGlobal() - metaAxis.GetAxisTipGlobal()).magnitude < triggerInvisibleDistance)
+                )
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+
+        public static float ProjectedDistanceToAxis(Vector3 point, AAxis axis)
+        {
+            var ray = new Ray(axis.GetAxisBaseGlobal(), (axis.GetAxisTipGlobal() - axis.GetAxisBaseGlobal()));
+            return Vector3.Cross(ray.direction, point - ray.origin).magnitude;
+        }
 
         /// <summary>
         /// Checks for a dataset which contains both represented attributes and 
@@ -135,7 +124,7 @@ namespace MetaVisualization
         /// <param name="axisA"></param>
         /// <param name="axisB"></param>
         /// <returns>Whether such a dataset exists</returns>
-        public abstract bool CheckIfCompatible(ETVPair etvPair, AxisPair axisPair, out int dataSetID);
+        public abstract bool CheckIfCompatible(AxisPair axisPair, out int dataSetID);
 
         /// <summary>
         /// Checks, which meta-visualization form would be appropriate
@@ -154,7 +143,40 @@ namespace MetaVisualization
         /// <param name="axisB">second axis</param>
         /// <param name="dataSetID">data set ID of them</param>
         /// <returns>appropriate meta-visualization form</returns>
-        public abstract MetaVisType WhichMetaVis(AxisPair pair, int dataSetID);
+        public static MetaVisType WhichMetaVis(AxisPair axes, int dataSetID)
+        {
+            // Which MetaVis is defined by the implicit combination grammar?
+
+            // ............................................ IMPLICIT GRAMMAR RULES
+
+            // orthogonal case - 3 axes: scatterplot 3D
+            // TODO - if enough time
+
+            // calculate angle between axes
+            var angle = Vector3.Angle(axes.A.GetAxisDirectionGlobal(), axes.B.GetAxisDirectionGlobal());
+
+            // are axes orthogonal to each other? (between 85 and 95 degrees)
+            var orthogonalCase = (Mathf.Abs(angle - 90) < 5);
+
+            var lomA = axes.A.stats.type;
+            var lomB = axes.B.stats.type;
+
+            if(orthogonalCase) // ......................... ORTHOGONAL
+            {
+                if((lomA == LoM.NOMINAL || lomA == LoM.ORDINAL) &&
+                   (lomB == LoM.NOMINAL || lomB == LoM.ORDINAL))
+                // if both categorical
+                {
+                    return MetaVisType.HEATMAP;
+                } else // if both numerical or mixed
+                {
+                    return MetaVisType.SCATTERPLOT_2D;
+                }
+            } else // ....................................... NOT ORTHOGONAL
+            {
+                return MetaVisType.IMMERSIVE_AXES;
+            }
+        }
 
         /// <summary>
         /// Generates an immersive axis meta-visualization between the given axes of
@@ -243,5 +265,12 @@ namespace MetaVisualization
         /// <param name="duplicateAxes"></param>
         /// <returns></returns>
         public abstract AETV GenerateHeatmap3D(int dataSetID, string[] variables, AxisPair pair, bool duplicateAxes);
+
+
+        // IAxisObserver
+        public abstract void Observe(AAxis observable);
+        public abstract void Ignore(AAxis observable);
+        public abstract void OnDispose(AAxis observable);
+        public abstract void OnChange(AAxis observable);
     }
 }

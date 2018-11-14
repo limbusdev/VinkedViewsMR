@@ -191,9 +191,9 @@ namespace MetaVisualization
             // Which metavisualization will do?
             switch(WhichMetaVis(axes, dataSetID))
             {
-                case MetaVisType.Scatterplot2D:
+                case MetaVisType.SCATTERPLOT_2D:
                     return SpanMetaVisScatterplot2D(axes, dataSetID, createDuplicates);
-                case MetaVisType.HeatMap:
+                case MetaVisType.HEATMAP:
                     return SpanMetaVisHeatmap3D(axes, dataSetID, createDuplicates);
                 default:
                     return SpanMetaVisImmersiveAxis(axes, dataSetID);
@@ -302,16 +302,16 @@ namespace MetaVisualization
                    (lomB == LoM.NOMINAL || lomB == LoM.ORDINAL)) 
                      // if both categorical
                 {
-                    return MetaVisType.HeatMap;
+                    return MetaVisType.HEATMAP;
                 } 
                 else // if both numerical or mixed
                 {
-                    return MetaVisType.Scatterplot2D;
+                    return MetaVisType.SCATTERPLOT_2D;
                 }
             } 
             else // ....................................... NOT ORTHOGONAL
             {
-                return MetaVisType.ImmersiveAxis;
+                return MetaVisType.IMMERSIVE_AXES;
             }
         }
 

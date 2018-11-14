@@ -42,7 +42,7 @@ namespace MetaVisualization
         /// </summary>
         public enum MetaVisType
         {
-            FlexibleLinkedAxis, ImmersiveAxis, Scatterplot2D, Scatterplot3D, HeatMap
+            FLEXIBLE_LINKED_AXES, IMMERSIVE_AXES, SCATTERPLOT_2D, SCATTERPLOT_3D, HEATMAP
         }
         
         public struct ETVPair
@@ -50,7 +50,7 @@ namespace MetaVisualization
             public AETV A { get; private set; }
             public AETV B { get; private set; }
 
-            public ETVPair(AETV a, AETV b) : this()
+            public ETVPair(AETV a, AETV b)
             {
                 A = a;
                 B = b;
@@ -59,8 +59,7 @@ namespace MetaVisualization
 
 
         /// <summary>
-        /// Key to identify a metavisualization. Keys which contain the same axis
-        /// in arbitrary order, are considered equal.
+        /// Pairs which contain the same axis in arbitrary order, are considered equal.
         /// </summary>
         public class AxisPair
         {
@@ -78,16 +77,12 @@ namespace MetaVisualization
                 if(obj is AxisPair)
                 {
                     var other = obj as AxisPair;
-                    if(other.A.Equals(A) && other.B.Equals(B))
-                        return true;
-                    else if(other.A.Equals(B) && other.B.Equals(A))
-                        return true;
-                    else
-                        return false;
-                } else
-                {
-                    return false;
+                    return (
+                        other.A.Equals(A) && other.B.Equals(B)
+                        ||
+                        other.A.Equals(B) && other.B.Equals(A));
                 }
+                else return false;
             }
 
             public override int GetHashCode()

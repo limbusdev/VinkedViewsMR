@@ -82,7 +82,7 @@ namespace MetaVisualization
 
         public override MetaVisType WhichMetaVis(AxisPair axes, int dataSetID)
         {
-            return MetaVisType.FlexibleLinkedAxis;
+            return MetaVisType.FLEXIBLE_LINKED_AXES;
         }
     }
 }

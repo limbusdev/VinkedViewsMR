@@ -17,7 +17,7 @@ namespace GraphicalPrimitive
     {
         private AETV etv;
 
-        private ISet<IObserver<AAxis>> observers;
+        private ISet<IObserver<AAxis>> observers = new HashSet<IObserver<AAxis>>();
 
         protected Vector3 direction = Vector3.up;
         public string labelVariableText { get; set; }

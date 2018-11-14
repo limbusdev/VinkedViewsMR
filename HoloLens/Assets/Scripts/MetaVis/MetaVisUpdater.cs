@@ -30,12 +30,14 @@ public class MetaVisUpdater : MonoBehaviour, IAxisObserver, IDisposable
         dataSetID = dsID;
         initialized = true;
 
+        FindShadowAxes();
         Observe(axes.A);
         Observe(axes.B);
     }
 
     private void FindShadowAxes()
     {
+        // FlexiblePCP does not contain shadow axes
         try
         {
             // for both axes of the pair, add their shadow-counterparts to the list
@@ -57,36 +59,33 @@ public class MetaVisUpdater : MonoBehaviour, IAxisObserver, IDisposable
     {
         foreach(var originalAxis in new AAxis[] { spanningAxes.A, spanningAxes.B })
         {
-            var shadowAxis = shadowAxes[originalAxis];
-            try
+            if(shadowAxes.ContainsKey(originalAxis))
             {
-                var visible = !AMetaVisSystem.CheckIfNearEnoughToHideAxis(originalAxis, shadowAxis);
-                shadowAxis.SetVisibility(visible);
-
-                var distProjOnOrigBase = AMetaVisSystem.ProjectedDistanceToAxis(shadowAxis.GetAxisBaseGlobal(), originalAxis);
-                var distProjOnOrigTip = AMetaVisSystem.ProjectedDistanceToAxis(shadowAxis.GetAxisTipGlobal(), originalAxis);
-
-                // if one axis is parallel it's metavis axis and the other is not,
-                // stick to the parallel one
-                if(distProjOnOrigBase < .01f && distProjOnOrigTip < .01f)
+                var shadowAxis = shadowAxes[originalAxis];
+                try
                 {
-                    metaVisualization.transform.position = originalAxis.GetAxisBaseGlobal();
+                    var visible = !AMetaVisSystem.CheckIfNearEnoughToHideAxis(originalAxis, shadowAxis);
+                    shadowAxis.SetVisibility(visible);
+
+                    var distProjOnOrigBase = AMetaVisSystem.ProjectedDistanceToAxis(shadowAxis.GetAxisBaseGlobal(), originalAxis);
+                    var distProjOnOrigTip = AMetaVisSystem.ProjectedDistanceToAxis(shadowAxis.GetAxisTipGlobal(), originalAxis);
+
+                    // if one axis is parallel it's metavis axis and the other is not,
+                    // stick to the parallel one
+                    if(distProjOnOrigBase < .01f && distProjOnOrigTip < .01f)
+                    {
+                        metaVisualization.transform.position = originalAxis.GetAxisBaseGlobal();
+                    }
+
+                } catch(Exception e)
+                {
+                    Debug.LogError("Checking vicinity of original and meta axis failed, because of exception.");
+                    Debug.LogException(e);
                 }
-                
-            } catch(Exception e)
-            {
-                Debug.LogError("Checking vicinity of original and meta axis failed, because of exception.");
-                Debug.LogException(e);
             }
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
 
     public void Ignore(AAxis observable)
     {

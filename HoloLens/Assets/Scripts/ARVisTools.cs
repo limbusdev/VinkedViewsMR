@@ -69,12 +69,12 @@ public class ARVisTools : NetworkBehaviour
     {
         try
         {
-            var visPlant = ServiceLocator.VisPlant();
-            var dataProvider = ServiceLocator.VisPlant().dataProvider;
+            var visPlant = Services.VisFactory();
+            var dataProvider = Services.VisFactory().dataProvider;
 
-            var etvMan = ServiceLocator.instance.etvManager;
-            var fact2 = ServiceLocator.instance.Factory2DETV;
-            var prim2Dfactory = ServiceLocator.instance.Factory2DPrimitives;
+            var etvMan = Services.instance.etvManager;
+            var fact2 = Services.instance.Factory2DETV;
+            var prim2Dfactory = Services.instance.Factory2DPrimitives;
 
             var etvYearPopulationCrimePCP2D = visPlant.GeneratePCP2DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
             etvMan.AutoPlaceETV(etvYearPopulationCrimePCP2D);
@@ -101,7 +101,7 @@ public class ARVisTools : NetworkBehaviour
             etvAxisPopulation.transform.position = new Vector3(1.5f, 0, 0);
 
 
-            var visBridgeSystem = ServiceLocator.VisBridges();
+            var visBridgeSystem = Services.VisBridgeSys();
             //visBridgeSystem.DrawVisBridgeFor(dataProvider.dataSets[0].infoObjects[7]);
 
 
@@ -119,12 +119,13 @@ public class ARVisTools : NetworkBehaviour
         try
         {
             // Tryout for meta-visualizations
-            var visPlant = ServiceLocator.VisPlant();
+            var visPlant = Services.VisFactory();
 
 
             ///////////////////////////////////////////////////////////////////
             // DYNAMIC
 
+            // One single axis static, the other moving left and right
             {
                 var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
                 var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
@@ -140,6 +141,7 @@ public class ARVisTools : NetworkBehaviour
                 etv.gameObject.AddComponent<Animation.LinearLeftRight>();
             }
 
+            // Two single axes static, the thirde moving left and right between them
             {
                 var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
                 var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
@@ -160,7 +162,7 @@ public class ARVisTools : NetworkBehaviour
                 etv.gameObject.AddComponent<Animation.LinearLeftRight>();
             }
 
-
+            // One single axis static, the other rotating around the origin
             {
                 var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
                 var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
@@ -176,20 +178,21 @@ public class ARVisTools : NetworkBehaviour
                 etv.Rotatable.AddComponent<Animation.Rotation>();
             }
 
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+            // One single axis static, the other rotating about it's origin in 0.5m distance
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
 
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(5, 0, 1);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(5, 0, 1);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
 
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(5, 0, 1.5f);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(5, 0, 1.5f);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
 
-            //    etv.Rotatable.AddComponent<Animation.Rotation>();
-            //}
+                etv.Rotatable.AddComponent<Animation.Rotation>();
+            }
 
             //{
             //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
@@ -501,11 +504,11 @@ public class ARVisTools : NetworkBehaviour
 
     private void TESTPlaceAxes()
     {
-        var dataProvider = ServiceLocator.VisPlant().dataProvider;
+        var dataProvider = Services.VisFactory().dataProvider;
 
-        var etvMan = ServiceLocator.instance.etvManager;
-        var fact2 = ServiceLocator.instance.Factory2DETV;
-        var prim2Dfactory = ServiceLocator.instance.Factory2DPrimitives;
+        var etvMan = Services.instance.etvManager;
+        var fact2 = Services.instance.Factory2DETV;
+        var prim2Dfactory = Services.instance.Factory2DPrimitives;
 
         var a1 = prim2Dfactory.CreateAutoTickedAxis("Year", AxisDirection.X, dataProvider.dataSets[0]);
         var ae1 = fact2.PutETVOnAnchor(a1);
@@ -527,8 +530,8 @@ public class ARVisTools : NetworkBehaviour
 
         etvMan.AutoPlaceETV(ae4);
 
-        var fact3 = ServiceLocator.instance.Factory3DETV;
-        var prim3Dfactory = ServiceLocator.instance.Factory3DPrimitives;
+        var fact3 = Services.instance.Factory3DETV;
+        var prim3Dfactory = Services.instance.Factory3DPrimitives;
         var a3d1 = prim3Dfactory.CreateAutoTickedAxis("Year", AxisDirection.X, dataProvider.dataSets[0]);
         var a3de1 = fact3.PutETVOnAnchor(a3d1);
 

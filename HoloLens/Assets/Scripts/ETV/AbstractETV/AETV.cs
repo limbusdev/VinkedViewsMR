@@ -21,10 +21,13 @@ namespace ETV
         public abstract void DrawGraph();
         public abstract void SetUpAxes();
         public abstract void UpdateETV();
-        public abstract AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory();
-
-        public bool disposed { get; private set; } = false;
+        public virtual AGraphicalPrimitiveFactory AxisFactory()
+        {
+            return Services.PrimFactory2D();
+        }
+        
         public bool isMetaVis { get; private set; } = false;
+        public bool disposed { get; private set; } = false;
         
         public ETVColorSchemes colorScheme { get; set; }
 
@@ -47,7 +50,7 @@ namespace ETV
 
         public void AddBarChartAxis(string attributeName, AxisDirection dir)
         {
-            var axis = GetGraphicalPrimitiveFactory().CreateAutoTickedAxis(attributeName, AxisDirection.X, Data);
+            var axis = AxisFactory().CreateAutoTickedAxis(attributeName, AxisDirection.X, Data);
             axis.transform.parent = Anchor;
             Axes.Add(dir, axis.GetComponent<AAxis>());
 
@@ -56,23 +59,22 @@ namespace ETV
 
         public void AddAxis(string attributeName, AxisDirection dir, float length=1f)
         {
-            var factory = GetGraphicalPrimitiveFactory();
             var lom = Data.TypeOf(attributeName);
 
             GameObject axis;
             switch(lom)
             {
                 case LoM.NOMINAL:
-                    axis = factory.CreateFixedLengthAutoTickedAxis(attributeName, length, dir, Data);
+                    axis = AxisFactory().CreateFixedLengthAutoTickedAxis(attributeName, length, dir, Data);
                     break;
                 case LoM.ORDINAL:
-                    axis = factory.CreateFixedLengthAutoTickedAxis(attributeName, length, dir, Data);
+                    axis = AxisFactory().CreateFixedLengthAutoTickedAxis(attributeName, length, dir, Data);
                     break;
                 case LoM.INTERVAL:
-                    axis = factory.CreateAutoTickedAxis(attributeName, dir, Data);
+                    axis = AxisFactory().CreateAutoTickedAxis(attributeName, dir, Data);
                     break;
                 default: // RATIO
-                    axis = factory.CreateAutoTickedAxis(attributeName, dir, Data);
+                    axis = AxisFactory().CreateAutoTickedAxis(attributeName, dir, Data);
                     break;
             }
             axis.transform.parent = Anchor;
@@ -87,7 +89,7 @@ namespace ETV
 
             if(!isMetaVis)
             {
-                ServiceLocator.MetaVisSystem().ObserveAxis(this, axis.GetComponent<AAxis>());
+                Services.MetaVisSys().ObserveAxis(this, axis.GetComponent<AAxis>());
             }
         }
 
@@ -99,8 +101,6 @@ namespace ETV
 
         public void AddAggregatedAxis(string attributeName, AxisDirection dir, out float max, out float length)
         {
-            var factory = GetGraphicalPrimitiveFactory();
-
             var lom = Data.TypeOf(attributeName);
 
             switch(lom)
@@ -117,7 +117,7 @@ namespace ETV
                     break;
             }
 
-            var yAxis = factory.CreateAutoTickedAxis("Amount", max);
+            var yAxis = AxisFactory().CreateAutoTickedAxis("Amount", max);
             yAxis.transform.parent = Anchor;
             
             Axes.Add(AxisDirection.Y, yAxis.GetComponent<AAxis>());
@@ -126,15 +126,18 @@ namespace ETV
         public void RememberRelationOf(InfoObject o, AGraphicalPrimitive p)
         {
             infoObject2primitive.Add(o, p);
-            ServiceLocator.VisBridges().RegisterGraphicalPrimitive(o, p);
+            Services.VisBridgeSys().RegisterGraphicalPrimitive(o, p);
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
+            gameObject.SetActive(false);
+            disposed = true;
+
             foreach(var axisKey in Axes.Keys)
             {
                 var axis = Axes[axisKey];
-                ServiceLocator.MetaVisSystem().StopObservationOf(this, axis);
+                Services.MetaVisSys().StopObservationOf(this, axis);
                 axis.Dispose();
             }
 
@@ -142,8 +145,7 @@ namespace ETV
             {
                 prim.Dispose();
             }
-
-            disposed = true;
+            
             Destroy(gameObject);
         }
     }

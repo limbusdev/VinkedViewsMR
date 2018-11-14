@@ -7,7 +7,6 @@ namespace MetaVisualization
     public class NullETV : AETV
     {
         public override void DrawGraph() { }
-        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory() { return ServiceLocator.PrimitivePlant2D(); }
         public override void SetUpAxes() { }
         public override void UpdateETV() { }
     }

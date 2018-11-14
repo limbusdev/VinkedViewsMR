@@ -4,7 +4,7 @@
     {
         public override AGraphicalPrimitiveFactory GetProperFactory()
         {
-            return ServiceLocator.PrimitivePlant2D();
+            return Services.PrimFactory2D();
         }
     }
 }

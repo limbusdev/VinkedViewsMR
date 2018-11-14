@@ -26,8 +26,8 @@ namespace MetaVisualization
 
         // .................................................................... PRIVATE PROPERTIES
 
-        private IDictionary<AETV, IList<AAxis>> axes = new Dictionary<AETV, IList<AAxis>>();
-        private IDictionary<AxisPair, AETV> metaVisualizations = new Dictionary<AxisPair, AETV>();
+        private IDictionary<AETV, IList<AAxis>> etv2axes = new Dictionary<AETV, IList<AAxis>>();
+        private IDictionary<AxisPair, AETV> axisPair2MetaVis = new Dictionary<AxisPair, AETV>();
         // Maps original axes to their (shadow) counterpart in the meta visualization
         private IDictionary<AxisPair, AETV> Original2Shadow = new Dictionary<AxisPair, AETV>();   
         
@@ -38,9 +38,9 @@ namespace MetaVisualization
             var toBeAdded = new Dictionary<AxisPair, AETV>();
             var toBeShred = new Dictionary<AxisPair, AETV>();
             
-            foreach(var etvs in DisjointPairsOf(axes.Keys, axes.Keys))
+            foreach(var etvs in DisjointPairsOf(etv2axes.Keys, etv2axes.Keys))
             {
-                foreach(var axes in DisjointPairsOf(axes[etvs.A], axes[etvs.B]))
+                foreach(var axes in DisjointPairsOf(etv2axes[etvs.A], etv2axes[etvs.B]))
                 {
                     // ................................................ CREATE NEW METAVIS
                     int dataSetID;
@@ -78,9 +78,9 @@ namespace MetaVisualization
                             // Check if there is a MetaVis already,
                             // and if so - remove it.
 
-                            if(metaVisualizations.ContainsKey(axes) && !toBeShred.ContainsKey(axes))
+                            if(axisPair2MetaVis.ContainsKey(axes) && !toBeShred.ContainsKey(axes))
                             {
-                                toBeShred.Add(axes, metaVisualizations[axes]);
+                                toBeShred.Add(axes, axisPair2MetaVis[axes]);
                             }
                         }
                     }
@@ -121,15 +121,15 @@ namespace MetaVisualization
             // Apply made changes
             foreach(var key in toBeShred.Keys)
             {
-                var metaVis = metaVisualizations[key];
+                var metaVis = axisPair2MetaVis[key];
                 metaVis.Dispose();
                 Destroy(metaVis);
-                metaVisualizations.Remove(key);
+                axisPair2MetaVis.Remove(key);
             }
 
             foreach(var key in toBeAdded.Keys)
             {
-                metaVisualizations.Add(key, toBeAdded[key]);
+                axisPair2MetaVis.Add(key, toBeAdded[key]);
             } 
         }
 
@@ -147,22 +147,22 @@ namespace MetaVisualization
                 return;
             } else
             {
-                if(!axes.ContainsKey(etv))
+                if(!etv2axes.ContainsKey(etv))
                 {
-                    axes.Add(etv, new List<AAxis>());
+                    etv2axes.Add(etv, new List<AAxis>());
                 }
-                axes[etv].Add(axis);
-                axis.Subscribe(this);
+                etv2axes[etv].Add(axis);
+                Observe(axis);
             }
         }
 
 
         public override void StopObservationOf(AETV etv, AAxis axis)
         {
-            if(!axes.ContainsKey(etv))
-                return;
-
-            axes[etv].Remove(axis);
+            if(etv2axes.ContainsKey(etv))
+            {
+                etv2axes[etv].Remove(axis);
+            }
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace MetaVisualization
             bool createIt = true;
 
             createIt &= !axes.A.attributeName.Equals(axes.B.attributeName);
-            createIt &= !metaVisualizations.ContainsKey(axes);
+            createIt &= !axisPair2MetaVis.ContainsKey(axes);
             createIt &= CheckIfNearEnough(axes);
             createIt &= CheckIfCompatible(etvs, axes, out dataSetID);
 
@@ -350,7 +350,7 @@ namespace MetaVisualization
             {
                 var ds = dataProvider.dataSets[dataSetID];
 
-                var factory = ServiceLocator.instance.FactoryMetaVis;
+                var factory = Services.instance.FactoryMetaVis;
                 var vis = factory.CreateFlexiblePCP(ds, variables, axes.A, axes.B);
                 
                 return vis;
@@ -370,7 +370,7 @@ namespace MetaVisualization
             {
                 // Create Meta-Visualization
                 var data = dataProvider.dataSets[dataSetID];
-                var plnt = ServiceLocator.MetaVisPlant();
+                var plnt = Services.MetaVisFactory();
                 var mVis = plnt.CreateMetaScatterplot2D(data, variables);
 
                 RotateAndScaleCorrectly(mVis, new AAxis[] { axes.A, axes.B });
@@ -406,7 +406,7 @@ namespace MetaVisualization
             {
                 // Create Meta-Visualization
                 var data = dataProvider.dataSets[dataSetID];
-                var plnt = ServiceLocator.MetaVisPlant();
+                var plnt = Services.MetaVisFactory();
                 
                 // Rotate and translate Meta-Visualization to match spanning axes
                 // look in direction of cross product
@@ -500,7 +500,36 @@ namespace MetaVisualization
 
         public void OnDispose(AAxis observable)
         {
+            foreach(var etv in etv2axes.Keys)
+            {
+                etv2axes[etv].Remove(observable);
+            }
 
+            var toBeRemoved = new List<AxisPair>();
+            foreach(var axisPair in axisPair2MetaVis.Keys)
+            {
+                if(axisPair.A.Equals(observable) || axisPair.B.Equals(observable))
+                {
+                    toBeRemoved.Add(axisPair);
+                }
+            }
+            foreach(var key in toBeRemoved)
+            {
+                axisPair2MetaVis.Remove(key);
+            }
+
+            toBeRemoved.Clear();
+            foreach(var axisPair in Original2Shadow.Keys)
+            {
+                if(axisPair.A.Equals(observable) || axisPair.B.Equals(observable))
+                {
+                    toBeRemoved.Add(axisPair);
+                }
+            }
+            foreach(var key in toBeRemoved)
+            {
+                Original2Shadow.Remove(key);
+            }
         }
 
         public void Notify(AAxis observable)
@@ -508,5 +537,9 @@ namespace MetaVisualization
             // Do nothing
         }
 
+        public void Observe(AAxis observable)
+        {
+            observable.Subscribe(this);
+        }
     }
 }

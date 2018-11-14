@@ -67,7 +67,7 @@ namespace ETV
 
         private GameObject GenerateAxes(bool withGrid, IDictionary<string, AAxis> axes)
         {
-            AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
+            AGraphicalPrimitiveFactory factory2D = Services.instance.Factory2DPrimitives;
 
             int counter = 0;
             GameObject allAxesGO = new GameObject("Axes-Set");
@@ -195,7 +195,7 @@ namespace ETV
 
         private GameObject GenerateGrid(float min, float max)
         {
-            var factory2D = ServiceLocator.instance.Factory2DPrimitives;
+            var factory2D = Services.instance.Factory2DPrimitives;
 
                 GameObject grid = factory2D.CreateGrid(
                     new Color(1, 1, 1, .5f),
@@ -215,11 +215,6 @@ namespace ETV
         {
             SetUpAxes();
             DrawGraph();
-        }
-
-        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-        {
-            return ServiceLocator.instance.Factory2DPrimitives;
         }
     }
 }

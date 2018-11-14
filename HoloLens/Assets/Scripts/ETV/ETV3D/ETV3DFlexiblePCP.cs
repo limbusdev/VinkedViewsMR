@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ETV
 {
-    public class ETV3DFlexiblePCP : AETV, IGPObserver<AAxis>
+    public class ETV3DFlexiblePCP : MetaVis
     {
         // Hook
         private APCPLineGenerator pcpLineGenerator;
@@ -14,8 +14,8 @@ namespace ETV
             ordinalIDs,
             intervalIDs,
             ratioIDs;
-        
-        private AAxis axisA, axisB;
+
+        private IDictionary<string, AAxis> axes;
 
         public string attributeA;
         public string attributeB;
@@ -34,8 +34,9 @@ namespace ETV
             this.intervalIDs = intervalIDs;
             this.ratioIDs = ratioIDs;
 
-            this.axisA = axisA;
-            this.axisB = axisB;
+            axes = new Dictionary<string, AAxis>();
+            axes.Add(axisA.attributeName, axisA);
+            axes.Add(axisB.attributeName, axisB);
 
             axisA.Subscribe(this);
             axisB.Subscribe(this);
@@ -43,10 +44,6 @@ namespace ETV
 
         public override void DrawGraph()
         {
-            var axes = new Dictionary<string, AAxis>();
-            axes.Add(axisA.attributeName, axisA);
-            axes.Add(axisB.attributeName, axisB);
-            
             foreach(var infoO in Data.infoObjects)
             {
                 var line = pcpLineGenerator.CreateLine(infoO, Data.colorTable[infoO], Data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs, axes, true);
@@ -59,41 +56,19 @@ namespace ETV
 
         public override void UpdateETV()
         {
-            if(disposed)
-                return;
-
-            var axes = new Dictionary<string, AAxis>();
-            axes.Add(axisA.attributeName, axisA);
-            axes.Add(axisB.attributeName, axisB);
-
             foreach(var key in infoObject2primitive.Keys)
             {
                 APCPLineGenerator.UpdatePolyline((APCPLine)infoObject2primitive[key], axes, true);
             }
         }
-        
 
-        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-        {
-            return ServiceLocator.PrimitivePlant2D();
-        }
-        
+
 
         // .................................................................... Useless in this MetaVis
-        public override void SetUpAxes() { /*Unneccessary*/ }
-
-        public void OnDispose(AAxis observable)
+        public override void SetUpAxes()
         {
-            // do Nothing
+            // A flexible axes PCP doesn't need it's own axes.
+            // Nothing to do here.
         }
-
-        public void Notify(AAxis observable)
-        {
-            UpdateETV();
-        }
-
-
-        // .................................................................... IObserver
-
     }
 }

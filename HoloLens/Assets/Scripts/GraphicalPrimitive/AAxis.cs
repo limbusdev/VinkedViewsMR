@@ -362,14 +362,22 @@ namespace GraphicalPrimitive
                 observers.Add(observer);
             return this;
         }
+        
 
         public void Dispose()
         {
+            gameObject.SetActive(false);
             foreach(var obs in observers)
             {
                 obs.OnDispose(this);
             }
+            observers.Clear();
             Destroy(gameObject);
+        }
+
+        public void Unsubscribe(IGPObserver<AAxis> observer)
+        {
+            observers.Remove(observer);
         }
     }
 }

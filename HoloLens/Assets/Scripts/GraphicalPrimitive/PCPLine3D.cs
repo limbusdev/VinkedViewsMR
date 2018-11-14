@@ -6,7 +6,7 @@ namespace GraphicalPrimitive
     {
         public override LineRenderer GetNewProperLineRenderer()
         {
-            return ServiceLocator.PrimitivePlant3D().GetNew3DLineRenderer();
+            return Services.PrimFactory3D().GetNew3DLineRenderer();
         }
     }
 }

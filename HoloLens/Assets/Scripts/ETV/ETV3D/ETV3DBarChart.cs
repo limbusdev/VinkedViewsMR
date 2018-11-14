@@ -54,7 +54,7 @@ namespace ETV
         private void InitNominal(DataSet data, string attributeName)
         {
             var measures = data.nominalStatistics[attributeName];
-            var factory = ServiceLocator.instance.Factory2DPrimitives;
+            var factory = Services.instance.Factory2DPrimitives;
 
             for(int i = 0; i < measures.numberOfUniqueValues; i++)
             {
@@ -77,7 +77,7 @@ namespace ETV
         private void InitOrdinal(DataSet data, string attributeName)
         {
             var measures = data.ordinalStatistics[attributeName];
-            var factory = ServiceLocator.instance.Factory2DPrimitives;
+            var factory = Services.instance.Factory2DPrimitives;
 
             for(int i = 0; i < measures.numberOfUniqueValues; i++)
             {
@@ -99,7 +99,7 @@ namespace ETV
         // ........................................................................ Helper Methods
         private Bar3D InsertBar(string name, int value, int barID)
         {
-            var factory3D = ServiceLocator.instance.Factory3DPrimitives;
+            var factory3D = Services.instance.Factory3DPrimitives;
 
             float normValue = GetAxis(AxisDirection.Y).TransformToAxisSpace(value);
             var bar = factory3D.CreateBar(normValue).GetComponent<Bar3D>();
@@ -118,7 +118,7 @@ namespace ETV
             AddBarChartAxis(attributeName, AxisDirection.X);
             AddAggregatedAxis(attributeName, AxisDirection.Y, out max, out length);
 
-            var factory = GetGraphicalPrimitiveFactory();
+            var factory = Services.PrimFactory2D();
 
             // Grid
             GameObject grid = factory.CreateAutoGrid(max, Vector3.right, Vector3.up, length);
@@ -171,11 +171,6 @@ namespace ETV
         public override void DrawGraph()
         {
             throw new System.NotImplementedException();
-        }
-
-        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-        {
-            return ServiceLocator.instance.Factory2DPrimitives;
         }
     }
 }

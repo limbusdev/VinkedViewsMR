@@ -68,6 +68,10 @@ namespace GraphicalPrimitive
             }
 
             // create new collider, if there is none
+            if(pivot == null)
+            {
+                Debug.Log("Stop here");
+            }
             MeshCollider collider = pivot.GetComponent<MeshCollider>();
             if(collider == null)
             {

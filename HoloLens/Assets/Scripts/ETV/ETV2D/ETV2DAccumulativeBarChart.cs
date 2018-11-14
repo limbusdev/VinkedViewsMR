@@ -41,7 +41,7 @@ namespace ETV
         private void InitNominal(DataSet data, string attributeName)
         {
             var measures = data.nominalStatistics[attributeName];
-            var factory = ServiceLocator.instance.Factory2DPrimitives;
+            var factory = Services.instance.Factory2DPrimitives;
 
             for(int i = 0; i < measures.numberOfUniqueValues; i++)
             {
@@ -65,7 +65,7 @@ namespace ETV
         private void InitOrdinal(DataSet data, string attributeName)
         {
             var measures = data.ordinalStatistics[attributeName];
-            var factory = ServiceLocator.instance.Factory2DPrimitives;
+            var factory = Services.instance.Factory2DPrimitives;
 
             for(int i = 0; i < measures.numberOfUniqueValues; i++)
             {
@@ -84,7 +84,7 @@ namespace ETV
         // ........................................................................ Helper Methods
         private Bar2D InsertBar(string name, int value, int barID)
         {
-            var factory2D = ServiceLocator.instance.Factory2DPrimitives;
+            var factory2D = Services.instance.Factory2DPrimitives;
 
             float normValue = GetAxis(AxisDirection.Y).TransformToAxisSpace(value);
             var bar = factory2D.CreateBar(normValue, .1f).GetComponent<Bar2D>();
@@ -104,7 +104,7 @@ namespace ETV
             AddAggregatedAxis(attributeName, AxisDirection.Y, out max, out length);
 
             // Grid
-            GameObject grid = GetGraphicalPrimitiveFactory().CreateAutoGrid(max, Vector3.right, Vector3.up, length);
+            var grid = Services.PrimFactory2D().CreateAutoGrid(max, Vector3.right, Vector3.up, length);
             grid.transform.localPosition = new Vector3(0, 0, .002f);
             grid.transform.parent = Anchor.transform;
         }
@@ -151,11 +151,6 @@ namespace ETV
         public override void DrawGraph()
         {
             // Nothing
-        }
-
-        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-        {
-            return ServiceLocator.PrimitivePlant2D();
         }
     }
 }

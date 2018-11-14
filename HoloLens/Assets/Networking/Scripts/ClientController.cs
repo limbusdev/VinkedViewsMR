@@ -39,9 +39,9 @@ public class ClientController : NetworkBehaviour
             transform.Rotate(r, s, t, Space.World);
 
             // Mouse Scrollwheel defines ETV scale
-            var scale = ServiceLocator.instance.clientManager.CurrentlyBoundETV.transform.localScale.x;
+            var scale = Services.instance.clientManager.CurrentlyBoundETV.transform.localScale.x;
             scale += Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * 10f;
-            ServiceLocator.instance.clientManager.CurrentlyBoundETV.transform.localScale = new Vector3(scale, scale, scale);
+            Services.instance.clientManager.CurrentlyBoundETV.transform.localScale = new Vector3(scale, scale, scale);
 
             // Space triggers action on server
             if(Input.GetKeyDown(KeyCode.Space))
@@ -86,9 +86,9 @@ public class ClientController : NetworkBehaviour
 
                 Debug.Log(attributes.Length);
                 
-                var vis = ServiceLocator.VisPlant().GenerateVisFrom(dataSetID, attributes, visType);
+                var vis = Services.VisFactory().GenerateVisFrom(dataSetID, attributes, visType);
 
-                ServiceLocator.instance.clientManager.CurrentlyBoundETV = vis;
+                Services.instance.clientManager.CurrentlyBoundETV = vis;
             }
         }
 

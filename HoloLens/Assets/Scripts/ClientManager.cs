@@ -35,16 +35,16 @@ public class ClientManager : MonoBehaviour
 
     private void Start()
     {
-        ServiceLocator.instance.clientManager = this;
+        Services.instance.clientManager = this;
 
         padding = 48;
 
-        var fact2 = ServiceLocator.ETVPlant2D();
-        var prim2Dfactory = ServiceLocator.PrimitivePlant2D();
+        var fact2 = Services.ETVFactory2D();
+        var prim2Dfactory = Services.PrimFactory2D();
 
         var etvYearPopulationCrimePCP2D = fact.GeneratePCP2DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
         etvYearPopulationCrimePCP2D.transform.parent = etvPosition.transform;
-        ServiceLocator.instance.clientManager.currentlyBoundETV = etvYearPopulationCrimePCP2D;
+        Services.instance.clientManager.currentlyBoundETV = etvYearPopulationCrimePCP2D;
         
         scale = canvasRect.localScale.x;
 

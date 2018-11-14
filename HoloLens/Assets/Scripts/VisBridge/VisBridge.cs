@@ -24,6 +24,8 @@ namespace VisBridge
         private IList<InfoObject> connectedInfObs 
             = new List<InfoObject>();
 
+        private IList<AGraphicalPrimitive> subscriptions = new List<AGraphicalPrimitive>();
+
         // .................................................................... Unity
         // Use this for initialization
         public void Awake()
@@ -75,7 +77,7 @@ namespace VisBridge
         public void Connect(InfoObject o)
         {
             connectedInfObs.Add(o);
-            var prims = ServiceLocator.VisBridges().GetRepresentativePrimitivesOf(o);
+            var prims = Services.VisBridgeSys().GetRepresentativePrimitivesOf(o);
 
             foreach(var prim in prims)
             {
@@ -86,7 +88,7 @@ namespace VisBridge
                     bridgeBranches.Add(prim, bridge);
                     bridge.transform.parent = gameObject.transform;
                     prim.Brush(Color.green);
-                    prim.Subscribe(this);
+                    Observe(prim);
                 }
             }
         }
@@ -99,7 +101,7 @@ namespace VisBridge
         public void RemoveInfoObject(InfoObject o)
         {
             connectedInfObs.Remove(o);
-            var prims = ServiceLocator.VisBridges().GetRepresentativePrimitivesOf(o);
+            var prims = Services.VisBridgeSys().GetRepresentativePrimitivesOf(o);
             RemovePrimitives(prims);
         }
 
@@ -137,6 +139,11 @@ namespace VisBridge
             {
                 Destroy(bridgePart.gameObject);
             }
+            foreach(var sub in subscriptions)
+            {
+                sub.Unsubscribe(this);
+            }
+            subscriptions.Clear();
             Destroy(gameObject);
         }
 
@@ -149,6 +156,12 @@ namespace VisBridge
         public void Notify(AGraphicalPrimitive observable)
         {
             // Nothing
+        }
+
+        public void Observe(AGraphicalPrimitive observable)
+        {
+            observable.Subscribe(this);
+            subscriptions.Add(observable);
         }
     }
 }

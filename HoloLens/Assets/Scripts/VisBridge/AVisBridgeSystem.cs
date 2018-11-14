@@ -12,6 +12,8 @@ namespace VisBridge
     /// </summary>
     public abstract class AVisBridgeSystem : MonoBehaviour, IGPObserver<AGraphicalPrimitive>
     {
+        private IList<AGraphicalPrimitive> subscriptions = new List<AGraphicalPrimitive>();
+
         /// <summary>
         /// Toggles (On/Off) a VisBridge of the given information object. Including all
         /// vinks to representative graphical primitives in all visible visualizations.
@@ -41,8 +43,16 @@ namespace VisBridge
         /// <returns>all representative graphical primitives</returns>
         public abstract IList<AGraphicalPrimitive> GetRepresentativePrimitivesOf(InfoObject o);
         
-        public abstract void OnDispose(AGraphicalPrimitive observable);
+        public virtual void OnDispose(AGraphicalPrimitive observable)
+        {
+            subscriptions.Remove(observable);
+        }
 
         public abstract void Notify(AGraphicalPrimitive observable);
+
+        public void Observe(AGraphicalPrimitive observable)
+        {
+            subscriptions.Add(observable);
+        }
     }
 }

@@ -13,9 +13,9 @@ namespace ETV
         public override void Init(DataSet data, string[] attributes, bool isMetaVis = false)
         {
             base.Init(data, isMetaVis);
-            this.attributeA = attributes[0];
-            this.attributeB = attributes[1];
-            this.attributeC = attributes[2];
+            attributeA = attributes[0];
+            attributeB = attributes[1];
+            attributeC = attributes[2];
 
             SetUpAxes();
             DrawGraph();
@@ -46,7 +46,7 @@ namespace ETV
                         GetAxis(AxisDirection.Z).TransformToAxisSpace(valC)
                         );
 
-                    var dot = ServiceLocator.PrimitivePlant3D().CreateScatterDot();
+                    var dot = Services.PrimFactory3D().CreateScatterDot();
                     dot.SetColor(Data.colorTable[infO]);
                     dot.transform.position = pos;
                     dot.transform.parent = Anchor.transform;
@@ -62,12 +62,6 @@ namespace ETV
         {
             SetUpAxes();
             DrawGraph();
-        }
-        
-
-        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-        {
-            return ServiceLocator.PrimitivePlant2D();
         }
     }
 }

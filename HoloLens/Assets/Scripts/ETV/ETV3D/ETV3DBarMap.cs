@@ -105,7 +105,7 @@ namespace ETV
             this.absMapValues = new int[dimA, dimB];
             this.barHeights = new float[dimA, dimB];
 
-            var factory3D = ServiceLocator.PrimitivePlant3D();
+            var factory3D = Services.PrimFactory3D();
 
             // For every possible value of attribute 1
             for(int vID1 = 0; vID1 < dimA; vID1++)
@@ -256,8 +256,8 @@ namespace ETV
         /// </summary>
         public override void SetUpAxes()
         {
-            var factory3D = ServiceLocator.PrimitivePlant3D();
-            var factory2D = ServiceLocator.PrimitivePlant2D();
+            var factory3D = Services.PrimFactory3D();
+            var factory2D = Services.PrimFactory2D();
 
             // Categorical Axis A
             AddAxis(attributeNameA, AxisDirection.X, lengthA);
@@ -279,7 +279,7 @@ namespace ETV
          * */
         private Bar3D CreateBar(float value, float range, float widthA=.1f, float widthB=.1f)
         {
-            var factory3D = ServiceLocator.instance.Factory3DPrimitives;
+            var factory3D = Services.instance.Factory3DPrimitives;
 
             Bar3D bar = factory3D.CreateBar(value, widthA, widthB).GetComponent<Bar3D>();
 
@@ -317,11 +317,6 @@ namespace ETV
         public override void UpdateETV()
         {
 
-        }
-
-        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-        {
-            return ServiceLocator.instance.Factory2DPrimitives;
         }
     }
 }

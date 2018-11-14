@@ -38,13 +38,11 @@ namespace ETV
             // Nothing yet
         }
 
-        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
+
+        public override AGraphicalPrimitiveFactory AxisFactory()
         {
-            return ServiceLocator.instance.Factory3DPrimitives;
+            return Services.PrimFactory3D();
         }
-
-
-        // .................................................................... MonoBehaviour Methods
 
     }
 }

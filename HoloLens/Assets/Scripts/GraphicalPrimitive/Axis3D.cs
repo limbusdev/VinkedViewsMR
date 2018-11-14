@@ -53,7 +53,7 @@ namespace GraphicalPrimitive
             // Draw ticks
             for(int i = 0; i <= m.max; i++)
             {
-                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick(true);
+                var tick = Services.instance.Factory2DPrimitives.CreateTick(true);
                 tick.lr.SetPosition(1, tickDir * diameter * 4f);
 
                 tick.SetDirection(axisDirection);
@@ -80,7 +80,7 @@ namespace GraphicalPrimitive
             // Draw ticks
             for(int i = 0; i <= m.max; i++)
             {
-                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick(true);
+                var tick = Services.instance.Factory2DPrimitives.CreateTick(true);
                 tick.lr.SetPosition(1, tickDir * diameter * 4f);
                 tick.SetDirection(axisDirection);
                 tick.label.text = m.uniqueValues[i];
@@ -105,7 +105,7 @@ namespace GraphicalPrimitive
             // Draw ticks
             for(int i = m.min; i <= m.max; i++)
             {
-                var tick = ServiceLocator.instance.Factory2DPrimitives.CreateTick(true);
+                var tick = Services.instance.Factory2DPrimitives.CreateTick(true);
                 tick.lr.SetPosition(1, tickDir * diameter * 4f);
                 tick.SetDirection(axisDirection);
                 tick.label.text = IntervalValueConverters.Translate(i, m.intervalTranslator);
@@ -125,7 +125,7 @@ namespace GraphicalPrimitive
             // Draw ticks
             for(float i = min; i <= max; i += tickResolution)
             {
-                var tick = ServiceLocator.PrimitivePlant2D().CreateTick(true);
+                var tick = Services.PrimFactory2D().CreateTick(true);
                 tick.lr.SetPosition(1, tickDir * diameter * 4f);
                 tick.SetDirection(axisDirection);
                 tick.label.text = i.ToString(i % 1 == 0 ? "N0" : ("N" + decimals));

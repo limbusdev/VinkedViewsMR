@@ -43,6 +43,8 @@ namespace GraphicalPrimitive
         private Color brushColor = Color.green;
         private Color highlightColor = Color.yellow;
 
+        public bool disposed { get; private set; } = false;
+
         private IList<IGPObserver<AGraphicalPrimitive>> observers = new List<IGPObserver<AGraphicalPrimitive>>();
 
         // .................................................................... METHODS
@@ -112,15 +114,21 @@ namespace GraphicalPrimitive
         public void OnInputClicked(InputClickedEventData eventData)
         {
             eventData.Use();
-            ServiceLocator.VisBridges().ToggleVisBridgeFor(this); 
+            Services.VisBridgeSys().ToggleVisBridgeFor(this); 
         }
 
         // .......................................................... IObservable, IDisposable
  
         public void Dispose()
         {
+            gameObject.SetActive(false);
+            disposed = true;
+
             foreach(var obs in observers)
+            {
                 obs.OnDispose(this);
+            }
+            observers.Clear();
             Destroy(gameObject);
         }
 
@@ -129,6 +137,11 @@ namespace GraphicalPrimitive
             if(!observers.Contains(observer))
                 observers.Add(observer);
             return this;
+        }
+
+        public void Unsubscribe(IGPObserver<AGraphicalPrimitive> observer)
+        {
+            observers.Remove(observer);
         }
     }
 }

@@ -79,7 +79,7 @@ public class VisualizationFactory : NetworkBehaviour
                 return new GameObject(VisType.SingleAxis + "not suitable for " + variable);
             }
 
-            var factory = ServiceLocator.ETVPlant3D();
+            var factory = Services.ETVFactory3D();
             var ds = dataProvider.dataSets[dataSetID];
             var vis = factory.CreateSingleAxis(ds, variable).gameObject;
             
@@ -116,7 +116,7 @@ public class VisualizationFactory : NetworkBehaviour
             var ds = dataProvider.dataSets[dataSetID];
             var lom = ds.TypeOf(variable);
 
-            var factory = ServiceLocator.instance.Factory2DETV;
+            var factory = Services.instance.Factory2DETV;
             var vis = factory.CreateBarChart(ds, variable).gameObject;
             vis = factory.PutETVOnAnchor(vis);
 
@@ -150,7 +150,7 @@ public class VisualizationFactory : NetworkBehaviour
             var ds = dataProvider.dataSets[dataSetID];
             var lom = ds.TypeOf(variable);
 
-            var factory = ServiceLocator.instance.Factory3DETV;
+            var factory = Services.instance.Factory3DETV;
             var vis = factory.CreateBarChart(ds, variable).gameObject;
             vis = factory.PutETVOnAnchor(vis);
 
@@ -185,7 +185,7 @@ public class VisualizationFactory : NetworkBehaviour
             var type1 = ds.TypeOf(variables[0]);
             var type2 = ds.TypeOf(variables[1]);
 
-            var factory = ServiceLocator.instance.Factory3DETV;
+            var factory = Services.instance.Factory3DETV;
             var vis = factory.CreateETVBarMap(ds, variables[0], variables[1]).gameObject;
             vis = factory.PutETVOnAnchor(vis);
 
@@ -218,7 +218,7 @@ public class VisualizationFactory : NetworkBehaviour
 
             var ds = dataProvider.dataSets[dataSetID];
 
-            var factory = ServiceLocator.instance.Factory2DETV;
+            var factory = Services.instance.Factory2DETV;
             var vis = factory.CreatePCP(ds, variables).gameObject;
 
             vis = factory.PutETVOnAnchor(vis);
@@ -252,7 +252,7 @@ public class VisualizationFactory : NetworkBehaviour
 
             var ds = dataProvider.dataSets[dataSetID];
 
-            var factory = ServiceLocator.instance.Factory3DETV;
+            var factory = Services.instance.Factory3DETV;
             var vis = factory.CreatePCP(ds, variables).gameObject;
 
             vis = factory.PutETVOnAnchor(vis);
@@ -286,7 +286,7 @@ public class VisualizationFactory : NetworkBehaviour
 
             var ds = dataProvider.dataSets[dataSetID];
 
-            var factory = ServiceLocator.instance.Factory2DETV;
+            var factory = Services.instance.Factory2DETV;
             var vis = factory.CreateScatterplot(ds, variables).gameObject;
 
             vis = factory.PutETVOnAnchor(vis);
@@ -320,7 +320,7 @@ public class VisualizationFactory : NetworkBehaviour
 
             var ds = dataProvider.dataSets[dataSetID];
 
-            var factory = ServiceLocator.instance.Factory3DETV;
+            var factory = Services.instance.Factory3DETV;
             var vis = factory.CreateScatterplot(ds, variables).gameObject;
 
             vis = factory.PutETVOnAnchor(vis);
@@ -354,7 +354,7 @@ public class VisualizationFactory : NetworkBehaviour
 
             var ds = dataProvider.dataSets[dataSetID];
 
-            var factory = ServiceLocator.instance.Factory2DETV;
+            var factory = Services.instance.Factory2DETV;
             var vis = factory.CreateLineChart(ds, variables[0], variables[1]).gameObject;
 
             vis = factory.PutETVOnAnchor(vis);
@@ -425,7 +425,7 @@ public class VisualizationFactory : NetworkBehaviour
             }
 
 
-            vis = ServiceLocator.ETVPlant2D().PutETVOnAnchor(vis);
+            vis = Services.ETVFactory2D().PutETVOnAnchor(vis);
             vis.transform.position = NewETVPlaceHolder.transform.position;
 
             return vis;

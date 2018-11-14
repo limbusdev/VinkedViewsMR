@@ -44,7 +44,7 @@ namespace ETV
 
         public override void DrawGraph()
         {
-            var line = ServiceLocator.instance.Factory2DPrimitives.CreateXYLine();
+            var line = Services.instance.Factory2DPrimitives.CreateXYLine();
             var xyLineComp = line.GetComponent<XYLine2D>();
             Vector3[] polyline;
 
@@ -82,11 +82,6 @@ namespace ETV
             line.transform.parent = Anchor.transform;
 
             primitive = xyLineComp;
-        }
-
-        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-        {
-            return ServiceLocator.instance.Factory2DPrimitives;
         }
     }
 }

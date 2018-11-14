@@ -32,7 +32,7 @@ namespace MetaVisualization
         public override AETV CreateMetaHeatmap3D(DataSet data, string[] attIDs, bool manualLength = false, float lengthA = 1f, float lengthB = 1f)
         {
             // Create Visualization
-            var factory = ServiceLocator.ETVPlant3D();
+            var factory = Services.ETVFactory3D();
             var mVis = factory.CreateETVBarMap(data, attIDs[0], attIDs[1], manualLength, lengthA, lengthB, true);
 
             return mVis;
@@ -41,7 +41,7 @@ namespace MetaVisualization
         public override AETV CreateMetaScatterplot2D(DataSet data, string[] attIDs)
         {
             // Create Visualization
-            var factory = ServiceLocator.ETVPlant2D();
+            var factory = Services.ETVFactory2D();
             var mVis = factory.CreateScatterplot(data, attIDs, true);
             
             return mVis;

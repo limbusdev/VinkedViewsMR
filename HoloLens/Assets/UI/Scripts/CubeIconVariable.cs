@@ -146,7 +146,7 @@ public class CubeIconVariable : InteractionReceiver
             lr.endWidth = .01f;
             
             visButtonsAnchor.SetActive(true);
-            VisType[] viss = ServiceLocator.instance.visualizationFactory.ListPossibleVisualizations(dataSetID, varNames);
+            VisType[] viss = Services.instance.visualizationFactory.ListPossibleVisualizations(dataSetID, varNames);
 
             lr.positionCount = viss.Length * 2;
             var poss = new List<Vector3>();
@@ -196,31 +196,31 @@ public class CubeIconVariable : InteractionReceiver
         switch(obj.name)
         {
             case "SingleAxis3D":
-                ServiceLocator.instance.visualizationFactory.GenerateSingle3DAxisFrom(dataSetID, varNames[0]);
+                Services.instance.visualizationFactory.GenerateSingle3DAxisFrom(dataSetID, varNames[0]);
                 break;
             case "BarChart2D":
-                ServiceLocator.instance.visualizationFactory.GenerateBarChart2DFrom(dataSetID, varNames[0]);
+                Services.instance.visualizationFactory.GenerateBarChart2DFrom(dataSetID, varNames[0]);
                 break;
             case "BarChart3D":
-                ServiceLocator.instance.visualizationFactory.GenerateBarChart3DFrom(dataSetID, varNames[0]);
+                Services.instance.visualizationFactory.GenerateBarChart3DFrom(dataSetID, varNames[0]);
                 break;
             case "BarMap3D":
-                ServiceLocator.instance.visualizationFactory.GenerateBarMap3DFrom(dataSetID, varNames);
+                Services.instance.visualizationFactory.GenerateBarMap3DFrom(dataSetID, varNames);
                 break;
             case "PCP2D":
-                ServiceLocator.instance.visualizationFactory.GeneratePCP2DFrom(dataSetID, varNames);
+                Services.instance.visualizationFactory.GeneratePCP2DFrom(dataSetID, varNames);
                 break;
             case "PCP3D":
-                ServiceLocator.instance.visualizationFactory.GeneratePCP3DFrom(dataSetID, varNames);
+                Services.instance.visualizationFactory.GeneratePCP3DFrom(dataSetID, varNames);
                 break;
             case "ScatterXY2D":
-                ServiceLocator.instance.visualizationFactory.GenerateScatterplot2DFrom(dataSetID, varNames);
+                Services.instance.visualizationFactory.GenerateScatterplot2DFrom(dataSetID, varNames);
                 break;
             case "ScatterXYZ3D":
-                ServiceLocator.instance.visualizationFactory.GenerateScatterplot3DFrom(dataSetID, varNames);
+                Services.instance.visualizationFactory.GenerateScatterplot3DFrom(dataSetID, varNames);
                 break;
             case "LineXY2D":
-                ServiceLocator.instance.visualizationFactory.GenerateLineplot2DFrom(dataSetID, varNames);
+                Services.instance.visualizationFactory.GenerateLineplot2DFrom(dataSetID, varNames);
                 break;
             default:
                 break;

@@ -49,7 +49,7 @@ namespace ETV
                         0
                         );
 
-                    var dot = GetGraphicalPrimitiveFactory().CreateScatterDot();
+                    var dot = Services.PrimFactory2D().CreateScatterDot();
                     dot.SetColor(Data.colorTable[infO]);
                     dot.transform.position = pos;
                     dot.transform.parent = Anchor.transform;
@@ -60,11 +60,6 @@ namespace ETV
             }
 
             dots = dotArray.ToArray();
-        }
-
-        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-        {
-            return ServiceLocator.PrimitivePlant2D();
         }
     }
 

@@ -43,7 +43,7 @@ namespace ETV
         public override void SetUpAxes()
         {
             PCPAxes = new Dictionary<string, AAxis>();
-            AGraphicalPrimitiveFactory factory2D = ServiceLocator.instance.Factory2DPrimitives;
+            AGraphicalPrimitiveFactory factory2D = Services.instance.Factory2DPrimitives;
             var lineGen = new PCP2DLineGenerator();
 
             int counter = 0;
@@ -141,12 +141,7 @@ namespace ETV
 
             lines = notNaNPrimitives.ToArray();
         }
-
-        public override AGraphicalPrimitiveFactory GetGraphicalPrimitiveFactory()
-        {
-            return ServiceLocator.PrimitivePlant2D();
-        }
-
+        
         public override void UpdateETV()
         {
             // Nothing

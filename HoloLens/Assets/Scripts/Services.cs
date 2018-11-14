@@ -8,9 +8,9 @@ using VisBridge;
 /// Service Locator. Gives access to all important system services
 /// and singletons. Populate in editor!
 /// </summary>
-public class ServiceLocator : MonoBehaviour
+public class Services : MonoBehaviour
 { 
-    public static ServiceLocator instance = null;
+    public static Services instance = null;
 
     [SerializeField]
     public Graphical3DPrimitiveFactory Factory3DPrimitives;
@@ -25,7 +25,7 @@ public class ServiceLocator : MonoBehaviour
 
     public ClientManager clientManager;
 
-    public static AVisBridgeSystem VisBridges()
+    public static AVisBridgeSystem VisBridgeSys()
     {
         if(instance.VisBridgeSystem == null)
         {
@@ -34,37 +34,37 @@ public class ServiceLocator : MonoBehaviour
         return instance.VisBridgeSystem;
     }
 
-    public static Graphical3DPrimitiveFactory PrimitivePlant3D()
+    public static Graphical3DPrimitiveFactory PrimFactory3D()
     {
         return instance.Factory3DPrimitives;
     }
 
-    public static Graphical2DPrimitiveFactory PrimitivePlant2D()
+    public static Graphical2DPrimitiveFactory PrimFactory2D()
     {
         return instance.Factory2DPrimitives;
     }
 
-    public static ETV3DFactory ETVPlant3D()
+    public static ETV3DFactory ETVFactory3D()
     {
         return instance.Factory3DETV;
     }
 
-    public static ETV2DFactory ETVPlant2D()
+    public static ETV2DFactory ETVFactory2D()
     {
         return instance.Factory2DETV;
     }
 
-    public static AMetaVisSystem MetaVisSystem()
+    public static AMetaVisSystem MetaVisSys()
     {
         return instance.metaVisSystem;
     }
 
-    public static AMetaVisFactory MetaVisPlant()
+    public static AMetaVisFactory MetaVisFactory()
     {
         return instance.FactoryMetaVis;
     }
 
-    public static VisualizationFactory VisPlant()
+    public static VisualizationFactory VisFactory()
     {
         return instance.visualizationFactory;
     }

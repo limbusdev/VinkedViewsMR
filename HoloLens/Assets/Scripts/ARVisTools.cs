@@ -162,6 +162,7 @@ public class ARVisTools : NetworkBehaviour
                 etv.gameObject.AddComponent<Animation.LinearLeftRight>();
             }
             */
+            
             // One single axis static, the other rotating around the origin
             {
                 var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
@@ -180,31 +181,31 @@ public class ARVisTools : NetworkBehaviour
             
             // One single axis static, the other rotating about it's origin in 0.5m distance
             {
-                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var axisYear = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var axisPopu = visPlant.GenerateSingle3DAxisFrom(0, "Year");
 
-                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-                etvAxisYear0.transform.position = new Vector3(5, 0, 1);
+                var etv = axisYear.GetComponent<ETVAnchor>();
+                axisYear.transform.position = new Vector3(5, 0, 1);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
 
-                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-                etvAxisPopulation0.transform.position = new Vector3(5, 0, 1.5f);
+                etv = axisPopu.GetComponent<ETVAnchor>();
+                axisPopu.transform.position = new Vector3(5, 0, 1.5f);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
 
                 etv.Rotatable.AddComponent<Animation.Rotation>();
             }
-            /*
-            // One single axis static, the other moving in circles aroung the first
+            
+            // One single axis static, the other moving in circles around the first
             {
-                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var axisPopu = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var axisYear = visPlant.GenerateSingle3DAxisFrom(0, "Year");
 
-                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-                etvAxisYear0.transform.position = new Vector3(3, 0, 2);
+                var etv = axisPopu.GetComponent<ETVAnchor>();
+                axisPopu.transform.position = new Vector3(3, 0, 2);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
 
-                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-                etvAxisPopulation0.transform.position = new Vector3(3, 0, 2);
+                etv = axisYear.GetComponent<ETVAnchor>();
+                axisYear.transform.position = new Vector3(3, 0, 2);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
 
                 etv.gameObject.AddComponent<Animation.LinearCircle>();
@@ -212,15 +213,15 @@ public class ARVisTools : NetworkBehaviour
 
             // One single axis static, the other moving in circles around it and rotating
             {
-                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var axisPopu = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var axisYear = visPlant.GenerateSingle3DAxisFrom(0, "Year");
 
-                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-                etvAxisYear0.transform.position = new Vector3(3, 0, 3);
+                var etv = axisPopu.GetComponent<ETVAnchor>();
+                axisPopu.transform.position = new Vector3(3, 0, 3);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
 
-                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-                etvAxisPopulation0.transform.position = new Vector3(3, 0, 3);
+                etv = axisYear.GetComponent<ETVAnchor>();
+                axisYear.transform.position = new Vector3(3, 0, 3);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
 
                 etv.Rotatable.AddComponent<Animation.Rotation>();
@@ -229,15 +230,15 @@ public class ARVisTools : NetworkBehaviour
 
             // One single axis static, the other being in a 90° angle circulating around it
             {
-                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var axisPopu = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var axisYear = visPlant.GenerateSingle3DAxisFrom(0, "Year");
 
-                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-                etvAxisYear0.transform.position = new Vector3(3, 0, 4);
+                var etv = axisPopu.GetComponent<ETVAnchor>();
+                axisPopu.transform.position = new Vector3(3, 0, 4);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
 
-                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-                etvAxisPopulation0.transform.position = new Vector3(3, 0, 4);
+                etv = axisYear.GetComponent<ETVAnchor>();
+                axisYear.transform.position = new Vector3(3, 0, 4);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
 
                 etv.gameObject.AddComponent<Animation.LinearCircle>();
@@ -265,16 +266,16 @@ public class ARVisTools : NetworkBehaviour
                 var etvAxisCrime0 = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
 
                 var etv = etvAxisWeapon0.GetComponent<ETVAnchor>();
-                etvAxisWeapon0.transform.position = new Vector3(3, 0, 6);
+                etvAxisWeapon0.transform.position = new Vector3(3, 0, 7);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
 
                 etv = etvAxisCrime0.GetComponent<ETVAnchor>();
-                etvAxisCrime0.transform.position = new Vector3(3, 0, 6);
+                etvAxisCrime0.transform.position = new Vector3(3, 0, 7);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -90);
 
                 etv.Rotatable.AddComponent<Animation.Rotation>();
             }
-            */
+            
             /////////////////////////////////////////////////////////////////////
             //// FLEXIBLE LINKED AXES
 

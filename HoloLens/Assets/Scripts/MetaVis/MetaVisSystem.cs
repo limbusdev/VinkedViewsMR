@@ -36,8 +36,21 @@ namespace MetaVisualization
                     MetaVisType mVisType;
                     var newVis = SpanMetaVisFor(axes, dataSetID, out mVisType);
                     var updaterObject = new GameObject("MetaVisUpdater");
-                    var metaVisUpdater = updaterObject.AddComponent<MetaVisUpdater>();
-                    metaVisUpdater.Init(newVis, axes, mVisType, dataSetID);
+
+                    AMetaVisUpdater metaVisUpdater;
+                    switch(mVisType)
+                    {
+                        case MetaVisType.SCATTERPLOT_2D:
+                            metaVisUpdater = updaterObject.AddComponent<MetaScatterplot2DUpdater>();
+                            break;
+                        case MetaVisType.HEATMAP:
+                            metaVisUpdater = updaterObject.AddComponent<MetaHeatMapUpdater>();
+                            break;
+                        default: // FLA & Immersive Axes
+                            metaVisUpdater = updaterObject.AddComponent<MetaImmersiveAxesUpdater>();
+                            break;
+                    }
+                    metaVisUpdater.Init(newVis, axes, dataSetID);
                     UseCombination(axes);
                 }
             }
@@ -214,12 +227,7 @@ namespace MetaVisualization
                 }
 
                 RotateAndScaleCorrectly(mVis, new AAxis[] { axes.A, axes.B });
-
-                // move to point between axes' origins
-                mVis.transform.position = (axes.A.GetAxisBaseGlobal() + axes.B.GetAxisBaseGlobal()) / 2f;
-
                 
-
                 return mVis;
             } 
             catch(Exception e)  // Handle potential failures
@@ -260,30 +268,11 @@ namespace MetaVisualization
                 }
 
                 var mVis = plnt.CreateMetaHeatmap3D(data, vars, true, 1, 1);
-
-                if(angle > 0)
-                {
-                    var rot = new Quaternion();
-                    rot.SetLookRotation(axes.A.GetAxisDirectionGlobal(), up);
-                    mVis.transform.rotation = rot;
-                } else
-                {
-                    var rot = new Quaternion();
-                    rot.SetLookRotation(axes.B.GetAxisDirectionGlobal(), up);
-                    mVis.transform.rotation = rot;
-                }
-
                 
-
-
                 RotateAndScaleCorrectly(mVis, new AAxis[] { axes.A, axes.B });
-
-                // move to point between axes' origins
-                mVis.transform.position = (axes.A.GetAxisBaseGlobal() + axes.B.GetAxisBaseGlobal()) / 2f;
-
                 
-
                 return mVis;
+
             } catch(Exception e)  // Handle potential failures
             {
                 Debug.Log("Creation of requested MetaVis for variables " + variables + " failed.");

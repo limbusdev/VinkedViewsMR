@@ -179,17 +179,41 @@ namespace MetaVisualization
                 // Create Meta-Visualization
                 var data = dataProvider.dataSets[dataSetID];
                 var plnt = Services.MetaVisFactory();
-                var mVis = plnt.CreateMetaScatterplot2D(data, variables);
-
-                RotateAndScaleCorrectly(mVis, new AAxis[] { axes.A, axes.B });
 
                 // Rotate and translate Meta-Visualization to match spanning axes
                 // look in direction of cross product
-                var cross = Vector3.Cross(
+                var forward = Vector3.Cross(
                     axes.A.GetAxisDirectionGlobal(),
                     axes.B.GetAxisDirectionGlobal());
 
-                mVis.transform.forward = cross;
+                var angle = Vector3.SignedAngle(axes.A.GetAxisDirectionGlobal(), axes.B.GetAxisDirectionGlobal(), forward);
+
+
+                string[] vars = new string[2];
+                if(angle > 0)
+                {
+                    vars[0] = variables[1];
+                    vars[1] = variables[0];
+                } else
+                {
+                    vars[0] = variables[0];
+                    vars[1] = variables[1];
+                }
+
+
+                var mVis = plnt.CreateMetaScatterplot2D(data, vars);
+
+                
+                if(angle > 0)
+                {
+                    mVis.transform.forward = -forward;
+                }
+                else
+                {
+                    mVis.transform.forward = forward;
+                }
+
+                RotateAndScaleCorrectly(mVis, new AAxis[] { axes.A, axes.B });
 
                 // move to point between axes' origins
                 mVis.transform.position = (axes.A.GetAxisBaseGlobal() + axes.B.GetAxisBaseGlobal()) / 2f;

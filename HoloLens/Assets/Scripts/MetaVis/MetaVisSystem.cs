@@ -25,11 +25,23 @@ namespace MetaVisualization
         // .................................................................... UPDATE METHOD
         void Update()
         {
+            // Only update if neccessary (See OnChange())
+        }
+
+        protected void UpdateAxis(AAxis updatedAxis)
+        {
+            var single = new List<AAxis>();
+            single.Add(updatedAxis);
+            UpdateAxes(single);
+        }
+
+        protected void UpdateAxes(ICollection<AAxis> updatedAxes)
+        {
             // for every pair of different axes
-            foreach(var axes in DisjointPairsOf(observedAxes, observedAxes))
+            foreach(var axes in DisjointPairsOf(updatedAxes, observedAxes))
             {
                 int dataSetID;
-
+                
                 if(MetaVisShouldBeCreated(axes, out dataSetID))
                 {
                     // Create meta-visualization
@@ -98,14 +110,14 @@ namespace MetaVisualization
         {
             if(axes.A.stats.name == axes.B.stats.name)
             {
-                Debug.LogWarning("Given axes represent the same dimension and can't span a useful MetaVis.");
+                //Debug.LogWarning("Given axes represent the same dimension and can't span a useful MetaVis.");
                 dataSetID = -1;
                 return false;
             }
 
             if(axes.A.Equals(axes.B))
             {
-                Debug.LogWarning("Given axes belong to the same visualization and are not connected by MetaVis'.");
+                //Debug.LogWarning("Given axes belong to the same visualization and are not connected by MetaVis'.");
                 dataSetID = -1;
                 return false;
             }
@@ -314,6 +326,7 @@ namespace MetaVisualization
                    where (!a.Equals(b))         // if they are not the same
                    select new AxisPair(a, b);   // make a tuple of them
         }
+        
 
 
         ///////////////////////////////////////////////////////////////////////////////////
@@ -333,12 +346,15 @@ namespace MetaVisualization
                 observable.Subscribe(this);
                 observedAxes.Add(observable);
                 normalVisualizations.Add(observable.Base());
+
+                UpdateAxis(observable);
             }
         }
 
         public override void Ignore(AAxis observable)
         {
             observedAxes.Remove(observable);
+            UpdateAxes(observedAxes);
             observable.Unsubscribe(this);
         }
 
@@ -346,12 +362,14 @@ namespace MetaVisualization
         {
             // Axis.Dispose() can only be called from AETV
             // do nothing here, but unsubscribe
-            Ignore(observable);
+            observedAxes.Remove(observable);
+            UpdateAxes(observedAxes);
+            // No need to Unsubscribe, since Observable clears Observer-List anyways
         }
 
         public override void OnChange(AAxis observable)
         {
-            // Do nothing
+            UpdateAxis(observable);
         }
 
         public override void ReleaseCombination(AxisPair key)

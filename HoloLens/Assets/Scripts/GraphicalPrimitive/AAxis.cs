@@ -2,6 +2,7 @@
 using Model;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace GraphicalPrimitive
@@ -52,7 +53,9 @@ namespace GraphicalPrimitive
             if(transform.hasChanged)
             {
                 transform.hasChanged = false; // Otherwise it get's called forever
-                foreach(var observer in observers)
+
+                // ToList() creates a copy of the list of observers and alows Unsubscription during foreach loop
+                foreach(var observer in observers.ToList())
                 {
                     observer.OnChange(this);
                 }

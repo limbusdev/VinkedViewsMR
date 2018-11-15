@@ -23,6 +23,16 @@ public class MetaScatterplot2DUpdater : AMetaVisUpdater
 
     protected override void UpdateRotation()
     {
-        // TODO
+        if(signedAngle > 0)
+        {
+            var rot = new Quaternion();
+            rot.SetLookRotation(-normal, spanningAxes.A.GetAxisDirectionGlobal());
+            metaVisualization.transform.rotation = rot;
+        } else
+        {
+            var rot = new Quaternion();
+            rot.SetLookRotation(-normal, spanningAxes.B.GetAxisDirectionGlobal());
+            metaVisualization.transform.rotation = rot;
+        }
     }
 }

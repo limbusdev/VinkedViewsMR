@@ -46,6 +46,7 @@ public abstract class AMetaVisUpdater : MonoBehaviour, IAxisObserver, IDisposabl
         // change.
         if(!disposed && initialized)
         {
+            CheckValidity();
             if(valid)
             {
                 metaVisualization.UpdateETV();

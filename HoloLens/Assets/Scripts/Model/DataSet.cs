@@ -33,6 +33,7 @@ namespace Model
         public IDictionary<string, IDictionary<int, string>> dictionaries;
         public IDictionary<string, string> intervalTranslators;
         public IDictionary<InfoObject, Color> colorTable;
+        public IDictionary<InfoObject, Color> colorTableBrushing;
 
         public DataSet(
             string title,
@@ -124,12 +125,21 @@ namespace Model
         {
             // Color table
             colorTable = new Dictionary<InfoObject, Color>();
+            colorTableBrushing = new Dictionary<InfoObject, Color>();
+
             int counter = 0;
             foreach(var o in infoObjects)
             {
+                // Primitive colors between blue and red
                 colorTable.Add(o, Color.HSVToRGB((((float)counter) / infoObjects.Count) / 2f + .5f, 1, 1));
+
+                // brush colors
+                colorTableBrushing.Add(o, Color.HSVToRGB(((float)counter) / infoObjects.Count /3f + .1f, 1, 1));
+
                 counter++;
             }
+
+            
         }
 
         public LoM TypeOf(string varName)

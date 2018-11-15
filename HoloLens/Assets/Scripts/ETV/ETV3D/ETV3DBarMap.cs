@@ -302,7 +302,7 @@ namespace ETV
                                 (H / dimA) / 2f + .5f,
                                 (S / dimB) / 2f + .5f,
                                 1);
-                            bars[row, col].SetColor(color);
+                            bars[row, col].SetColor(color, Color.green);
                             S++;
                         }
                         H++;

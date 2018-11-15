@@ -167,7 +167,8 @@ namespace ETV
                 float zOffset = counter * accordionLength - .005f;
                 var line = pcpLineGenerator.CreateLine(
                     infO,
-                    Data.colorTable[infO], 
+                    Data.colorTable[infO],
+                    Data.colorTableBrushing[infO],
                     Data, 
                     nominalIDs, 
                     ordinalIDs, 

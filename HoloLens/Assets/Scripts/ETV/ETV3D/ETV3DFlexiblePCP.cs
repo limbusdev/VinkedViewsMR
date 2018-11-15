@@ -41,12 +41,18 @@ namespace ETV
 
         public override void DrawGraph()
         {
-            foreach(var infoO in Data.infoObjects)
+            foreach(var infO in Data.infoObjects)
             {
-                var line = pcpLineGenerator.CreateLine(infoO, Data.colorTable[infoO], Data, nominalIDs, ordinalIDs, intervalIDs, ratioIDs, axes, true);
+                var line = pcpLineGenerator.CreateLine(
+                    infO, 
+                    Data.colorTable[infO], 
+                    Data.colorTableBrushing[infO], 
+                    Data, 
+                    nominalIDs, ordinalIDs, intervalIDs, ratioIDs, 
+                    axes, true);
                 if(line != null)
                 {
-                    RememberRelationOf(infoO, line);
+                    RememberRelationOf(infO, line);
                 }
             }
         }

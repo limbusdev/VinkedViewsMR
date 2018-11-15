@@ -29,6 +29,7 @@ namespace ETV
         public APCPLine CreateLine(
             InfoObject o,
             Color color,
+            Color brushingColor,
             DataSet data,
             int[] nominalIDs,
             int[] ordinalIDs,
@@ -52,7 +53,7 @@ namespace ETV
             // ...................................................... geometry calculation .. END
 
             var factory = GetProperFactory();
-            var pcpLine = factory.CreatePCPLine(color, points.ToArray(), axisValues, .01f);
+            var pcpLine = factory.CreatePCPLine(color, brushingColor, points.ToArray(), axisValues, .01f);
             pcpLine.LR.useWorldSpace = global;
             pcpLine.visBridgePort.transform.localPosition = points[0];
 

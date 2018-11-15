@@ -26,7 +26,7 @@ namespace ETV
             {
                 default:
                     Color color = Color.HSVToRGB(.5f, 1, 1);
-                    primitive.SetColor(color);
+                    primitive.SetColor(color, Color.green);
                     break;
             }
         }

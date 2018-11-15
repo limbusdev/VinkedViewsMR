@@ -49,7 +49,7 @@ namespace ETV
                         );
 
                     var dot = Services.PrimFactory2D().CreateScatterDot();
-                    dot.SetColor(Data.colorTable[infO]);
+                    dot.SetColor(Data.colorTable[infO], Data.colorTableBrushing[infO]);
                     dot.transform.position = pos;
                     dot.transform.parent = Anchor.transform;
                     dotArray.Add(dot);

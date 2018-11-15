@@ -117,7 +117,7 @@ namespace ETV
                     foreach(Bar2D bar in bars.Values)
                     {
                         Color color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
-                        bar.SetColor(color);
+                        bar.SetColor(color, Color.green);
                         category++;
                     }
                     break;
@@ -126,7 +126,7 @@ namespace ETV
                     foreach(Bar2D bar in bars.Values)
                     {
                         Color color = (even) ? Color.gray : Color.white;
-                        bar.SetColor(color);
+                        bar.SetColor(color, Color.green);
                         even = !even;
                         category++;
                     }
@@ -135,7 +135,7 @@ namespace ETV
                     foreach(Bar2D bar in bars.Values)
                     {
                         Color color = Color.HSVToRGB((((float)category) / numberOfCategories) / 2f + .5f, 1, 1);
-                        bar.SetColor(color);
+                        bar.SetColor(color, Color.green);
                         category++;
                     }
                     break;

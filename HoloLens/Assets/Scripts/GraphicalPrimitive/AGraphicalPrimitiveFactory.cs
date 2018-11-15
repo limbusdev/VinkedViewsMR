@@ -20,11 +20,11 @@ public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
     /// <param name="color">color to tint the line</param>
     /// <param name="width">width of the line, defaults to 0.01</param>
     /// <returns>blank PCP line</returns>
-    public APCPLine CreatePCPLine(Color color, float width = .01f)
+    public APCPLine CreatePCPLine(Color color, Color brushingColor, float width = .01f)
     {
         var line = CreatePCPLine();
         line.SetWidth(width);
-        line.SetColor(color);
+        line.SetColor(color, brushingColor);
 
         return line;
     }
@@ -36,9 +36,9 @@ public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
     /// <param name="points">3D positions of the lines polygon</param>
     /// <param name="width">width of the line, defaults to 0.01</param>
     /// <returns>3D polygon PCP line</returns>
-    public APCPLine CreatePCPLine(Color color, Vector3[] points, IDictionary<string, float> values, float width = .01f)
+    public APCPLine CreatePCPLine(Color color, Color brushingColor, Vector3[] points, IDictionary<string, float> values, float width = .01f)
     {
-        var line = CreatePCPLine(color, width);
+        var line = CreatePCPLine(color, brushingColor, width);
         line.Init(points, values);
 
         return line;

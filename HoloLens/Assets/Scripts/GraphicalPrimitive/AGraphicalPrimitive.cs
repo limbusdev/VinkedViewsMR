@@ -51,8 +51,9 @@ namespace GraphicalPrimitive
 
         protected virtual void ApplyColor(Color color) { }
         
-        public void SetColor(Color color)
+        public void SetColor(Color color, Color brushingColor)
         {
+            brushColor = brushingColor;
             primitiveColor = color;
             ApplyColor(color);
         }
@@ -60,8 +61,7 @@ namespace GraphicalPrimitive
         public void Brush(Color color)
         {
             brushed = true;
-            brushColor = color;
-            ApplyColor(color);
+            ApplyColor(brushColor);
         }
 
         public virtual void Unbrush()

@@ -116,7 +116,8 @@ namespace ETV
             {
                 var line = pcpLineGen.CreateLine(
                     infO,
-                    Data.colorTable[infO],
+                    Data.colorTable[infO], 
+                    Data.colorTableBrushing[infO],
                     Data,
                     nominalIDs,
                     ordinalIDs,

@@ -40,6 +40,8 @@ public class ARVisTools : NetworkBehaviour
     /// </summary>
     public void Startup()
     {
+        //Physics.autoSimulation = false;
+
         switch(GlobalSettings.scenario)
         {
             case GlobalSettings.Scenario.TEST_MetaVis:
@@ -294,19 +296,19 @@ public class ARVisTools : NetworkBehaviour
             /////////////////////////////////////////////////////////////////////
             //// FLEXIBLE LINKED AXES
 
-            //// FLA: perfect
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+            // FLA: perfect
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
 
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(-3, 0, -5);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(-3, 0, -5);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
 
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(-2.5f, 0, -5);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
-            //}
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(-2.5f, 0, -5);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
 
             //// FLA: tilted
             //{

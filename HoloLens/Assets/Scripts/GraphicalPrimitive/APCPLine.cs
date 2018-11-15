@@ -13,7 +13,7 @@ namespace GraphicalPrimitive
                 if(lr == null)
                 {
                     lr = GetNewProperLineRenderer();
-                    lr.transform.parent = this.transform;
+                    lr.transform.parent = transform;
                 }
                 return lr;
             }
@@ -23,17 +23,19 @@ namespace GraphicalPrimitive
 
         public Vector3[] points;
         public IDictionary<string,float> Values;
+        private GameObject[] colliders;
 
         public void Init(Vector3[] points, IDictionary<string, float> values)
         {
             Values = values;
-            UpdatePoints(points);
+            SetPoints(points);
+            GenerateCollider();
         }
 
         public void UpdatePoints(Vector3[] points)
         {
             SetPoints(points);
-            GenerateCollider();
+            UpdateCollider();
         }
 
         protected override void ApplyColor(Color color)
@@ -58,6 +60,29 @@ namespace GraphicalPrimitive
             LR.SetPositions(points);
         }
 
+        private void UpdateCollider()
+        {
+            for(int i = 0; i < points.Length - 1; i++)
+            {
+                // Better performance with primitive colliders
+                var segmentStart = points[i];
+                var segmentEnd = points[i + 1];
+
+                // Create Collider
+                var collider = colliders[i];
+                var primCollider = collider.GetComponent<BoxCollider>();
+                var segmentLength = Vector3.Magnitude(segmentEnd - segmentStart);
+
+                primCollider.size = new Vector3(.02f, .02f, segmentLength);
+
+                // Move Collider to correct position
+                collider.transform.localPosition = (segmentStart + segmentEnd) / 2f;
+
+                // Rotate collider correctly
+                collider.transform.LookAt(segmentEnd);
+            }
+        }
+
         private void GenerateCollider()
         {
             // Return, when line is empty
@@ -72,113 +97,24 @@ namespace GraphicalPrimitive
             {
                 Debug.Log("Stop here");
             }
-            MeshCollider collider = pivot.GetComponent<MeshCollider>();
-            if(collider == null)
-            {
-                collider = pivot.AddComponent<MeshCollider>();
-                collider.sharedMesh = new Mesh();
-            }
-            // clear it otherwise
-            else
-            {
-                if(collider.sharedMesh != null)
-                {
-                    collider.sharedMesh.Clear();
-                }
-            }
-
-            // Create triangle store structure
-            var triangles = new int[(points.Length - 1) * 6 * 4 + 12]; // two triangles for every line segment makes 6 vertices for every segment
             
-            // Generate path
-            var path1 = new Vector3[points.Length * 2];
-            var path2 = new Vector3[points.Length * 2];
-            var path3 = new Vector3[points.Length * 2];
-            var path4 = new Vector3[points.Length * 2];
-
-            for(int i = 0; i < points.Length; i++)
-            {
-                path1[i] = new Vector3(points[i].x, points[i].y + .01f, points[i].z + .01f);
-                path2[i] = new Vector3(points[i].x, points[i].y + .01f, points[i].z - .01f);
-                path3[i] = new Vector3(points[i].x, points[i].y - .01f, points[i].z - .01f);
-                path4[i] = new Vector3(points[i].x, points[i].y - .01f, points[i].z + .01f);
-            }
-
-            var path = new Vector3[points.Length * 4];
-            for(int i = 0; i < points.Length; i++)
-            {
-                path[i + points.Length * 0] = path1[i];
-                path[i + points.Length * 1] = path2[i];
-                path[i + points.Length * 2] = path3[i];
-                path[i + points.Length * 3] = path4[i];
-            }
-
-            var mesh = collider.sharedMesh;
-
-            mesh.vertices = path;
-
-            int length = points.Length;
-            int trianglesPerSide = (length - 1) * 2;
-            int start;
-
-
-            int triangleID = 0;
-
+            colliders = new GameObject[points.Length -1];
+            
 
             for(int i = 0; i < points.Length - 1; i++)
             {
-                // STRIP 1
-                // Triangle 1
-                start = triangleID * 3;
-                triangles[start] = i;
-                triangles[start + 1] = i + 1;
-                triangles[start + 2] = length + i;
+                // Better performance with primitive colliders
+                var segmentStart = points[i];
+                var segmentEnd = points[i + 1];
 
-                // Triangle 2
-                start = (triangleID + 1) * 3;
-                triangles[start] = length + i;
-                triangles[start + 1] = i + 1;
-                triangles[start + 2] = length + i + 1;
+                // Create Collider
+                var collider = new GameObject("LineCollider");
+                colliders[i] = collider;
+                collider.transform.parent = pivot.transform;
+                var primCollider = collider.AddComponent<BoxCollider>();
 
-                // STRIP 2
-                start = trianglesPerSide * 3 * 1 + triangleID * 3;
-                triangles[start] = length + i;
-                triangles[start + 1] = length + i + 1;
-                triangles[start + 2] = length * 2 + i;
-
-                start = trianglesPerSide * 3 * 1 + (triangleID + 1) * 3;
-                triangles[start] = length * 2 + i;
-                triangles[start + 1] = length + i + 1;
-                triangles[start + 2] = length * 2 + i + 1;
-
-                // STRIP 3
-                start = trianglesPerSide * 3 * 2 + triangleID * 3;
-                triangles[start] = length * 2 + i;
-                triangles[start + 1] = length * 2 + i + 1;
-                triangles[start + 2] = length * 3 + i;
-
-                start = trianglesPerSide * 3 * 2 + (triangleID + 1) * 3;
-                triangles[start] = length * 3 + i;
-                triangles[start + 1] = length * 2 + i + 1;
-                triangles[start + 2] = length * 3 + i + 1;
-
-                // STRIP 4
-                start = trianglesPerSide * 3 * 3 + triangleID * 3;
-                triangles[start] = length * 3 + i;
-                triangles[start + 1] = length * 3 + i + 1;
-                triangles[start + 2] = i;
-
-                start = trianglesPerSide * 3 * 3 + (triangleID + 1) * 3;
-                triangles[start] = i;
-                triangles[start + 1] = length * 3 + i + 1;
-                triangles[start + 2] = i + 1;
-
-                triangleID += 2;
+                UpdateCollider();
             }
-
-            mesh.triangles = triangles;
-            mesh.RecalculateBounds();
-            mesh.RecalculateNormals();
         }
     }
 }

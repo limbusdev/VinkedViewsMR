@@ -124,7 +124,7 @@ public class ARVisTools : NetworkBehaviour
 
             ///////////////////////////////////////////////////////////////////
             // DYNAMIC
-            /*
+
             // One single axis static, the other moving left and right
             {
                 var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
@@ -161,7 +161,6 @@ public class ARVisTools : NetworkBehaviour
 
                 etv.gameObject.AddComponent<Animation.LinearLeftRight>();
             }
-            */
             
             // One single axis static, the other rotating around the origin
             {
@@ -275,7 +274,23 @@ public class ARVisTools : NetworkBehaviour
 
                 etv.Rotatable.AddComponent<Animation.Rotation>();
             }
-            
+
+            // One single axis static, the other being in a 90° angle circulating around it
+            {
+                var axisPopu = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var axisYear = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+
+                var etv = axisPopu.GetComponent<ETVAnchor>();
+                axisPopu.transform.position = new Vector3(7, 0, 2);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
+                var rotation = etv.Rotatable.AddComponent<Animation.Rotation>();
+                rotation.Euler = new Vector3(.5f, 0, 0);
+
+                etv = axisYear.GetComponent<ETVAnchor>();
+                axisYear.transform.position = new Vector3(7, 0, 2);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+
             /////////////////////////////////////////////////////////////////////
             //// FLEXIBLE LINKED AXES
 

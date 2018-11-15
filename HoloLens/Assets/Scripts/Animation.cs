@@ -9,6 +9,7 @@ public class Animation : MonoBehaviour
     {
         private float RotateSpeed = .3f;
         private float Radius = 0.5f;
+        
 
         private Vector3 center;
         private float angle;
@@ -29,9 +30,11 @@ public class Animation : MonoBehaviour
 
     public class Rotation : MonoBehaviour
     {
+        public Vector3 Euler = new Vector3(0, 0, .5f);
+
         private void Update()
         {
-            transform.Rotate(new Vector3(0,0,.5f));
+            transform.Rotate(Euler);
         }
     }
 

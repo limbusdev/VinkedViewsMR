@@ -1,4 +1,5 @@
-﻿using GraphicalPrimitive;
+﻿using ETV;
+using GraphicalPrimitive;
 using Model;
 using System.Collections.Generic;
 
@@ -12,6 +13,7 @@ namespace VisBridge
 
         // .................................................................... Properties
         private IDictionary<int, VisBridge> visBridges = new Dictionary<int, VisBridge>();
+        
 
         // .................................................................... VisBridge generation
         
@@ -79,8 +81,8 @@ namespace VisBridge
             if(!representedInfoObjects.ContainsKey(p))
                 representedInfoObjects.Add(p, new List<InfoObject>());
             representedInfoObjects[p].Add(o);
-
-            // Add to visbridge is there is one
+            
+            // Add to visbridge if there is one
             if(visBridges.ContainsKey(o.dataSetID) && visBridges[o.dataSetID].Connects(o))
             {
                 ToggleVisBridgeFor(o);

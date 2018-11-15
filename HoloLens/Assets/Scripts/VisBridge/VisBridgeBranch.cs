@@ -14,7 +14,7 @@ namespace VisBridge
 
         private bool initialized = false;
         private bool paused = false;
-        private Color color = Color.green;
+        public Color color { get; private set; } = Color.green;
 
         private CurvedLinePoint[] curvedLinePoints;
 
@@ -45,7 +45,7 @@ namespace VisBridge
             initialized = false;
         }
 
-        void Update()
+        public void Update()
         {
             if(initialized)
             {

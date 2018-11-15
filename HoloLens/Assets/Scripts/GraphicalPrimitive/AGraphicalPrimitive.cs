@@ -1,4 +1,5 @@
-﻿using HoloToolkit.Unity.InputModule;
+﻿using ETV;
+using HoloToolkit.Unity.InputModule;
 using Model;
 using System;
 using System.Collections.Generic;
@@ -26,6 +27,8 @@ namespace GraphicalPrimitive
         public enum Visibility { VISIBLE, INVISIBLE }
 
         // .................................................................... PROPERTIES
+        private AETV etv;
+
         // .......................................................... game object components
         public GameObject pivot;
         public GameObject label;
@@ -48,6 +51,16 @@ namespace GraphicalPrimitive
         private IList<IObserver<AGraphicalPrimitive>> observers = new List<IObserver<AGraphicalPrimitive>>();
 
         // .................................................................... METHODS
+
+        public void Assign(AETV etv)
+        {
+            this.etv = etv;
+        }
+
+        public AETV Base()
+        {
+            return etv;
+        }
 
         protected virtual void ApplyColor(Color color) { }
         

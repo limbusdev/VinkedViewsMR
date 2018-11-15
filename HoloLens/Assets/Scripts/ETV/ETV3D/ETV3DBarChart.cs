@@ -102,6 +102,7 @@ namespace ETV
             float normValue = GetAxis(AxisDirection.Y).TransformToAxisSpace(value);
             var bar = factory3D.CreateBar(normValue).GetComponent<Bar3D>();
             bar.GetComponent<Bar3D>().SetLabelText(value.ToString());
+            bar.Assign(this);
 
             bars.Add(name, bar);
             bar.gameObject.transform.localPosition = new Vector3((barID + 1) * 0.15f, 0, .001f);

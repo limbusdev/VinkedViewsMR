@@ -279,6 +279,7 @@ namespace ETV
             var factory3D = Services.instance.Factory3DPrimitives;
 
             Bar3D bar = factory3D.CreateBar(value, widthA, widthB).GetComponent<Bar3D>();
+            bar.Assign(this);
 
             bar.SetLabelText(value.ToString());
 

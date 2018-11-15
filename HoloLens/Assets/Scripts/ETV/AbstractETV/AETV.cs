@@ -133,6 +133,7 @@ namespace ETV
         public void RememberRelationOf(InfoObject o, AGraphicalPrimitive p)
         {
             infoObject2primitive.Add(o, p);
+            p.Assign(this);
             Services.VisBridgeSys().RegisterGraphicalPrimitive(o, p);
         }
 

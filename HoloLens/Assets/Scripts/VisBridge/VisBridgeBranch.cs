@@ -14,6 +14,7 @@ namespace VisBridge
 
         private bool initialized = false;
         private bool paused = false;
+        private Color color = Color.green;
 
         private CurvedLinePoint[] curvedLinePoints;
 
@@ -36,10 +37,6 @@ namespace VisBridge
             clr.showGizmos = false;
 
             LineRenderer lr = gameObject.GetComponent<LineRenderer>();
-            lr.startColor = Color.green;
-            lr.endColor = Color.green;
-            lr.material = material;
-            lr.material.color = Color.green;
             lr.startWidth = 0.01f;
             lr.endWidth = 0.01f;
 
@@ -89,10 +86,17 @@ namespace VisBridge
             curvedLinePoints[2].transform.position = optPad;
         }
 
-        public void Init(AGraphicalPrimitive origin, AGraphicalPrimitive target)
+        public void Init(AGraphicalPrimitive origin, AGraphicalPrimitive target, Color color)
         {
             this.origin = origin;
             this.target = target;
+            this.color = color;
+
+            var lr = gameObject.GetComponent<LineRenderer>();
+            lr.startColor = color;
+            lr.endColor = color;
+            lr.material = material;
+            lr.material.color = color;
 
             curvedLinePoints[0] = AddCurvedLinePoint(origin.visBridgePort.transform.position);
             curvedLinePoints[1] = AddCurvedLinePoint(new Vector3());

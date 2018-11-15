@@ -89,6 +89,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   visBridgePrefab: {fileID: 114514605450555464, guid: 6549b96df8efde14d909ff0b278669f4,
     type: 2}
+  Data: {fileID: 0}
 --- !u!114 &114407415702384088
 MonoBehaviour:
   m_ObjectHideFlags: 1

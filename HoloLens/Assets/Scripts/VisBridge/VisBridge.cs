@@ -74,7 +74,7 @@ namespace VisBridge
         /// </summary>
         /// <param name="o"></param>
         /// <param name="primitives"></param>
-        public void Connect(InfoObject o)
+        public void Connect(InfoObject o, Color color)
         {
             connectedInfObs.Add(o);
             var prims = Services.VisBridgeSys().GetRepresentativePrimitivesOf(o);
@@ -84,10 +84,10 @@ namespace VisBridge
                 if(!bridgeBranches.ContainsKey(prim) && prim != null)
                 {
                     var bridge = Instantiate(branchPrefab);
-                    bridge.Init(prim, centerSphere);
+                    bridge.Init(prim, centerSphere, color);
                     bridgeBranches.Add(prim, bridge);
                     bridge.transform.parent = gameObject.transform;
-                    prim.Brush(Color.green);
+                    prim.Brush(color);
                     Observe(prim);
                 }
             }

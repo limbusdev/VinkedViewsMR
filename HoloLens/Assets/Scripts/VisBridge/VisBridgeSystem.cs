@@ -8,6 +8,7 @@ namespace VisBridge
     {
         // .................................................................... PREFABS
         public VisBridge visBridgePrefab;
+        public DataProvider Data;
 
         // .................................................................... Properties
         private IDictionary<int, VisBridge> visBridges = new Dictionary<int, VisBridge>();
@@ -38,7 +39,11 @@ namespace VisBridge
             if(visBridges[infO.dataSetID].Connects(infO))
                 visBridges[infO.dataSetID].RemoveInfoObject(infO);
             else // draw a new one
-                visBridges[infO.dataSetID].Connect(infO);
+            {
+                var color = Data.dataSets[infO.dataSetID].colorTableBrushing[infO];
+                visBridges[infO.dataSetID].Connect(infO, color);
+            }
+                
         }
 
         public override void ToggleVisBridgeFor(AGraphicalPrimitive prim)

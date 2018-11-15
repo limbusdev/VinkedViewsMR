@@ -24,6 +24,7 @@ SOFTWARE.
 
 using ETV;
 using GraphicalPrimitive;
+using mikado;
 using Model;
 using UnityEngine;
 
@@ -152,30 +153,18 @@ namespace MetaVisualization
             // orthogonal case - 3 axes: scatterplot 3D
             // TODO - if enough time
 
-            // calculate angle between axes
-            var angle = Vector3.Angle(axes.A.GetAxisDirectionGlobal(), axes.B.GetAxisDirectionGlobal());
+            var constellation = new AAxis[] { axes.A, axes.B };
 
-            // are axes orthogonal to each other? (between 85 and 95 degrees)
-            var orthogonalCase = (Mathf.Abs(angle - 90) < 5);
-
-            var lomA = axes.A.stats.type;
-            var lomB = axes.B.stats.type;
-
-            if(orthogonalCase) // ......................... ORTHOGONAL
+            if(MikadoIRuleScatterplot2D.I.RuleApplies(constellation))
             {
-                if((lomA == LoM.NOMINAL || lomA == LoM.ORDINAL) &&
-                   (lomB == LoM.NOMINAL || lomB == LoM.ORDINAL))
-                // if both categorical
-                {
-                    return MetaVisType.HEATMAP;
-                } else // if both numerical or mixed
-                {
-                    return MetaVisType.SCATTERPLOT_2D;
-                }
-            } else // ....................................... NOT ORTHOGONAL
-            {
-                return MetaVisType.IMMERSIVE_AXES;
+                return MetaVisType.SCATTERPLOT_2D;
             }
+            else if(MikadoIRuleHeatMap.I.RuleApplies(constellation))
+            {
+                return MetaVisType.HEATMAP;
+            }
+            else
+                return MetaVisType.IMMERSIVE_AXES;
         }
 
         /// <summary>

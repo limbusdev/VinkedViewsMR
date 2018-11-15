@@ -114,7 +114,6 @@ public class VisualizationFactory : NetworkBehaviour
             }
 
             var ds = dataProvider.dataSets[dataSetID];
-            var lom = ds.TypeOf(variable);
 
             var factory = Services.instance.Factory2DETV;
             var vis = factory.CreateBarChart(ds, variable).gameObject;
@@ -148,7 +147,6 @@ public class VisualizationFactory : NetworkBehaviour
             }
 
             var ds = dataProvider.dataSets[dataSetID];
-            var lom = ds.TypeOf(variable);
 
             var factory = Services.instance.Factory3DETV;
             var vis = factory.CreateBarChart(ds, variable).gameObject;
@@ -182,8 +180,6 @@ public class VisualizationFactory : NetworkBehaviour
             }
 
             var ds = dataProvider.dataSets[dataSetID];
-            var type1 = ds.TypeOf(variables[0]);
-            var type2 = ds.TypeOf(variables[1]);
 
             var factory = Services.instance.Factory3DETV;
             var vis = factory.CreateETVBarMap(ds, variables[0], variables[1]).gameObject;
@@ -393,8 +389,6 @@ public class VisualizationFactory : NetworkBehaviour
             {
                 return new GameObject(visType + " not suitable for " + variables);
             }
-
-            var ds = dataProvider.dataSets[dataSetID];
 
             // SWITCH create vis
             GameObject vis;

@@ -41,7 +41,6 @@ namespace ETV
         private void InitNominal(DataSet data, string attributeName)
         {
             var measures = data.nominalStatistics[attributeName];
-            var factory = Services.instance.Factory2DPrimitives;
 
             for(int i = 0; i < measures.numberOfUniqueValues; i++)
             {
@@ -65,7 +64,6 @@ namespace ETV
         private void InitOrdinal(DataSet data, string attributeName)
         {
             var measures = data.ordinalStatistics[attributeName];
-            var factory = Services.instance.Factory2DPrimitives;
 
             for(int i = 0; i < measures.numberOfUniqueValues; i++)
             {

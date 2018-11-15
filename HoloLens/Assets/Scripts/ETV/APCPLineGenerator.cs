@@ -127,8 +127,6 @@ namespace ETV
             )
         {
             var points = new List<Vector3>();
-            // Assemble Polyline
-            var polyline = new Vector3[axisValues.Count];
 
             int counter = 0;
             foreach(var name in axisValues.Keys)
@@ -170,7 +168,6 @@ namespace ETV
                     points[counter] = axes[key].GetLocalValueInGlobalSpace(value);
                 } else
                 {
-                    var val = axes[key].TransformToAxisSpace(value);
                     points[counter] = new Vector3(.5f * counter, value, zOffset);
                 }
                 counter++;

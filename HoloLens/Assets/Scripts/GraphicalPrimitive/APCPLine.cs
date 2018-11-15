@@ -103,15 +103,11 @@ namespace GraphicalPrimitive
 
             for(int i = 0; i < points.Length - 1; i++)
             {
-                // Better performance with primitive colliders
-                var segmentStart = points[i];
-                var segmentEnd = points[i + 1];
-
                 // Create Collider
                 var collider = new GameObject("LineCollider");
                 colliders[i] = collider;
                 collider.transform.parent = pivot.transform;
-                var primCollider = collider.AddComponent<BoxCollider>();
+                collider.AddComponent<BoxCollider>();
 
                 UpdateCollider();
             }

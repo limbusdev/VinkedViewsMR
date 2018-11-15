@@ -27,7 +27,6 @@ public abstract class AMetaVisUpdater : MonoBehaviour, IAxisObserver, IDisposabl
     private bool initialized = false;
     private bool valid = true;
     private IDictionary<AAxis, AAxis> shadowAxes = new Dictionary<AAxis, AAxis>();
-    private ISet<IObserver<AMetaVisUpdater>> observers = new HashSet<IObserver<AMetaVisUpdater>>();
 
     // ........................................................................ Abstract Methods
     protected abstract void UpdatePosition();

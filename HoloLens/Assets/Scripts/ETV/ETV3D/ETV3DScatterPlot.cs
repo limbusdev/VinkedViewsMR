@@ -7,7 +7,6 @@ namespace ETV
 {
     public class ETV3DScatterPlot : AETVScatterPlot
     {
-        private AScatterDot[] dots;
         private string attributeA, attributeB, attributeC;
 
         public override void Init(DataSet data, string[] attributes, bool isMetaVis = false)
@@ -30,8 +29,6 @@ namespace ETV
 
         public override void DrawGraph()
         {
-            var dotArray = new List<AScatterDot>();
-
             foreach(var infO in Data.infoObjects)
             {
                 float valA = Data.ValueOf(infO, attributeA);
@@ -50,12 +47,10 @@ namespace ETV
                     dot.SetColor(Data.colorTable[infO]);
                     dot.transform.position = pos;
                     dot.transform.parent = Anchor.transform;
-                    dotArray.Add(dot);
 
                     RememberRelationOf(infO, dot);
                 }
             }
-            dots = dotArray.ToArray();
         }
 
         public override void UpdateETV()

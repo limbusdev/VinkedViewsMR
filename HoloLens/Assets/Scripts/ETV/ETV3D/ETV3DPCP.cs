@@ -20,9 +20,7 @@ namespace ETV
             ratioIDs;
 
         private IDictionary<string, AAxis> PCPAxesFront, PCPAxesBack;
-
-        private APCPLine[] lines;
-
+        
         // ........................................................................ CONSTRUCTOR / INITIALIZER
 
         public override void Init(DataSet data, int[] nominalIDs, int[] ordinalIDs, int[] intervalIDs, int[] ratioIDs, bool isMetaVis = false)
@@ -163,8 +161,6 @@ namespace ETV
 
         public override void DrawGraph()
         {
-            var notNaNPrimitives = new List<APCPLine>();
-
             int counter = 0;
             foreach(var infO in Data.infoObjects)
             {
@@ -183,19 +179,16 @@ namespace ETV
                 if(line != null)
                 {
                     line.transform.parent = Anchor.transform;
-                    notNaNPrimitives.Add(line);
                     RememberRelationOf(infO, line);
                 }
                 counter++;
             }
-
-            lines = notNaNPrimitives.ToArray();
         }
 
 
         private GameObject GenerateGrid(float min, float max)
         {
-            var factory2D = Services.instance.Factory2DPrimitives;
+            var factory2D = Services.PrimFactory2D();
 
                 GameObject grid = factory2D.CreateGrid(
                     new Color(1, 1, 1, .5f),
@@ -213,8 +206,7 @@ namespace ETV
 
         public override void UpdateETV()
         {
-            SetUpAxes();
-            DrawGraph();
+            
         }
     }
 }

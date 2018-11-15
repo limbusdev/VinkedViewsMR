@@ -72,11 +72,8 @@ public class ARVisTools : NetworkBehaviour
         try
         {
             var visPlant = Services.VisFactory();
-            var dataProvider = Services.VisFactory().dataProvider;
 
             var etvMan = Services.instance.etvManager;
-            var fact2 = Services.instance.Factory2DETV;
-            var prim2Dfactory = Services.instance.Factory2DPrimitives;
 
             var etvYearPopulationCrimePCP2D = visPlant.GeneratePCP2DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
             etvMan.AutoPlaceETV(etvYearPopulationCrimePCP2D);
@@ -101,13 +98,6 @@ public class ARVisTools : NetworkBehaviour
 
             var etvAxisPopulation = visPlant.GenerateSingle3DAxisFrom(0, "Population");
             etvAxisPopulation.transform.position = new Vector3(1.5f, 0, 0);
-
-
-            var visBridgeSystem = Services.VisBridgeSys();
-            //visBridgeSystem.DrawVisBridgeFor(dataProvider.dataSets[0].infoObjects[7]);
-
-
-            
         }
         catch(Exception e)
         {
@@ -310,230 +300,230 @@ public class ARVisTools : NetworkBehaviour
                 etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
 
-            //// FLA: tilted
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+            // FLA: tilted
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
 
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(-3, 0, -4);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 20, 20));
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(-3, 0, -4);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 20, 20));
 
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(-2.5f, 0, -4);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, -20, -20);
-            //}
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(-2.5f, 0, -4);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, -20, -20);
+            }
 
-            //// FLA: nearly Scatterplot
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+            // FLA: nearly Scatterplot
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
 
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(-3, 0, -3);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -85));
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(-3, 0, -3);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -85));
 
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(-3f, 0, -3);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -5);
-            //}
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(-3f, 0, -3);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -5);
+            }
 
-            //// FLA: PCP-Ring
-            //{
-            //    var etvYear = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvPopulation = visPlant.GenerateSingle3DAxisFrom(0, "Population");
-            //    var etvViolentCrime = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime");
-            //    var etvMurder = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS.");
-            //    var etvRapeLegacy = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy)");
-            //    var etvRapeRev = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev)");
-            //    var etvRobbery = visPlant.GenerateSingle3DAxisFrom(0, "Robbery");
+            // FLA: PCP-Ring
+            {
+                var etvYear = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvPopulation = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var etvViolentCrime = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime");
+                var etvMurder = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS.");
+                var etvRapeLegacy = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy)");
+                var etvRapeRev = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev)");
+                var etvRobbery = visPlant.GenerateSingle3DAxisFrom(0, "Robbery");
 
-            //    etvYear.transform.position = new Vector3(-2, 0, -1);
-            //    etvPopulation.transform.position = new Vector3(-2.7f, 0, -1);
-            //    etvViolentCrime.transform.position = new Vector3(-1.3f, 0, -1);
-            //    etvMurder.transform.position = new Vector3(-2.3f, 0, -1.5f);
-            //    etvRapeRev.transform.position = new Vector3(-1.7f, 0, -1.5f);   
-            //    etvRapeLegacy.transform.position = new Vector3(-2.3f, 0, -.5f);
-            //    etvRobbery.transform.position = new Vector3(-1.7f, 0, -.5f);
-            //}
+                etvYear.transform.position = new Vector3(-2, 0, -1);
+                etvPopulation.transform.position = new Vector3(-2.7f, 0, -1);
+                etvViolentCrime.transform.position = new Vector3(-1.3f, 0, -1);
+                etvMurder.transform.position = new Vector3(-2.3f, 0, -1.5f);
+                etvRapeRev.transform.position = new Vector3(-1.7f, 0, -1.5f);
+                etvRapeLegacy.transform.position = new Vector3(-2.3f, 0, -.5f);
+                etvRobbery.transform.position = new Vector3(-1.7f, 0, -.5f);
+            }
 
 
             /////////////////////////////////////////////////////////////////////
             //// SCATTERPLOT
 
 
-            //// Scatterplot: perfect
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+            // Scatterplot: perfect
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
 
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(-5, 0, -5);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(-5, 0, -5);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
 
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(-5, 0, -5);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
-            //}
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(-5, 0, -5);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
 
-            //// Scatterplot: perfect flat
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+            // Scatterplot: perfect flat
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
 
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(-5, 0, 3);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(-5, 0, 3);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
 
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(-5, 0, 3);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(90, 0, 0);
-            //}
-
-
-            //// Scatterplot: tilted
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
-
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(-5, 0, -3);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
-
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(-5, 0, -3);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(20, 0, 0);
-            //}
-
-            //// Scatterplot: axes set apart
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
-
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(-4.75f, 0, -1);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
-
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(-5, 0, -1.25f);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
-            //}
-
-            //// Scatterplot: axes set apart 2
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
-
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(-4.75f, 0, 0);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
-
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(-5, 0, 0f);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
-            //}
-
-            //// Scatterplot: axes set apart 3
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
-
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(-4.9f, -.1f, 1);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
-
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(-5.1f, .1f, 1);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
-            //}
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(-5, 0, 3);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(90, 0, 0);
+            }
 
 
-            //// Scatterplot: imperfect
-            //{
-            //    var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            //    var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+            // Scatterplot: tilted
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
 
-            //    var etv = etvAxisYear0.GetComponent<ETVAnchor>();
-            //    etvAxisYear0.transform.position = new Vector3(-5, 0, 2);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -87));
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(-5, 0, -3);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
 
-            //    etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
-            //    etvAxisPopulation0.transform.position = new Vector3(-5, 0, 2);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
-            //}
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(-5, 0, -3);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(20, 0, 0);
+            }
+
+            // Scatterplot: axes set apart
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(-4.75f, 0, -1);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
+
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(-5, 0, -1.25f);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+
+            // Scatterplot: axes set apart 2
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(-4.75f, 0, 0);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
+
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(-5, 0, 0f);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+
+            // Scatterplot: axes set apart 3
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(-4.9f, -.1f, 1);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -90));
+
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(-5.1f, .1f, 1);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+
+
+            // Scatterplot: imperfect
+            {
+                var etvAxisYear0 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvAxisPopulation0 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+
+                var etv = etvAxisYear0.GetComponent<ETVAnchor>();
+                etvAxisYear0.transform.position = new Vector3(-5, 0, 2);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(0, 0, -87));
+
+                etv = etvAxisPopulation0.GetComponent<ETVAnchor>();
+                etvAxisPopulation0.transform.position = new Vector3(-5, 0, 2);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
 
             /////////////////////////////////////////////////////////////////////
             //// BAR MAP
 
-            //// Bar Map: perfect
-            //{
-            //    var etvAxisWeapon0 = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
-            //    var etvAxisCrime0 = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
+            // Bar Map: perfect
+            {
+                var etvAxisWeapon0 = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
+                var etvAxisCrime0 = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
 
-            //    var etv = etvAxisWeapon0.GetComponent<ETVAnchor>();
-            //    etvAxisWeapon0.transform.position = new Vector3(-7, 0, -5);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
+                var etv = etvAxisWeapon0.GetComponent<ETVAnchor>();
+                etvAxisWeapon0.transform.position = new Vector3(-7, 0, -5);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
 
-            //    etv = etvAxisCrime0.GetComponent<ETVAnchor>();
-            //    etvAxisCrime0.transform.position = new Vector3(-7, 0, -5);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -90);
-            //}
+                etv = etvAxisCrime0.GetComponent<ETVAnchor>();
+                etvAxisCrime0.transform.position = new Vector3(-7, 0, -5);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -90);
+            }
 
-            //// Bar Map: tilted
-            //{
-            //    var etvAxisWeapon0 = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
-            //    var etvAxisCrime0 = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
+            // Bar Map: tilted
+            {
+                var etvAxisWeapon0 = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
+                var etvAxisCrime0 = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
 
-            //    var etv = etvAxisWeapon0.GetComponent<ETVAnchor>();
-            //    etvAxisWeapon0.transform.position = new Vector3(-7, 0, -3);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
+                var etv = etvAxisWeapon0.GetComponent<ETVAnchor>();
+                etvAxisWeapon0.transform.position = new Vector3(-7, 0, -3);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
 
-            //    etv = etvAxisCrime0.GetComponent<ETVAnchor>();
-            //    etvAxisCrime0.transform.position = new Vector3(-7, 0, -3);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -60);
-            //}
+                etv = etvAxisCrime0.GetComponent<ETVAnchor>();
+                etvAxisCrime0.transform.position = new Vector3(-7, 0, -3);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -60);
+            }
 
-            //// Bar Map: tilted 2
-            //{
-            //    var etvAxisWeapon0 = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
-            //    var etvAxisCrime0 = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
+            // Bar Map: tilted 2
+            {
+                var etvAxisWeapon0 = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
+                var etvAxisCrime0 = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
 
-            //    var etv = etvAxisWeapon0.GetComponent<ETVAnchor>();
-            //    etvAxisWeapon0.transform.position = new Vector3(-7, 0, -1);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(90, 20, 0));
+                var etv = etvAxisWeapon0.GetComponent<ETVAnchor>();
+                etvAxisWeapon0.transform.position = new Vector3(-7, 0, -1);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(90, 20, 0));
 
-            //    etv = etvAxisCrime0.GetComponent<ETVAnchor>();
-            //    etvAxisCrime0.transform.position = new Vector3(-7, 0, -1);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 20, -60);
-            //}
+                etv = etvAxisCrime0.GetComponent<ETVAnchor>();
+                etvAxisCrime0.transform.position = new Vector3(-7, 0, -1);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 20, -60);
+            }
 
-            //// Bar Map: imperfect
-            //{
-            //    var etvAxisWeapon0 = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
-            //    var etvAxisCrime0 = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
+            // Bar Map: imperfect
+            {
+                var etvAxisWeapon0 = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
+                var etvAxisCrime0 = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
 
-            //    var etv = etvAxisWeapon0.GetComponent<ETVAnchor>();
-            //    etvAxisWeapon0.transform.position = new Vector3(-7, 0, 1);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(93, 0, 0));
+                var etv = etvAxisWeapon0.GetComponent<ETVAnchor>();
+                etvAxisWeapon0.transform.position = new Vector3(-7, 0, 1);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(93, 0, 0));
 
-            //    etv = etvAxisCrime0.GetComponent<ETVAnchor>();
-            //    etvAxisCrime0.transform.position = new Vector3(-7, 0, 1);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -60);
-            //}
+                etv = etvAxisCrime0.GetComponent<ETVAnchor>();
+                etvAxisCrime0.transform.position = new Vector3(-7, 0, 1);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -60);
+            }
 
-            //// Bar Map: set apart
-            //{
-            //    var etvAxisWeapon0 = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
-            //    var etvAxisCrime0 = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
+            // Bar Map: set apart
+            {
+                var etvAxisWeapon0 = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
+                var etvAxisCrime0 = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
 
-            //    var etv = etvAxisWeapon0.GetComponent<ETVAnchor>();
-            //    etvAxisWeapon0.transform.position = new Vector3(-7.1f, 0, 3.1f);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
+                var etv = etvAxisWeapon0.GetComponent<ETVAnchor>();
+                etvAxisWeapon0.transform.position = new Vector3(-7.1f, 0, 3.1f);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(90, 0, 0));
 
-            //    etv = etvAxisCrime0.GetComponent<ETVAnchor>();
-            //    etvAxisCrime0.transform.position = new Vector3(-6.9f, 0, 2.9f);
-            //    etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -90);
-            //}
+                etv = etvAxisCrime0.GetComponent<ETVAnchor>();
+                etvAxisCrime0.transform.position = new Vector3(-6.9f, 0, 2.9f);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -90);
+            }
         } catch(Exception e)
         {
             Debug.LogException(e);

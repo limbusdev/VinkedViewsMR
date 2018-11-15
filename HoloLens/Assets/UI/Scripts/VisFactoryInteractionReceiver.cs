@@ -180,8 +180,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         ms.AddRange(ds.ordinalStatistics.Values);
         ms.AddRange(ds.intervalStatistics.Values);
         ms.AddRange(ds.rationalStatistics.Values);
-
-        var keys = new List<IconKey>();
+        
 
         foreach(AttributeStats m in ms)
         {

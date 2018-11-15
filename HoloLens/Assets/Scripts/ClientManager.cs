@@ -39,9 +39,6 @@ public class ClientManager : MonoBehaviour
 
         padding = 48;
 
-        var fact2 = Services.ETVFactory2D();
-        var prim2Dfactory = Services.PrimFactory2D();
-
         var etvYearPopulationCrimePCP2D = fact.GeneratePCP2DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
         etvYearPopulationCrimePCP2D.transform.parent = etvPosition.transform;
         Services.instance.clientManager.currentlyBoundETV = etvYearPopulationCrimePCP2D;

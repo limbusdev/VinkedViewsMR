@@ -8,10 +8,7 @@ using UnityEngine.Networking;
 public class NetworkManagerServer : NetworkManager
 {
     IDictionary<int, GameObject> pETVIDs;
-
-    private int pETVcounter = 0;
     
-
     // Called on the server, when it starts
     public override void OnStartServer()
     {

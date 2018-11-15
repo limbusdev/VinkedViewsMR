@@ -105,8 +105,6 @@ namespace ETV
             this.absMapValues = new int[dimA, dimB];
             this.barHeights = new float[dimA, dimB];
 
-            var factory3D = Services.PrimFactory3D();
-
             // For every possible value of attribute 1
             for(int vID1 = 0; vID1 < dimA; vID1++)
             {
@@ -256,7 +254,6 @@ namespace ETV
         /// </summary>
         public override void SetUpAxes()
         {
-            var factory3D = Services.PrimFactory3D();
             var factory2D = Services.PrimFactory2D();
 
             // Categorical Axis A

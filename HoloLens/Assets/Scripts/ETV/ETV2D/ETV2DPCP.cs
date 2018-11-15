@@ -20,9 +20,7 @@ namespace ETV
         private GameObject allAxesGO;
 
         private IDictionary<string, AAxis> PCPAxes;
-
-        private APCPLine[] lines;
-
+       
 
         // ........................................................................ CONSTRUCTOR / INITIALIZER
 
@@ -43,8 +41,7 @@ namespace ETV
         public override void SetUpAxes()
         {
             PCPAxes = new Dictionary<string, AAxis>();
-            AGraphicalPrimitiveFactory factory2D = Services.instance.Factory2DPrimitives;
-            var lineGen = new PCP2DLineGenerator();
+            var factory2D = Services.PrimFactory2D();
 
             int counter = 0;
             allAxesGO = new GameObject("Axes-Set");
@@ -114,8 +111,6 @@ namespace ETV
 
         public override void DrawGraph()
         {
-            var notNaNPrimitives = new List<APCPLine>();
-
             int counter = 0;
             foreach(var infO in Data.infoObjects)
             {
@@ -133,13 +128,10 @@ namespace ETV
                 if(line != null)
                 {
                     line.transform.parent = Anchor.transform;
-                    notNaNPrimitives.Add(line);
                     RememberRelationOf(infO, line);
                 }
                 counter++;
             }
-
-            lines = notNaNPrimitives.ToArray();
         }
         
         public override void UpdateETV()

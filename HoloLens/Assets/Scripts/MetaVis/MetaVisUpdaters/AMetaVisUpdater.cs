@@ -85,7 +85,10 @@ public abstract class AMetaVisUpdater : MonoBehaviour, IAxisObserver, IDisposabl
             {
                 if(metaVisualization.registeredAxes.ContainsKey(ax.attributeName))
                 {
-                    shadowAxes.Add(ax, metaVisualization.registeredAxes[ax.attributeName]);
+                    foreach(var a in metaVisualization.registeredAxes[ax.attributeName])
+                    {
+                        shadowAxes.Add(ax, a);
+                    }
                 }
             }
 

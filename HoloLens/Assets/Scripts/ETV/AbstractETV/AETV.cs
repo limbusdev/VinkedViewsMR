@@ -16,7 +16,7 @@ namespace ETV
             = new Dictionary<AxisDirection, AAxis>();
         public IDictionary<InfoObject, AGraphicalPrimitive> infoObject2primitive { get; private set; } 
             = new Dictionary<InfoObject, AGraphicalPrimitive>();
-        public IDictionary<string, AAxis> registeredAxes = new Dictionary<string, AAxis>();
+        public IDictionary<string, IList<AAxis>> registeredAxes = new Dictionary<string, IList<AAxis>>();
         
         public abstract void DrawGraph();
         public abstract void SetUpAxes();
@@ -85,7 +85,11 @@ namespace ETV
 
         public void RegisterAxis(AAxis axis)
         {
-            registeredAxes.Add(axis.attributeName, axis);
+            if(!registeredAxes.ContainsKey(axis.attributeName))
+            {
+                registeredAxes.Add(axis.attributeName, new List<AAxis>());
+            }
+            registeredAxes[axis.attributeName].Add(axis);
             axis.Assign(this);
 
             if(!isMetaVis)

@@ -259,7 +259,10 @@ public class VisualizationFactory : NetworkBehaviour
             return vis;
         } catch(Exception e)
         {
-            Debug.LogError("Creation of requested Visualization for variable " + variables + " failed.");
+            var allVars = "";
+            foreach(var s in variables)
+                allVars += s;
+            Debug.LogError("Creation of requested Visualization for variable " + allVars + " failed.");
             Debug.LogException(e);
             return new GameObject("Creation Failed");
         }

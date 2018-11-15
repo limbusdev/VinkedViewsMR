@@ -70,16 +70,20 @@ namespace GraphicalPrimitive
 
                 // Create Collider
                 var collider = colliders[i];
-                var primCollider = collider.GetComponent<BoxCollider>();
-                var segmentLength = Vector3.Magnitude(segmentEnd - segmentStart);
 
-                primCollider.size = new Vector3(.02f, .02f, segmentLength);
+                if(collider != null)
+                {
+                    var primCollider = collider.GetComponent<BoxCollider>();
+                    var segmentLength = Vector3.Magnitude(segmentEnd - segmentStart);
 
-                // Move Collider to correct position
-                collider.transform.localPosition = (segmentStart + segmentEnd) / 2f;
+                    primCollider.size = new Vector3(.02f, .02f, segmentLength);
 
-                // Rotate collider correctly
-                collider.transform.LookAt(segmentEnd);
+                    // Move Collider to correct position
+                    collider.transform.localPosition = (segmentStart + segmentEnd) / 2f;
+
+                    // Rotate collider correctly
+                    collider.transform.LookAt(segmentEnd);
+                }
             }
         }
 

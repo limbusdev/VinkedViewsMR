@@ -4,56 +4,45 @@ using GraphicalPrimitive;
 using Model;
 using ETV;
 
-namespace VisBridge
+namespace VisBridges
 {
     /// <summary>
     /// VisBridge class. Represents a VisBridge, which connects multiple
     /// graphical primitives of one or more visualizations, if they
     /// directly or indirectly represent the same information object.
     /// </summary>
-    public class VisBridge : MonoBehaviour, IObserver<AGraphicalPrimitive>
+    public class VisBridge : MonoBehaviour
     {
+        
         // .................................................................... Unit Components
-        public AGraphicalPrimitive centerSphere;
+        public AGraphicalPrimitive center;
+        public VisBridgeTree VisBridgeTreePrefab;
         public VisBridgeBranch branchPrefab;
 
         // .................................................................... Properties
-        private IDictionary<AGraphicalPrimitive, VisBridgeBranch> bridgeBranches
-            = new Dictionary<AGraphicalPrimitive, VisBridgeBranch>();
+        private IDictionary<AETV, VisBridgeTree> trees = new Dictionary<AETV, VisBridgeTree>();
 
         // List of information objects currently active in the VisBridge
-        private IList<InfoObject> connectedInfObs 
-            = new List<InfoObject>();
-
-        private IDictionary<AETV, IList<AGraphicalPrimitive>> etv2prim = new Dictionary<AETV, IList<AGraphicalPrimitive>>();
-        private IDictionary<AETV, AGraphicalPrimitive> etv2bundleNode = new Dictionary<AETV, AGraphicalPrimitive>();
+        private IList<InfoObject> connectedInfObs = new List<InfoObject>();
+        public IDictionary<InfoObject, AGraphicalPrimitive> centroids = new Dictionary<InfoObject, AGraphicalPrimitive>();
 
         // .................................................................... Unity
         // Use this for initialization
         public void Awake()
         {
-            centerSphere.Brush(Color.green);
+            center.Brush(Color.green);
         }
 
         void Update()
         {
             // Update kartesian center
-            var center = new Vector3();
-            var activeEndpoints = 0;
-            foreach(var prim in bridgeBranches.Keys)
+            var c = Vector3.zero;
+            foreach(var tree in trees.Values)
             {
-                if(prim != null && prim.isActiveAndEnabled)
-                {
-                    center += prim.transform.position;
-                    activeEndpoints++;
-                }
+                c += tree.GetKartesianCenterOfPrims();
             }
-
-            if(activeEndpoints != 0)
-            {
-                center /= activeEndpoints;
-                centerSphere.transform.position = center;
-            }
+            c = (trees.Count == 0) ? Vector3.zero : c / trees.Count;
+            center.transform.position = c;
         }
 
 
@@ -79,66 +68,36 @@ namespace VisBridge
         public void Connect(InfoObject o, Color color)
         {
             connectedInfObs.Add(o);
+            if(!centroids.ContainsKey(o))
+            {
+                var centroid = Services.PrimFactory3D().CreatePhantomPrimitive();
+                centroid.transform.parent = center.transform;
+                centroid.transform.localPosition = Vector3.zero;
+                centroids.Add(o, centroid);
+            }
             
             var prims = Services.VisBridgeSys().GetRepresentativePrimitivesOf(o);
 
             foreach(var prim in prims)
             {
-                if(!bridgeBranches.ContainsKey(prim) && prim != null)
+                // Add tree if neccessary
+                VisBridgeTree tree;
+                if(!trees.ContainsKey(prim.Base()))
                 {
-                    var bridge = Instantiate(branchPrefab);
-
-                    // Edge Bundling
-                    
-                    bridge.Init(prim, centerSphere, color);
-                    bridgeBranches.Add(prim, bridge);
-                    bridge.transform.parent = gameObject.transform;
-                    prim.Brush(color);
-                    Observe(prim);
+                    tree = Instantiate(VisBridgeTreePrefab);
+                    tree.Assign(this);
+                    trees.Add(prim.Base(), tree);
+                } else
+                {
+                    tree = trees[prim.Base()];
                 }
-            }
 
-            foreach(var etv in etv2prim.Keys)
-            {
-                CreateBundledVisBridgeBranches(etv2prim[etv]);
+                // Add primitive to tree
+                tree.Connect(this, o, prim, color);
+                prim.Brush(color);
             }
         }
-
-        private Vector3 CreateBundledVisBridgeBranches(IList<AGraphicalPrimitive> bundlePrims)
-        {
-            if(!(bundlePrims[0].Base() == null) && !etv2bundleNode.ContainsKey(bundlePrims[0].Base()))
-            {
-                etv2bundleNode.Add(bundlePrims[0].Base(), Instantiate(centerSphere));
-            }
-
-            Vector3 bundlePoint = Vector3.zero;
-
-            // TODO create only one per bundle
-            var bundleObject = etv2bundleNode[bundlePrims[0].Base()];
-
-            
-            int counter = 0;
-            foreach(var p in bundlePrims)
-            {
-                var branch = bridgeBranches[p];
-                branch.target = bundleObject;
-                branch.Update();
-                bundlePoint += branch.origin.visBridgePort.transform.position;
-                counter++;
-            }
-            bundlePoint /= counter;
-            bundlePoint += bundlePoint;
-            bundlePoint += centerSphere.transform.position;
-            bundlePoint /= 3f;
-
-            bundleObject.transform.position = bundlePoint;
-
-            // Create branch from bundle to visBridge-center
-            var centerBranch = Instantiate(branchPrefab);
-            centerBranch.Init(bundleObject, centerSphere, Color.green);
-
-            return bundlePoint;
-        }
+        
 
         /// <summary>
         /// Removes connections to all representative graphical
@@ -159,72 +118,15 @@ namespace VisBridge
         /// <returns>No primitives left. Bridge destroyed.</returns>
         private bool RemovePrimitives(IList<AGraphicalPrimitive> primitives)
         {
-            foreach(var prim in primitives)
-            {
-                if(bridgeBranches.ContainsKey(prim))
-                {
-                    Destroy(bridgeBranches[prim].gameObject);
-                    bridgeBranches.Remove(prim);
-                    prim.Unbrush();
-                }
-            }
-
-            if(bridgeBranches.Count == 0)
-            {
-                return true;
-            } else
-            {
-                return false;
-            }
+            // TODO
+            return false;
         }
 
         
 
         public void Dispose()
         {
-            foreach(var bridgePart in bridgeBranches.Values)
-            {
-                Destroy(bridgePart.gameObject);
-            }
-            foreach(var prims in etv2prim.Values)
-            {
-                foreach(var sub in prims)
-                {
-                    sub.Unsubscribe(this);
-                }
-            }
-            etv2prim.Clear();
-            Destroy(gameObject);
-        }
-
-
-        public void OnDispose(AGraphicalPrimitive observable)
-        {
-            RemovePrimitives(new List<AGraphicalPrimitive>() { observable });
-        }
-
-        public void OnChange(AGraphicalPrimitive observable)
-        {
-            // Nothing
-        }
-
-        public void Observe(AGraphicalPrimitive prim)
-        {
-            prim.Subscribe(this);
-            // Remember to which etv it belongs
-            if(prim.Base() != null && !etv2prim.ContainsKey(prim.Base()))
-            {
-                etv2prim.Add(prim.Base(), new List<AGraphicalPrimitive>());
-            }
-            etv2prim[prim.Base()].Add(prim);
-        }
-
-        public void Ignore(AGraphicalPrimitive observable)
-        {
-            if(observable.Base() != null && etv2prim.ContainsKey(observable.Base()))
-            {
-                etv2prim[observable.Base()].Remove(observable);
-            }
+            // TODO
         }
     }
 }

@@ -3,7 +3,7 @@ using GraphicalPrimitive;
 using Model;
 using System.Collections.Generic;
 
-namespace VisBridge
+namespace VisBridges
 {
     public class VisBridgeSystem : AVisBridgeSystem
     {

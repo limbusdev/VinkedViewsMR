@@ -10,9 +10,15 @@ public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
     public LineRenderer lineRenderer2DPrefab;
     public LineRenderer lineRenderer3DPrefab;
     public LineRenderer axisLineRendererPrefab;
+    public AGraphicalPrimitive PhantomPrimitivePrefab;
 
 
     // ........................................................................ Explicitly implemented methods
+
+    public AGraphicalPrimitive CreatePhantomPrimitive()
+    {
+        return Instantiate(PhantomPrimitivePrefab);
+    }
 
     /// <summary>
     /// Creates a new blank PCP line of the given width and color.

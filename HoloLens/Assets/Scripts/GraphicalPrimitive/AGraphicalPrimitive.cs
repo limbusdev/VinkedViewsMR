@@ -21,7 +21,7 @@ namespace GraphicalPrimitive
     /// they activate a VisBridge connecting them to all other graphical
     /// primitives representing the same information object(s).
     /// </summary>
-    public class AGraphicalPrimitive : MonoBehaviour, IFocusable, IInputClickHandler, IObservablePrimitive<InfoObject>, IDisposable
+    public abstract class AGraphicalPrimitive : MonoBehaviour, IFocusable, IInputClickHandler, IObservablePrimitive<InfoObject>, IDisposable
     {
         public enum Status { ENABLED, DISABLED }
         public enum Visibility { VISIBLE, INVISIBLE }

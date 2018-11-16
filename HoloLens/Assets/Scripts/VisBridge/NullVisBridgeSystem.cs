@@ -3,7 +3,7 @@ using GraphicalPrimitive;
 using Model;
 using UnityEngine;
 
-namespace VisBridge
+namespace VisBridges
 {
     /// <summary>
     /// Dummy implementation of AVisBridgeSystem. Try to provide the ServiceLocator

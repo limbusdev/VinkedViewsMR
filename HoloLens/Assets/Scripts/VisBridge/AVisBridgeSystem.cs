@@ -3,7 +3,7 @@ using Model;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace VisBridge
+namespace VisBridges
 {
     /// <summary>
     /// Manages visual connections between the representations of one or multiple

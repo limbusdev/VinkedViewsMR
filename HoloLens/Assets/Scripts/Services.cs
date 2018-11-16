@@ -1,7 +1,7 @@
 ﻿using ETV;
 using MetaVisualization;
 using UnityEngine;
-using VisBridge;
+using VisBridges;
 
 /// <summary>
 /// Service locator. Loose implementation of the design pattern 

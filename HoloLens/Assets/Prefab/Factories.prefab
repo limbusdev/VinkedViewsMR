@@ -61,9 +61,7 @@ MonoBehaviour:
     type: 2}
   axisLineRendererPrefab: {fileID: 120686247906450020, guid: f44069bbb4822a943a11c9b7dedddd05,
     type: 2}
-  fastLineRendererPrefab: {fileID: 114537018403411326, guid: 46e1107717d27ea46bf3e5aa07d1d02c,
-    type: 2}
-  fastAxesLineRendererPrefab: {fileID: 114537018403411326, guid: 13e91da7fdd310349b67a330b128f0e8,
+  PhantomPrimitivePrefab: {fileID: 114969558763271848, guid: 60e0090d94c245940b3472b05c6043c5,
     type: 2}
   bar2D: {fileID: 114136709646360438, guid: a247774af56768b40a121d512d42d824, type: 2}
   label: {fileID: 1340621660906316, guid: a8914cdd4e0184542a0251c684fb596d, type: 2}
@@ -143,9 +141,7 @@ MonoBehaviour:
     type: 2}
   axisLineRendererPrefab: {fileID: 120686247906450020, guid: f44069bbb4822a943a11c9b7dedddd05,
     type: 2}
-  fastLineRendererPrefab: {fileID: 114537018403411326, guid: 46e1107717d27ea46bf3e5aa07d1d02c,
-    type: 2}
-  fastAxesLineRendererPrefab: {fileID: 114537018403411326, guid: 13e91da7fdd310349b67a330b128f0e8,
+  PhantomPrimitivePrefab: {fileID: 114969558763271848, guid: 60e0090d94c245940b3472b05c6043c5,
     type: 2}
   cone: {fileID: 1235091312533442, guid: a7ac7c0156811924185a33f61cda2f6b, type: 2}
   bar3D: {fileID: 114065101787556358, guid: 77a7171990d32c74688c6f030fc34754, type: 2}

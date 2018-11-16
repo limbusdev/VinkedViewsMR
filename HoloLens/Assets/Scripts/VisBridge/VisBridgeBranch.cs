@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace VisBridge
+namespace VisBridges
 {
     public class VisBridgeBranch : MonoBehaviour
     {

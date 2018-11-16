@@ -2,6 +2,7 @@
 using GraphicalPrimitive;
 using Model;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace VisBridges
 {
@@ -40,8 +41,14 @@ namespace VisBridges
             // ............................................ VisBridge aktivation/deactivation
             // if their already is a visbridge for the objects dataset, disable it
             if(visBridges[infO.dataSetID].Connects(infO))
+            {
                 visBridges[infO.dataSetID].Disconnect(infO);
-            else // draw a new one
+                var prims = Services.VisBridgeSys().GetRepresentativePrimitivesOf(infO);
+                foreach(var p in prims.ToList())
+                {
+                    p.Disconnect();
+                }
+            } else // draw a new one
             {
                 var color = Data.dataSets[infO.dataSetID].colorTableBrushing[infO];
                 visBridges[infO.dataSetID].Connect(infO, color);
@@ -102,21 +109,24 @@ namespace VisBridges
 
         public override void OnDispose(AGraphicalPrimitive prim)
         {
-            foreach(var infO in representedInfoObjects[prim])
+            if(prim.disposed)
             {
-                if(observedVisElements.ContainsKey(infO))
+                foreach(var infO in representedInfoObjects[prim])
                 {
-                    if(observedVisElements[infO].Contains(prim))
+                    if(observedVisElements.ContainsKey(infO))
                     {
-                        observedVisElements[infO].Remove(prim);
+                        if(observedVisElements[infO].Contains(prim))
+                        {
+                            observedVisElements[infO].Remove(prim);
+                        }
                     }
                 }
-            }
 
-            if(representedInfoObjects.ContainsKey(prim))
-            {
-                representedInfoObjects.Remove(prim);
-            }            
+                if(representedInfoObjects.ContainsKey(prim))
+                {
+                    representedInfoObjects.Remove(prim);
+                }
+            }
         }
 
         public override void OnChange(AGraphicalPrimitive observable)

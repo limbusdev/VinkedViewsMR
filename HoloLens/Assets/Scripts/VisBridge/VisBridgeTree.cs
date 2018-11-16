@@ -65,6 +65,8 @@ namespace VisBridges
         }
 
         // .................................................................... Methods
+
+
         public bool Connects(InfoObject i)
         {
             return paths.ContainsKey(i);

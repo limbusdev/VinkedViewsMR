@@ -128,22 +128,14 @@ namespace VisBridges
         /// <param name="o"></param>
         public void Disconnect(InfoObject o)
         {
-            connectedInfObs.Remove(o);
-            var prims = Services.VisBridgeSys().GetRepresentativePrimitivesOf(o);
-            RemovePrimitives(prims);
+            if(connectedInfObs.Contains(o))
+            {
+                connectedInfObs.Remove(o);
+                var cent = centroids[o];
+                centroids.Remove(o);
+                Destroy(cent);
+            }
         }
-
-        /// <summary>
-        /// Removes connections to all representative GPs.
-        /// </summary>
-        /// <param name="primitives">primitives to cut off</param>
-        /// <returns>No primitives left. Bridge destroyed.</returns>
-        private bool RemovePrimitives(IList<AGraphicalPrimitive> primitives)
-        {
-            // TODO
-            return false;
-        }
-
         
 
         public void Dispose()

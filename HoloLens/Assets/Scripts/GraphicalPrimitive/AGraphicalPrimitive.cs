@@ -143,6 +143,16 @@ namespace GraphicalPrimitive
 
         // .......................................................... IObservable, IDisposable
  
+        public void Disconnect()
+        {
+            Unbrush();
+            foreach(var obs in observers)
+            {
+                obs.OnDispose(this);
+            }
+            observers.Clear();
+        }
+
         public void Dispose()
         {
             gameObject.SetActive(false);

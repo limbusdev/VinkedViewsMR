@@ -65,7 +65,12 @@ namespace VisBridges
         }
 
         // .................................................................... Methods
-        public void Connect(VisBridge bridge, InfoObject infO, AGraphicalPrimitive prim, Color color, int offsetIndex)
+        public bool Connects(InfoObject i)
+        {
+            return paths.ContainsKey(i);
+        }
+
+        public void Connect(VisBridge bridge, InfoObject infO, AGraphicalPrimitive prim, Color color)
         {
             if(paths.ContainsKey(infO))
                 return;
@@ -75,7 +80,7 @@ namespace VisBridges
                 center = Services.PrimFactory3D().CreatePhantomPrimitive();
             }
 
-            var bridgeCenter = bridge.centroids[offsetIndex];
+            var bridgeCenter = bridge.centroids[infO];
 
             var offset = Services.PrimFactory3D().CreateBoxPrimitive();
             offset.transform.parent = center.transform;
@@ -102,7 +107,7 @@ namespace VisBridges
             {
                 var path = paths[key];
                 var offset = path.offset;
-                int offIndex = root.connectedInfObs.IndexOf(key);
+                int offIndex = root.order.IndexOf(key);
                 offset.transform.localPosition = new Vector3(0, offIndex * VisBridgeSystem.offsetDist, 0);
             }
 

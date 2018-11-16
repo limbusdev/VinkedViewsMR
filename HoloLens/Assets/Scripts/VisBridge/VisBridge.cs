@@ -23,8 +23,9 @@ namespace VisBridges
         private IDictionary<AETV, VisBridgeTree> trees = new Dictionary<AETV, VisBridgeTree>();
 
         // List of information objects currently active in the VisBridge
-        public IList<InfoObject> connectedInfObs = new List<InfoObject>();
-        public IList<AGraphicalPrimitive> centroids = new List<AGraphicalPrimitive>();
+        public ISet<InfoObject> connectedInfObs = new HashSet<InfoObject>();
+        public IList<InfoObject> order = new List<InfoObject>();
+        public IDictionary<InfoObject, AGraphicalPrimitive> centroids = new Dictionary<InfoObject, AGraphicalPrimitive>();
 
         // .................................................................... Unity
         // Use this for initialization
@@ -47,6 +48,31 @@ namespace VisBridges
             return connectedInfObs.Contains(o);
         }
 
+        public void Connect(InfoObject o, Color color, AGraphicalPrimitive p)
+        {
+            if(trees.ContainsKey(p.Base()))
+            {
+                if(connectedInfObs.Contains(o))
+                {
+                    foreach(var tree in trees.Values)
+                    {
+                        if(!tree.Connects(o))
+                        {
+                            tree.Connect(this, o, p, color);
+                        }
+                    }
+                }
+            } else
+            {
+                var tree = Instantiate(VisBridgeTreePrefab);
+                tree.Assign(this, p.Base());
+                trees.Add(p.Base(), tree);
+                tree.Subscribe(this);
+                tree.Connect(this, o, p, color);
+                p.Brush(color);
+            }
+        }
+
         /// <summary>
         /// Draws VisBridge branches to representative GPs of the given
         /// information object.
@@ -55,41 +81,42 @@ namespace VisBridges
         /// <param name="primitives"></param>
         public void Connect(InfoObject o, Color color)
         {
-            connectedInfObs.Add(o);
-
-            // Setup centroids
-            int index = connectedInfObs.IndexOf(o);
-            if(index >= centroids.Count || centroids[index] == null)
+            if(!connectedInfObs.Contains(o))
             {
+                connectedInfObs.Add(o);
+                order.Add(o);
+                int index = order.IndexOf(o);
+
+                // Setup centroids
                 var centroid = Services.PrimFactory3D().CreateBoxPrimitive();
                 centroid.SetColor(color, color);
                 centroid.transform.parent = center.transform;
-                centroid.transform.localPosition = new Vector3(0,VisBridgeSystem.offsetDist*10*index,0);
-                centroid.transform.localScale = new Vector3(1, VisBridgeSystem.offsetDist*10, 1);
-                centroids.Insert(index, centroid);
-            }
-            
-            // Get all visual primitives that represent the given InfoObject
-            var prims = Services.VisBridgeSys().GetRepresentativePrimitivesOf(o);
+                centroid.transform.localPosition = new Vector3(0, VisBridgeSystem.offsetDist * 10 * index, 0);
+                centroid.transform.localScale = new Vector3(1, VisBridgeSystem.offsetDist * 10, 1);
+                centroids.Add(o, centroid);
 
-            foreach(var prim in prims)
-            {
-                // Add tree if neccessary
-                VisBridgeTree tree;
-                if(!trees.ContainsKey(prim.Base()))
+                // Get all visual primitives that represent the given InfoObject
+                var prims = Services.VisBridgeSys().GetRepresentativePrimitivesOf(o);
+
+                foreach(var prim in prims)
                 {
-                    tree = Instantiate(VisBridgeTreePrefab);
-                    tree.Assign(this, prim.Base());
-                    trees.Add(prim.Base(), tree);
-                    tree.Subscribe(this);
-                } else
-                {
-                    tree = trees[prim.Base()];
+                    // Add tree if neccessary
+                    VisBridgeTree tree;
+                    if(!trees.ContainsKey(prim.Base()))
+                    {
+                        tree = Instantiate(VisBridgeTreePrefab);
+                        tree.Assign(this, prim.Base());
+                        trees.Add(prim.Base(), tree);
+                        tree.Subscribe(this);
+                    } else
+                    {
+                        tree = trees[prim.Base()];
+                    }
+
+                    // Add primitive to tree
+                    tree.Connect(this, o, prim, color);
+                    prim.Brush(color);
                 }
-
-                // Add primitive to tree
-                tree.Connect(this, o, prim, color, index);
-                prim.Brush(color);
             }
         }
         

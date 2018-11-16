@@ -67,6 +67,9 @@ namespace VisBridges
         // .................................................................... Methods
         public void Connect(VisBridge bridge, InfoObject infO, AGraphicalPrimitive prim, Color color, int offsetIndex)
         {
+            if(paths.ContainsKey(infO))
+                return;
+
             if(center == null)
             {
                 center = Services.PrimFactory3D().CreatePhantomPrimitive();

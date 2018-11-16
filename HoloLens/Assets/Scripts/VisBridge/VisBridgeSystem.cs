@@ -86,7 +86,7 @@ namespace VisBridges
             // Add to visbridge if there is one
             if(visBridges.ContainsKey(o.dataSetID) && visBridges[o.dataSetID].Connects(o))
             {
-                ToggleVisBridgeFor(o);
+                visBridges[o.dataSetID].Connect(o, o.dataSet.colorTableBrushing[o]);
             }
         }
 

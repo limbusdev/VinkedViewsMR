@@ -59,6 +59,7 @@ namespace VisBridges
                         if(!tree.Connects(o))
                         {
                             tree.Connect(this, o, p, color);
+                            p.Brush(color);
                         }
                     }
                 }

@@ -36,6 +36,7 @@ namespace GraphicalPrimitive
         {
             SetPoints(points);
             UpdateCollider();
+            transform.hasChanged = true;
         }
 
         protected override void ApplyColor(Color color)

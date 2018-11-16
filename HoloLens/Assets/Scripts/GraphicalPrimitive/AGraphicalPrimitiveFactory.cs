@@ -11,6 +11,7 @@ public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
     public LineRenderer lineRenderer3DPrefab;
     public LineRenderer axisLineRendererPrefab;
     public AGraphicalPrimitive PhantomPrimitivePrefab;
+    public AGraphicalPrimitive BoxPrimitivePrefab;
 
 
     // ........................................................................ Explicitly implemented methods
@@ -18,6 +19,11 @@ public abstract class AGraphicalPrimitiveFactory  : MonoBehaviour
     public AGraphicalPrimitive CreatePhantomPrimitive()
     {
         return Instantiate(PhantomPrimitivePrefab);
+    }
+
+    public AGraphicalPrimitive CreateBoxPrimitive()
+    {
+        return Instantiate(BoxPrimitivePrefab);
     }
 
     /// <summary>

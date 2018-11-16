@@ -11,33 +11,48 @@ namespace VisBridges
     /// the VisBridgeCenter and the single branches, which connect the local center
     /// with the brushed primitives of the same ETV.
     /// </summary>
-    public class VisBridgeTree : MonoBehaviour, IPrimitiveObserver
+    public class VisBridgeTree : MonoBehaviour, IObserver<VisBridgeBranch>, IObservable<VisBridgeTree>
     {
+        private struct BridgePath
+        {
+            public InfoObject ID;
+            public VisBridgeBranch trunk;
+            public VisBridgeBranch branch;
+            public AGraphicalPrimitive offset;
+
+            public BridgePath(InfoObject iD, VisBridgeBranch trunk, VisBridgeBranch branch, AGraphicalPrimitive offset)
+            {
+                ID = iD;
+                this.trunk = trunk;
+                this.branch = branch;
+                this.offset = offset;
+            }
+        }
+
+        public AETV ID;
         public VisBridgeBranch branchPrefab;
         public VisBridge root;
-        
-        private IDictionary<AGraphicalPrimitive, VisBridgeBranch> trunk
-            = new Dictionary<AGraphicalPrimitive, VisBridgeBranch>();
-        private IDictionary<AGraphicalPrimitive, VisBridgeBranch> branches
-            = new Dictionary<AGraphicalPrimitive, VisBridgeBranch>();
 
+        private IDictionary<InfoObject, BridgePath> paths
+            = new Dictionary<InfoObject, BridgePath>();
+        
         public AGraphicalPrimitive center { get; private set; }
-        private IDictionary<AGraphicalPrimitive, AGraphicalPrimitive> offsets
-            = new Dictionary<AGraphicalPrimitive, AGraphicalPrimitive>();
         
-        private float offsetDist = .01f;
         
-        public void Assign(VisBridge visBridge)
+        public void Assign(VisBridge visBridge, AETV ID)
         {
             root = visBridge;
+            this.ID = ID;
         }
 
         public Vector3 GetKartesianCenterOfPrims()
         {
             var c = Vector3.zero;
             int i = 0;
-            foreach(var p in branches.Keys)
+            foreach(var o in paths.Keys)
             {
+                var p = paths[o].branch.target;
+
                 if(p.isActiveAndEnabled)
                 {
                     c += p.transform.position;
@@ -45,90 +60,118 @@ namespace VisBridges
                 }
             }
 
-            c = ((i == 0) ? Vector3.zero : (c /= branches.Count));
+            c = ((i == 0) ? Vector3.zero : (c /= paths.Count));
             return c;
         }
 
         // .................................................................... Methods
-        public void Connect(VisBridge bridge, InfoObject infO, AGraphicalPrimitive prim, Color color)
+        public void Connect(VisBridge bridge, InfoObject infO, AGraphicalPrimitive prim, Color color, int offsetIndex)
         {
-            Observe(prim);
-
             if(center == null)
             {
                 center = Services.PrimFactory3D().CreatePhantomPrimitive();
             }
 
-            var bridgeCenter = bridge.centroids[infO];
+            var bridgeCenter = bridge.centroids[offsetIndex];
 
-            var offset = Services.PrimFactory3D().CreatePhantomPrimitive();
+            var offset = Services.PrimFactory3D().CreateBoxPrimitive();
             offset.transform.parent = center.transform;
-            offsets.Add(prim, offset);
+            offset.transform.localScale = new Vector3(.05f,.005f,.05f);
+            offset.SetColor(color, color);
 
             // Connect visBridgeCenter with treeCenter
-            var trunkWedge = Instantiate(branchPrefab);
-            trunkWedge.Init(bridgeCenter, offset, color);
-            trunk.Add(prim, trunkWedge);
+            var trunk = Instantiate(branchPrefab);
+            trunk.Init(bridgeCenter, offset, color, infO);
 
             var branch = Instantiate(branchPrefab);
-            branch.Init(prim, offset, color);
-            branches.Add(prim, branch);
+            branch.Init(offset, prim, color, infO);
+
+            paths.Add(infO, new BridgePath(infO, trunk, branch, offset));
+            Observe(branch);
 
             UpdateCenter();
         }
 
-        private void UpdateCenter()
+        public void UpdateCenter()
         {
             // Update Offsets
-            int counter = 0;
-            foreach(var key in offsets.Keys)
+            foreach(var key in paths.Keys)
             {
-                var offset = offsets[key];
-                offset.transform.localPosition = new Vector3(0, counter * offsetDist, 0);
-                counter++;
+                var path = paths[key];
+                var offset = path.offset;
+                int offIndex = root.connectedInfObs.IndexOf(key);
+                offset.transform.localPosition = new Vector3(0, offIndex * VisBridgeSystem.offsetDist, 0);
             }
 
             var c = Vector3.zero;
-            foreach(var p in branches.Keys)
+            foreach(var key in paths.Keys)
             {
+                var p = paths[key].branch.target;
                 c += p.visBridgePort.transform.position;
             }
-            c /= branches.Keys.Count;
-            c += c; // double weight
+
+            c /= paths.Count;
+            c *= 2; // double weight
             c += root.center.transform.position;
             c /= 3f;
-            center.transform.position = c;
+
+            if(!float.IsNaN(c.x) && !float.IsNaN(c.y) && !float.IsNaN(c.z))
+                center.transform.position = c;
+
+            foreach(var o in observers)
+                o.OnChange(this);
         }
 
-        // .................................................................... IPrimitiveObserver
-        public void Ignore(AGraphicalPrimitive observable)
+        // .................................................................... IObserver<VisBridgeBranch>
+        public void Observe(VisBridgeBranch observable)
         {
-            var trk = trunk[observable];
-            var brn = branches[observable];
-            var ofs = offsets[observable];
-
-            trunk.Remove(observable);
-            branches.Remove(observable);
-            offsets.Remove(observable);
-
-            Destroy(trk);
-            Destroy(brn);
-            Destroy(ofs);
+            observable.Subscribe(this);
         }
 
-        public void Observe(AGraphicalPrimitive prim)
+        public void Ignore(VisBridgeBranch observable)
         {
-            prim.Subscribe(this);
+            // Nothing yet
         }
 
-        public void OnChange(AGraphicalPrimitive observable)
+        public void OnDispose(VisBridgeBranch observable)
+        {
+            paths[observable.ID].trunk.Dispose();
+            paths[observable.ID].offset.Dispose();
+            paths.Remove(observable.ID);
+
+            if(paths.Count == 0)
+                Dispose();
+        }
+
+        public void OnChange(VisBridgeBranch observable)
         {
             UpdateCenter();
         }
 
-        public void OnDispose(AGraphicalPrimitive observable)
+        public void Dispose()
         {
-            Ignore(observable);
+            foreach(var o in observers)
+                o.OnDispose(this);
+            observers.Clear();
+            Destroy(center);
+            Destroy(gameObject);
+        }
+
+
+        // .................................................................... IObservable<VisBridgeTree>
+        private IList<IObserver<VisBridgeTree>> observers
+            = new List<IObserver<VisBridgeTree>>();
+
+        public void Subscribe(IObserver<VisBridgeTree> observer)
+        {
+            if(!observers.Contains(observer))
+            observers.Add(observer);
+        }
+
+        public void Unsubscribe(IObserver<VisBridgeTree> observer)
+        {
+            if(observers.Contains(observer))
+                observers.Remove(observer);
         }
     }
 }

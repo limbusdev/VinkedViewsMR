@@ -22,6 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+using ETV;
 using GraphicalPrimitive;
 using System;
 using UnityEngine;
@@ -98,6 +99,7 @@ public class ARVisTools : NetworkBehaviour
 
             var etvAxisPopulation = visPlant.GenerateSingle3DAxisFrom(0, "Population");
             etvAxisPopulation.transform.position = new Vector3(1.5f, 0, 0);
+
         }
         catch(Exception e)
         {

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using GraphicalPrimitive;
+﻿using GraphicalPrimitive;
 using Model;
 using UnityEngine;
 
@@ -44,6 +43,7 @@ namespace ETV
                         );
 
                     var dot = Services.PrimFactory3D().CreateScatterDot();
+                    
                     dot.SetColor(Data.colorTable[infO], Data.colorTableBrushing[infO]);
                     dot.transform.position = pos;
                     dot.transform.parent = Anchor.transform;
@@ -55,8 +55,7 @@ namespace ETV
 
         public override void UpdateETV()
         {
-            SetUpAxes();
-            DrawGraph();
+
         }
     }
 }

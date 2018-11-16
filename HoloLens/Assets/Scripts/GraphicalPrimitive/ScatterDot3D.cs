@@ -4,8 +4,9 @@ namespace GraphicalPrimitive
 {
     public class ScatterDot3D : AScatterDot
     {
-        private void Update()
+        public override void Update()
         {
+            base.Update();
             dot.transform.LookAt(Camera.main.transform);
         }
     }

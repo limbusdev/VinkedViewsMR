@@ -51,6 +51,17 @@ namespace GraphicalPrimitive
         private IList<IObserver<AGraphicalPrimitive>> observers = new List<IObserver<AGraphicalPrimitive>>();
 
         // .................................................................... METHODS
+        
+
+        public virtual void Update()
+        {
+            if(transform.hasChanged)
+            {
+                transform.hasChanged = false;
+                foreach(var o in observers)
+                    o.OnChange(this);
+            }
+        }
 
         public void Assign(AETV etv)
         {

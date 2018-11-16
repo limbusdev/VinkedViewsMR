@@ -1,33 +1,25 @@
 ﻿using GraphicalPrimitive;
+using Model;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace VisBridges
 {
-    public class VisBridgeBranch : MonoBehaviour
+    public class VisBridgeBranch : MonoBehaviour, IPrimitiveObserver, IObservable<VisBridgeBranch>
     {
         [SerializeField]
         public Material material;
 
-        public AGraphicalPrimitive origin { get; set; }
-        public AGraphicalPrimitive target { get; set; }
+        public AGraphicalPrimitive origin { get; private set; }
+        public AGraphicalPrimitive target { get; private set; }
 
         private bool initialized = false;
         private bool paused = false;
         public Color color { get; private set; } = Color.green;
+        public InfoObject ID { get; private set; }
 
         private CurvedLinePoint[] curvedLinePoints;
-
-        public VisBridgeBranch()
-        {
-            
-        }
-
-        public VisBridgeBranch(AGraphicalPrimitive origin, AGraphicalPrimitive target)
-        {
-            this.origin = origin;
-            this.target = target;
-        }
+        
 
         void Awake()
         {
@@ -44,32 +36,7 @@ namespace VisBridges
 
             initialized = false;
         }
-
-        public void Update()
-        {
-            if(initialized)
-            {
-                LineRenderer lr = gameObject.GetComponent<LineRenderer>();
-
-                // check if one port is inactive
-                if(origin != null && target != null && origin.isActiveAndEnabled && target.isActiveAndEnabled)
-                {
-                    paused = false;
-                    
-                    lr.enabled = true;
-                } else
-                {
-                    paused = true;
-                    lr.enabled = false;
-                }
-
-                if(!paused)
-                {
-                    UpdatePorts();
-                    UpdatePadding();
-                }
-            }
-        }
+        
 
         private void UpdatePorts()
         {
@@ -86,8 +53,12 @@ namespace VisBridges
             curvedLinePoints[2].transform.position = optPad;
         }
 
-        public void Init(AGraphicalPrimitive origin, AGraphicalPrimitive target, Color color)
+        public void Init(AGraphicalPrimitive origin, AGraphicalPrimitive target, Color color, InfoObject infO)
         {
+            this.ID = infO;
+            Observe(origin);
+            Observe(target);
+
             this.origin = origin;
             this.target = target;
             this.color = color;
@@ -152,25 +123,103 @@ namespace VisBridges
 
 
 
-        public override bool Equals(object other)
+        //public override bool Equals(object other)
+        //{
+        //    if(other is VisBridgeBranch)
+        //    {
+        //        VisBridgeBranch otherBridge = (other as VisBridgeBranch);
+        //        return ((otherBridge.origin.Equals(origin) && otherBridge.target.Equals(target)) ||
+        //                (otherBridge.origin.Equals(target) && otherBridge.target.Equals(origin)));
+        //    } else
+        //    {
+        //        return false;
+        //    }
+        //}
+
+        //public override int GetHashCode()
+        //{
+        //    var hashCode = -1493433867;
+        //    hashCode = hashCode + EqualityComparer<AGraphicalPrimitive>.Default.GetHashCode(origin);
+        //    hashCode = hashCode + EqualityComparer<AGraphicalPrimitive>.Default.GetHashCode(target);
+        //    return hashCode;
+        //}
+
+
+        // .................................................................... IPrimitiveObserver
+        public void Observe(AGraphicalPrimitive observable)
         {
-            if(other is VisBridgeBranch)
-            {
-                VisBridgeBranch otherBridge = (other as VisBridgeBranch);
-                return ((otherBridge.origin.Equals(origin) && otherBridge.target.Equals(target)) ||
-                        (otherBridge.origin.Equals(target) && otherBridge.target.Equals(origin)));
-            } else
-            {
-                return false;
-            }
+            observable.Subscribe(this);
         }
 
-        public override int GetHashCode()
+        public void Ignore(AGraphicalPrimitive observable)
         {
-            var hashCode = -1493433867;
-            hashCode = hashCode + EqualityComparer<AGraphicalPrimitive>.Default.GetHashCode(origin);
-            hashCode = hashCode + EqualityComparer<AGraphicalPrimitive>.Default.GetHashCode(target);
-            return hashCode;
+
+        }
+
+        public void OnDispose(AGraphicalPrimitive observable)
+        {
+            if(observable.Equals(origin))
+                target.Unsubscribe(this);
+            else
+                origin.Unsubscribe(this);
+
+            origin = null;
+            target = null;
+
+            Dispose();
+        }
+
+        public void OnChange(AGraphicalPrimitive observable)
+        {
+            if(initialized)
+            {
+                LineRenderer lr = gameObject.GetComponent<LineRenderer>();
+
+                // check if one port is inactive
+                if(origin != null && target != null && origin.isActiveAndEnabled && target.isActiveAndEnabled)
+                {
+                    paused = false;
+
+                    lr.enabled = true;
+                } else
+                {
+                    paused = true;
+                    lr.enabled = false;
+                }
+
+                if(!paused)
+                {
+                    UpdatePorts();
+                    UpdatePadding();
+                }
+            }
+
+            foreach(var o in observers)
+                o.OnChange(this);
+        }
+
+        // .................................................................... IObservable
+
+        private IList<IObserver<VisBridgeBranch>> observers = new List<IObserver<VisBridgeBranch>>();
+
+        public void Subscribe(IObserver<VisBridgeBranch> observer)
+        {
+            if(!observers.Contains(observer))
+                observers.Add(observer);
+        }
+
+        public void Unsubscribe(IObserver<VisBridgeBranch> observer)
+        {
+            if(observers.Contains(observer))
+                observers.Remove(observer);
+        }
+
+        public void Dispose()
+        {
+            foreach(var o in observers)
+                o.OnDispose(this);
+            observers.Clear();
+            Destroy(gameObject);
         }
     }
 }

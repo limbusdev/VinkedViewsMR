@@ -7,6 +7,7 @@ namespace VisBridges
 {
     public class VisBridgeSystem : AVisBridgeSystem
     {
+        public static float offsetDist = .005f;
         // .................................................................... PREFABS
         public VisBridge visBridgePrefab;
         public DataProvider Data;
@@ -39,7 +40,7 @@ namespace VisBridges
             // ............................................ VisBridge aktivation/deactivation
             // if their already is a visbridge for the objects dataset, disable it
             if(visBridges[infO.dataSetID].Connects(infO))
-                visBridges[infO.dataSetID].RemoveInfoObject(infO);
+                visBridges[infO.dataSetID].Disconnect(infO);
             else // draw a new one
             {
                 var color = Data.dataSets[infO.dataSetID].colorTableBrushing[infO];
@@ -85,7 +86,6 @@ namespace VisBridges
             // Add to visbridge if there is one
             if(visBridges.ContainsKey(o.dataSetID) && visBridges[o.dataSetID].Connects(o))
             {
-                ToggleVisBridgeFor(o);
                 ToggleVisBridgeFor(o);
             }
         }

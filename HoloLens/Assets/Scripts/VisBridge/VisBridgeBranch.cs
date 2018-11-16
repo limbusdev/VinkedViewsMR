@@ -46,7 +46,7 @@ namespace VisBridges
 
         private void UpdatePadding()
         {
-            Vector3 optPad = GetOptimalPaddingPosition(target.visBridgePort, origin.GetComponent<AGraphicalPrimitive>());
+            var optPad = GetOptimalPaddingPosition(target.visBridgePort, origin.GetComponent<AGraphicalPrimitive>());
             curvedLinePoints[1].transform.position = optPad;
 
             optPad = GetOptimalPaddingPosition(origin.visBridgePort, target.GetComponent<AGraphicalPrimitive>());

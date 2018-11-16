@@ -95,10 +95,10 @@ public class ARVisTools : NetworkBehaviour
             etvMan.AutoPlaceETV(etvTimeMurder);
 
             var etvAxisMurder = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-            etvAxisMurder.transform.position = new Vector3(1, 0, 0);
+            etvAxisMurder.transform.position = new Vector3(1, 0, -3);
 
             var etvAxisPopulation = visPlant.GenerateSingle3DAxisFrom(0, "Population");
-            etvAxisPopulation.transform.position = new Vector3(1.5f, 0, 0);
+            etvAxisPopulation.transform.position = new Vector3(1.5f, 0, -3);
 
         }
         catch(Exception e)

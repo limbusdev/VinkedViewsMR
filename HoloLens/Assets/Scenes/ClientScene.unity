@@ -724,15 +724,15 @@ MonoBehaviour:
     type: 2}
   axisLineRendererPrefab: {fileID: 120686247906450020, guid: f44069bbb4822a943a11c9b7dedddd05,
     type: 2}
-  fastLineRendererPrefab: {fileID: 114537018403411326, guid: 46e1107717d27ea46bf3e5aa07d1d02c,
+  PhantomPrimitivePrefab: {fileID: 114969558763271848, guid: 60e0090d94c245940b3472b05c6043c5,
     type: 2}
-  fastAxesLineRendererPrefab: {fileID: 114537018403411326, guid: 13e91da7fdd310349b67a330b128f0e8,
+  BoxPrimitivePrefab: {fileID: 114063761098728006, guid: 755efdb1b6c354742805fe1bd04e6eca,
     type: 2}
   cone: {fileID: 1235091312533442, guid: a7ac7c0156811924185a33f61cda2f6b, type: 2}
-  bar3D: {fileID: 1851467595003564, guid: 77a7171990d32c74688c6f030fc34754, type: 2}
+  bar3D: {fileID: 114065101787556358, guid: 77a7171990d32c74688c6f030fc34754, type: 2}
   axis3D: {fileID: 1213320104624410, guid: d42f4c6b07da3134e9da74c7459174a0, type: 2}
   label: {fileID: 1340621660906316, guid: a8914cdd4e0184542a0251c684fb596d, type: 2}
-  ScatterDot3DPrefab: {fileID: 1474547056978956, guid: f68d7b6bf18ba4549962492f0703fc84,
+  ScatterDot3DPrefab: {fileID: 114884204510470252, guid: f68d7b6bf18ba4549962492f0703fc84,
     type: 2}
   Axis3DPrefab: {fileID: 1213320104624410, guid: d42f4c6b07da3134e9da74c7459174a0,
     type: 2}
@@ -755,11 +755,11 @@ MonoBehaviour:
     type: 2}
   axisLineRendererPrefab: {fileID: 120686247906450020, guid: f44069bbb4822a943a11c9b7dedddd05,
     type: 2}
-  fastLineRendererPrefab: {fileID: 114537018403411326, guid: 46e1107717d27ea46bf3e5aa07d1d02c,
+  PhantomPrimitivePrefab: {fileID: 114969558763271848, guid: 60e0090d94c245940b3472b05c6043c5,
     type: 2}
-  fastAxesLineRendererPrefab: {fileID: 114537018403411326, guid: 13e91da7fdd310349b67a330b128f0e8,
+  BoxPrimitivePrefab: {fileID: 114063761098728006, guid: 755efdb1b6c354742805fe1bd04e6eca,
     type: 2}
-  bar2D: {fileID: 1407780082100994, guid: a247774af56768b40a121d512d42d824, type: 2}
+  bar2D: {fileID: 114136709646360438, guid: a247774af56768b40a121d512d42d824, type: 2}
   label: {fileID: 1340621660906316, guid: a8914cdd4e0184542a0251c684fb596d, type: 2}
   Axis2DPrefab: {fileID: 1131818127915714, guid: b3c5ed6b532d28e4f92871287f6ff18c,
     type: 2}
@@ -767,7 +767,7 @@ MonoBehaviour:
     type: 2}
   XYLine2DPrefab: {fileID: 1946303620594004, guid: b708eac9b556220449bbb4a602d530cf,
     type: 2}
-  ScatterDot2DPrefab: {fileID: 1304509300456040, guid: 58364d502df45bb478ef6870ff9fb9e9,
+  ScatterDot2DPrefab: {fileID: 114827669489515190, guid: 58364d502df45bb478ef6870ff9fb9e9,
     type: 2}
   TickPrefab: {fileID: 1966629896501752, guid: b1c36d1c9a172aa4a875cc7fe5d941af, type: 2}
   GridLinePrefab: {fileID: 1347270854832024, guid: 0a74383a57ae68746bad9e42379b8fde,
@@ -783,14 +783,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49f1168a70109a745bc5a6787d633ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NewETVPosition: {fileID: 1302615699}
+  NewETVPlaceHolder: {fileID: 1302615700}
   ObjectCollection: {fileID: 0}
   CubeIconVariable: {fileID: 0}
   NetworkAnchorPrefab: {fileID: 1341272817190920, guid: 6fb8114d67e53a34a898049b826a6d91,
     type: 2}
   dataProvider: {fileID: 1542916657}
-  interactionReceiver: {fileID: 0}
   lineMaterial: {fileID: 0}
+  interactionReceiver: {fileID: 0}
 --- !u!114 &1542916657
 MonoBehaviour:
   m_ObjectHideFlags: 0

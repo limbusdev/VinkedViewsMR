@@ -207,7 +207,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!21 &193400358
+--- !u!21 &221642824
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
@@ -678,7 +678,7 @@ Prefab:
         type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 193400358}
+      objectReference: {fileID: 221642824}
     - target: {fileID: 23404438252261238, guid: 2153fbb812ca725419a3ed3b5a316394,
         type: 2}
       propertyPath: m_Materials.Array.data[0]
@@ -1853,12 +1853,14 @@ MonoBehaviour:
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 0}
+  m_PlayerPrefab: {fileID: 1355788086752280, guid: 2cbb03a849f9b8248b8e5dab69d8469c,
+    type: 2}
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
   m_OfflineScene: 
   m_OnlineScene: 
-  m_SpawnPrefabs: []
+  m_SpawnPrefabs:
+  - {fileID: 1836349302284128, guid: 97db2d1010db91642a5e2101d54d1d2e, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:

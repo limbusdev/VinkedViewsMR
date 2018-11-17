@@ -18,32 +18,32 @@ namespace VisBridges
         
         public override void ToggleVisBridgeFor(AGraphicalPrimitive prim)
         {
-            throw new System.NotImplementedException();
+            // Do Nothing
         }
 
         public override IList<InfoObject> GetInfoObjectsRepresentedBy(AGraphicalPrimitive p)
         {
-            throw new System.NotImplementedException();
+            return new List<InfoObject>();
         }
 
         public override IList<AGraphicalPrimitive> GetRepresentativePrimitivesOf(InfoObject o)
         {
-            throw new System.NotImplementedException();
+            return new List<AGraphicalPrimitive>();
         }
 
         public override void OnDispose(AGraphicalPrimitive observable)
         {
-            throw new System.NotImplementedException();
+            // Do Nothing
         }
 
         public override void OnChange(AGraphicalPrimitive observable)
         {
-            throw new System.NotImplementedException();
+            // Do Nothing
         }
 
         public override void RegisterGraphicalPrimitive(InfoObject o, AGraphicalPrimitive p)
         {
-            throw new System.NotImplementedException();
+            // Do Nothing
         }
     }
 }

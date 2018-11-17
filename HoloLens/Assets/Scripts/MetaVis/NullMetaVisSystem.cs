@@ -24,12 +24,16 @@ namespace MetaVisualization
         
         public override AETV GenerateFlexibleLinkedAxes(int dataSetID, string[] variables, AxisPair axes)
         {
-            throw new System.NotImplementedException();
+            var mVis = new GameObject();
+            var comp = mVis.AddComponent<ETV2DScatterPlot>();
+            return comp;
         }
 
         public override AETV GenerateHeatmap3D(int dataSetID, string[] variables, AxisPair axes, bool duplicateAxes)
         {
-            throw new System.NotImplementedException();
+            var mVis = new GameObject();
+            var comp = mVis.AddComponent<ETV2DScatterPlot>();
+            return comp;
         }
 
         public override AETV GenerateImmersiveAxes(int dataSetID, string[] variables, AxisPair axes)
@@ -40,7 +44,9 @@ namespace MetaVisualization
 
         public override AETV GenerateScatterplot2D(int dataSetID, string[] variables, AxisPair axes, bool duplicateAxes)
         {
-            throw new System.NotImplementedException();
+            var mVis = new GameObject();
+            var comp = mVis.AddComponent<ETV2DScatterPlot>();
+            return comp;
         }
 
         public override AETV SpanMetaVisFor(AxisPair axes, int dataSetID, out MetaVisType type)
@@ -52,12 +58,16 @@ namespace MetaVisualization
 
         public override AETV SpanMetaVisFlexibleLinedAxes(AxisPair axes, int dataSetID)
         {
-            throw new System.NotImplementedException();
+            var mVis = new GameObject();
+            var comp = mVis.AddComponent<ETV2DScatterPlot>();
+            return comp;
         }
 
         public override AETV SpanMetaVisHeatmap3D(AxisPair axes, int dataSetID, bool duplicateAxes)
         {
-            throw new System.NotImplementedException();
+            var mVis = new GameObject();
+            var comp = mVis.AddComponent<ETV2DScatterPlot>();
+            return comp;
         }
 
         public override AETV SpanMetaVisImmersiveAxis(AxisPair axes, int dataSetID)
@@ -68,37 +78,39 @@ namespace MetaVisualization
 
         public override AETV SpanMetaVisScatterplot2D(AxisPair axes, int dataSetID, bool duplicateAxes)
         {
-            throw new System.NotImplementedException();
+            var mVis = new GameObject();
+            var comp = mVis.AddComponent<ETV2DScatterPlot>();
+            return comp;
         }
 
         public override void UseCombination(AxisPair key)
         {
-            throw new System.NotImplementedException();
+            // Do nothing
         }
 
         public override void ReleaseCombination(AxisPair key)
         {
-            throw new System.NotImplementedException();
+            // Do nothing
         }
 
         public override void Observe(AAxis observable)
         {
-            throw new System.NotImplementedException();
+            // Do nothing
         }
 
         public override void Ignore(AAxis observable)
         {
-            throw new System.NotImplementedException();
+            // Do nothing
         }
 
         public override void OnDispose(AAxis observable)
         {
-            throw new System.NotImplementedException();
+            // Do nothing
         }
 
         public override void OnChange(AAxis observable)
         {
-            throw new System.NotImplementedException();
+            // Do nothing
         }
     }
 }

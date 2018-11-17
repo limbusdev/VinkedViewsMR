@@ -85,7 +85,8 @@ public class ClientController : NetworkBehaviour
                 string[] attributes = otherAnchor.GetAttributesAsStrings();
                 var visType = (VisType)otherAnchor.syncedVisType;
 
-                Debug.Log(attributes.Length);
+                string atts = ""; foreach(var s in attributes) atts+=("," + s);
+                Debug.Log("Hit NetworkAnchor with: datasetID = " + dataSetID + ", VisType: " + visType + ", Attributes: " + atts);
                 
                 var vis = Services.VisFactory().GenerateVisFrom(dataSetID, attributes, visType);
 

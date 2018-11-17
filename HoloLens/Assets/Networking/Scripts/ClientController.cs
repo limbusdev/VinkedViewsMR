@@ -66,6 +66,23 @@ public class ClientController : NetworkBehaviour
         // Do something only for the local player prefab instance
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if(isServer)
+        {
+            var otherAnchor = other.gameObject.GetComponent<ETVAnchor>();
+
+            if(otherAnchor != null)
+            {
+                // Disable the visualization in HoloLens and align it with pETV
+                Debug.Log("Collision detected");
+
+                otherAnchor.VisAnchor.SetActive(true);
+
+            }
+        }
+    }
+
     /// <summary>
     /// Is triggered when an ETV anchor and pETV collide.
     /// This usually means, the ETVs visualization gets
@@ -97,7 +114,26 @@ public class ClientController : NetworkBehaviour
         // If collision is detected on the server
         if(isServer)
         {
-            // Disable the visualization in HoloLens and align it with pETV
+            var otherAnchor = collider.gameObject.GetComponent<ETVAnchor>();
+
+            if(otherAnchor != null && !otherAnchor.tag.Equals("VisFactory"))
+            {
+                // Disable the visualization in HoloLens and align it with pETV
+                Debug.Log("Collision detected");
+
+                //otherAnchor.VisAnchor.SetActive(false);
+                otherAnchor.transform.parent = Anchor.transform;
+                otherAnchor.gameObject.layer = LayerMask.NameToLayer("Invisible");
+
+                foreach(var t in otherAnchor.transform.GetComponentsInChildren<Transform>())
+                {
+                    t.gameObject.layer = 9;
+                }
+
+                otherAnchor.transform.localPosition = new Vector3(-.8f,-.8f,0);
+                otherAnchor.Rotatable.transform.localRotation = Quaternion.Euler(0,180,0);
+
+            }
         }
     }
 }

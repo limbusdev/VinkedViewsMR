@@ -373,12 +373,15 @@ public class VisualizationFactory : NetworkBehaviour
 
     public void AddNetworkAnchor(GameObject etv, int dataSetID, string[] attributes, VisType visType)
     {
-        var networkAnchor = Instantiate(NetworkAnchorPrefab);
-        if(networkAnchor.GetComponent<NetworkAnchor>() != null)
+        if(isServer)
         {
-            NetworkServer.Spawn(networkAnchor);
-            networkAnchor.GetComponent<NetworkAnchor>().Init(dataSetID, attributes, visType);
-            networkAnchor.GetComponent<NetworkAnchor>().ETV = etv;
+            var networkAnchor = Instantiate(NetworkAnchorPrefab);
+            if(networkAnchor.GetComponent<NetworkAnchor>() != null)
+            {
+                NetworkServer.Spawn(networkAnchor);
+                networkAnchor.GetComponent<NetworkAnchor>().Init(dataSetID, attributes, visType);
+                networkAnchor.GetComponent<NetworkAnchor>().ETV = etv;
+            }
         }
 
     }

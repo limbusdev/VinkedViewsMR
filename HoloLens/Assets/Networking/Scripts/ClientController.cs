@@ -39,10 +39,10 @@ public class ClientController : NetworkBehaviour
             transform.Rotate(r, s, t, Space.World);
 
             // Mouse Scrollwheel defines ETV scale
-            var scale = Services.instance.clientManager.CurrentlyBoundETV.transform.localScale.magnitude;
-            //scale += Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * 10f;
+            var scale = Services.instance.clientManager.CurrentlyBoundETV.transform.localScale.x;
+            scale += Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * 10f;
             //scale += Input.GetAxis("Scale") * Time.deltaTime * 10f;
-            //Services.instance.clientManager.CurrentlyBoundETV.transform.localScale = new Vector3(scale, scale, scale);
+            Services.instance.clientManager.CurrentlyBoundETV.transform.localScale = new Vector3(scale, scale, scale);
 
             // Space triggers action on server
             if(Input.GetKeyDown(KeyCode.Space))

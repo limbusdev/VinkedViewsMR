@@ -892,6 +892,7 @@ GameObject:
   - component: {fileID: 1617456261}
   - component: {fileID: 1617456260}
   - component: {fileID: 1617456259}
+  - component: {fileID: 1617456262}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -905,7 +906,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1617456258}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 004a6396258400a45a8a536f6db7bbf4, type: 3}
   m_Name: 
@@ -917,7 +918,7 @@ MonoBehaviour:
   m_BroadcastInterval: 1000
   m_UseNetworkManager: 1
   m_BroadcastData: ARVisTools
-  m_ShowGUI: 0
+  m_ShowGUI: 1
   m_OffsetX: 0
   m_OffsetY: 0
   label: {fileID: 0}
@@ -941,7 +942,7 @@ MonoBehaviour:
   m_RunInBackground: 1
   m_ScriptCRCCheck: 1
   m_MaxDelay: 0.01
-  m_LogLevel: 2
+  m_LogLevel: 0
   m_PlayerPrefab: {fileID: 1355788086752280, guid: 2cbb03a849f9b8248b8e5dab69d8469c,
     type: 2}
   m_AutoCreatePlayer: 1
@@ -1018,6 +1019,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1617456262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1617456258}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 227461547, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  manager: {fileID: 0}
+  showGUI: 1
+  offsetX: 0
+  offsetY: 0
 --- !u!1 &1658362860
 GameObject:
   m_ObjectHideFlags: 0

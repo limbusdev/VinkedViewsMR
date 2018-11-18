@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: limbusdev
   productName: ARVisualizationTools
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -255,7 +255,14 @@ PlayerSettings:
     banner: {fileID: 0}
   androidGamepadSupportLevel: 0
   resolutionDialogBanner: {fileID: 0}
-  m_BuildTargetIcons: []
+  m_BuildTargetIcons:
+  - m_BuildTarget: 
+    m_Icons:
+    - serializedVersion: 2
+      m_Icon: {fileID: 2800000, guid: fd96910a40399614fb3e04d78db13f6c, type: 3}
+      m_Width: 128
+      m_Height: 128
+      m_Kind: 0
   m_BuildTargetPlatformIcons: []
   m_BuildTargetBatching:
   - m_BuildTarget: Standalone
@@ -615,7 +622,7 @@ PlayerSettings:
       EnterpriseAuthentication: False
       HumanInterfaceDevice: False
       InputInjectionBrokered: False
-      InternetClient: False
+      InternetClient: True
       InternetClientServer: True
       Location: False
       LowLevelDevices: False

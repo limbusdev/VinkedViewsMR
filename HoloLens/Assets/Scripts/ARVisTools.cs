@@ -248,7 +248,7 @@ public class ARVisTools : NetworkBehaviour
 
             {
                 var w = visPlant.GenerateBarChart2DFrom(1, "Weapon");
-                w.transform.position = new Vector3(7,0,0);
+                w.transform.position = new Vector3(0,.5f,3.5f);
 
                 var c = visPlant.GenerateBarChart3DFrom(1, "Crime");
                 c.transform.position = new Vector3(7, 0, 2);

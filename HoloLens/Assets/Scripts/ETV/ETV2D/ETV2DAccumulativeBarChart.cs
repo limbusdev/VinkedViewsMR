@@ -165,9 +165,9 @@ namespace ETV
             yAxis.transform.parent = Anchor;
 
             // Grid
-            var grid = Services.PrimFactory2D().CreateAutoGrid(max, Vector3.right, Vector3.up, length);
-            grid.transform.localPosition = new Vector3(0, 0, .002f);
-            grid.transform.parent = Anchor.transform;
+            //var grid = Services.PrimFactory2D().CreateAutoGrid(max, Vector3.right, Vector3.up, length);
+            //grid.transform.localPosition = new Vector3(0, 0, .002f);
+            //grid.transform.parent = Anchor.transform;
         }
 
         public override void ChangeColoringScheme(ETVColorSchemes scheme)
@@ -178,9 +178,12 @@ namespace ETV
                     float H = 0f;
                     for(int bar = 0; bar < dim; bar++)
                     {
-                        var color = Color.HSVToRGB((H / dim) / 2f + .5f,1,1);
-                        bars[bar].SetColor(color, Color.green);
-                        H++;
+                        if(dim > 0)
+                        {
+                            var color = Color.HSVToRGB((H / dim) / 2f + .5f, 1, 1);
+                            bars[bar].SetColor(color, Color.green);
+                            H++;
+                        }
                     }
                     break;
             }

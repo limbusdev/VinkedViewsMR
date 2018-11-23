@@ -11,11 +11,9 @@ namespace GraphicalPrimitive
         protected override void ApplyColor(Color color)
         {
             Renderer rend = barBack.GetComponent<Renderer>();
-            rend.material = new Material(Shader.Find("Specular"));
             rend.material.color = color;
 
             rend = barFront.GetComponent<Renderer>();
-            rend.material = new Material(Shader.Find("Specular"));
             rend.material.color = color;
         }
        

@@ -177,9 +177,9 @@ namespace ETV
             yAxis.transform.parent = Anchor;
 
             // Grid
-            var grid = Services.PrimFactory2D().CreateAutoGrid(max, Vector3.right, Vector3.up, length);
-            grid.transform.localPosition = new Vector3(0, 0, .002f);
-            grid.transform.parent = Anchor.transform;
+            //var grid = Services.PrimFactory2D().CreateAutoGrid(max, Vector3.right, Vector3.up, length);
+            //grid.transform.localPosition = new Vector3(0, 0, .002f);
+            //grid.transform.parent = Anchor.transform;
         }
 
         public override void ChangeColoringScheme(ETVColorSchemes scheme)

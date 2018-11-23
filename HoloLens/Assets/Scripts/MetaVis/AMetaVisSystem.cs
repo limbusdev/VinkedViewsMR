@@ -39,7 +39,7 @@ namespace MetaVisualization
     {
         // .................................................................... STATIC PARAMETERS
 
-        public static float triggerMetaVisDistance = 1f;
+        public static float triggerMetaVisDistance = .8f;
         public static float triggerInvisibleDistance = .05f;
         public static float triggerInvisibleAngleDiscrepancy = 5;
 
@@ -79,15 +79,22 @@ namespace MetaVisualization
         /// <returns>If they are near enough to span a MetaVis.</returns>
         public static bool CheckIfNearEnough(AxisPair axes)
         {
-            if(
-                ((axes.A.GetAxisBaseGlobal() - axes.B.GetAxisBaseGlobal()).magnitude < triggerMetaVisDistance
-                || (axes.A.GetAxisBaseGlobal() - axes.B.GetAxisTipGlobal()).magnitude < triggerMetaVisDistance)
-                &&
-                ((axes.A.GetAxisTipGlobal() - axes.B.GetAxisTipGlobal()).magnitude < triggerMetaVisDistance
-                || (axes.A.GetAxisTipGlobal() - axes.B.GetAxisTipGlobal()).magnitude < triggerMetaVisDistance)
-                )
+            var tipA = axes.A.GetAxisTipGlobal();
+            var baseA = axes.A.GetAxisBaseGlobal();
+            var tipB = axes.B.GetAxisTipGlobal();
+            var baseB = axes.B.GetAxisBaseGlobal();
+
+            if(((baseA - baseB).magnitude < triggerMetaVisDistance && (tipA - tipB).magnitude < triggerMetaVisDistance)
+                ||
+                ((baseA - tipB).magnitude < triggerMetaVisDistance && (tipA - baseB).magnitude < triggerMetaVisDistance))
             {
-                return true;
+                if(Vector3.Angle(axes.A.GetAxisDirectionGlobal(), axes.B.GetAxisDirectionGlobal()) < 100)
+                {
+                    return true;
+                } else
+                {
+                    return false;
+                }
             } else
             {
                 return false;

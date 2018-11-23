@@ -41,7 +41,13 @@ namespace ETV
 
 
         // ........................................................................ Initializers
-        public override void Init(DataSet data, string attributeNameX, string attributeNameY, float lengthA=1f, float lengthB=1f, bool isMetaVis = false)
+        public override void Init(
+            DataSet data, 
+            string attributeNameX, 
+            string attributeNameY, 
+            float lengthA=1f, 
+            float lengthB=1f, 
+            bool isMetaVis = false)
         {
             base.Init(data, isMetaVis);
             this.attributeNameA = attributeNameX;

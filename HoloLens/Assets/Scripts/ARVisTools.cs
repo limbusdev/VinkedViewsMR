@@ -51,6 +51,9 @@ public class ARVisTools : NetworkBehaviour
             case GlobalSettings.Scenario.TEST_BostonPD:
                 TESTSetupBostonPD();
                 break;
+            case GlobalSettings.Scenario.TEST_Playground:
+                TESTPlayground();
+                break;
             default:
                 // Nothing;
                 break;
@@ -67,6 +70,212 @@ public class ARVisTools : NetworkBehaviour
     }
 
     // ........................................................................ TEST SETUPS
+
+    private void TESTPlayground()
+    {
+        try
+        {
+            // Tryout for meta-visualizations
+            var visPlant = Services.VisFactory();
+            
+            // Single Axes
+            {
+                var y1 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var p1 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var c1 = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime");
+                var m1 = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS.");
+                var rl1 = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy)");
+                var rr1 = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev)");
+                var ro1 = visPlant.GenerateSingle3DAxisFrom(0, "Robbery");
+                var pr1 = visPlant.GenerateSingle3DAxisFrom(0, "Property crime");
+                var c1rate = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime rate");
+                var m1rate = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS. rate");
+                var rl1rate = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy) rate");
+                var rr1rate = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev) rate");
+                var ro1rate = visPlant.GenerateSingle3DAxisFrom(0, "Robbery rate");
+                var pr1rate = visPlant.GenerateSingle3DAxisFrom(0, "Property crime rate");
+
+                y1.transform.position = new Vector3(-5, 0, -5);
+                p1.transform.position = new Vector3(-5, 0, -4);
+                c1.transform.position = new Vector3(-5, 0, -3);
+                m1.transform.position = new Vector3(-5, 0, -2);
+                rl1.transform.position = new Vector3(-5, 0, -1);
+                rr1.transform.position = new Vector3(-5, 0, 0);
+                ro1.transform.position = new Vector3(-5, 0, 1);
+                pr1.transform.position = new Vector3(-5, 0, 2);
+
+                c1rate.transform.position = new Vector3(-4, 0, -3);
+                m1rate.transform.position = new Vector3(-4, 0, -2);
+                rl1rate.transform.position = new Vector3(-4, 0, -1);
+                rr1rate.transform.position = new Vector3(-4, 0, 0);
+                ro1rate.transform.position = new Vector3(-4, 0, 1);
+                pr1rate.transform.position = new Vector3(-4, 0, 2);
+            }
+
+            // Combined Axes
+            // FLA: PCP-Ring
+            {
+                var etvYear = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var etvPopulation = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var etvViolentCrime = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime rate");
+                var etvMurder = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS. rate");
+                var etvRapeLegacy = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy) rate");
+                var etvRapeRev = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev) rate");
+                var etvRobbery = visPlant.GenerateSingle3DAxisFrom(0, "Property crime rate");
+
+                etvYear.transform.position = new Vector3(-2, 0, -1);
+                etvPopulation.transform.position = new Vector3(-2.7f, 0, -1);
+                etvViolentCrime.transform.position = new Vector3(-1.3f, 0, -1);
+                etvMurder.transform.position = new Vector3(-2.3f, 0, -1.5f);
+                etvRapeRev.transform.position = new Vector3(-1.7f, 0, -1.5f);
+                etvRapeLegacy.transform.position = new Vector3(-2.3f, 0, -.5f);
+                etvRobbery.transform.position = new Vector3(-1.7f, 0, -.5f);
+            }
+
+            // Combined Axes
+            // FLA: PCP-Ring 2
+            {
+                var etvPopulation = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var etvViolentCrime = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime rate");
+                var etvMurder = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS. rate");
+                var etvRapeLegacy = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy) rate");
+                var etvRapeRev = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev) rate");
+                var etvRobbery = visPlant.GenerateSingle3DAxisFrom(0, "Property crime rate");
+                
+                etvPopulation.transform.position = new Vector3(-2.7f, 0, -4);
+                etvViolentCrime.transform.position = new Vector3(-1.3f, 0, -4);
+                etvMurder.transform.position = new Vector3(-2.3f, 0, -4.5f);
+                etvRapeRev.transform.position = new Vector3(-1.7f, 0, -4.5f);
+                etvRapeLegacy.transform.position = new Vector3(-2.3f, 0, -3.5f);
+                etvRobbery.transform.position = new Vector3(-1.7f, 0, -3.5f);
+            }
+
+            // Star Glyph
+            {
+                var y = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var p = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var c = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime rate");
+                var m = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS. rate");
+                var ra = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy) rate");
+                var rr = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev) rate");
+                var ro = visPlant.GenerateSingle3DAxisFrom(0, "Property crime rate");
+
+                y.transform.position = new Vector3(2,0,0);
+                p.transform.position = new Vector3(2, 0, 0);
+                c.transform.position = new Vector3(2, 0, 0);
+                m.transform.position = new Vector3(2, 0, 0);
+                rr.transform.position = new Vector3(2, 0, 0);
+                ra.transform.position = new Vector3(2, 0, 0);
+                ro.transform.position = new Vector3(2, 0, 0);
+
+                y.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0,0,0);
+                p.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 51);
+                c.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 102);
+                m.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 153);
+                rr.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 204);
+                ra.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 255);
+                ro.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 306);
+            }
+
+            // Accordion Star Glyph
+            {
+                var y = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var p = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var c = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime rate");
+                var m = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS. rate");
+                var ra = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy) rate");
+                var rr = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev) rate");
+                var ro = visPlant.GenerateSingle3DAxisFrom(0, "Property crime rate");
+
+                y.transform.position = new Vector3(4, 0, 0);
+                p.transform.position = new Vector3(4, 0, .2f);
+                c.transform.position = new Vector3(4, 0, .4f);
+                m.transform.position = new Vector3(4, 0, .6f);
+                rr.transform.position = new Vector3(4, 0, .8f);
+                ra.transform.position = new Vector3(4, 0, 1f);
+                ro.transform.position = new Vector3(4, 0, 1.2f);
+
+                y.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
+                p.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 51);
+                c.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 102);
+                m.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 153);
+                rr.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 204);
+                ra.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 255);
+                ro.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 306);
+            }
+
+            // Star Ring
+            {
+                var y = visPlant.GenerateSingle3DAxisFrom(0, "Year");
+                var p = visPlant.GenerateSingle3DAxisFrom(0, "Population");
+                var c = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime rate");
+                var m = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS. rate");
+                var ra = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy) rate");
+                var rr = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev) rate");
+                var ro = visPlant.GenerateSingle3DAxisFrom(0, "Property crime rate");
+
+                y.transform.position = new Vector3(6, .3f, 0);
+                p.transform.position = new Vector3(6 -.235f, 0.187f,     0);
+                c.transform.position = new Vector3(6 -.292f, -0.067f,    0);
+                m.transform.position = new Vector3(6 -.130f, -0.270f,    0);
+                rr.transform.position = new Vector3(6 + 0.130f, -0.270f, 0);
+                ra.transform.position = new Vector3(6 + 0.292f, -0.067f, 0);
+                ro.transform.position = new Vector3(6 + 0.235f, 0.187f, 0);
+
+                y.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 0);
+                p.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 51);
+                c.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 102);
+                m.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 153);
+                rr.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 204);
+                ra.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 255);
+                ro.GetComponent<ETVAnchor>().Rotatable.transform.rotation = Quaternion.Euler(0, 0, 306);
+            }
+
+            // Complete Visualizations
+            {
+                var axisWeapon = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
+                var axisCrime = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
+
+                var etv = axisWeapon.GetComponent<ETVAnchor>();
+                axisWeapon.transform.position = new Vector3(-.1f, 0, -2.9f);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(new Vector3(75, 0, 0));
+
+                etv = axisCrime.GetComponent<ETVAnchor>();
+                axisCrime.transform.position = new Vector3(.1f, 0, -3.1f);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -92);
+
+            }
+
+            {
+                var w = visPlant.GenerateBarChart2DFrom(1, "Weapon");
+                w.transform.position = new Vector3(7,0,0);
+
+                var c = visPlant.GenerateBarChart3DFrom(1, "Crime");
+                c.transform.position = new Vector3(7, 0, 2);
+            }
+
+            // Single Axes
+            {
+                var c = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
+                var i = visPlant.GenerateSingle3DAxisFrom(1, "Inside/Outside");
+                var w = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
+                var d = visPlant.GenerateSingle3DAxisFrom(1, "District");
+                var p = visPlant.GenerateSingle3DAxisFrom(1, "Premise");
+
+                c.transform.position = new Vector3(8, 0, -5);
+                i.transform.position = new Vector3(8, 0, -4);
+                w.transform.position = new Vector3(8, 0, -3);
+                d.transform.position = new Vector3(8, 0, -2);
+                p.transform.position = new Vector3(8, 0, -1);
+            }
+
+
+        } catch(Exception e)
+        {
+            Debug.LogException(e);
+        }
+    }
+
 
     private void TESTSetupBostonPD()
     {

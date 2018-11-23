@@ -22,7 +22,20 @@ namespace ETV
         private string attributeName;
         private int attributeID;
 
-        private IDictionary<string, Bar3D> bars;
+        private LoM lom;
+        string[] uniqueVals;
+        int[] distribution;
+        int dim;
+
+        private Bar3D[] bars;
+
+        private int[] absMapValues;
+        private float[] barHeights;
+        private IDictionary<int, string> dict1;
+        private IDictionary<string, int> dict2;
+
+        float max;
+        private float length;
 
 
         // ........................................................................ Initializers
@@ -31,13 +44,42 @@ namespace ETV
             base.Init(data, isMetaVis);
             this.attributeName = attributeName;
             this.attributeID = data.IDOf(attributeName);
+            this.lom = data.TypeOf(attributeName);
+            this.max = 0;
+            this.length = 1f;
 
-            bars = new Dictionary<string, Bar3D>();
+            dict1 = new Dictionary<int, string>();
+            dict2 = new Dictionary<string, int>();
 
             SetUpAxes();
 
             // .................................................................... initialize
-            switch(data.TypeOf(attributeName))
+            switch(lom)
+            {
+                case LoM.NOMINAL:
+                    var mN = data.nominalStatistics[attributeName];
+                    uniqueVals = mN.uniqueValues;
+                    dict1 = mN.idValues;
+                    dict2 = mN.valueIDs;
+                    max = mN.distMax;
+                    break;
+                case LoM.ORDINAL:
+                    var mO = data.ordinalStatistics[attributeName];
+                    uniqueVals = mO.uniqueValues;
+                    dict1 = mO.orderedValueIDs;
+                    dict2 = mO.orderedIDValues;
+                    max = mO.distMax;
+                    break;
+                default:
+                    // Nothing
+                    break;
+            }
+
+            dim = uniqueVals.Length;
+            this.absMapValues = new int[dim];
+            this.barHeights = new float[dim];
+
+            switch(lom)
             {
                 case LoM.NOMINAL:
                     InitNominal(data, attributeName);
@@ -46,29 +88,36 @@ namespace ETV
                     InitOrdinal(data, attributeName);
                     break;
                 default:
-                    // Nothing
                     break;
             }
+
+            ChangeColoringScheme(ETVColorSchemes.SplitHSV);
         }
 
         private void InitNominal(DataSet data, string attributeName)
         {
             var measures = data.nominalStatistics[attributeName];
 
-            for(int i = 0; i < measures.numberOfUniqueValues; i++)
+            foreach(var key in measures.distribution.Keys)
             {
-                string val = measures.uniqueValues[i];
-                InsertBar(val, measures.distribution[val], i);
+                int ID = measures.valueIDs[key];
+                absMapValues[ID] = measures.distribution[key];
+                barHeights[ID] = measures.distribution[key] / (1f * measures.distMax);
             }
 
-            foreach(var o in data.infoObjects)
+            if(max > 0)
             {
-                bool valMissing = data.IsValueMissing(o, attributeName);
-                if(!valMissing)
+                DrawGraph();
+
+                foreach(var o in data.infoObjects)
                 {
-                    string value = o.nomVALbyID[attributeID].value;
-                    var bar = bars[value];
-                    RememberRelationOf(o, bar);
+                    bool missing = data.IsValueMissing(o, attributeName);
+
+                    if(!missing)
+                    {
+                        ABar bar = bars[dict2[o.NomValueOf(attributeName)]];
+                        RememberRelationOf(o, bar);
+                    }
                 }
             }
         }
@@ -77,99 +126,107 @@ namespace ETV
         {
             var measures = data.ordinalStatistics[attributeName];
 
-            for(int i = 0; i < measures.numberOfUniqueValues; i++)
+            foreach(var key in measures.distribution.Keys)
             {
-                InsertBar(measures.uniqueValues[i], measures.distribution[i], i);
+                var name = measures.orderedValueIDs[key];
+                absMapValues[key] = measures.distribution[key];
+                barHeights[key] = measures.distribution[key] / (1f * measures.distMax);
             }
 
-            foreach(var o in data.infoObjects)
+            if(max > 0)
             {
-                bool valMissing = data.IsValueMissing(o, attributeName);
-                if(!valMissing)
+                DrawGraph();
+
+                foreach(var o in data.infoObjects)
                 {
-                    int value = o.ordVALbyID[attributeID].value;
-                    var bar = bars[measures.uniqueValues[value]];
-                    RememberRelationOf(o, bar);
+                    bool missing = data.IsValueMissing(o, attributeName);
+
+                    if(!missing)
+                    {
+                        ABar bar = bars[o.OrdValueOf(attributeName)];
+                        RememberRelationOf(o, bar);
+                    }
                 }
             }
         }
 
         // ........................................................................ Helper Methods
-        private Bar3D InsertBar(string name, int value, int barID)
+        private Bar3D CreateBar(float value, float range, float widthA = .1f, float widthB = .1f)
         {
             var factory3D = Services.instance.Factory3DPrimitives;
 
-            float normValue = GetAxis(AxisDirection.Y).TransformToAxisSpace(value);
-            var bar = factory3D.CreateBar(normValue).GetComponent<Bar3D>();
-            bar.GetComponent<Bar3D>().SetLabelText(value.ToString());
+            var bar = factory3D.CreateBar(value, widthA).GetComponent<Bar3D>();
             bar.Assign(this);
 
-            bars.Add(name, bar);
-            bar.gameObject.transform.localPosition = new Vector3((barID + 1) * 0.15f, 0, .001f);
-            bar.gameObject.transform.parent = Anchor.transform;
+            bar.SetLabelText(value.ToString());
 
             return bar;
         }
 
         public override void SetUpAxes()
         {
-            float max, length;
-            AddBarChartAxis(attributeName, AxisDirection.X);
-            AddAggregatedAxis(attributeName, AxisDirection.Y, out max, out length);
+            var factory2D = Services.PrimFactory2D();
 
-            var factory = Services.PrimFactory2D();
+            // Categorical Axis A
+            AddAxis(attributeName, AxisDirection.X, length);
+            var xAxis = GetAxis(AxisDirection.X);
+            xAxis.transform.parent = Anchor.transform;
+            xAxis.transform.localRotation = Quaternion.Euler(90, 0, 0);
+
+            var yAxis = factory2D.CreateAutoTickedAxis("Amount", max);
+            yAxis.transform.parent = Anchor;
 
             // Grid
-            GameObject grid = factory.CreateAutoGrid(max, Vector3.right, Vector3.up, length);
+            var grid = Services.PrimFactory2D().CreateAutoGrid(max, Vector3.right, Vector3.up, length);
             grid.transform.localPosition = new Vector3(0, 0, .002f);
             grid.transform.parent = Anchor.transform;
         }
 
         public override void ChangeColoringScheme(ETVColorSchemes scheme)
         {
-            int category = 0;
-            int numberOfCategories = bars.Count;
             switch(scheme)
             {
-                case ETVColorSchemes.Rainbow:
-                    foreach(Bar3D bar in bars.Values)
+                default: // case SplitHSV
+                    float H = 0f;
+                    for(int bar = 0; bar < dim; bar++)
                     {
-                        Color color = Color.HSVToRGB(((float)category) / numberOfCategories, 1, 1);
-                        bar.SetColor(color, Color.green);
-                        category++;
+                        var color = Color.HSVToRGB((H / dim) / 2f + .5f, 1, 1);
+                        bars[bar].SetColor(color, Color.green);
+                        H++;
                     }
-                    break;
-                case ETVColorSchemes.GrayZebra:
-                    bool even = true;
-                    foreach(Bar3D bar in bars.Values)
-                    {
-                        Color color = (even) ? Color.gray : Color.white;
-                        bar.SetColor(color, Color.green);
-                        even = !even;
-                        category++;
-                    }
-                    break;
-                case ETVColorSchemes.SplitHSV:
-                    foreach(Bar3D bar in bars.Values)
-                    {
-                        Color color = Color.HSVToRGB((((float)category) / numberOfCategories) / 2f + .5f, 1, 1);
-                        bar.SetColor(color, Color.green);
-                        category++;
-                    }
-                    break;
-                default:
                     break;
             }
         }
 
         public override void UpdateETV()
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public override void DrawGraph()
         {
-            throw new System.NotImplementedException();
+            float barGap = .01f;
+            float gapWidth = (dim - 1) * barGap;
+            float barWidth = (length - gapWidth - .1f) / (dim);
+
+
+            bars = new Bar3D[dim];
+
+            float margin = .05f + barWidth / 2f;
+
+            for(int i = 0; i < dim; i++)
+            {
+                bars[i] = CreateBar(barHeights[i], max, barWidth, barWidth);
+                bars[i].SetLabelText(absMapValues[i].ToString());
+
+                // Set bar's position
+                var barGO = bars[i].gameObject;
+                barGO.transform.localPosition = new Vector3(
+                    margin + i * (barWidth + barGap),
+                    0,
+                    .1f);
+                barGO.transform.parent = Anchor.transform;
+            }
         }
     }
 }

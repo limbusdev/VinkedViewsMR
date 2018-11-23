@@ -17,7 +17,6 @@ namespace ETV
             var barChart = Instantiate(ETV2DBarChartPrefab);
 
             barChart.Init(data, attributeName, isMetaVis);
-            barChart.ChangeColoringScheme(ETVColorSchemes.SplitHSV);
 
             return barChart;
         }

@@ -36,7 +36,8 @@ namespace GraphicalPrimitive
         public bool ticked { get; set; } = false;
         public Color color { get; set; } = Color.white;
         public int decimals { get; set; } = 2;
-        
+        protected float endOffset = 0;
+
         public AxisDirection axisDirection = AxisDirection.Y;
 
         // InformationObject Data
@@ -345,7 +346,7 @@ namespace GraphicalPrimitive
         {
             if(max - min == 0)
                 return 0f;
-            return ((value - min) / (max - min)) * length;
+            return ((value - min) / (max - min)) * (length-2*endOffset) + endOffset;
         }
 
         /// <summary>
@@ -357,7 +358,7 @@ namespace GraphicalPrimitive
         {
             if(max - min == 0)
                 return 0f;
-            return (value / length) * (max - min) + min;
+            return (value / (length - 2*endOffset)) * (max - min) + min;
         }
 
 

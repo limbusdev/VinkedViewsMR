@@ -47,10 +47,16 @@ namespace GraphicalPrimitive
         // (TEMPLATE METHOD)
         protected override void GenerateNominalTicks(NominalAttributeStats m, bool manualTickRes=false, float tickRes=.15f)
         {
+            float barGap = .01f;
+            float dim = m.uniqueValues.Length;
+            float gapWidth = (dim - 1) * barGap;
+            float barWidth = (length - gapWidth - .1f) / (dim);
+            float margin = .05f + barWidth / 2;
+
             var tickDir = DefineTickDirection(axisDirection);
 
             // Draw ticks
-            for(int i = 0; i <= m.max; i++)
+            for(int i = 0; i < dim; i++)
             {
                 var tick = Services.instance.Factory2DPrimitives.CreateTick(true);
 
@@ -60,40 +66,46 @@ namespace GraphicalPrimitive
                 tick.label.text = m.uniqueValues[i];
 
                 tick.transform.parent = Anchor.transform;
-                if(manualTickRes)
-                {
-                    tick.transform.localPosition = direction * (tickRes * i);
-                } else
-                {
-                    tick.transform.localPosition = direction * .15f * (i + 1);
-                }
+
+                float offset = margin + i * (barWidth + barGap);
+                tick.transform.localPosition = direction * offset;
+                
                 ticks.Add(tick);
             }
+
+            base.endOffset = margin;
         }
 
         // (TEMPLATE METHOD)
         protected override void GenerateOrdinalTicks(OrdinalAttributeStats m, bool manualTickRes = false, float tickRes = .15f)
         {
+            float barGap = .01f;
+            float dim = m.uniqueValues.Length;
+            float gapWidth = (dim - 1) * barGap;
+            float barWidth = (length - gapWidth - .1f) / (dim);
+            float margin = .05f + barWidth / 2;
+
             var tickDir = DefineTickDirection(axisDirection);
 
             // Draw ticks
             for(int i = 0; i <= m.max; i++)
             {
                 var tick = Services.instance.Factory2DPrimitives.CreateTick(true);
+
                 tick.lr.SetPosition(1, tickDir * diameter * 4f);
+
                 tick.SetDirection(axisDirection);
                 tick.label.text = m.uniqueValues[i];
 
                 tick.transform.parent = Anchor.transform;
-                if(manualTickRes)
-                {
-                    tick.transform.localPosition = direction * tickRes * i;
-                } else
-                {
-                    tick.transform.localPosition = direction * .15f * (i + 1);
-                }
+
+                float offset = margin + i * (barWidth + barGap);
+                tick.transform.localPosition = direction * offset;
+
                 ticks.Add(tick);
             }
+
+            base.endOffset = margin;
         }
 
         // (TEMPLATE METHOD)

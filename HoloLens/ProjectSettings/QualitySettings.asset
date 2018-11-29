@@ -245,16 +245,16 @@ QualitySettings:
     resolutionScalingFixedDPIFactor: 1
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
-    Android: 6
+    Android: 5
     Nintendo 3DS: 5
     Nintendo Switch: 5
     PS4: 5
     PSP2: 2
-    Standalone: 6
+    Standalone: 5
     Tizen: 2
-    WebGL: 6
+    WebGL: 5
     WiiU: 5
-    Windows Store Apps: 0
+    Windows Store Apps: 5
     XboxOne: 5
     iPhone: 2
     tvOS: 2

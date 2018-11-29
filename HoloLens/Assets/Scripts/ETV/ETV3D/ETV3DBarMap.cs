@@ -291,9 +291,7 @@ namespace ETV
 
             return bar;
         }
-
-
-
+        
         public override void ChangeColoringScheme(ETVColorSchemes scheme)
         {
             switch(scheme)

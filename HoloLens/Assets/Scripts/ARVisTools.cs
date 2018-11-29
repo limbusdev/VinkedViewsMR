@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using ETV;
 using GraphicalPrimitive;
 using System;
 using UnityEngine;
@@ -243,6 +242,16 @@ public class ARVisTools : NetworkBehaviour
                 etv = axisCrime.GetComponent<ETVAnchor>();
                 axisCrime.transform.position = new Vector3(.1f, 0, -3.1f);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -92);
+
+                var d = visPlant.GenerateSingle3DAxisFrom(1, "District");
+                etv = d.GetComponent<ETVAnchor>();
+                etv.transform.position = new Vector3(-.6f, 0, -2.9f);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(90, 0, 0);
+
+                var i = visPlant.GenerateSingle3DAxisFrom(1, "Inside/Outside");
+                etv = i.GetComponent<ETVAnchor>();
+                etv.transform.position = new Vector3(-.7f, 0, -3f);
+                etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 90);
 
             }
 

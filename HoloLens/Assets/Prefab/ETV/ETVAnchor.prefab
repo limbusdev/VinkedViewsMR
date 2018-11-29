@@ -8562,9 +8562,9 @@ MonoBehaviour:
   translationConstraint: 0
   hasFocus: 0
   isTapped: 0
-  Handle: {fileID: 0}
-  notHoldMat: {fileID: 0}
-  HoldMat: {fileID: 0}
+  Handle: {fileID: 1757406769677742}
+  notHoldMat: {fileID: 2100000, guid: 5a25272264d89634fafefbb6909a6357, type: 2}
+  HoldMat: {fileID: 2100000, guid: b8589c0cb3fc0ab48be207d3f249a87c, type: 2}
 --- !u!114 &114687030102069656
 MonoBehaviour:
   m_ObjectHideFlags: 1

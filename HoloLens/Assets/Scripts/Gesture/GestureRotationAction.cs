@@ -3,7 +3,11 @@ using UnityEngine;
 
 namespace Gestures
 {
-    public class GestureRotationAction : AConstrainedGesture, INavigationHandler, IFocusable, IInputHandler
+    public class GestureRotationAction : 
+        AConstrainedGesture,
+        IManipulationHandler, 
+        IFocusable, 
+        IInputHandler
     {
         [SerializeField]
         [Tooltip("Transform that will be dragged. Default is the components GameObject.")]
@@ -20,14 +24,21 @@ namespace Gestures
         public bool hasFocus = false;
         public bool isTapped = false;
 
+        // .................................................................... Unity Methods
 
         void Awake()
         {
             if(hostTransform == null)
+            {
                 hostTransform = transform;
+            }
         }
 
-        void INavigationHandler.OnNavigationStarted(NavigationEventData eventData)
+
+        // .................................................................... INTERFACE IManipulationHandler
+
+
+        void IManipulationHandler.OnManipulationStarted(ManipulationEventData eventData)
         {
             if(isTapped)
             {
@@ -36,24 +47,27 @@ namespace Gestures
             }
         }
 
-        void INavigationHandler.OnNavigationUpdated(NavigationEventData eventData)
+        void IManipulationHandler.OnManipulationUpdated(ManipulationEventData eventData)
         {
             if(isTapped)
             {
                 Vector3 rotationVector = new Vector3();
-                float rotationFactor = 1f;
+                float rotationFactor = .5f;
+
+                var cumulativeUpdate = eventData.CumulativeDelta;
+
                 switch(rotationConstraint)
                 {
                     case AxisAndPlaneConstraint.X_AXIS_ONLY:
-                        rotationFactor = eventData.NormalizedOffset.x * RotationSensitivity;
+                        rotationFactor = cumulativeUpdate.x * RotationSensitivity;
                         rotationVector.x = -1 * rotationFactor;
                         break;
                     case AxisAndPlaneConstraint.Z_AXIS_ONLY:
-                        rotationFactor = eventData.NormalizedOffset.x * RotationSensitivity;
+                        rotationFactor = cumulativeUpdate.x * RotationSensitivity;
                         rotationVector.z = -1 * rotationFactor;
                         break;
                     default: // case: Y_AXIS_ONLY:
-                        rotationFactor = eventData.NormalizedOffset.x * RotationSensitivity;
+                        rotationFactor = cumulativeUpdate.x * RotationSensitivity;
                         rotationVector.y = -1 * rotationFactor;
                         break;
                 }
@@ -63,13 +77,13 @@ namespace Gestures
             }
         }
 
-        void INavigationHandler.OnNavigationCompleted(NavigationEventData eventData)
+        void IManipulationHandler.OnManipulationCompleted(ManipulationEventData eventData)
         {
-                InputManager.Instance.PopModalInputHandler();
-                eventData.Use();
+            InputManager.Instance.PopModalInputHandler();
+            eventData.Use();
         }
 
-        void INavigationHandler.OnNavigationCanceled(NavigationEventData eventData)
+        void IManipulationHandler.OnManipulationCanceled(ManipulationEventData eventData)
         {
             InputManager.Instance.PopModalInputHandler();
             eventData.Use();

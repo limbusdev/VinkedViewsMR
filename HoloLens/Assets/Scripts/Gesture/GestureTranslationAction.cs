@@ -29,19 +29,29 @@ namespace Gestures
         private Transform hostTransform = null;
 
         [SerializeField]
-        [Tooltip("Constrain translation along an axis.")]
+        [Tooltip("Constrain translation to layer or axis.")]
         private AxisAndPlaneConstraint translationConstraint = AxisAndPlaneConstraint.NONE;
+
+        [SerializeField]
+        [Tooltip("Mesh that triggers this translation action.")]
+        private GameObject Handle;
+
+        [SerializeField]
+        [Tooltip("Default material of the trigger mesh.")]
+        private Material notHoldMat;
+
+        [SerializeField]
+        [Tooltip("Material, when trigger is active and translation in action.")]
+        private Material HoldMat;
 
         private Vector3 manipulationOriginalPosition = Vector3.zero;
         private Vector3 originCameraPos = Vector3.zero;
 
         public bool hasFocus = false;
         public bool isTapped = false;
-
-        public GameObject Handle;
-
-        public Material notHoldMat, HoldMat;
         
+        // .................................................................... Unity Methods
+
         void Awake()
         {
             if(hostTransform == null)
@@ -50,13 +60,15 @@ namespace Gestures
             }
         }
 
+        // .................................................................... INTERFACE IManipulationHandler
+
         void IManipulationHandler.OnManipulationStarted(ManipulationEventData eventData)
         {
             if(isTapped)
             {
                 InputManager.Instance.PushModalInputHandler(gameObject);
-
                 manipulationOriginalPosition = transform.position;
+                eventData.Use();
             }
         }
 
@@ -95,55 +107,6 @@ namespace Gestures
 
                 hostTransform.position = manipulationOriginalPosition + cumulativeUpdate;
                 eventData.Use();
-            }
-
-            if(isTapped)
-            {
-                //Vector3 positionUpdate = (new Vector3(eventData.NormalizedOffset.x, eventData.NormalizedOffset.y, eventData.NormalizedOffset.x)) * .01f;
-                //var glOff = Camera.current.transform.TransformVector(eventData.NormalizedOffset);
-                //glOff = hostTransform.InverseTransformVector(glOff) * .5f;
-                //positionUpdate = glOff;
-
-                //Debug.Log(glOff);
-
-                //switch(translationConstraint)
-                //{
-                //    case AxisAndPlaneConstraint.X_AXIS_ONLY:
-                //        positionUpdate.y = 0;
-                //        positionUpdate.z = 0;
-                //        positionUpdate.x = glOff.x;
-                //        //var diff = Camera.current.transform.position - originCameraPos;
-                //        //hostTransform.position = new Vector3(
-                //        //    manipulationOriginalPosition.x + glOff.x, 
-                //        //    hostTransform.position.y, 
-                //        //    hostTransform.position.z
-                //        //    );
-                //        break;
-                //    case AxisAndPlaneConstraint.Y_AXIS_ONLY:
-                //        positionUpdate.x = 0;
-                //        positionUpdate.z = 0;
-                //        break;
-                //    case AxisAndPlaneConstraint.Z_AXIS_ONLY:
-                //        positionUpdate.z = positionUpdate.x; // Map X-Component of Gesture to z-Position
-                //        positionUpdate.x = 0;
-                //        positionUpdate.y = 0;
-                //        break;
-                //    case AxisAndPlaneConstraint.XY_PLANE_ONLY:
-                //        positionUpdate.z = 0;
-                //        break;
-                //    case AxisAndPlaneConstraint.XZ_PLANE_ONLY:
-                //        positionUpdate.y = 0;
-                //        break;
-                //    case AxisAndPlaneConstraint.YZ_PLANE_ONLY:
-                //        positionUpdate.z = positionUpdate.x;
-                //        positionUpdate.x = 0;
-                //        break;
-                //    default: // case NONE:
-                //        break;
-                //}
-
-                //hostTransform.position += positionUpdate;
-
             }
         }
 

@@ -1,34 +1,53 @@
 ﻿using HoloToolkit.Unity.InputModule;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gestures
 {
-    public class GestureFeedbackHookRotationDisk : AGestureFeedbackHook, INavigationHandler
+    /// <summary>
+    /// Constrainable Rotation Component
+    /// With this component, any GameObject, containing a mesh, can be made
+    /// touch- and rotationable with the given constraints:
+    ///     * rotate around X axis
+    ///     * rotate around Y axis
+    ///     * rotate around Z axis
+    /// </summary>
+    public class GestureFeedbackHookRotationDisk : 
+        AGestureFeedbackHook, 
+        IManipulationHandler
     {
-        public GameObject Disk;
-        public GameObject Handle;
+        [SerializeField]
+        [Tooltip("Mesh to visualize rotation direction.")]
+        private GameObject Disk;
 
-        public Material notHoldMat, HoldMat;
+        [SerializeField]
+        [Tooltip("Mesh that triggers this rotation action.")]
+        private GameObject Handle;
+
+        [SerializeField]
+        [Tooltip("Default material of the trigger mesh.")]
+        private Material notHoldMat;
+
+        [SerializeField]
+        [Tooltip("Material, when trigger is active and rotation in action.")]
+        private Material HoldMat;
 
 
-        public void OnNavigationCanceled(NavigationEventData eventData)
+        public void OnManipulationCanceled(ManipulationEventData eventData)
         {
             FeedbackEnd();
         }
 
-        public void OnNavigationCompleted(NavigationEventData eventData)
+        public void OnManipulationCompleted(ManipulationEventData eventData)
         {
             FeedbackEnd();
         }
 
-        public void OnNavigationStarted(NavigationEventData eventData)
+        public void OnManipulationStarted(ManipulationEventData eventData)
         {
             FeedbackStart();
         }
 
-        public void OnNavigationUpdated(NavigationEventData eventData)
+        public void OnManipulationUpdated(ManipulationEventData eventData)
         {
             FeedbackUpdate();
         }
@@ -49,5 +68,7 @@ namespace Gestures
             Disk.SetActive(false);
             Handle.GetComponent<MeshRenderer>().material = notHoldMat;
         }
+
+       
     }
 }

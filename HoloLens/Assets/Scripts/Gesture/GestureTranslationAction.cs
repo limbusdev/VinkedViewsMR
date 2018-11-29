@@ -4,6 +4,20 @@ using UnityEngine;
 
 namespace Gestures
 {
+    /// <summary>
+    /// Constrainable Translation Component
+    /// With this component, any GameObject, containing a mesh, can be made
+    /// touch- and translateable with the given constraints:
+    ///     * translate along X only
+    ///     * translate along Y only
+    ///     * translate along Z only
+    ///     * translate in X-Y-layer only
+    ///     * translate in X-Z-layer only
+    ///     * translate in Y-Z-layer only
+    ///     
+    /// A mesh, reacting to manipulation gestures and a transform, being
+    /// target of the translation, must be provided.
+    /// </summary>
     public class GestureTranslationAction : 
         AConstrainedGesture,
         IManipulationHandler,

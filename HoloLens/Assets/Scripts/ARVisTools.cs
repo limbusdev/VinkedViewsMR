@@ -23,9 +23,11 @@ SOFTWARE.
 */
 
 using GraphicalPrimitive;
+using HoloToolkit.Unity;
 using System;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.XR.WSA.Persistence;
 
 /// <summary>
 /// This is the main entry point for this application. It initializes the sceen
@@ -33,6 +35,8 @@ using UnityEngine.Networking;
 /// </summary>
 public class ARVisTools : NetworkBehaviour
 {
+    public WorldAnchorStore worldAnchorStore;
+
     private bool startup = false;
 
     /// <summary>

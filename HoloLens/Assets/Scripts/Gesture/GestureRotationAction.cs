@@ -5,7 +5,7 @@ namespace Gestures
 {
     public class GestureRotationAction : 
         AConstrainedGesture,
-        IManipulationHandler, 
+        INavigationHandler, 
         IFocusable, 
         IInputHandler
     {
@@ -24,6 +24,8 @@ namespace Gestures
         public bool hasFocus = false;
         public bool isTapped = false;
 
+        private Vector3 initialEulerAngles;
+
         // .................................................................... Unity Methods
 
         void Awake()
@@ -38,52 +40,49 @@ namespace Gestures
         // .................................................................... INTERFACE IManipulationHandler
 
 
-        void IManipulationHandler.OnManipulationStarted(ManipulationEventData eventData)
+        public void OnNavigationStarted(NavigationEventData eventData)
         {
             if(isTapped)
             {
+                initialEulerAngles = new Vector3();
                 InputManager.Instance.PushModalInputHandler(gameObject);
                 eventData.Use();
             }
         }
 
-        void IManipulationHandler.OnManipulationUpdated(ManipulationEventData eventData)
+        public void OnNavigationUpdated(NavigationEventData eventData)
         {
             if(isTapped)
             {
-                Vector3 rotationVector = new Vector3();
-                float rotationFactor = .5f;
+                var rotation = new Vector3();
 
-                var cumulativeUpdate = eventData.CumulativeDelta;
+                var cumulativeUpdate = eventData.NormalizedOffset.x;
 
                 switch(rotationConstraint)
                 {
                     case AxisAndPlaneConstraint.X_AXIS_ONLY:
-                        rotationFactor = cumulativeUpdate.x * RotationSensitivity;
-                        rotationVector.x = -1 * rotationFactor;
+                        rotation.x = cumulativeUpdate * 180f - initialEulerAngles.x;
                         break;
                     case AxisAndPlaneConstraint.Z_AXIS_ONLY:
-                        rotationFactor = cumulativeUpdate.x * RotationSensitivity;
-                        rotationVector.z = -1 * rotationFactor;
+                        rotation.z = cumulativeUpdate * 180f - initialEulerAngles.z;
                         break;
                     default: // case: Y_AXIS_ONLY:
-                        rotationFactor = cumulativeUpdate.x * RotationSensitivity;
-                        rotationVector.y = -1 * rotationFactor;
+                        rotation.y = cumulativeUpdate * 180f - initialEulerAngles.y;
                         break;
                 }
 
-
-                hostTransform.Rotate(rotationVector);
+                initialEulerAngles += rotation;
+                hostTransform.Rotate(rotation);
             }
         }
 
-        void IManipulationHandler.OnManipulationCompleted(ManipulationEventData eventData)
+        public void OnNavigationCompleted(NavigationEventData eventData)
         {
             InputManager.Instance.PopModalInputHandler();
             eventData.Use();
         }
 
-        void IManipulationHandler.OnManipulationCanceled(ManipulationEventData eventData)
+        public void OnNavigationCanceled(NavigationEventData eventData)
         {
             InputManager.Instance.PopModalInputHandler();
             eventData.Use();
@@ -113,5 +112,6 @@ namespace Gestures
         {
             hasFocus = false;
         }
+        
     }
 }

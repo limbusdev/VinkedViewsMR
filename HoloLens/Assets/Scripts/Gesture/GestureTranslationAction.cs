@@ -96,6 +96,8 @@ namespace Gestures
                         cumulativeUpdate.z = 0;
                         break;
                     case AxisAndPlaneConstraint.XZ_PLANE_ONLY:
+                        cumulativeUpdate.x += cumulativeUpdate.y / 2f;
+                        cumulativeUpdate.z += cumulativeUpdate.y / 2f;
                         cumulativeUpdate.y = 0;
                         break;
                     case AxisAndPlaneConstraint.YZ_PLANE_ONLY:

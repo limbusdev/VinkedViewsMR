@@ -8,9 +8,4 @@ public class WorldAnchorObject : MonoBehaviour
         // Loads Anchor, if it exists, creates one otherwise.
         WorldAnchorManager.Instance.AttachAnchor(gameObject, gameObject.name);	
 	}
-	
-	void Update ()
-    {
-		
-	}
 }

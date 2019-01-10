@@ -13,10 +13,15 @@ public class TranslatableWorldAnchor : MonoBehaviour, IInputHandler
         var anchor = hostTransform.gameObject.GetComponent<WorldAnchor>();
         if(anchor != null)
             DestroyImmediate(anchor);
+
+        var anchorObject = hostTransform.gameObject.GetComponent<WorldAnchorObject>();
+        if(anchorObject != null)
+            DestroyImmediate(anchorObject);
     }
 
     public void OnInputUp(InputEventData eventData)
     {
         hostTransform.gameObject.AddComponent<WorldAnchor>();
+        hostTransform.gameObject.AddComponent<WorldAnchorObject>();
     }
 }

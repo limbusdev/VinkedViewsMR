@@ -80,15 +80,9 @@ public class GameManager : MonoBehaviour
 
     public void Save()
     {
+        // Only save in release builds
         if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
             return;
-        /*string path = Path.Combine(Application.persistentDataPath, FolderName);
-        if(!Directory.Exists(path))
-        {
-            Directory.CreateDirectory(path);
-        }
-        string saveGamePath = Path.Combine(path, SaveGameFileName);
-        */
 
         // open save game file
         var bf = new BinaryFormatter();

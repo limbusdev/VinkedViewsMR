@@ -7,5 +7,5 @@
 
     public static bool onHoloLens = false;
     public static bool DEBUG = false;
-    public static Scenario scenario = Scenario.TEST_Playground;
+    public static Scenario scenario = Scenario.TEST_BostonPD;
 }

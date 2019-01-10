@@ -195,38 +195,43 @@ public class CubeIconVariable : InteractionReceiver
         Debug.Log("InputDown: " + obj.name);
 
         // SingleAxis3D, BarChart2D, BarChart3D, BarMap3D, PCP2D, PCP3D, ScatterXY2D, ScatterXYZ3D, LineXY2D
+        VisType visType;
+
         switch(obj.name)
         {
             case "SingleAxis":
-                Services.instance.visualizationFactory.GenerateVisFrom(dataSetID, varNames, VisType.SingleAxis);
+                visType = VisType.SingleAxis3D;
                 break;
             case "BarChart2D":
-                Services.instance.visualizationFactory.GenerateBarChart2DFrom(dataSetID, varNames[0]);
+                visType = VisType.Histogram2D;
                 break;
             case "BarChart3D":
-                Services.instance.visualizationFactory.GenerateBarChart3DFrom(dataSetID, varNames[0]);
+                visType = VisType.Histogram3D;
                 break;
             case "BarMap3D":
-                Services.instance.visualizationFactory.GenerateBarMap3DFrom(dataSetID, varNames);
+                visType = VisType.HistogramHeatmap3D;
                 break;
             case "PCP2D":
-                Services.instance.visualizationFactory.GeneratePCP2DFrom(dataSetID, varNames);
+                visType = VisType.PCP2D;
                 break;
             case "PCP3D":
-                Services.instance.visualizationFactory.GeneratePCP3DFrom(dataSetID, varNames);
+                visType = VisType.PCP3D;
                 break;
             case "ScatterXY2D":
-                Services.instance.visualizationFactory.GenerateScatterplot2DFrom(dataSetID, varNames);
+                visType = VisType.ScatterPlot2D;
                 break;
             case "ScatterXYZ3D":
-                Services.instance.visualizationFactory.GenerateScatterplot3DFrom(dataSetID, varNames);
+                visType = VisType.ScatterPlot3D;
                 break;
             case "LineXY2D":
-                Services.instance.visualizationFactory.GenerateLineplot2DFrom(dataSetID, varNames);
+                visType = VisType.LineChart2D;
                 break;
             default:
+                visType = VisType.SingleAxis3D;
                 break;
         }
+
+        Services.VisFactory().GenerateVisFrom(dataSetID, varNames, visType);
     }
     
 }

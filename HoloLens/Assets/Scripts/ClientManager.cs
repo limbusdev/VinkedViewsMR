@@ -39,7 +39,7 @@ public class ClientManager : MonoBehaviour
 
         padding = 48;
 
-        var etvYearPopulationCrimePCP2D = fact.GeneratePCP2DFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" });
+        var etvYearPopulationCrimePCP2D = fact.GenerateVisFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" }, VisType.PCP2D);
         etvYearPopulationCrimePCP2D.transform.parent = etvPosition.transform;
         Services.instance.clientManager.currentlyBoundETV = etvYearPopulationCrimePCP2D;
         

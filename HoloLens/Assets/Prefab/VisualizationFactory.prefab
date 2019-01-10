@@ -8961,6 +8961,16 @@ MonoBehaviour:
   dataProvider: {fileID: 0}
   lineMaterial: {fileID: 2100000, guid: e7b8d8b54700d454aa635da9f950cdab, type: 2}
   interactionReceiver: {fileID: 114358196427402574}
+  factoryMethodHooks:
+  - {fileID: 114615439899076526, guid: f9ec59031a03f1f47a17a8d176d267da, type: 2}
+  - {fileID: 114921752968514776, guid: abfe5ea0294030345aa9f4f312b6a9b5, type: 2}
+  - {fileID: 114505141253836864, guid: e62a860780ead914da62ceb9f5ec91de, type: 2}
+  - {fileID: 114305168876916272, guid: c8ee0045cda054e4399cbbaa8d2cf8ac, type: 2}
+  - {fileID: 114394858260476358, guid: 02c7f96518ba7dd4a8a7aacaf86e96f1, type: 2}
+  - {fileID: 114303190584017256, guid: d50e590c95ae69845813886ec5df757a, type: 2}
+  - {fileID: 114439913522115390, guid: c0970f8779701fc4491248ac15f84930, type: 2}
+  - {fileID: 114323536696012794, guid: 1818f26b2638a5c4f808cda2f34b0491, type: 2}
+  - {fileID: 114133264508555110, guid: 752a3a8b1d1828e4da0a678baf909d33, type: 2}
 --- !u!114 &114332511849747838
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9216,11 +9226,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hostTransform: {fileID: 4228932203145578}
   translationConstraint: 2
-  hasFocus: 0
-  isTapped: 0
   Handle: {fileID: 1954752094793306}
   notHoldMat: {fileID: 2100000, guid: 93eb7232b301f1d4c85638658ef1aa2d, type: 2}
   HoldMat: {fileID: 2100000, guid: b8589c0cb3fc0ab48be207d3f249a87c, type: 2}
+  hasFocus: 0
+  isTapped: 0
 --- !u!114 &114453442420292706
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9234,11 +9244,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hostTransform: {fileID: 4228932203145578}
   translationConstraint: 3
-  hasFocus: 0
-  isTapped: 0
   Handle: {fileID: 1814901552177708}
   notHoldMat: {fileID: 2100000, guid: d2907bcfd1a60c34bb48a2ba30f50955, type: 2}
   HoldMat: {fileID: 2100000, guid: b8589c0cb3fc0ab48be207d3f249a87c, type: 2}
+  hasFocus: 0
+  isTapped: 0
 --- !u!114 &114478063427685836
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -9562,11 +9572,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hostTransform: {fileID: 4228932203145578}
   translationConstraint: 1
-  hasFocus: 0
-  isTapped: 0
   Handle: {fileID: 1024062664648204}
   notHoldMat: {fileID: 2100000, guid: 5a26ccb4c12f27d4da12526d5dc84e86, type: 2}
   HoldMat: {fileID: 2100000, guid: b8589c0cb3fc0ab48be207d3f249a87c, type: 2}
+  hasFocus: 0
+  isTapped: 0
 --- !u!114 &114782806728110880
 MonoBehaviour:
   m_ObjectHideFlags: 1

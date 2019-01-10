@@ -59,9 +59,9 @@ public class VisualizationFactory : NetworkBehaviour
     /// <param name="variable">attribute to visualize</param>
     /// <param name="visType">visualization type to generate</param>
     /// <returns></returns>
-    public GameObject GenerateVisFrom(int dataSetID, string variable, VisType visType)
+    public GameObject GenerateVisFrom(int dataSetID, string variable, VisType visType, bool persist=true)
     {
-        return GenerateVisFrom(dataSetID, new string[] { variable }, visType);
+        return GenerateVisFrom(dataSetID, new string[] { variable }, visType, persist);
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public class VisualizationFactory : NetworkBehaviour
     /// <param name="variable">attribute to visualize</param>
     /// <param name="visType">visualization type to generate</param>
     /// <returns></returns>
-    public GameObject GenerateVisFrom(int dataSetID, string[] variables, VisType visType)
+    public GameObject GenerateVisFrom(int dataSetID, string[] variables, VisType visType, bool persist = true)
     {
         try
         {
@@ -148,42 +148,7 @@ public class VisualizationFactory : NetworkBehaviour
             return suitableVisTypes.ToArray();
     }
 
-    /// <summary>
-    /// Checks whether the given attributes of the given DataSet are suitable for
-    /// the visualization type in question
-    /// </summary>
-    /// <param name="dataSetID">ID of the data set</param>
-    /// <param name="attributes">attributes in question</param>
-    /// <param name="visType">planned visualization type</param>
-    /// <returns>if suitable</returns>
-    public bool CheckIfSuitable(int dataSetID, string[] attributes, VisType visType)
-    {
-        return CheckIfSuitable(dataSetID, attributes, new VisType[] { visType });
-    }
-    public bool CheckIfSuitable(int dataSetID, string[] attributes, VisType[] visTypes)
-    {
-        // SingleAxis3D, BarChart2D, BarChart3D, BarMap3D, PCP2D, PCP3D, ScatterXY2D, ScatterXYZ3D, LineXY2D
-        var suitables = ListPossibleVisualizations(dataSetID, attributes);
-
-        bool suitable = true;
-
-        foreach(var t in visTypes)
-        {
-            suitable &= suitables.Contains(t);
-        }
-
-        if(!suitable)
-        {
-            var atts = "";
-            var vists = "";
-            foreach(var att in attributes) atts += (att + ", ");
-            foreach(var vist in visTypes) vists += (vist.ToString() + ", ");
-            Debug.LogWarning("Visualization type(s) " + vists + " not suitable for attribute(s) " + atts);
-        }
-
-        return suitable;
-    }
-
+    
     public void AddNewVisualization(GameObject visualization)
     {
         if(visualization.GetComponent<ETVAnchor>() != null)

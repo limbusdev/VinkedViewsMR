@@ -35,6 +35,13 @@ public abstract class AETVFactoryMethod : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Checks whether the given attributes of the given DataSet are suitable for
+    /// the visualization type in question
+    /// </summary>
+    /// <param name="dataSetID">ID of the data set</param>
+    /// <param name="attributes">attributes in question</param>
+    /// <returns>if suitable</returns>
     public bool CheckIfSuitable(int dataSetID, string[] variables)
     {
         int[] nomIDs, ordIDs, ivlIDs, ratIDs;

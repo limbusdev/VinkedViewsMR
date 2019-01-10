@@ -83,20 +83,19 @@ public class ARVisTools : NetworkBehaviour
             
             // Single Axes
             {
-                var y1 = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-                var p1 = visPlant.GenerateSingle3DAxisFrom(0, "Population");
-                var c1 = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime");
-                var m1 = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS.");
-                var rl1 = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy)");
-                var rr1 = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev)");
-                var ro1 = visPlant.GenerateSingle3DAxisFrom(0, "Robbery");
-                var pr1 = visPlant.GenerateSingle3DAxisFrom(0, "Property crime");
-                var c1rate = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime rate");
-                var m1rate = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS. rate");
-                var rl1rate = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy) rate");
-                var rr1rate = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev) rate");
-                var ro1rate = visPlant.GenerateSingle3DAxisFrom(0, "Robbery rate");
-                var pr1rate = visPlant.GenerateSingle3DAxisFrom(0, "Property crime rate");
+                var y1 = visPlant.GenerateVisFrom(0, "Year", VisType.SingleAxis);
+                var p1 = visPlant.GenerateVisFrom(0, "Population", VisType.SingleAxis);
+                var c1 = visPlant.GenerateVisFrom(0, "Violent crime", VisType.SingleAxis);
+                var m1 = visPlant.GenerateVisFrom(0, "Murder/MS.", VisType.SingleAxis);
+                var rl1 = visPlant.GenerateVisFrom(0, "Rape (legacy)", VisType.SingleAxis);
+                var rr1 = visPlant.GenerateVisFrom(0, "Rape (rev)", VisType.SingleAxis);
+                var ro1 = visPlant.GenerateVisFrom(0, "Robbery", VisType.SingleAxis);
+                var pr1 = visPlant.GenerateVisFrom(0, "Property crime", VisType.SingleAxis);
+                var c1rate = visPlant.GenerateVisFrom(0, "Murder/MS. rate", VisType.SingleAxis);
+                var m1rate = visPlant.GenerateVisFrom(0, "Rape (legacy) rate", VisType.SingleAxis);
+                var rl1rate = visPlant.GenerateVisFrom(0, "Rape (rev) rate", VisType.SingleAxis);
+                var rr1rate = visPlant.GenerateVisFrom(0, "Robbery rate", VisType.SingleAxis);
+                var pr1rate = visPlant.GenerateVisFrom(0, "Property crime rate", VisType.SingleAxis);
 
                 y1.transform.position = new Vector3(-5, 0, -5);
                 p1.transform.position = new Vector3(-5, 0, -4);
@@ -111,20 +110,19 @@ public class ARVisTools : NetworkBehaviour
                 m1rate.transform.position = new Vector3(-4, 0, -2);
                 rl1rate.transform.position = new Vector3(-4, 0, -1);
                 rr1rate.transform.position = new Vector3(-4, 0, 0);
-                ro1rate.transform.position = new Vector3(-4, 0, 1);
                 pr1rate.transform.position = new Vector3(-4, 0, 2);
             }
 
             // Combined Axes
             // FLA: PCP-Ring
             {
-                var etvYear = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-                var etvPopulation = visPlant.GenerateSingle3DAxisFrom(0, "Population");
-                var etvViolentCrime = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime rate");
-                var etvMurder = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS. rate");
-                var etvRapeLegacy = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy) rate");
-                var etvRapeRev = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev) rate");
-                var etvRobbery = visPlant.GenerateSingle3DAxisFrom(0, "Property crime rate");
+                var etvYear = visPlant.GenerateVisFrom(0, "Year", VisType.SingleAxis);
+                var etvPopulation = visPlant.GenerateVisFrom(0, "Population", VisType.SingleAxis);
+                var etvViolentCrime = visPlant.GenerateVisFrom(0, "Violent crime rate", VisType.SingleAxis);
+                var etvMurder = visPlant.GenerateVisFrom(0, "Murder/MS. rate", VisType.SingleAxis);
+                var etvRapeLegacy = visPlant.GenerateVisFrom(0, "Rape (legacy) rate", VisType.SingleAxis);
+                var etvRapeRev = visPlant.GenerateVisFrom(0, "Rape (rev) rate", VisType.SingleAxis);
+                var etvRobbery = visPlant.GenerateVisFrom(0, "Property crime rate", VisType.SingleAxis);
 
                 etvYear.transform.position = new Vector3(-2, 0, -1);
                 etvPopulation.transform.position = new Vector3(-2.7f, 0, -1);
@@ -138,13 +136,13 @@ public class ARVisTools : NetworkBehaviour
             // Combined Axes
             // FLA: PCP-Ring 2
             {
-                var etvPopulation = visPlant.GenerateSingle3DAxisFrom(0, "Population");
-                var etvViolentCrime = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime rate");
-                var etvMurder = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS. rate");
-                var etvRapeLegacy = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy) rate");
-                var etvRapeRev = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev) rate");
-                var etvRobbery = visPlant.GenerateSingle3DAxisFrom(0, "Property crime rate");
-                
+                var etvPopulation = visPlant.GenerateVisFrom(0, "Population", VisType.SingleAxis);
+                var etvViolentCrime = visPlant.GenerateVisFrom(0, "Violent crime rate", VisType.SingleAxis);
+                var etvMurder = visPlant.GenerateVisFrom(0, "Murder/MS. rate", VisType.SingleAxis);
+                var etvRapeLegacy = visPlant.GenerateVisFrom(0, "Rape (legacy) rate", VisType.SingleAxis);
+                var etvRapeRev = visPlant.GenerateVisFrom(0, "Rape (rev) rate", VisType.SingleAxis);
+                var etvRobbery = visPlant.GenerateVisFrom(0, "Property crime rate", VisType.SingleAxis);
+
                 etvPopulation.transform.position = new Vector3(-2.7f, 0, -4);
                 etvViolentCrime.transform.position = new Vector3(-1.3f, 0, -4);
                 etvMurder.transform.position = new Vector3(-2.3f, 0, -4.5f);
@@ -155,13 +153,13 @@ public class ARVisTools : NetworkBehaviour
 
             // Star Glyph
             {
-                var y = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-                var p = visPlant.GenerateSingle3DAxisFrom(0, "Population");
-                var c = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime rate");
-                var m = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS. rate");
-                var ra = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy) rate");
-                var rr = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev) rate");
-                var ro = visPlant.GenerateSingle3DAxisFrom(0, "Property crime rate");
+                var y = visPlant.GenerateVisFrom(0, "Year", VisType.SingleAxis);
+                var p = visPlant.GenerateVisFrom(0, "Population", VisType.SingleAxis);
+                var c = visPlant.GenerateVisFrom(0, "Violent crime rate", VisType.SingleAxis);
+                var m = visPlant.GenerateVisFrom(0, "Murder/MS. rate", VisType.SingleAxis);
+                var ra = visPlant.GenerateVisFrom(0, "Rape (legacy) rate", VisType.SingleAxis);
+                var rr = visPlant.GenerateVisFrom(0, "Rape (rev) rate", VisType.SingleAxis);
+                var ro = visPlant.GenerateVisFrom(0, "Property crime rate", VisType.SingleAxis);
 
                 y.transform.position = new Vector3(2,0,0);
                 p.transform.position = new Vector3(2, 0, 0);
@@ -182,13 +180,13 @@ public class ARVisTools : NetworkBehaviour
 
             // Accordion Star Glyph
             {
-                var y = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-                var p = visPlant.GenerateSingle3DAxisFrom(0, "Population");
-                var c = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime rate");
-                var m = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS. rate");
-                var ra = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy) rate");
-                var rr = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev) rate");
-                var ro = visPlant.GenerateSingle3DAxisFrom(0, "Property crime rate");
+                var y = visPlant.GenerateVisFrom(0, "Year", VisType.SingleAxis);
+                var p = visPlant.GenerateVisFrom(0, "Population", VisType.SingleAxis);
+                var c = visPlant.GenerateVisFrom(0, "Violent crime rate", VisType.SingleAxis);
+                var m = visPlant.GenerateVisFrom(0, "Murder/MS. rate", VisType.SingleAxis);
+                var ra = visPlant.GenerateVisFrom(0, "Rape (legacy) rate", VisType.SingleAxis);
+                var rr = visPlant.GenerateVisFrom(0, "Rape (rev) rate", VisType.SingleAxis);
+                var ro = visPlant.GenerateVisFrom(0, "Property crime rate", VisType.SingleAxis);
 
                 y.transform.position = new Vector3(4, 0, 0);
                 p.transform.position = new Vector3(4, 0, .2f);
@@ -209,13 +207,13 @@ public class ARVisTools : NetworkBehaviour
 
             // Star Ring
             {
-                var y = visPlant.GenerateSingle3DAxisFrom(0, "Year");
-                var p = visPlant.GenerateSingle3DAxisFrom(0, "Population");
-                var c = visPlant.GenerateSingle3DAxisFrom(0, "Violent crime rate");
-                var m = visPlant.GenerateSingle3DAxisFrom(0, "Murder/MS. rate");
-                var ra = visPlant.GenerateSingle3DAxisFrom(0, "Rape (legacy) rate");
-                var rr = visPlant.GenerateSingle3DAxisFrom(0, "Rape (rev) rate");
-                var ro = visPlant.GenerateSingle3DAxisFrom(0, "Property crime rate");
+                var y = visPlant.GenerateVisFrom(0, "Year", VisType.SingleAxis);
+                var p = visPlant.GenerateVisFrom(0, "Population", VisType.SingleAxis);
+                var c = visPlant.GenerateVisFrom(0, "Violent crime rate", VisType.SingleAxis);
+                var m = visPlant.GenerateVisFrom(0, "Murder/MS. rate", VisType.SingleAxis);
+                var ra = visPlant.GenerateVisFrom(0, "Rape (legacy) rate", VisType.SingleAxis);
+                var rr = visPlant.GenerateVisFrom(0, "Rape (rev) rate", VisType.SingleAxis);
+                var ro = visPlant.GenerateVisFrom(0, "Property crime rate", VisType.SingleAxis);
 
                 y.transform.position = new Vector3(6, .3f, 0);
                 p.transform.position = new Vector3(6 -.235f, 0.187f,     0);
@@ -236,8 +234,8 @@ public class ARVisTools : NetworkBehaviour
 
             // Complete Visualizations
             {
-                var axisWeapon = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
-                var axisCrime = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
+                var axisWeapon = visPlant.GenerateVisFrom(1, "Weapon", VisType.SingleAxis);
+                var axisCrime = visPlant.GenerateVisFrom(1, "Crime", VisType.SingleAxis);
 
                 var etv = axisWeapon.GetComponent<ETVAnchor>();
                 axisWeapon.transform.position = new Vector3(-.1f, 0, -2.9f);
@@ -247,12 +245,12 @@ public class ARVisTools : NetworkBehaviour
                 axisCrime.transform.position = new Vector3(.1f, 0, -3.1f);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, -92);
 
-                var d = visPlant.GenerateSingle3DAxisFrom(1, "District");
+                var d = visPlant.GenerateVisFrom(1, "District", VisType.SingleAxis);
                 etv = d.GetComponent<ETVAnchor>();
                 etv.transform.position = new Vector3(-.6f, 0, -2.9f);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(90, 0, 0);
 
-                var i = visPlant.GenerateSingle3DAxisFrom(1, "Inside/Outside");
+                var i = visPlant.GenerateVisFrom(1, "Inside/Outside", VisType.SingleAxis);
                 etv = i.GetComponent<ETVAnchor>();
                 etv.transform.position = new Vector3(-.7f, 0, -3f);
                 etv.Rotatable.transform.rotation = Quaternion.Euler(0, 0, 90);
@@ -260,20 +258,20 @@ public class ARVisTools : NetworkBehaviour
             }
 
             {
-                var w = visPlant.GenerateBarChart2DFrom(1, "Weapon");
+                var w = visPlant.GenerateVisFrom(1, "Weapon", VisType.SingleAxis);
                 w.transform.position = new Vector3(0,.5f,3.5f);
 
-                var c = visPlant.GenerateBarChart3DFrom(1, "Crime");
+                var c = visPlant.GenerateVisFrom(1, "Crime", VisType.SingleAxis);
                 c.transform.position = new Vector3(7, 0, 2);
             }
 
             // Single Axes
             {
-                var c = visPlant.GenerateSingle3DAxisFrom(1, "Crime");
-                var i = visPlant.GenerateSingle3DAxisFrom(1, "Inside/Outside");
-                var w = visPlant.GenerateSingle3DAxisFrom(1, "Weapon");
-                var d = visPlant.GenerateSingle3DAxisFrom(1, "District");
-                var p = visPlant.GenerateSingle3DAxisFrom(1, "Premise");
+                var c = visPlant.GenerateVisFrom(1, "Crime", VisType.SingleAxis);
+                var i = visPlant.GenerateVisFrom(1, "Inside/Outside", VisType.SingleAxis);
+                var w = visPlant.GenerateVisFrom(1, "Weapon", VisType.SingleAxis);
+                var d = visPlant.GenerateVisFrom(1, "District", VisType.SingleAxis);
+                var p = visPlant.GenerateVisFrom(1, "Premise", VisType.SingleAxis);
 
                 c.transform.position = new Vector3(8, 0, -5);
                 i.transform.position = new Vector3(8, 0, -4);

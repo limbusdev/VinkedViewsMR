@@ -386,6 +386,11 @@ public class VisualizationFactory : NetworkBehaviour
 
     }
 
+    public GameObject GenerateVisFrom(int dataSetID, string variable, VisType visType)
+    {
+        return GenerateVisFrom(dataSetID, new string[] { variable }, visType);
+    }
+
 
     public GameObject GenerateVisFrom(int dataSetID, string[] variables, VisType visType)
     {

@@ -45,6 +45,8 @@ public class GameManager : MonoBehaviour
 
     public void PersistETV(GameObject etv, int dataSetID, string[] variables, VisType visType)
     {
+        if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
+            return;
         var persistableETV = new SerializedETV();
         persistableETV.dataSetID = dataSetID;
         persistableETV.variables = variables;
@@ -55,6 +57,8 @@ public class GameManager : MonoBehaviour
 
     public void LoadPersistentETV(SerializedETV etv)
     {
+        if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
+            return;
         var loadedETV = Services.VisFactory().GenerateVisFrom(etv.dataSetID, etv.variables, etv.visType);
         loadedETV.transform.localPosition = new Vector3(etv.position[0], etv.position[1], etv.position[2]);
         loadedETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation = new Quaternion(etv.rotation[0], etv.rotation[1], etv.rotation[2], etv.rotation[3]);
@@ -62,16 +66,22 @@ public class GameManager : MonoBehaviour
 
     private void OnEnable()
     {
+        if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
+            return;
         Load();
     }
 
     void OnApplicationQuit()
     {
+        if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
+            return;
         Save();
     }
 
     public void Save()
     {
+        if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
+            return;
         /*string path = Path.Combine(Application.persistentDataPath, FolderName);
         if(!Directory.Exists(path))
         {
@@ -116,6 +126,8 @@ public class GameManager : MonoBehaviour
 
     public void Load()
     {
+        if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
+            return;
         var newETVs = new List<SerializedETV>();
 
         if(File.Exists(Path.Combine(Application.persistentDataPath, SaveGameFileName)))

@@ -1,5 +1,6 @@
 ﻿public class GlobalSettings
 {
+    // Only RELEASE enables persistence
     public enum Scenario
     {
         TEST_BostonPD, TEST_FBI, TEST_Exoplanets, TEST_MetaVis, TEST_Playground, TEST_empty, RELEASE

@@ -90,7 +90,9 @@ public class GameManager : MonoBehaviour
 
         // open save game file
         var serializer = new XmlSerializer(typeof(Setup));
-        var writer = new StreamWriter(Path.Combine(Application.persistentDataPath, SaveGameFileName));
+        var fs = new FileStream(Path.Combine(Application.persistentDataPath, SaveGameFileName), FileMode.OpenOrCreate);
+
+        var writer = new StreamWriter(fs);
         
         // Create save game container
         var saveData = new Setup();
@@ -118,7 +120,7 @@ public class GameManager : MonoBehaviour
         }
 
         serializer.Serialize(writer, saveData);
-        writer.Close();
+        writer.Dispose();
     }
 
     public void Load()
@@ -130,15 +132,11 @@ public class GameManager : MonoBehaviour
         if(File.Exists(Path.Combine(Application.persistentDataPath, SaveGameFileName)))
         {
             var serializer = new XmlSerializer(typeof(Setup));
-
-            serializer.UnknownNode += new XmlNodeEventHandler(serializer_UnknownNode);
-            serializer.UnknownAttribute += new XmlAttributeEventHandler(serializer_UnknownAttribute);
-
+            
             var fs = new FileStream(Path.Combine(Application.persistentDataPath, SaveGameFileName), FileMode.Open);
             Setup saveGame = (Setup)serializer.Deserialize(fs);
-
-            fs.Close();
-
+            fs.Dispose();
+            
             newETVs.AddRange(saveGame.ETVs);
         }
 
@@ -150,9 +148,4 @@ public class GameManager : MonoBehaviour
             
     }
 
-    // Handles unknown nodes
-    private void serializer_UnknownNode(object sender, XmlNodeEventArgs e) { }
-
-    // handles unknown attributes
-    private void serializer_UnknownAttribute(object sender, XmlAttributeEventArgs e) { }
- }
+}

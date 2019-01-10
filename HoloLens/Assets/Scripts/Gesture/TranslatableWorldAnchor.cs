@@ -2,30 +2,21 @@
 using UnityEngine;
 using UnityEngine.XR.WSA;
 
-public class TranslatableWorldAnchor : MonoBehaviour, IManipulationHandler
+public class TranslatableWorldAnchor : MonoBehaviour, IInputHandler
 {
-    private WorldAnchor worldAnchor;
+    [SerializeField]
+    [Tooltip("Transform that will be dragged. Default is the components GameObject.")]
+    private Transform hostTransform = null;
 
-    public void OnManipulationCanceled(ManipulationEventData eventData)
+    public void OnInputDown(InputEventData eventData)
     {
-        gameObject.AddComponent<WorldAnchor>();
-    }
-
-    public void OnManipulationCompleted(ManipulationEventData eventData)
-    {
-        gameObject.AddComponent<WorldAnchor>();
-    }
-
-    public void OnManipulationStarted(ManipulationEventData eventData)
-    {
-        var anchor = gameObject.GetComponent<WorldAnchor>();
+        var anchor = hostTransform.gameObject.GetComponent<WorldAnchor>();
         if(anchor != null)
             DestroyImmediate(anchor);
-       
     }
 
-    public void OnManipulationUpdated(ManipulationEventData eventData)
+    public void OnInputUp(InputEventData eventData)
     {
-        
+        hostTransform.gameObject.AddComponent<WorldAnchor>();
     }
 }

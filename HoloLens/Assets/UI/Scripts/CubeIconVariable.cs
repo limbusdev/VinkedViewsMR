@@ -192,11 +192,13 @@ public class CubeIconVariable : InteractionReceiver
     /// <param name="eventData"></param>
     protected override void InputDown(GameObject obj, InputEventData eventData)
     {
+        Debug.Log("InputDown: " + obj.name);
+
         // SingleAxis3D, BarChart2D, BarChart3D, BarMap3D, PCP2D, PCP3D, ScatterXY2D, ScatterXYZ3D, LineXY2D
         switch(obj.name)
         {
-            case "SingleAxis3D":
-                Services.instance.visualizationFactory.GenerateSingle3DAxisFrom(dataSetID, varNames[0]);
+            case "SingleAxis":
+                Services.instance.visualizationFactory.GenerateVisFrom(dataSetID, varNames, VisType.SingleAxis);
                 break;
             case "BarChart2D":
                 Services.instance.visualizationFactory.GenerateBarChart2DFrom(dataSetID, varNames[0]);

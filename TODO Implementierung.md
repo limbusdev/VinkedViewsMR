@@ -2,5 +2,14 @@
 
 ## noch zu implementieren
 
-* Linking & Brushing
-* Bewegung der ETVs mit XBOX-Controller
++ World Anchor
++ everything as child to world anchor 
+
+## implementiert
+
++ Linking & Brushing
+
+
+## obsolet
+
++ Bewegung der ETVs mit XBOX-Controller

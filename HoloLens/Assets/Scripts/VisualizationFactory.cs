@@ -402,31 +402,40 @@ public class VisualizationFactory : NetworkBehaviour
             switch(visType)
             {
                 case VisType.SingleAxis:
-                    return GenerateSingle3DAxisFrom(dataSetID, variables[0]);
+                    vis = GenerateSingle3DAxisFrom(dataSetID, variables[0]);
+                    break;
                 case VisType.ScatterPlot2D:
-                    return GenerateScatterplot2DFrom(dataSetID, variables);
+                    vis = GenerateScatterplot2DFrom(dataSetID, variables);
+                    break;
                 case VisType.ScatterPlot3D:
-                    return GenerateScatterplot3DFrom(dataSetID, variables);
+                    vis = GenerateScatterplot3DFrom(dataSetID, variables);
+                    break;
                 case VisType.PCP2D:
-                    return GeneratePCP2DFrom(dataSetID, variables);
+                    vis = GeneratePCP2DFrom(dataSetID, variables);
+                    break;
                 case VisType.PCP3D:
-                    return GeneratePCP2DFrom(dataSetID, variables);
+                    vis = GeneratePCP2DFrom(dataSetID, variables);
+                    break;
                 case VisType.LineChartXY2D:
-                    return GenerateLineplot2DFrom(dataSetID, variables);
+                    vis = GenerateLineplot2DFrom(dataSetID, variables);
+                    break;
                 case VisType.BarChart2D:
-                    return GenerateBarChart2DFrom(dataSetID, variables[0]);
+                    vis = GenerateBarChart2DFrom(dataSetID, variables[0]);
+                    break;
                 case VisType.BarChart3D:
-                    return GenerateBarChart2DFrom(dataSetID, variables[0]);
+                    vis = GenerateBarChart2DFrom(dataSetID, variables[0]);
+                    break;
                 case VisType.BarMap3D:
-                    return GenerateBarMap3DFrom(dataSetID, variables);
+                    vis = GenerateBarMap3DFrom(dataSetID, variables);
+                    break;
                 default:
                     vis = new GameObject("Failed");
+                    vis = Services.ETVFactory2D().PutETVOnAnchor(vis);
+                    vis.transform.position = NewETVPlaceHolder.transform.position;
                     break;
             }
-
-
-            vis = Services.ETVFactory2D().PutETVOnAnchor(vis);
-            vis.transform.position = NewETVPlaceHolder.transform.position;
+            
+            GameManager.gameManager.PersistETV(vis, dataSetID, variables, visType);
 
             return vis;
         } 

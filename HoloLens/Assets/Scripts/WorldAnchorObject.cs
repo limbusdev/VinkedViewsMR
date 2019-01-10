@@ -1,18 +1,16 @@
 ﻿using HoloToolkit.Unity;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class WorldAnchorObject : MonoBehaviour {
-
-	// Use this for initialization
+public class WorldAnchorObject : MonoBehaviour
+{
 	void Start ()
     {
+        // Loads Anchor, if it exists, creates one otherwise.
         WorldAnchorManager.Instance.AttachAnchor(gameObject, "RootWorldAnchor");	
 	}
 	
-	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 		
 	}
 }

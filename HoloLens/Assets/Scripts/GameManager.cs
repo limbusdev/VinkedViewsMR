@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 using System.IO;
 using System.Collections.Generic;
 using System;
@@ -7,15 +7,19 @@ using System;
 [Serializable]
 public class SerializedETV
 {
+    [XmlAttribute]
+    public int dataSetID;
+    public VisType visType;
+
     public float[] position;
     public float[] rotation;
-    public int dataSetID;
     public string[] variables;
-    public VisType visType;
+    
 }
 
 [Serializable]
-class Setup
+[XmlRoot("Setup")]
+public class Setup
 {
     public SerializedETV[] ETVs;
 }
@@ -64,7 +68,7 @@ public class GameManager : MonoBehaviour
         loadedETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation = new Quaternion(etv.rotation[0], etv.rotation[1], etv.rotation[2], etv.rotation[3]);
     }
 
-    private void OnEnable()
+    void Start()
     {
         if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
             return;
@@ -85,9 +89,9 @@ public class GameManager : MonoBehaviour
             return;
 
         // open save game file
-        var bf = new BinaryFormatter();
-        var file = File.Open(Path.Combine(Application.persistentDataPath, SaveGameFileName), FileMode.OpenOrCreate);
-
+        var serializer = new XmlSerializer(typeof(Setup));
+        var writer = new StreamWriter(Path.Combine(Application.persistentDataPath, SaveGameFileName));
+        
         // Create save game container
         var saveData = new Setup();
         saveData.ETVs = new SerializedETV[ETVs.Keys.Count];
@@ -113,9 +117,8 @@ public class GameManager : MonoBehaviour
             i++;
         }
 
-        // write save game container to file and close file
-        bf.Serialize(file, saveData);
-        file.Close();
+        serializer.Serialize(writer, saveData);
+        writer.Close();
     }
 
     public void Load()
@@ -126,10 +129,15 @@ public class GameManager : MonoBehaviour
 
         if(File.Exists(Path.Combine(Application.persistentDataPath, SaveGameFileName)))
         {
-            var bf = new BinaryFormatter();
-            var file = File.Open(Path.Combine(Application.persistentDataPath, SaveGameFileName), FileMode.Open);
-            Setup saveGame = (Setup)bf.Deserialize(file);
-            file.Close();
+            var serializer = new XmlSerializer(typeof(Setup));
+
+            serializer.UnknownNode += new XmlNodeEventHandler(serializer_UnknownNode);
+            serializer.UnknownAttribute += new XmlAttributeEventHandler(serializer_UnknownAttribute);
+
+            var fs = new FileStream(Path.Combine(Application.persistentDataPath, SaveGameFileName), FileMode.Open);
+            Setup saveGame = (Setup)serializer.Deserialize(fs);
+
+            fs.Close();
 
             newETVs.AddRange(saveGame.ETVs);
         }
@@ -142,5 +150,9 @@ public class GameManager : MonoBehaviour
             
     }
 
+    // Handles unknown nodes
+    private void serializer_UnknownNode(object sender, XmlNodeEventArgs e) { }
 
-}
+    // handles unknown attributes
+    private void serializer_UnknownAttribute(object sender, XmlAttributeEventArgs e) { }
+ }

@@ -50,6 +50,7 @@ namespace Gestures
         public bool hasFocus = false;
         public bool isTapped = false;
         
+        
         // .................................................................... Unity Methods
 
         void Awake()
@@ -68,7 +69,7 @@ namespace Gestures
             {
                 InputManager.Instance.PushModalInputHandler(gameObject);
                 manipulationOriginalPosition = transform.position;
-                eventData.Use();
+                //eventData.Use();
             }
         }
 
@@ -108,20 +109,20 @@ namespace Gestures
                 }
 
                 hostTransform.position = manipulationOriginalPosition + cumulativeUpdate;
-                eventData.Use();
+                //eventData.Use();
             }
         }
 
         void IManipulationHandler.OnManipulationCompleted(ManipulationEventData eventData)
         {
             InputManager.Instance.PopModalInputHandler();
-            eventData.Use();
+            //eventData.Use();
         }
 
         void IManipulationHandler.OnManipulationCanceled(ManipulationEventData eventData)
         {
             InputManager.Instance.PopModalInputHandler();
-            eventData.Use();
+            //eventData.Use();
         }
 
         // .................................................................... INTERFACE INavigationHandler

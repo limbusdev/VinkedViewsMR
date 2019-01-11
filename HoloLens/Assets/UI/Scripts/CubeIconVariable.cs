@@ -146,7 +146,7 @@ public class CubeIconVariable : InteractionReceiver
             lr.endWidth = .01f;
             
             visButtonsAnchor.SetActive(true);
-            VisType[] viss = Services.instance.visualizationFactory.ListPossibleVisualizations(dataSetID, varNames);
+            VisType[] viss = Services.VisFactory().ListPossibleVisualizations(dataSetID, varNames);
 
             lr.positionCount = viss.Length * 2;
             var poss = new List<Vector3>();

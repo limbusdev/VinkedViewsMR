@@ -33,10 +33,18 @@ public class VisualizationFactory : NetworkBehaviour
     // ........................................................................ Private properties
 
     private IList<GameObject> activeVisualizations;
-    
+
 
 
     // ........................................................................ MonoBehaviour methods
+
+    private void Awake()
+    {
+        if(!initialized)
+        {
+            Initialize();
+        }
+    }
 
     void Initialize()
     {

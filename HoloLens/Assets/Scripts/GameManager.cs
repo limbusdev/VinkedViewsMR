@@ -4,6 +4,10 @@ using System.IO;
 using System.Collections.Generic;
 using System;
 
+
+/// <summary>
+/// Serializable XML-SubElement
+/// </summary>
 [Serializable]
 public class SerializedETV
 {
@@ -17,6 +21,11 @@ public class SerializedETV
     
 }
 
+/// <summary>
+/// Simple serializable container to collect information, which should be
+/// persistent between session. Use simple data types only. (int, string, 
+/// float, simple arrays, ...)
+/// </summary>
 [Serializable]
 [XmlRoot("Setup")]
 public class Setup
@@ -24,16 +33,25 @@ public class Setup
     public SerializedETV[] ETVs;
 }
 
+
+/// <summary>
+/// GameManager manages game sessions by saving session data and restoring it.
+/// </summary>
 public class GameManager : MonoBehaviour
 {
+    // ........................................................................ Properties
     public static string TAG = "GameManager";
 
     private static string SaveGameFileName = "setup.dat";
     public string saveGamePath;
 
+    // Singleton Instance
     public static GameManager gameManager;
+
+    // temporal storage for persistent ETVs
     public Dictionary<GameObject,SerializedETV> ETVs;
 
+    // ........................................................................ MonoBehaviour
     private void Awake()
     {
         // Singleton kind-of
@@ -48,6 +66,21 @@ public class GameManager : MonoBehaviour
 
         ETVs = new Dictionary<GameObject, SerializedETV>();
     }
+
+
+    // ........................................................................ GameManager
+
+    public void OnDataProviderFinishedLoading()
+    {
+        saveGamePath = Path.Combine(Application.persistentDataPath, SaveGameFileName);
+        Load();
+    }
+
+    void OnApplicationQuit()
+    {
+        Save();
+    }
+
 
     public void PersistETV(GameObject etv, int dataSetID, string[] variables, VisType visType)
     {
@@ -75,16 +108,7 @@ public class GameManager : MonoBehaviour
             = new Quaternion(etv.rotation[0], etv.rotation[1], etv.rotation[2], etv.rotation[3]);
     }
 
-    public void OnDataProviderFinishedLoading()
-    {
-        saveGamePath = Path.Combine(Application.persistentDataPath, SaveGameFileName);
-        Load();
-    }
-
-    void OnApplicationQuit()
-    {
-        Save();
-    }
+    
 
     public void Save()
     {

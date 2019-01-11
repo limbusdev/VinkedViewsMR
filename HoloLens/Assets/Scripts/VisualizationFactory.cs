@@ -26,6 +26,8 @@ public class VisualizationFactory : NetworkBehaviour
 
     public IDictionary<VisType, AETVFactoryMethod> generators;
 
+    private bool initialized = false;
+
 
 
     // ........................................................................ Private properties
@@ -36,7 +38,7 @@ public class VisualizationFactory : NetworkBehaviour
 
     // ........................................................................ MonoBehaviour methods
 
-    void Awake()
+    void Initialize()
     {
         activeVisualizations = new List<GameObject>();
         generators = new Dictionary<VisType, AETVFactoryMethod>();
@@ -73,6 +75,11 @@ public class VisualizationFactory : NetworkBehaviour
     /// <returns></returns>
     public GameObject GenerateVisFrom(int dataSetID, string[] variables, VisType visType, bool persist = true)
     {
+        if(!initialized)
+        {
+            Initialize();
+        }
+
         try
         {
             var vis = generators[visType].GenerateVisualization(dataSetID, variables);

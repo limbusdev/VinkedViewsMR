@@ -27,6 +27,11 @@ public class DataProvider : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        GameManager.gameManager.OnDataProviderFinishedLoading();
+    }
+
     private IDictionary<string, IDictionary<int, string>> ParseDictionaries()
     {
         var dictionaries = new Dictionary<string, IDictionary<int, string>>();

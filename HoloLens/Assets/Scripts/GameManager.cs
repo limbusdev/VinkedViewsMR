@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
             = new Quaternion(etv.rotation[0], etv.rotation[1], etv.rotation[2], etv.rotation[3]);
     }
 
-    void Start()
+    public void OnDataProviderFinishedLoading()
     {
         saveGamePath = Path.Combine(Application.persistentDataPath, SaveGameFileName);
         Load();
@@ -88,12 +88,6 @@ public class GameManager : MonoBehaviour
 
     public void Save()
     {
-        // open save game file
-        var serializer = new XmlSerializer(typeof(Setup));
-        var fs = new FileStream(saveGamePath, FileMode.OpenOrCreate);
-
-        var writer = new StreamWriter(fs);
-        
         // Create save game container
         var saveData = new Setup();
         saveData.ETVs = new SerializedETV[ETVs.Keys.Count];
@@ -118,9 +112,15 @@ public class GameManager : MonoBehaviour
             saveData.ETVs[i] = ETVs[key];
             i++;
         }
+        
 
-        serializer.Serialize(writer, saveData);
-        writer.Dispose();
+        using(StreamWriter writer = new StreamWriter(File.Create(saveGamePath)))
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(Setup));
+            serializer.Serialize(writer, saveData);
+        }
+
+        Debug.Log(TAG + ": save data serialized and written to save file.");
     }
 
     public void Load()
@@ -131,13 +131,15 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log(TAG + ": save file " + saveGamePath + " found.");
 
-            var serializer = new XmlSerializer(typeof(Setup));
-            
-            var fs = new FileStream(saveGamePath, FileMode.Open);
-            Setup saveGame = (Setup)serializer.Deserialize(fs);
-            fs.Dispose();
-            
-            newETVs.AddRange(saveGame.ETVs);
+            using(StreamReader reader = new StreamReader(File.OpenRead(saveGamePath)))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(Setup));
+                Setup saveGame = (Setup)serializer.Deserialize(reader);
+
+                newETVs.AddRange(saveGame.ETVs);
+            }
+
+            Debug.Log(TAG + ": save file deserialized.");
         } else
         {
             Debug.Log(TAG + ": save file " + saveGamePath + " not found.");

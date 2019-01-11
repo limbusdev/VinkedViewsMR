@@ -26,8 +26,10 @@ public class Setup
 
 public class GameManager : MonoBehaviour
 {
+    public static string TAG = "GameManager";
+
     private static string SaveGameFileName = "setup.dat";
-    private static string FolderName = "binarySaveData";
+    public string saveGamePath;
 
     public static GameManager gameManager;
     public Dictionary<GameObject,SerializedETV> ETVs;
@@ -63,34 +65,32 @@ public class GameManager : MonoBehaviour
     {
         if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
             return;
+
+        // Restore Visualization from loaded information
         var loadedETV = Services.VisFactory().GenerateVisFrom(etv.dataSetID, etv.variables, etv.visType);
+
+        // Restore position and rotation
         loadedETV.transform.localPosition = new Vector3(etv.position[0], etv.position[1], etv.position[2]);
-        loadedETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation = new Quaternion(etv.rotation[0], etv.rotation[1], etv.rotation[2], etv.rotation[3]);
+        loadedETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation 
+            = new Quaternion(etv.rotation[0], etv.rotation[1], etv.rotation[2], etv.rotation[3]);
     }
 
     void Start()
     {
-        if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
-            return;
+        saveGamePath = Path.Combine(Application.persistentDataPath, SaveGameFileName);
         Load();
     }
 
     void OnApplicationQuit()
     {
-        if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
-            return;
         Save();
     }
 
     public void Save()
     {
-        // Only save in release builds
-        if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
-            return;
-
         // open save game file
         var serializer = new XmlSerializer(typeof(Setup));
-        var fs = new FileStream(Path.Combine(Application.persistentDataPath, SaveGameFileName), FileMode.OpenOrCreate);
+        var fs = new FileStream(saveGamePath, FileMode.OpenOrCreate);
 
         var writer = new StreamWriter(fs);
         
@@ -125,19 +125,22 @@ public class GameManager : MonoBehaviour
 
     public void Load()
     {
-        if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
-            return;
         var newETVs = new List<SerializedETV>();
 
-        if(File.Exists(Path.Combine(Application.persistentDataPath, SaveGameFileName)))
+        if(File.Exists(saveGamePath))
         {
+            Debug.Log(TAG + ": save file " + saveGamePath + " found.");
+
             var serializer = new XmlSerializer(typeof(Setup));
             
-            var fs = new FileStream(Path.Combine(Application.persistentDataPath, SaveGameFileName), FileMode.Open);
+            var fs = new FileStream(saveGamePath, FileMode.Open);
             Setup saveGame = (Setup)serializer.Deserialize(fs);
             fs.Dispose();
             
             newETVs.AddRange(saveGame.ETVs);
+        } else
+        {
+            Debug.Log(TAG + ": save file " + saveGamePath + " not found.");
         }
 
         foreach(var savedETV in newETVs)

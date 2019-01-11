@@ -1,4 +1,5 @@
-﻿using HoloToolkit.Unity.InputModule;
+﻿using HoloToolkit.Unity;
+using HoloToolkit.Unity.InputModule;
 using UnityEngine;
 using UnityEngine.XR.WSA;
 
@@ -12,16 +13,15 @@ public class TranslatableWorldAnchor : MonoBehaviour, IInputHandler
     {
         var anchor = hostTransform.gameObject.GetComponent<WorldAnchor>();
         if(anchor != null)
-            DestroyImmediate(anchor);
-
-        var anchorObject = hostTransform.gameObject.GetComponent<WorldAnchorObject>();
-        if(anchorObject != null)
-            DestroyImmediate(anchorObject);
+        {
+            WorldAnchorManager.Instance.RemoveAnchor(hostTransform.gameObject);
+            Debug.Log("World Anchor removed for translating.");
+        }
     }
 
     public void OnInputUp(InputEventData eventData)
     {
-        hostTransform.gameObject.AddComponent<WorldAnchor>();
-        hostTransform.gameObject.AddComponent<WorldAnchorObject>();
+        WorldAnchorManager.Instance.AttachAnchor(hostTransform.gameObject, hostTransform.gameObject.name);
+        Debug.Log("World Anchor re-added");
     }
 }

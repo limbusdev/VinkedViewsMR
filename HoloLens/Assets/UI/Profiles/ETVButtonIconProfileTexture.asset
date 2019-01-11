@@ -26,7 +26,7 @@ MonoBehaviour:
   PageLeft: {fileID: 0}
   PageRight: {fileID: 0}
   Add: {fileID: 0}
-  Remove: {fileID: 0}
+  Remove: {fileID: 2800000, guid: b545d05163179994da7c305738066262, type: 3}
   Clear: {fileID: 0}
   Cancel: {fileID: 0}
   Zoom: {fileID: 0}
@@ -71,3 +71,4 @@ MonoBehaviour:
   - {fileID: 2800000, guid: 3283c36c5d83b2c4dbf5a4aa7cdfb0f7, type: 3}
   - {fileID: 2800000, guid: b94c837f4d93bb148b38d5f1f20803de, type: 3}
   - {fileID: 2800000, guid: 8b3e79a9145042346b9da8f7cba39c0e, type: 3}
+  - {fileID: 2800000, guid: b545d05163179994da7c305738066262, type: 3}

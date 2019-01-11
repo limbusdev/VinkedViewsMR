@@ -31,26 +31,26 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         {
             case "ButtonDataSets":
                 DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 1, 2, 3, 4 });
+                ActivateInteractables(new int[] { 1, 2, 3, 4, 10 });
                 break;
             case "Back":
                 DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 0 });
+                ActivateInteractables(new int[] { 0, 10 });
                 break;
             case "ButtonDataSet1":
                 currentlyChosenDataBase = 0;
                 DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 5,6,7,8,9 });
+                ActivateInteractables(new int[] { 5,6,7,8,9, 10 });
                 break;
             case "ButtonDataSet2":
                 currentlyChosenDataBase = 1;
                 DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 5, 6, 7, 8, 9 });
+                ActivateInteractables(new int[] { 5, 6, 7, 8, 9, 10 });
                 break;
             case "ButtonDataSet3":
                 currentlyChosenDataBase = 2;
                 DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 5, 6, 7, 8, 9 });
+                ActivateInteractables(new int[] { 5, 6, 7, 8, 9, 10 });
                 break;
             case "Button1D":
                 SetupGalery(currentlyChosenDataBase, 1);
@@ -66,7 +66,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
                 break;
             case "Back2":
                 DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 1,2,3,4 });
+                ActivateInteractables(new int[] { 1,2,3,4, 10 });
                 ClearGalery();
                 break;
             case "CubeIconVariable":
@@ -76,7 +76,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
                     obj.GetComponent<CubeIconVariable>().ShowButtons();
                 }
                 break;
-
+            case "ButtonQuitApp":
+                Debug.Log("Quitting Application");
+                Application.Quit();
+                break;
             default:
                 break;
         }

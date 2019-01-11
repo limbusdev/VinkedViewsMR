@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: limbusdev
-  productName: ARVisualizationTools
+  productName: VinkedViews
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -40,7 +40,8 @@ PlayerSettings:
     width: 1
     height: 1
   m_SplashScreenLogos: []
-  m_VirtualRealitySplashScreen: {fileID: 0}
+  m_VirtualRealitySplashScreen: {fileID: 2800000, guid: 5533b264fdaa28f48acb0f75e2c8867e,
+    type: 3}
   m_HolographicTrackingLossScreen: {fileID: 0}
   defaultScreenWidth: 1024
   defaultScreenHeight: 768
@@ -259,7 +260,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: fd96910a40399614fb3e04d78db13f6c, type: 3}
+      m_Icon: {fileID: 2800000, guid: 70bdcc7df52c8a2428fb9a6301d4b49d, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -589,16 +590,49 @@ PlayerSettings:
   apiCompatibilityLevelPerPlatform: {}
   m_RenderingPath: 1
   m_MobileRenderingPath: 1
-  metroPackageName: ARVisToolsScene
+  metroPackageName: VinkedViews
   metroPackageVersion: 1.0.0.0
   metroCertificatePath: Assets\WSATestCertificate.pfx
   metroCertificatePassword: 
   metroCertificateSubject: DefaultCompany
   metroCertificateIssuer: DefaultCompany
   metroCertificateNotAfter: 004c45eafd72d501
-  metroApplicationDescription: Template_3D
-  wsaImages: {}
-  metroTileShortName: ARVisualizationTools
+  metroApplicationDescription: Visually Linked Views
+  wsaImages:
+    65636: Assets/Icon/appicon50.png
+    65661: Assets/Icon/appicon63.png
+    65676: Assets/Icon/appicon70.png
+    65686: Assets/Icon/appicon75.png
+    65716: Assets/Icon/appicon90.png
+    65736: Assets/Icon/appicon100.png
+    65776: Assets/Icon/appicon120.png
+    65936: Assets/Icon/appicon200.png
+    2031632: Assets/Icon/appicon16.png
+    2031640: Assets/Icon/appicon24.png
+    2031648: Assets/Icon/appicon32.png
+    2031664: Assets/Icon/appicon48.png
+    2031716: Assets/Icon/appicon44.png
+    2031741: Assets/Icon/appicon55.png
+    2031766: Assets/Icon/appicon66.png
+    2031816: Assets/Icon/appicon88.png
+    2031872: Assets/Icon/appicon256.png
+    2032016: Assets/Icon/appicon176.png
+    2097252: Assets/Icon/appicon71.png
+    2097277: Assets/Icon/appicon89.png
+    2097302: Assets/Icon/appicon107.png
+    2097352: Assets/Icon/appicon142.png
+    2097552: Assets/Icon/appicon284.png
+    2162788: Assets/Icon/appicon150.png
+    2162813: Assets/Icon/appicon188.png
+    2162838: Assets/Icon/appicon225.png
+    2162888: Assets/Icon/appicon300.png
+    2163088: Assets/Icon/appicon600.png
+    2228324: Assets/Icon/appicon310.png
+    2228349: Assets/Icon/appicon388.png
+    2228374: Assets/Icon/appicon465.png
+    2228424: Assets/Icon/appicon620.png
+    2228624: Assets/Icon/appicon1240.png
+  metroTileShortName: VinkedViews
   metroTileShowName: 0
   metroMediumTileShowName: 0
   metroLargeTileShowName: 0

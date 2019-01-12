@@ -4,6 +4,8 @@ using System.IO;
 using System.Collections.Generic;
 using System;
 
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ SUB CLASSES
+
 [Serializable]
 public class SerializedAnchor
 {
@@ -37,23 +39,28 @@ public class Setup
 }
 
 
+
+// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ MAIN CLASS
+
 /// <summary>
 /// GameManager manages game sessions by saving session data and restoring it.
 /// </summary>
 public class PersistenceManager : MonoBehaviour
 {
-    // ........................................................................ Properties
-    public static string TAG = "PersistenceManager";
-
-    private static string SaveGameFileName = "setup.dat";
-    private string saveGamePath;
-
+    // ........................................................................ Singleton
     // Singleton Instance
     public static PersistenceManager Instance;
 
-    // temporal storage for persistent ETVs
-    public Dictionary<GameObject,SerializedETV> ETVs;
+    // ........................................................................ Properties
+    // .................................................... public
+    public static string TAG = "PersistenceManager";
+    public Dictionary<GameObject, SerializedETV> ETVs;
 
+
+    // .................................................... private
+    private static string SaveGameFileName = "setup.dat";
+    private string saveGamePath;
+    
 
     // ........................................................................ MonoBehaviour
     private void Awake()
@@ -72,7 +79,7 @@ public class PersistenceManager : MonoBehaviour
     }
 
 
-    // ........................................................................ GameManager
+    // ........................................................................ PersistenceManager
 
     public void OnDataProviderFinishedLoading()
     {
@@ -86,6 +93,14 @@ public class PersistenceManager : MonoBehaviour
     }
     
 
+    /// <summary>
+    /// Enters the given ETV into a list of observed ETVs. All ETVs entered here,
+    /// will be persisted, when the app is closed.
+    /// </summary>
+    /// <param name="etv">ETV to persist later</param>
+    /// <param name="dataSetID">data set ID of it</param>
+    /// <param name="variables">variables which it visualizes</param>
+    /// <param name="visType">visualization type used</param>
     public void PersistETV(GameObject etv, int dataSetID, string[] variables, VisType visType)
     {
         var persistableETV = new SerializedETV();
@@ -96,6 +111,11 @@ public class PersistenceManager : MonoBehaviour
         ETVs.Add(etv, persistableETV);
     }
 
+    /// <summary>
+    /// Restores an ETV from the persisted information (position, rotation, variables,
+    /// data set ID and Visualization Type).
+    /// </summary>
+    /// <param name="etv">serialized ETV information</param>
     public void LoadPersistentETV(SerializedETV etv)
     {
         // Restore Visualization from loaded information
@@ -110,7 +130,10 @@ public class PersistenceManager : MonoBehaviour
     }
 
     
-
+    /// <summary>
+    /// Serializes all ETVs in the temporal storage to a file in the persistent
+    /// data path of this app. The document is XML structured and human readable.
+    /// </summary>
     public void Save()
     {
         // Create save game container
@@ -153,6 +176,11 @@ public class PersistenceManager : MonoBehaviour
         Debug.Log(TAG + ": save data serialized and written to save file.");
     }
 
+
+    /// <summary>
+    /// Loads information about persistent ETVs from an XML file in the 
+    /// persistent data path to restore the last session.
+    /// </summary>
     public void Load()
     {
         var newETVs = new List<SerializedETV>();

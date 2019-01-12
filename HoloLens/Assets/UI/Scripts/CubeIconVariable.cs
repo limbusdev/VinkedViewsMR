@@ -102,9 +102,9 @@ public class CubeIconVariable : InteractionReceiver
                 iconNum = (variableTypes[0] == LoM.RATIO || variableTypes[0] == LoM.INTERVAL) ? 0 : 1;
                 break;
             case 2:
-                if      (allVarsNumeric) iconNum = 2;
+                if      (allVarsNumeric)   iconNum = 2;
                 else if (allVarsCategoric) iconNum = 3;
-                else                          iconNum = 4;
+                else                       iconNum = 4;
                 break;
             case 3:
                 if (allVarsNumeric) iconNum = 5;
@@ -127,12 +127,13 @@ public class CubeIconVariable : InteractionReceiver
         if (variableNames.Length == 1)
         {
             name = variableNames[0];
+            name = (((name.Length > 12 ? name.Substring(0, 11) : name)) + "\n");
         }
         else
         {
             foreach (string v in variableNames)
             {
-                name += (v + "\n");
+                name += (((v.Length > 12 ? v.Substring(0,11) : v)) + "\n");
             }
         }
 

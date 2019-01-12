@@ -88,3 +88,54 @@ Setups of visualization can be written in code (hard coded) or defined in an XML
 </Setup>
 
 ```
+
+## Providing Data
+
+CSV files must be UTF-8 coded and with Unix (LF) line endings. Otherwise there will be errors. Additionally they must contain the level of measurement in the second row: ratio, ordinal, nominal or interval. If you provide interval, you must provide the unit name as well, like this:
+
+```
+Year,Population,Assaults
+interval+year,ratio,ratio
+2000,15000,21
+2001,15320,21
+2002,16011,23
+```
+
+Ordinal attributes must be numerical coded, to provide their order as well. To get their categorical values, a dictionary must be provided as well.
+
+CSV file DataBase.csv:
+
+```
+Date,Time,Address,Crime,Inside/Outside,Weapon
+interval+date,interval+minute,nominal,ordinal,nominal,nominal
+43288,1433,1600 PENTWOOD RD,6,,FIREARM
+43288,1430,ST & DIVISION ST,5,O,OTHER
+43288,1398,2500 PERRING MANOR RD,0,I,OTHER
+43288,1361,3700 S HANOVER ST,14,,FIREARM
+43288,1375,LOMBARD ST & LIGHT ST,5,I,OTHER
+43288,1338,1800 W FRANKLIN ST,0,I,OTHER
+```
+
+Lets assume one crime is worse than others, and we have defined an order on crimes - from the worst to the least meaningful, they are coded from high to low. The coding is provided in a dictionary file:
+
+Dictionary_Crime.txt:
+
+```
+0:Aggressive assault
+1:Arson
+2:Assault by threat
+3:Auto theft
+4:Burglary
+5:Common assault
+6:Homicide
+7:Larceny
+8:Larceny from auto
+9:Rape
+10:Robbery - carjackacking
+11:Robbery - commercial
+12:Robbery - residence
+13:Robbery - street
+14:Shooting
+```
+
+Provide both files to the DataProvider, and everything is fine.

@@ -97,7 +97,7 @@ public class VisualizationFactory : NetworkBehaviour
             AddNetworkAnchor(vis, dataSetID, variables, visType);
 
 
-            GameManager.gameManager.PersistETV(vis, dataSetID, variables, visType);
+            PersistenceManager.Instance.PersistETV(vis, dataSetID, variables, visType);
 
             return vis;
         } catch(Exception e)

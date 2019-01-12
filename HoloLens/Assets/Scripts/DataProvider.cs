@@ -29,7 +29,7 @@ public class DataProvider : MonoBehaviour
 
     void Start()
     {
-        GameManager.gameManager.OnDataProviderFinishedLoading();
+        PersistenceManager.Instance.OnDataProviderFinishedLoading();
     }
 
     private IDictionary<string, IDictionary<int, string>> ParseDictionaries()

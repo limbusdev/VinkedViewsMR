@@ -4,21 +4,24 @@ using System.IO;
 using System.Collections.Generic;
 using System;
 
+[Serializable]
+public class SerializedAnchor
+{
+    public float[] position;
+    public float[] rotation;
+}
 
 /// <summary>
 /// Serializable XML-SubElement
 /// </summary>
 [Serializable]
-public class SerializedETV
+public class SerializedETV : SerializedAnchor
 {
     [XmlAttribute]
     public int dataSetID;
     public VisType visType;
 
-    public float[] position;
-    public float[] rotation;
     public string[] variables;
-    
 }
 
 /// <summary>
@@ -30,6 +33,7 @@ public class SerializedETV
 [XmlRoot("Setup")]
 public class Setup
 {
+    public SerializedAnchor visFactory;
     public SerializedETV[] ETVs;
 }
 
@@ -37,29 +41,30 @@ public class Setup
 /// <summary>
 /// GameManager manages game sessions by saving session data and restoring it.
 /// </summary>
-public class GameManager : MonoBehaviour
+public class PersistenceManager : MonoBehaviour
 {
     // ........................................................................ Properties
-    public static string TAG = "GameManager";
+    public static string TAG = "PersistenceManager";
 
     private static string SaveGameFileName = "setup.dat";
-    public string saveGamePath;
+    private string saveGamePath;
 
     // Singleton Instance
-    public static GameManager gameManager;
+    public static PersistenceManager Instance;
 
     // temporal storage for persistent ETVs
     public Dictionary<GameObject,SerializedETV> ETVs;
+
 
     // ........................................................................ MonoBehaviour
     private void Awake()
     {
         // Singleton kind-of
-        if(gameManager == null)
+        if(Instance == null)
         {
             DontDestroyOnLoad(gameObject);
-            gameManager = this;
-        } else if(gameManager != this)
+            Instance = this;
+        } else if(Instance != this)
         {
             Destroy(gameObject);
         }
@@ -80,12 +85,10 @@ public class GameManager : MonoBehaviour
     {
         Save();
     }
-
+    
 
     public void PersistETV(GameObject etv, int dataSetID, string[] variables, VisType visType)
     {
-        if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
-            return;
         var persistableETV = new SerializedETV();
         persistableETV.dataSetID = dataSetID;
         persistableETV.variables = variables;
@@ -96,9 +99,6 @@ public class GameManager : MonoBehaviour
 
     public void LoadPersistentETV(SerializedETV etv)
     {
-        if(GlobalSettings.scenario != GlobalSettings.Scenario.RELEASE)
-            return;
-
         // Restore Visualization from loaded information
         var loadedETV = Services.VisFactory().GenerateVisFrom(etv.dataSetID, etv.variables, etv.visType);
 
@@ -136,6 +136,14 @@ public class GameManager : MonoBehaviour
             saveData.ETVs[i] = ETVs[key];
             i++;
         }
+
+        // Serialize Visualization Factory's anchor
+        var visFactoryAnchor = Services.VisFactory().GetComponentInChildren<ETVAnchor>();
+        saveData.visFactory = new SerializedAnchor();
+        var pos = visFactoryAnchor.transform.localPosition;
+        saveData.visFactory.position = new float[] { pos.x, pos.y, pos.z };
+        var rot = visFactoryAnchor.Rotatable.transform.localRotation;
+        saveData.visFactory.rotation = new float[] { rot.x, rot.y, rot.z, rot.w };
         
 
         using(StreamWriter writer = new StreamWriter(File.Create(saveGamePath)))
@@ -150,6 +158,8 @@ public class GameManager : MonoBehaviour
     public void Load()
     {
         var newETVs = new List<SerializedETV>();
+        var VisFactoryPos = Vector3.zero;
+        var VisFactoryRot = Quaternion.identity;
 
         if(File.Exists(saveGamePath))
         {
@@ -159,6 +169,11 @@ public class GameManager : MonoBehaviour
             {
                 XmlSerializer serializer = new XmlSerializer(typeof(Setup));
                 Setup saveGame = (Setup)serializer.Deserialize(reader);
+
+                var p = saveGame.visFactory.position;
+                var r = saveGame.visFactory.rotation;
+                VisFactoryPos = new Vector3(p[0], p[1], p[2]);
+                VisFactoryRot = new Quaternion(r[0], r[1], r[2], r[3]);
 
                 newETVs.AddRange(saveGame.ETVs);
             }
@@ -174,6 +189,11 @@ public class GameManager : MonoBehaviour
             // Generate ETV with VisualizationFactory
             LoadPersistentETV(savedETV);
         }
+
+        // Restore Visualization Factory's position
+        var vf = Services.VisFactory();
+        vf.GetComponentInChildren<ETVAnchor>().transform.localPosition = VisFactoryPos;
+        vf.GetComponentInChildren<ETVAnchor>().Rotatable.transform.localRotation = VisFactoryRot;
             
     }
 

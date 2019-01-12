@@ -7,20 +7,21 @@ using System.Linq;
 
 namespace MetaVisualization
 {
-    
     public class MetaVisSystem : AMetaVisSystem
     {
         // .................................................................... EDITOR FIELDS
 
         [SerializeField]
         public DataProvider dataProvider;
-        
+
 
         // .................................................................... PRIVATE PROPERTIES
 
+        private ISet<MetaVisByAttributesAndETV> usedCombinationsByAttributeAndETV = new HashSet<MetaVisByAttributesAndETV>();
         private ISet<AxisPair> usedCombinations = new HashSet<AxisPair>();
         private ISet<AAxis> observedAxes = new HashSet<AAxis>();                                    // all currently observed axes of normal visualizations
         private ISet<AETV> normalVisualizations = new HashSet<AETV>();                              // all currently active visualizations
+
 
         // .................................................................... UPDATE METHOD
         void Update()
@@ -44,6 +45,9 @@ namespace MetaVisualization
                 
                 if(MetaVisShouldBeCreated(axes, out dataSetID))
                 {
+                    // Check if there is a Meta-Visualization using axes from the same ETV
+
+
                     // Create meta-visualization
                     MetaVisType mVisType;
                     var newVis = SpanMetaVisFor(axes, dataSetID, out mVisType);
@@ -76,8 +80,13 @@ namespace MetaVisualization
         {
             bool createIt = true;
 
+            var mvisCombos = new MetaVisByAttributesAndETV(axes);
+
+
+
             createIt &= !usedCombinations.Contains(axes);
-            createIt &= !axes.A.Base().Equals(axes.B.Base());               // not coomponent of the same etv
+            createIt &= !usedCombinationsByAttributeAndETV.Contains(mvisCombos);
+            createIt &= !axes.A.Base().Equals(axes.B.Base());               // not component of the same etv
             createIt &= !axes.A.attributeName.Equals(axes.B.attributeName); // do not represent the same attribute
             createIt &= CheckIfNearEnough(axes);                            // are close enought to each other
             createIt &= CheckIfCompatible(axes, out dataSetID);             // are compatible and from the same data set
@@ -375,11 +384,13 @@ namespace MetaVisualization
         public override void ReleaseCombination(AxisPair key)
         {
             usedCombinations.Remove(key);
+            usedCombinationsByAttributeAndETV.Remove(new MetaVisByAttributesAndETV(key));
         }
 
         public override void UseCombination(AxisPair key)
         {
             usedCombinations.Add(key);
+            usedCombinationsByAttributeAndETV.Add(new MetaVisByAttributesAndETV(key));
         }
     }
 }

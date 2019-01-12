@@ -10,8 +10,14 @@ using UnityEngine;
 /// </summary>
 public class CubeIconVariable : InteractionReceiver
 {
+    // ........................................................................ Inner Classes
+    public class VisTypeButton : MonoBehaviour
+    {
+        public VisType visType = VisType.SingleAxis3D;
+    }
+
     // ........................................................................ Public Editor Fields
-    
+
     [SerializeField]
     public TextMesh text;
     public Transform IconPosition;
@@ -32,7 +38,7 @@ public class CubeIconVariable : InteractionReceiver
 
     // ........................................................................ Private Properties
 
-    private string[] IconKeys = {
+    private static readonly string[] IconKeys = {
         "1DOrdinal",
         "1DNominal",
         "2DOrdinal",
@@ -153,11 +159,13 @@ public class CubeIconVariable : InteractionReceiver
             
             for(int i = 0; i < suitableVisTypes.Length; i++)
             {
-                var visType = suitableVisTypes[i].ToString();
+                var visType = suitableVisTypes[i];
                 var button = Instantiate(HoloButtonPrefab);
 
-                button.name = visType;
-                button.GetComponent<CompoundButtonText>().Text = visType;
+                button.AddComponent<VisTypeButton>().visType = visType;
+
+                button.name = visType.ToString();
+                button.GetComponent<CompoundButtonText>().Text = visType.ToString();
 
                 button.transform.parent = visButtonsAnchor.transform;
                 button.transform.localPosition = new Vector3(.15f * i, 0, 0);
@@ -197,44 +205,10 @@ public class CubeIconVariable : InteractionReceiver
     {
         Debug.Log("InputDown: " + obj.name);
 
-        // SingleAxis3D, BarChart2D, BarChart3D, BarMap3D, PCP2D, PCP3D, ScatterXY2D, ScatterXYZ3D, LineXY2D
-        VisType visType;
-
-        switch(obj.name)
-        {
-            case "SingleAxis3D":
-                visType = VisType.SingleAxis3D;
-                break;
-            case "Histogram2D":
-                visType = VisType.Histogram2D;
-                break;
-            case "Histogram3D":
-                visType = VisType.Histogram3D;
-                break;
-            case "HistogramHeatmap3D":
-                visType = VisType.HistogramHeatmap3D;
-                break;
-            case "PCP2D":
-                visType = VisType.PCP2D;
-                break;
-            case "PCP3D":
-                visType = VisType.PCP3D;
-                break;
-            case "ScatterPlot2D":
-                visType = VisType.ScatterPlot2D;
-                break;
-            case "ScatterPlot3D":
-                visType = VisType.ScatterPlot3D;
-                break;
-            case "LineChart2D":
-                visType = VisType.LineChart2D;
-                break;
-            default:
-                visType = VisType.SingleAxis3D;
-                break;
-        }
-
-        Services.VisFactory().GenerateVisFrom(dataSetID, varNames, visType);
+        Services.VisFactory().GenerateVisFrom(
+            dataSetID, 
+            varNames, 
+            obj.GetComponent<VisTypeButton>().visType);
     }
     
 }

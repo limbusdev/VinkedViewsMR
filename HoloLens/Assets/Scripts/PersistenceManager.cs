@@ -17,9 +17,8 @@ public class SerializedAnchor
 [Serializable]
 public class SerializedETV : SerializedAnchor
 {
-    [XmlAttribute]
-    public int dataSetID;
-    public VisType visType;
+    [XmlAttribute] public int dataSetID;
+    [XmlAttribute] public VisType visType;
 
     public string[] variables;
 }
@@ -103,9 +102,11 @@ public class PersistenceManager : MonoBehaviour
         var loadedETV = Services.VisFactory().GenerateVisFrom(etv.dataSetID, etv.variables, etv.visType);
 
         // Restore position and rotation
-        loadedETV.transform.localPosition = new Vector3(etv.position[0], etv.position[1], etv.position[2]);
-        loadedETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation 
-            = new Quaternion(etv.rotation[0], etv.rotation[1], etv.rotation[2], etv.rotation[3]);
+        var p = etv.position;
+        var r = etv.rotation;
+
+        loadedETV.transform.localPosition = new Vector3(p[0], p[1], p[2]);
+        loadedETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation = Quaternion.Euler(r[0], r[1], r[2]);
     }
 
     
@@ -125,13 +126,12 @@ public class PersistenceManager : MonoBehaviour
                 key.transform.localPosition.z
             };
 
-            var rotatable = key.GetComponent<ETVAnchor>().Rotatable.transform.localRotation;
+            var rotatable = key.GetComponent<ETVAnchor>().Rotatable.transform.localRotation.eulerAngles;
             ETVs[key].rotation = new float[]
             {
                 rotatable.x,
                 rotatable.y,
-                rotatable.z,
-                rotatable.w
+                rotatable.z
             };
             saveData.ETVs[i] = ETVs[key];
             i++;
@@ -142,8 +142,8 @@ public class PersistenceManager : MonoBehaviour
         saveData.visFactory = new SerializedAnchor();
         var pos = visFactoryAnchor.transform.localPosition;
         saveData.visFactory.position = new float[] { pos.x, pos.y, pos.z };
-        var rot = visFactoryAnchor.Rotatable.transform.localRotation;
-        saveData.visFactory.rotation = new float[] { rot.x, rot.y, rot.z, rot.w };
+        var rot = visFactoryAnchor.Rotatable.transform.localRotation.eulerAngles;
+        saveData.visFactory.rotation = new float[] { rot.x, rot.y, rot.z};
         
 
         using(StreamWriter writer = new StreamWriter(File.Create(saveGamePath)))
@@ -159,7 +159,7 @@ public class PersistenceManager : MonoBehaviour
     {
         var newETVs = new List<SerializedETV>();
         var VisFactoryPos = Vector3.up;
-        var VisFactoryRot = Quaternion.identity;
+        var VisFactoryRot = Vector3.zero;
 
         if(File.Exists(saveGamePath))
         {
@@ -173,7 +173,7 @@ public class PersistenceManager : MonoBehaviour
                 var p = saveGame.visFactory.position;
                 var r = saveGame.visFactory.rotation;
                 VisFactoryPos = new Vector3(p[0], p[1], p[2]);
-                VisFactoryRot = new Quaternion(r[0], r[1], r[2], r[3]);
+                VisFactoryRot = new Vector3(r[0], r[1], r[2]);
 
                 newETVs.AddRange(saveGame.ETVs);
             }
@@ -193,7 +193,7 @@ public class PersistenceManager : MonoBehaviour
         // Restore Visualization Factory's position
         var vf = Services.VisFactory();
         vf.GetComponentInChildren<ETVAnchor>().transform.localPosition = VisFactoryPos;
-        vf.GetComponentInChildren<ETVAnchor>().Rotatable.transform.localRotation = VisFactoryRot;
+        vf.GetComponentInChildren<ETVAnchor>().Rotatable.transform.localRotation = Quaternion.Euler(VisFactoryRot);
             
     }
 

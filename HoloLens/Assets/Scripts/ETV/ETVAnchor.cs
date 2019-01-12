@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ETVAnchor : MonoBehaviour
 {
     public GameObject VisAnchor;
     public GameObject Rotatable;
     public bool resetRotation = false;
-    public Quaternion defaultLocalRotation = Quaternion.Euler(new Vector3(0, 180, 0));
+    public Quaternion defaultLocalRotation = Quaternion.Euler(new Vector3(0, 0, 0));
 
     public void PutETVintoAnchor(GameObject ETV)
     {

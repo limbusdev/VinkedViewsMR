@@ -17,7 +17,7 @@ namespace ETV
 
         public GameObject PutETVOnAnchor(GameObject ETV)
         {
-            GameObject Anchor = Instantiate(ETVAnchorPrefab);
+            var Anchor = Instantiate(ETVAnchorPrefab);
             Anchor.GetComponent<ETVAnchor>().PutETVintoAnchor(ETV);
             return Anchor;
         }

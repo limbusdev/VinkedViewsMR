@@ -21,14 +21,13 @@ Setups of visualization can be written in code (hard coded) or defined in an XML
   <visFactory>
     <position>
       <float>0</float>
-      <float>0.451337427</float>
+      <float>.5</float>
       <float>0</float>
     </position>
     <rotation>
       <float>0</float>
       <float>0</float>
       <float>0</float>
-      <float>1</float>
     </rotation>
   </visFactory>
   
@@ -82,7 +81,7 @@ Setups of visualization can be written in code (hard coded) or defined in an XML
       </rotation>
       <variables>
         <string>Year</string>
-		<string>Violent crime</string>
+        <string>Violent crime</string>
       </variables>
     </SerializedETV>
   </ETVs>

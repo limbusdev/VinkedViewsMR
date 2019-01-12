@@ -40,7 +40,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
             case "ButtonDataSet1":
                 currentlyChosenDataBase = 0;
                 DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 5,6,7,8,9, 10 });
+                ActivateInteractables(new int[] { 5, 6, 7, 8, 9, 10 });
                 break;
             case "ButtonDataSet2":
                 currentlyChosenDataBase = 1;
@@ -67,13 +67,13 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
             case "Back2":
                 DeactivateAllInteractibles();
                 ActivateInteractables(new int[] { 1,2,3,4, 10 });
-                ClearGalery();
+                ClearGallery();
                 break;
             case "CubeIconVariable":
                 HideAllIconSubButtons();
                 if(obj.GetComponent<CubeIconVariable>() != null)
                 {
-                    obj.GetComponent<CubeIconVariable>().ShowButtons();
+                    obj.GetComponent<CubeIconVariable>().ShowVisTypeButtons();
                 }
                 break;
             case "ButtonQuitApp":
@@ -115,13 +115,12 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     }
 
     /// <summary>
-    /// Removes all shelf items from the galery.
+    /// Removes all shelf items from the gallery.
     /// </summary>
-    private void ClearGalery()
+    private void ClearGallery()
     {
         for(int i = 0; i < ObjectCollection.transform.childCount; i++)
         {
-            
             var g = ObjectCollection.transform.GetChild(i);
             interactables.Remove(g.gameObject);
             Destroy(g.gameObject);

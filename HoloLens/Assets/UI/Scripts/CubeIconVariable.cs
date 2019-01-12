@@ -134,9 +134,9 @@ public class CubeIconVariable : InteractionReceiver
     }
 
     /// <summary>
-    /// Initializes the sub buttons to choose possible visualizations from.
+    /// Initializes the sub buttons to choose possible visualization type from.
     /// </summary>
-    public void ShowButtons()
+    public void ShowVisTypeButtons()
     {
         if(!clicked && !initialized)
         {
@@ -146,27 +146,30 @@ public class CubeIconVariable : InteractionReceiver
             lr.endWidth = .01f;
             
             visButtonsAnchor.SetActive(true);
-            VisType[] viss = Services.VisFactory().ListPossibleVisualizations(dataSetID, varNames);
+            var suitableVisTypes = Services.VisFactory().ListPossibleVisualizations(dataSetID, varNames);
 
-            lr.positionCount = viss.Length * 2;
-            var poss = new List<Vector3>();
-
-            for(int i = 0; i < viss.Length; i++)
+            lr.positionCount = suitableVisTypes.Length * 2;
+            var buttonPositions = new List<Vector3>();
+            
+            for(int i = 0; i < suitableVisTypes.Length; i++)
             {
-                var key = viss[i];
+                var visType = suitableVisTypes[i].ToString();
                 var button = Instantiate(HoloButtonPrefab);
+
+                button.name = visType;
+                button.GetComponent<CompoundButtonText>().Text = visType;
+
                 button.transform.parent = visButtonsAnchor.transform;
-                button.name = key.ToString();
-                button.GetComponent<CompoundButtonText>().Text = key.ToString();
                 button.transform.localPosition = new Vector3(.15f * i, 0, 0);
                 button.transform.localRotation = Quaternion.Euler(Vector3.zero);
-                interactables.Add(button);
+                
+                buttonPositions.Add(button.transform.position);
+                buttonPositions.Add(BasePlatform.position);
 
-                poss.Add(button.transform.position);
-                poss.Add(BasePlatform.position);
+                interactables.Add(button);
             }
 
-            lr.SetPositions(poss.ToArray());
+            lr.SetPositions(buttonPositions.ToArray());
 
             clicked = true;
             initialized = true;
@@ -199,16 +202,16 @@ public class CubeIconVariable : InteractionReceiver
 
         switch(obj.name)
         {
-            case "SingleAxis":
+            case "SingleAxis3D":
                 visType = VisType.SingleAxis3D;
                 break;
-            case "BarChart2D":
+            case "Histogram2D":
                 visType = VisType.Histogram2D;
                 break;
-            case "BarChart3D":
+            case "Histogram3D":
                 visType = VisType.Histogram3D;
                 break;
-            case "BarMap3D":
+            case "HistogramHeatmap3D":
                 visType = VisType.HistogramHeatmap3D;
                 break;
             case "PCP2D":
@@ -217,13 +220,13 @@ public class CubeIconVariable : InteractionReceiver
             case "PCP3D":
                 visType = VisType.PCP3D;
                 break;
-            case "ScatterXY2D":
+            case "ScatterPlot2D":
                 visType = VisType.ScatterPlot2D;
                 break;
-            case "ScatterXYZ3D":
+            case "ScatterPlot3D":
                 visType = VisType.ScatterPlot3D;
                 break;
-            case "LineXY2D":
+            case "LineChart2D":
                 visType = VisType.LineChart2D;
                 break;
             default:

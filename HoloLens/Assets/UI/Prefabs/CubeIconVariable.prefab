@@ -91,7 +91,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!1 &1223189930244082
 GameObject:
   m_ObjectHideFlags: 1
@@ -509,8 +509,8 @@ MonoBehaviour:
     type: 2}
   visButtonsAnchor: {fileID: 1219269144864310}
   IconType: 0
-  VariableNames: []
-  VariableTypes: 
+  varNames: []
+  varTypes: 
   dimension: 0
 --- !u!114 &114948287693057546
 MonoBehaviour:
@@ -565,7 +565,7 @@ LineRenderer:
   m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 0, z: 1}
+  - {x: 0, y: 0, z: 0}
   m_Parameters:
     serializedVersion: 2
     widthMultiplier: 1

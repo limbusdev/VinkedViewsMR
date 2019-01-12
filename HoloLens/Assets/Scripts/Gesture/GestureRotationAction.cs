@@ -72,7 +72,7 @@ namespace Gestures
                 }
 
                 initialEulerAngles += rotation;
-                hostTransform.Rotate(rotation);
+                hostTransform.Rotate(rotation, Space.Self);
             }
         }
 

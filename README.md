@@ -53,38 +53,36 @@ Setups of visualization can be written in code (hard coded) or defined in an XML
   -->
   <!-- Examples -->
   <ETVs>
-    <SerializedETV dataSetID="0">
+	<!-- Data Set ID and Visualization Type are defined as XML attributes -->
+    <SerializedETV dataSetID="0" visType="SingleAxis3D">
       <position>
-        <float>-0.743384</float>
-        <float>0.7613374</float>
-        <float>0.249999851</float>
+        <float>0</float><!-- x component of position vector -->
+        <float>2</float><!-- y component of position vector -->
+        <float>0</float><!-- z component of position vector -->
       </position>
       <rotation>
-        <float>0</float>
-        <float>1</float>
-        <float>0</float>
-        <float>0</float>
+        <float>0</float><!-- rotation around x axis -->
+        <float>9</float><!-- rotation around y axis -->
+        <float>0</float><!-- rotation around z axis -->
       </rotation>
-      <visType>SingleAxis3D</visType>
       <variables>
         <string>Property crime rate</string>
       </variables>
     </SerializedETV>
-    <SerializedETV dataSetID="0">
+    <SerializedETV dataSetID="0" visType="ScatterPlot2D">
       <position>
-        <float>-1.22980952</float>
-        <float>0.7613374</float>
-        <float>0.249999851</float>
+        <float>1</float>
+        <float>0</float>
+        <float>1</float>
       </position>
       <rotation>
         <float>0</float>
-        <float>1</float>
-        <float>0</float>
+        <float>45</float>
         <float>0</float>
       </rotation>
-      <visType>SingleAxis3D</visType>
       <variables>
-        <string>Rape (rev)</string>
+        <string>Year</string>
+		<string>Violent crime</string>
       </variables>
     </SerializedETV>
   </ETVs>

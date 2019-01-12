@@ -2,6 +2,8 @@
 
 Vinks are visually drawn connection lines (from **v**isual l**ink**) between two or more visualizations. They connect graphical primitives. Visualizations can be connected in different ways. *VinkedViews* supports three of them: Brushing & Linking, VisBridges and Meta-Visualizations.
 
+![](./Documents/icon96.png)
+
 ## VisBridges
 
 A *VisBridge* connects graphical primitives of two or more visualizations. The connected primitives have to be in a relation - be it directy (graphical primitives represent the same *Information Object*) or indirectly (the value, the graphical primitive represents, contains the connected information objects value in some way (sum, mean, ...)).

@@ -17,11 +17,35 @@
    version="1.1"
    inkscape:version="0.91 r13725"
    sodipodi:docname="AppIconVinkedViews.svg"
-   inkscape:export-filename="D:\Software\Entwicklung\Unity\ARVisualizationTools\HoloLens\Assets\Icon\appicon200.png"
-   inkscape:export-xdpi="35.15625"
-   inkscape:export-ydpi="35.15625">
+   inkscape:export-filename="D:\Software\Entwicklung\Unity\ARVisualizationTools\Documents\Images\icon96.png"
+   inkscape:export-xdpi="16.879999"
+   inkscape:export-ydpi="16.879999">
   <defs
-     id="defs4201" />
+     id="defs4201">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4158">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop4160" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop4162" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4158"
+       id="radialGradient4164"
+       cx="255.99998"
+       cy="942.6875"
+       fx="255.99998"
+       fy="942.6875"
+       r="241.50792"
+       gradientTransform="matrix(1.2839304,-4.4632671e-8,4.9967579e-8,1.4373976,-72.686213,-411.51174)"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
   <sodipodi:namedview
      id="base"
      pagecolor="#535353"
@@ -31,15 +55,15 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.7"
      inkscape:cx="88.381261"
-     inkscape:cy="379.5302"
+     inkscape:cy="322.38734"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      units="px"
      inkscape:window-width="1536"
      inkscape:window-height="841"
-     inkscape:window-x="1528"
-     inkscape:window-y="210"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata4204">
@@ -49,7 +73,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -58,6 +82,24 @@
      inkscape:groupmode="layer"
      id="layer1"
      transform="translate(0,-540.36214)">
+    <rect
+       style="opacity:1;fill:#171828;fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect4146"
+       width="497.2222"
+       height="500"
+       x="7.3889008"
+       y="546.36212"
+       rx="29.166666"
+       ry="29.166666" />
+    <rect
+       ry="28.333332"
+       rx="28.333332"
+       y="553.505"
+       x="14.492075"
+       height="485.71429"
+       width="483.01584"
+       id="rect4148"
+       style="opacity:0.3;fill:url(#radialGradient4164);fill-opacity:1;stroke:none;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1" />
     <image
        sodipodi:absref="E:\Studium MINF\Master\Masterarbeit\Bilder\eckert2018_meshbutton_anchor_tradget.png"
        y="497.23682"

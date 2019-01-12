@@ -12,7 +12,12 @@ Meta-Visualizations connect two or more visualizations with a new visualization.
 
 ## Visualization Setup
 
-Setups of visualization can be written in code (hard coded) or defined in an XML file. The XML file has to be placed in the persistent data path (see Unity documentation) and must be of the following structure:
+Setups of visualization can be written in code (hard coded), defined in an XML file or put up manually in the App by using the *Visualization Factory*. 
+
+
+### Setup with XML
+
+The XML file has to be placed in the persistent data path (see Unity documentation) and must be of the following structure:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>

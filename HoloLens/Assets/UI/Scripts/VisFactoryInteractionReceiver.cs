@@ -205,19 +205,30 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         ms.AddRange(ds.rationalStatistics.Values);
 
         var keys = new List<IconKey2D>();
+        string debug = "";
 
         foreach(var m1 in ms)
         {
             foreach(var m2 in ms)
             {
                 var key = new IconKey2D(m1, m2);
-                if(!keys.Contains(key) && !m1.Equals(m2))
+                if(!m1.name.Equals(m2.name))
                 {
                     keys.Add(key);
                     interactables.Add(Create2DIconAndInsert(m1.name, m2.name, m1.type, m2.type));
+                    debug += m1.name + " x " + m2.name + "\n";
                 }
             }
         }
+
+        
+
+        foreach(var m in ms)
+        {
+            
+        }
+
+        Debug.Log(debug);
     }
 
     /// <summary>
@@ -394,18 +405,6 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
             ks[0] = k1;
             ks[0] = k2;
         }
-
-        public override bool Equals(object obj)
-        {
-            if(obj is IconKey2D)
-            {
-                var o = obj as IconKey2D;
-                return (ks.Contains(o.ks[0]) && ks.Contains(o.ks[1]));
-            } else
-            {
-                return false;
-            }
-        }
     }
 
     private class IconKey
@@ -418,18 +417,6 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
             ks[0] = k1;
             ks[0] = k2;
             ks[0] = k3;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if(obj is IconKey)
-            {
-                var o = obj as IconKey;
-                return (ks.Contains(o.ks[0]) && ks.Contains(o.ks[1]) && ks.Contains(o.ks[2]));
-            } else
-            {
-                return false;
-            }
         }
     }
 }

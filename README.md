@@ -148,3 +148,14 @@ Dictionary_Crime.txt:
 Note: this order is completely random and is only there to give an example.
 
 Provide both files to the DataProvider, and everything is fine.
+
+
+## Dependencies
+
+Vinked Views is made of three components:
+
++ the Vinked Views Code
++ Mixed Reality Toolkit
++ Unity
+
+To see which Assets from the Unity Asset Store are used, see [StoreAssets](./HoloLens/StoreAssets.md).

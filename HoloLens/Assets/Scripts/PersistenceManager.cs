@@ -158,7 +158,7 @@ public class PersistenceManager : MonoBehaviour
     public void Load()
     {
         var newETVs = new List<SerializedETV>();
-        var VisFactoryPos = Vector3.zero;
+        var VisFactoryPos = Vector3.up;
         var VisFactoryRot = Quaternion.identity;
 
         if(File.Exists(saveGamePath))

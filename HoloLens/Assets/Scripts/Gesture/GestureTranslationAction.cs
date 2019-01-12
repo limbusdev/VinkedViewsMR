@@ -68,7 +68,7 @@ namespace Gestures
             if(isTapped)
             {
                 InputManager.Instance.PushModalInputHandler(gameObject);
-                manipulationOriginalPosition = transform.localPosition;
+                manipulationOriginalPosition = hostTransform.localPosition;
                 eventData.Use();
             }
         }

@@ -93,11 +93,13 @@ public class VisualizationFactory : NetworkBehaviour
             var vis = generators[visType].GenerateVisualization(dataSetID, variables);
             
             vis = Services.ETVFactory2D().PutETVOnAnchor(vis);
-            vis.transform.position = NewETVPlaceHolder.position;
+            vis.transform.localPosition = NewETVPlaceHolder.position - GameObject.FindGameObjectWithTag("RootWorldAnchor").transform.position;
             AddNetworkAnchor(vis, dataSetID, variables, visType);
 
 
             PersistenceManager.Instance.PersistETV(vis, dataSetID, variables, visType);
+
+            vis.transform.parent = GameObject.FindGameObjectWithTag("RootWorldAnchor").transform;
 
             return vis;
         } catch(Exception e)

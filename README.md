@@ -138,4 +138,6 @@ Dictionary_Crime.txt:
 14:Shooting
 ```
 
+Note: this order is completely random and is only there to give an example.
+
 Provide both files to the DataProvider, and everything is fine.

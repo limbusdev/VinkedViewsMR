@@ -12,6 +12,11 @@ public class ETVAnchor : MonoBehaviour
         ETV.transform.localScale = new Vector3(.5f, .5f, .5f);
         ETV.transform.parent = VisAnchor.transform;
     }
+
+    public Vector3 GetVisEulerAngles()
+    {
+        return Rotatable.transform.localEulerAngles;
+    }
     
 	// Update is called once per frame
 	void Update ()

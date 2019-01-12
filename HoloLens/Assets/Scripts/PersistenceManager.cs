@@ -115,40 +115,38 @@ public class PersistenceManager : MonoBehaviour
     {
         // Create save game container
         var saveData = new Setup();
+
+        // Serialize ETV's anchors
         saveData.ETVs = new SerializedETV[ETVs.Keys.Count];
 
         int i = 0;
         foreach(var key in ETVs.Keys)
         {
-            ETVs[key].position = new float[] {
-                key.transform.localPosition.x,
-                key.transform.localPosition.y,
-                key.transform.localPosition.z
-            };
+            var pos = key.transform.localPosition;
+            var rot = key.GetComponent<ETVAnchor>().GetVisEulerAngles();
 
-            var rotatable = key.GetComponent<ETVAnchor>().Rotatable.transform.localRotation.eulerAngles;
-            ETVs[key].rotation = new float[]
-            {
-                rotatable.x,
-                rotatable.y,
-                rotatable.z
-            };
+            ETVs[key].position = new float[] { pos.x, pos.y, pos.z };
+            ETVs[key].rotation = new float[] { rot.x, rot.y, rot.z };
+
             saveData.ETVs[i] = ETVs[key];
             i++;
         }
 
         // Serialize Visualization Factory's anchor
-        var visFactoryAnchor = Services.VisFactory().GetComponentInChildren<ETVAnchor>();
         saveData.visFactory = new SerializedAnchor();
-        var pos = visFactoryAnchor.transform.localPosition;
-        saveData.visFactory.position = new float[] { pos.x, pos.y, pos.z };
-        var rot = visFactoryAnchor.Rotatable.transform.localRotation.eulerAngles;
-        saveData.visFactory.rotation = new float[] { rot.x, rot.y, rot.z};
+
+        var vfAnchor = Services.VisFactory().GetComponentInChildren<ETVAnchor>();
+        
+        var vfPos = vfAnchor.transform.localPosition;
+        var vfRot = vfAnchor.GetVisEulerAngles();
+
+        saveData.visFactory.position = new float[] { vfPos.x, vfPos.y, vfPos.z };
+        saveData.visFactory.rotation = new float[] { vfRot.x, vfRot.y, vfRot.z};
         
 
-        using(StreamWriter writer = new StreamWriter(File.Create(saveGamePath)))
+        using(var writer = new StreamWriter(File.Create(saveGamePath)))
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(Setup));
+            var serializer = new XmlSerializer(typeof(Setup));
             serializer.Serialize(writer, saveData);
         }
 
@@ -158,22 +156,22 @@ public class PersistenceManager : MonoBehaviour
     public void Load()
     {
         var newETVs = new List<SerializedETV>();
-        var VisFactoryPos = Vector3.up;
-        var VisFactoryRot = Vector3.zero;
+        var vfPos = Vector3.up;
+        var vfRot = Vector3.zero;
 
         if(File.Exists(saveGamePath))
         {
             Debug.Log(TAG + ": save file " + saveGamePath + " found.");
 
-            using(StreamReader reader = new StreamReader(File.OpenRead(saveGamePath)))
+            using(var reader = new StreamReader(File.OpenRead(saveGamePath)))
             {
-                XmlSerializer serializer = new XmlSerializer(typeof(Setup));
-                Setup saveGame = (Setup)serializer.Deserialize(reader);
+                var serializer = new XmlSerializer(typeof(Setup));
+                var saveGame = (Setup)serializer.Deserialize(reader);
 
-                var p = saveGame.visFactory.position;
-                var r = saveGame.visFactory.rotation;
-                VisFactoryPos = new Vector3(p[0], p[1], p[2]);
-                VisFactoryRot = new Vector3(r[0], r[1], r[2]);
+                var pos = saveGame.visFactory.position;
+                var rot = saveGame.visFactory.rotation;
+                vfPos = new Vector3(pos[0], pos[1], pos[2]);
+                vfRot = new Vector3(rot[0], rot[1], rot[2]);
 
                 newETVs.AddRange(saveGame.ETVs);
             }
@@ -192,8 +190,8 @@ public class PersistenceManager : MonoBehaviour
 
         // Restore Visualization Factory's position
         var vf = Services.VisFactory();
-        vf.GetComponentInChildren<ETVAnchor>().transform.localPosition = VisFactoryPos;
-        vf.GetComponentInChildren<ETVAnchor>().Rotatable.transform.localRotation = Quaternion.Euler(VisFactoryRot);
+        vf.GetComponentInChildren<ETVAnchor>().transform.localPosition = vfPos;
+        vf.GetComponentInChildren<ETVAnchor>().Rotatable.transform.localRotation = Quaternion.Euler(vfRot);
             
     }
 

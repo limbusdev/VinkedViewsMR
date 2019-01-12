@@ -24,6 +24,14 @@ namespace ETV
             AddAxis(attributeA, AxisDirection.X);
             AddAxis(attributeB, AxisDirection.Y);
 
+            var secondXAxis = AddAxis(attributeA, AxisDirection.X);
+            var secondYAxis = AddAxis(attributeB, AxisDirection.Y);
+
+            secondXAxis.transform.localPosition = new Vector3(0, 1, 0);
+            secondYAxis.transform.localPosition = new Vector3(1, 0, 0);
+
+            secondXAxis.transform.localRotation = Quaternion.Euler(180, 0, 0);
+            secondYAxis.transform.localRotation = Quaternion.Euler(0, 180, 0);
         }
 
         public override void DrawGraph()

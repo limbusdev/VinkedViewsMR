@@ -59,8 +59,6 @@ public class VisualizationFactory : NetworkBehaviour
     }
 
     // ........................................................................ Visualization generation
-    // SingleAxis3D, BarChart2D, BarChart3D, BarMap3D, PCP2D, PCP3D, ScatterXY2D, ScatterXYZ3D, LineXY2D
-
 
     /// <summary>
     /// Generates visualizations from one attribute.

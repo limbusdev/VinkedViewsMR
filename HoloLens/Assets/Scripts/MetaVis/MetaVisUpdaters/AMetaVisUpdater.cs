@@ -80,14 +80,26 @@ public abstract class AMetaVisUpdater : MonoBehaviour, IAxisObserver, IDisposabl
         // FlexiblePCP does not contain shadow axes
         try
         {
-            // for both axes of the pair, add their shadow-counterparts to the list
+            // for both of the spanning axes, add their shadow-counterparts to the list
             foreach(var ax in new AAxis[] { spanningAxes.A, spanningAxes.B })
             {
                 if(metaVisualization.registeredAxes.ContainsKey(ax.attributeName))
                 {
+                    // If a metavisualization contains more than one matching
+                    // shadow axis, add the nearest one.
                     foreach(var a in metaVisualization.registeredAxes[ax.attributeName])
                     {
-                        shadowAxes.Add(ax, a);
+                        if(shadowAxes.ContainsKey(ax))
+                        {
+                            var alreadyRegisteredShadowAxis = shadowAxes[ax];
+                            if(AMetaVisSystem.MeanDistanceBetween(ax,a) < AMetaVisSystem.MeanDistanceBetween(ax, shadowAxes[ax]))
+                            {
+                                shadowAxes[ax] = a;
+                            }
+                        } else
+                        {
+                            shadowAxes.Add(ax, a);
+                        }
                     }
                 }
             }

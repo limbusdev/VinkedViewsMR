@@ -13,7 +13,7 @@ namespace ETV
         void ChangeColoringScheme(ETVColorSchemes scheme);
         void SetUpAxes();
         void AddBarChartAxis(string attributeName, AxisDirection dir);
-        void AddAxis(string attributeName, AxisDirection dir, float length=1f);
+        AAxis AddAxis(string attributeName, AxisDirection dir, float length=1f);
         void AddAggregatedAxis(string attributeName, AxisDirection dir, out float max, out float length);
         void UpdateETV();
         void SetAxisLabels(AxisDirection axisDirection, string axisVariable);

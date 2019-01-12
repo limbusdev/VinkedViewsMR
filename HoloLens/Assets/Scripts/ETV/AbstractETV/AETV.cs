@@ -12,8 +12,8 @@ namespace ETV
         
         protected DataSet Data { get; set; }
 
-        public IDictionary<AxisDirection, AAxis> Axes { get; private set; } 
-            = new Dictionary<AxisDirection, AAxis>();
+        public IDictionary<AxisDirection, IList<AAxis>> Axes { get; private set; } 
+            = new Dictionary<AxisDirection, IList<AAxis>>();
         public IDictionary<InfoObject, AGraphicalPrimitive> infoObject2primitive { get; private set; } 
             = new Dictionary<InfoObject, AGraphicalPrimitive>();
         public IDictionary<string, IList<AAxis>> registeredAxes = new Dictionary<string, IList<AAxis>>();
@@ -44,20 +44,28 @@ namespace ETV
 
         public void SetAxisLabels(AxisDirection axisDirection, string axisVariable)
         {
-            Axes[axisDirection].labelVariableText = axisVariable;
-            Axes[axisDirection].UpdateAxis();
+            foreach(var axis in Axes[axisDirection])
+            {
+                axis.labelVariableText = axisVariable;
+                axis.UpdateAxis();
+            }
         }
 
         public void AddBarChartAxis(string attributeName, AxisDirection dir)
         {
             var axis = AxisFactory().CreateAutoTickedAxis(attributeName, AxisDirection.X, Data);
             axis.transform.parent = Anchor;
-            Axes.Add(dir, axis.GetComponent<AAxis>());
+
+            if(!Axes.ContainsKey(dir))
+            {
+                Axes.Add(dir, new List<AAxis>());
+            }
+            Axes[dir].Add(axis.GetComponent<AAxis>());
 
             RegisterAxis(axis.GetComponent<AAxis>());
         }
 
-        public void AddAxis(string attributeName, AxisDirection dir, float length=1f)
+        public AAxis AddAxis(string attributeName, AxisDirection dir, float length=1f)
         {
             var lom = Data.TypeOf(attributeName);
 
@@ -78,9 +86,17 @@ namespace ETV
                     break;
             }
             axis.transform.parent = Anchor;
-            Axes.Add(dir, axis.GetComponent<AAxis>());
+
+
+            if(!Axes.ContainsKey(dir))
+            {
+                Axes.Add(dir, new List<AAxis>());
+            }
+            Axes[dir].Add(axis.GetComponent<AAxis>());
 
             RegisterAxis(axis.GetComponent<AAxis>());
+
+            return axis.GetComponent<AAxis>();
         }
 
         public void RegisterAxis(AAxis axis)
@@ -100,7 +116,7 @@ namespace ETV
 
         public AAxis GetAxis(AxisDirection dir)
         {
-            return Axes[dir].GetComponent<AAxis>();
+            return Axes[dir][0].GetComponent<AAxis>();
         }
         
 
@@ -127,7 +143,13 @@ namespace ETV
             var comp = yAxis.GetComponent<AAxis>();
 
             comp.Assign(this);
-            Axes.Add(AxisDirection.Y, yAxis.GetComponent<AAxis>());
+
+
+            if(!Axes.ContainsKey(AxisDirection.Y))
+            {
+                Axes.Add(AxisDirection.Y, new List<AAxis>());
+            }
+            Axes[AxisDirection.Y].Add(yAxis.GetComponent<AAxis>());
         }
 
         public void RememberRelationOf(InfoObject o, AGraphicalPrimitive p)
@@ -145,7 +167,10 @@ namespace ETV
             foreach(var axisKey in Axes.Keys)
             {
                 var axis = Axes[axisKey];
-                axis.Dispose();
+                foreach(var a in axis)
+                {
+                    a.Dispose();
+                }
             }
 
             foreach(var prim in infoObject2primitive.Values)

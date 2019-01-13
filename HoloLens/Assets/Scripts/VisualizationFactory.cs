@@ -86,13 +86,14 @@ public class VisualizationFactory : MonoBehaviour
             var vis = generators[visType].GenerateVisualization(dataSetID, variables);
             
             vis = Services.ETVFactory2D().PutETVOnAnchor(vis);
-            vis.transform.localPosition = NewETVPlaceHolder.position - GameObject.FindGameObjectWithTag("RootWorldAnchor").transform.position;
+            
             AddNetworkAnchor(vis, dataSetID, variables, visType);
 
 
             Services.Persistence().PersistETV(vis, dataSetID, variables, visType);
 
             vis.transform.parent = GameObject.FindGameObjectWithTag("RootWorldAnchor").transform;
+            vis.transform.localPosition = NewETVPlaceHolder.position - GameObject.FindGameObjectWithTag("RootWorldAnchor").transform.position;
 
             return vis;
         } catch(Exception e)

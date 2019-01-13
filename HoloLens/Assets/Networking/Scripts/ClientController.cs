@@ -12,6 +12,8 @@ public class ClientController : NetworkBehaviour
     public GameObject Frame;
     public GameObject currentlyBoundETV;
     private Vector3 positionAtTimeOfBinding = Vector3.zero;
+    private Quaternion rotationAtTimeOfBinding = Quaternion.identity;
+    private GameObject currentlyBoundNetworkAnchor;
 
     private void Start()
     {
@@ -126,7 +128,10 @@ public class ClientController : NetworkBehaviour
                     var pos = currentlyBoundETV.transform.position;
                     pos = new Vector3(pos.x, pos.y, pos.z);
                     currentlyBoundETV.transform.parent = GameObject.FindGameObjectWithTag("RootWorldAnchor").transform;
-                    currentlyBoundETV.transform.position = positionAtTimeOfBinding;
+                    currentlyBoundETV.transform.localPosition = positionAtTimeOfBinding;
+                    currentlyBoundETV.transform.localRotation = Quaternion.identity;
+                    currentlyBoundETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation = rotationAtTimeOfBinding;
+                    currentlyBoundNetworkAnchor.GetComponent<BoxCollider>().enabled = true;
 
                     foreach(var t in currentlyBoundETV.transform.GetComponentsInChildren<Transform>())
                     {
@@ -135,7 +140,10 @@ public class ClientController : NetworkBehaviour
                 }
                 currentlyBoundETV = networkAnchor.ETV.gameObject;
                 positionAtTimeOfBinding = currentlyBoundETV.transform.position;
-                positionAtTimeOfBinding = new Vector3(positionAtTimeOfBinding.x, positionAtTimeOfBinding.y, positionAtTimeOfBinding.z);
+                rotationAtTimeOfBinding = currentlyBoundETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation;
+                currentlyBoundNetworkAnchor = networkAnchor.gameObject;
+                currentlyBoundNetworkAnchor.GetComponent<BoxCollider>().enabled = false;
+
                 // Disable the visualization in HoloLens and align it with pETV
                 Debug.Log("Collision detected");
 
@@ -148,8 +156,9 @@ public class ClientController : NetworkBehaviour
                     t.gameObject.layer = 9;
                 }
 
-                currentlyBoundETV.transform.localPosition = new Vector3(-.8f,-.8f,0);
-                currentlyBoundETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation = Quaternion.Euler(0,0,0);
+                currentlyBoundETV.transform.localPosition = new Vector3(1.75f, 1.75f, .5f);
+                currentlyBoundETV.transform.localRotation = Quaternion.identity;
+                currentlyBoundETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation = Quaternion.identity;
 
             }
         }

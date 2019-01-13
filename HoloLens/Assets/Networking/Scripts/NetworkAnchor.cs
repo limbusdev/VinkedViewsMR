@@ -8,7 +8,7 @@ public class NetworkAnchor : NetworkBehaviour
     // ........................................................................ MonoBehaviour
     void Update()
     {
-        if(isServer)
+        if(VisualizationFactory.onServer)
         {
             if(ETV.transform.hasChanged)
             {

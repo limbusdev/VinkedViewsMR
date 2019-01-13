@@ -95,7 +95,7 @@ public class VisualizationFactory : NetworkBehaviour
             AddNetworkAnchor(vis, dataSetID, variables, visType);
 
 
-            PersistenceManager.Instance.PersistETV(vis, dataSetID, variables, visType);
+            Services.Persistence().PersistETV(vis, dataSetID, variables, visType);
 
             vis.transform.parent = GameObject.FindGameObjectWithTag("RootWorldAnchor").transform;
 

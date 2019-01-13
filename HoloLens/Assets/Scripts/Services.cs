@@ -9,7 +9,7 @@ using VisBridges;
 /// and singletons. Populate in editor!
 /// </summary>
 public class Services : MonoBehaviour
-{ 
+{
     public static Services instance = null;
 
     [SerializeField]
@@ -22,6 +22,7 @@ public class Services : MonoBehaviour
     public AMetaVisSystem metaVisSystem;
     public AMetaVisFactory FactoryMetaVis;
     public AVisBridgeSystem VisBridgeSystem;
+    public APersistenceManager PersistenceManager;
 
     public ClientManager clientManager;
 
@@ -72,6 +73,11 @@ public class Services : MonoBehaviour
     public static AETVManager ETVMan()
     {
         return instance.etvManager;
+    }
+
+    public static APersistenceManager Persistence()
+    {
+        return instance.PersistenceManager;
     }
 
 

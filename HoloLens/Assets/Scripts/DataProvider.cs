@@ -29,7 +29,7 @@ public class DataProvider : MonoBehaviour
 
     void Start()
     {
-        PersistenceManager.Instance.OnDataProviderFinishedLoading();
+        Services.Persistence().OnDataProviderFinishedLoading();
     }
 
     private IDictionary<string, IDictionary<int, string>> ParseDictionaries()

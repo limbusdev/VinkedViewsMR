@@ -750,7 +750,7 @@ public class ARVisTools : NetworkBehaviour
 
     private void TESTPlaceAxes()
     {
-        var dataProvider = Services.VisFactory().dataProvider;
+        var dataProvider = Services.DataBase();
 
         var etvMan = Services.instance.etvManager;
         var fact2 = Services.instance.Factory2DETV;

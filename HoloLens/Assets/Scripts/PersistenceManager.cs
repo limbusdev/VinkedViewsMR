@@ -3,7 +3,6 @@ using System.Xml.Serialization;
 using System.IO;
 using System.Collections.Generic;
 using System;
-using UnityEngine.Networking;
 
 // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ SUB CLASSES
 
@@ -51,36 +50,30 @@ public class PersistenceManager : APersistenceManager
     // ........................................................................ Properties
     // .................................................... public
     public static string TAG = "PersistenceManager";
-    public Dictionary<GameObject, SerializedETV> ETVs;
+    public Dictionary<GameObject, SerializedETV> ETVs
+         = new Dictionary<GameObject, SerializedETV>();
 
 
     // .................................................... private
     private static string SaveGameFileName = "setup.dat";
     private string saveGamePath;
-    
-
-    // ........................................................................ MonoBehaviour
-    private void Awake()
-    {
-        ETVs = new Dictionary<GameObject, SerializedETV>();
-    }
+    private bool initialized = false;
 
 
     // ........................................................................ PersistenceManager
-
-    override public void OnDataProviderFinishedLoading()
+    override public void Initialize()
     {
-        saveGamePath = Path.Combine(Application.persistentDataPath, SaveGameFileName);
-#if UNITY_WSA || UNITY_EDITOR
-        Load();
-#endif
+        if(!initialized)
+        {
+            saveGamePath = Path.Combine(Application.persistentDataPath, SaveGameFileName);
+            initialized = true;
+        }
     }
 
     void OnApplicationQuit()
     {
-#if UNITY_WSA || UNITY_EDITOR
+        Initialize();
         Save();
-#endif
     }
     
 

@@ -18,7 +18,16 @@ public class NetworkManagerServer : NetworkManager
 
         Debug.Log("Server started");
     }
-    
+
+    private void Start()
+    {
+        // Initialize dependent Services
+        Services.Persistence().Load();
+
+        StartServer();
+        GetComponent<NetworkDiscovery>().Initialize();
+        GetComponent<NetworkDiscovery>().StartAsServer();
+    }
 
     // Called on the server when a new client connects.
     public override void OnServerConnect(NetworkConnection conn)

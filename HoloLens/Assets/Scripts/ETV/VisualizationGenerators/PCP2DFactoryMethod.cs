@@ -17,7 +17,7 @@ public class PCP2DFactoryMethod : AETVFactoryMethod
     protected override GameObject GeneratorTemplate(int dataSetID, string[] variables)
     {
         var factory = Services.ETVFactory2D();
-        var ds = Services.VisFactory().dataProvider.dataSets[dataSetID];
+        var ds = Services.DataBase().dataSets[dataSetID];
         var vis = factory.CreatePCP(ds, variables).gameObject;
 
         return vis;

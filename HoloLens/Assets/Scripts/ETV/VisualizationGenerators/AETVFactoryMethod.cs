@@ -47,7 +47,7 @@ public abstract class AETVFactoryMethod : MonoBehaviour
         int[] nomIDs, ordIDs, ivlIDs, ratIDs;
 
         AttributeProcessor.ExtractAttributeIDs(
-            Services.VisFactory().dataProvider.dataSets[dataSetID], 
+            Services.DataBase().dataSets[dataSetID], 
             variables, 
             out nomIDs, 
             out ordIDs, 

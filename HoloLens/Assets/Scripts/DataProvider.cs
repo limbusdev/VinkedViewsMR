@@ -15,23 +15,24 @@ public class DataProvider : MonoBehaviour
     public DictFile[] ordinalDicts;
     public DataSet[] dataSets;
     public static int dataSetIDs = 0;
+
+    private bool initialized = false;
     
-    private void Awake()
+    public void Initialize()
     {
-        dataSets = new DataSet[csvFiles.Length];
-        
-        for(int i=0; i<csvFiles.Length; i++)
+        if(!initialized)
         {
-            dataSets[i] = ImportDataSet(csvFiles[i]);
-            dataSetIDs++;
+            dataSets = new DataSet[csvFiles.Length];
+
+            for(int i = 0; i < csvFiles.Length; i++)
+            {
+                dataSets[i] = ImportDataSet(csvFiles[i]);
+                dataSetIDs++;
+            }
+            initialized = true;
         }
     }
-
-    void Start()
-    {
-        Services.Persistence().OnDataProviderFinishedLoading();
-    }
-
+    
     private IDictionary<string, IDictionary<int, string>> ParseDictionaries()
     {
         var dictionaries = new Dictionary<string, IDictionary<int, string>>();

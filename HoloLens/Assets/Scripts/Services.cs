@@ -23,6 +23,7 @@ public class Services : MonoBehaviour
     public AMetaVisFactory FactoryMetaVis;
     public AVisBridgeSystem VisBridgeSystem;
     public APersistenceManager PersistenceManager;
+    public DataProvider dataProvider;
 
     public ClientManager clientManager;
 
@@ -38,6 +39,16 @@ public class Services : MonoBehaviour
     public static Graphical3DPrimitiveFactory PrimFactory3D()
     {
         return instance.Factory3DPrimitives;
+    }
+
+    public static DataProvider DataBase()
+    {
+        if(instance.dataProvider == null)
+        {
+            throw new System.Exception("Data Provider must be provided to the ServiceLocator.");
+        }
+        instance.dataProvider.Initialize();
+        return instance.dataProvider;
     }
 
     public static Graphical2DPrimitiveFactory PrimFactory2D()
@@ -67,6 +78,7 @@ public class Services : MonoBehaviour
 
     public static VisualizationFactory VisFactory()
     {
+        instance.visualizationFactory.Initialize();
         return instance.visualizationFactory;
     }
 
@@ -77,6 +89,7 @@ public class Services : MonoBehaviour
 
     public static APersistenceManager Persistence()
     {
+        instance.PersistenceManager.Initialize();
         return instance.PersistenceManager;
     }
 

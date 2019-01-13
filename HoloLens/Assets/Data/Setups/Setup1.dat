@@ -7,7 +7,7 @@
       <float>0</float>
     </position>
     <rotation>
-      <float>0</float>
+      <float>-0</float>
       <float>0</float>
       <float>0</float>
     </rotation>
@@ -20,12 +20,12 @@
         <float>0.249999851</float>
       </position>
       <rotation>
-        <float>0</float>
+        <float>-0</float>
         <float>0</float>
         <float>0</float>
       </rotation>
       <variables>
-        <string>Property crime rate</string>
+        <string>Property crime</string>
       </variables>
     </SerializedETV>
     <SerializedETV dataSetID="0" visType="LineChart2D">
@@ -35,13 +35,13 @@
         <float>-6</float>
       </position>
       <rotation>
-        <float>0</float>
+        <float>-0</float>
         <float>0</float>
         <float>0</float>
       </rotation>
       <variables>
         <string>Year</string>
-        <string>Property crime rate</string>
+        <string>Property crime</string>
       </variables>
     </SerializedETV>
     <SerializedETV dataSetID="0" visType="ScatterPlot2D">
@@ -51,7 +51,7 @@
         <float>-2</float>
       </position>
       <rotation>
-        <float>0</float>
+        <float>-0</float>
         <float>0</float>
         <float>0</float>
       </rotation>
@@ -67,7 +67,7 @@
         <float>-2</float>
       </position>
       <rotation>
-        <float>0</float>
+        <float>-0</float>
         <float>0</float>
         <float>0</float>
       </rotation>
@@ -84,7 +84,7 @@
         <float>-2</float>
       </position>
       <rotation>
-        <float>0</float>
+        <float>-0</float>
         <float>0</float>
         <float>0</float>
       </rotation>
@@ -101,7 +101,7 @@
         <float>-2</float>
       </position>
       <rotation>
-        <float>0</float>
+        <float>-0</float>
         <float>0</float>
         <float>0</float>
       </rotation>
@@ -118,7 +118,7 @@
         <float>-4</float>
       </position>
       <rotation>
-        <float>0</float>
+        <float>-0</float>
         <float>0</float>
         <float>0</float>
       </rotation>
@@ -133,7 +133,7 @@
         <float>-4</float>
       </position>
       <rotation>
-        <float>0</float>
+        <float>-0</float>
         <float>0</float>
         <float>0</float>
       </rotation>
@@ -148,7 +148,7 @@
         <float>-4</float>
       </position>
       <rotation>
-        <float>0</float>
+        <float>-0</float>
         <float>0</float>
         <float>0</float>
       </rotation>

@@ -18,7 +18,7 @@ public class ScatterPlot3DFactoryMethod : AETVFactoryMethod
     protected override GameObject GeneratorTemplate(int dataSetID, string[] variables)
     {
         var factory = Services.ETVFactory3D();
-        var ds = Services.VisFactory().dataProvider.dataSets[dataSetID];
+        var ds = Services.DataBase().dataSets[dataSetID];
         var vis = factory.CreateScatterplot(ds, variables).gameObject;
 
         return vis;

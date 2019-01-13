@@ -14,7 +14,7 @@ public class NullPersistenceManager : APersistenceManager
         Debug.Log(TAG + ": Dummy. Doing nothing.");
     }
 
-    public override void OnDataProviderFinishedLoading()
+    public override void Initialize()
     {
         Debug.Log(TAG + ": Dummy. Doing nothing.");
     }

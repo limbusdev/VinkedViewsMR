@@ -1,15 +1,16 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 using System;
 using UnityEngine.Networking;
 
 /// <summary>
 /// Main class for visualization generation from databases.
 /// </summary>
-public class VisualizationFactory : NetworkBehaviour
+public class VisualizationFactory : MonoBehaviour
 {
     // ........................................................................ Fields to populate in editor
+    public static bool onServer = false;
+
 
     // Prefabs
     public Transform NewETVPlaceHolder;
@@ -18,7 +19,6 @@ public class VisualizationFactory : NetworkBehaviour
     public GameObject NetworkAnchorPrefab;
 
     [SerializeField]
-    public DataProvider dataProvider;
     public Material lineMaterial;
     public VisFactoryInteractionReceiver interactionReceiver;
 
@@ -37,24 +37,19 @@ public class VisualizationFactory : NetworkBehaviour
 
 
     // ........................................................................ MonoBehaviour methods
-
-    private void Awake()
+    public void Initialize()
     {
         if(!initialized)
         {
-            Initialize();
-        }
-    }
-
-    void Initialize()
-    {
-        activeVisualizations = new List<GameObject>();
-        generators = new Dictionary<VisType, AETVFactoryMethod>();
-        foreach(var method in factoryMethodHooks)
-        {
-            var key = VisType.SingleAxis3D;
-            Enum.TryParse(method.gameObject.name, true, out key);
-            generators.Add(key, method);
+            activeVisualizations = new List<GameObject>();
+            generators = new Dictionary<VisType, AETVFactoryMethod>();
+            foreach(var method in factoryMethodHooks)
+            {
+                var key = VisType.SingleAxis3D;
+                Enum.TryParse(method.gameObject.name, true, out key);
+                generators.Add(key, method);
+            }
+            initialized = true;
         }
     }
 
@@ -117,7 +112,7 @@ public class VisualizationFactory : NetworkBehaviour
         
     public void AddNetworkAnchor(GameObject etv, int dataSetID, string[] attributes, VisType visType)
     {
-        if(isServer)
+        if(onServer)
         {
             var networkAnchor = Instantiate(NetworkAnchorPrefab);
             if(networkAnchor.GetComponent<NetworkAnchor>() != null)
@@ -145,6 +140,7 @@ public class VisualizationFactory : NetworkBehaviour
     {
         int[] nomIDs, ordIDs, ivlIDs, ratIDs;
 
+        var dataProvider = Services.DataBase();
         AttributeProcessor.ExtractAttributeIDs(dataProvider.dataSets[dataSetID], variables, out nomIDs, out ordIDs, out ivlIDs, out ratIDs);
 
         var suitableVisTypes = new List<VisType>();

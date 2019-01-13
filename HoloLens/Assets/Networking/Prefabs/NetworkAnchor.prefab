@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 65036416552519080}
   m_Layer: 0
   m_Name: NetworkAnchor
-  m_TagString: Untagged
+  m_TagString: NetworkAnchor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -119,6 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cdd7e3ca27389043b43b2585c977e56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  observedAnchor: {fileID: 0}
-  dataSetID: 0
-  visType: 0
+  ETV: {fileID: 0}
+  syncedDataSetID: 0
+  syncedVisType: 0
+  syncedHint: 

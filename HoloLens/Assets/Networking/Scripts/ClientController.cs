@@ -10,6 +10,8 @@ public class ClientController : NetworkBehaviour
 {
     public GameObject Anchor;
     public GameObject Frame;
+    public GameObject currentlyBoundETV;
+    private Vector3 positionAtTimeOfBinding = Vector3.zero;
 
     private void Start()
     {
@@ -112,26 +114,42 @@ public class ClientController : NetworkBehaviour
         }
 
         // If collision is detected on the server
-        if(isServer)
+        if(isServer && collider.gameObject.CompareTag("NetworkAnchor"))
         {
-            var otherAnchor = collider.gameObject.GetComponent<ETVAnchor>();
+            var networkAnchor = collider.gameObject.GetComponent<NetworkAnchor>();
 
-            if(otherAnchor != null && !otherAnchor.tag.Equals("VisFactory"))
+            if(networkAnchor != null && !networkAnchor.tag.Equals("VisFactory"))
             {
+                // Eject currently bound ETV, if there is any
+                if(currentlyBoundETV != null)
+                {
+                    var pos = currentlyBoundETV.transform.position;
+                    pos = new Vector3(pos.x, pos.y, pos.z);
+                    currentlyBoundETV.transform.parent = GameObject.FindGameObjectWithTag("RootWorldAnchor").transform;
+                    currentlyBoundETV.transform.position = positionAtTimeOfBinding;
+
+                    foreach(var t in currentlyBoundETV.transform.GetComponentsInChildren<Transform>())
+                    {
+                        t.gameObject.layer = LayerMask.NameToLayer("Default");
+                    }
+                }
+                currentlyBoundETV = networkAnchor.ETV.gameObject;
+                positionAtTimeOfBinding = currentlyBoundETV.transform.position;
+                positionAtTimeOfBinding = new Vector3(positionAtTimeOfBinding.x, positionAtTimeOfBinding.y, positionAtTimeOfBinding.z);
                 // Disable the visualization in HoloLens and align it with pETV
                 Debug.Log("Collision detected");
 
                 //otherAnchor.VisAnchor.SetActive(false);
-                otherAnchor.transform.parent = Anchor.transform;
-                otherAnchor.gameObject.layer = LayerMask.NameToLayer("Invisible");
+                currentlyBoundETV.transform.parent = Anchor.transform;
+                currentlyBoundETV.layer = LayerMask.NameToLayer("Invisible");
 
-                foreach(var t in otherAnchor.transform.GetComponentsInChildren<Transform>())
+                foreach(var t in currentlyBoundETV.transform.GetComponentsInChildren<Transform>())
                 {
                     t.gameObject.layer = 9;
                 }
 
-                otherAnchor.transform.localPosition = new Vector3(-.8f,-.8f,0);
-                otherAnchor.Rotatable.transform.localRotation = Quaternion.Euler(0,180,0);
+                currentlyBoundETV.transform.localPosition = new Vector3(-.8f,-.8f,0);
+                currentlyBoundETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation = Quaternion.Euler(0,0,0);
 
             }
         }

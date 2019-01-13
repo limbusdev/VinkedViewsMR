@@ -6,6 +6,7 @@ TagManager:
   tags:
   - VisFactory
   - RootWorldAnchor
+  - NetworkAnchor
   layers:
   - Default
   - TransparentFX

@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Networking;
 
 public class NetworkAnchor : NetworkBehaviour
 {
     public GameObject ETV;
 
+    // ........................................................................ MonoBehaviour
     void Update()
     {
         if(isServer)
@@ -19,12 +18,12 @@ public class NetworkAnchor : NetworkBehaviour
         }
     }
 
-    [SyncVar]
-    public int syncedDataSetID;
-    [SyncVar]
-    public int syncedVisType;
-    [SyncVar]
-    public string syncedHint;
+
+    // ........................................................................ Server Side Logic
+
+    [SyncVar] public int syncedDataSetID;
+    [SyncVar] public int syncedVisType;
+    [SyncVar] public string syncedHint;
     
     public SyncListString syncedAttributes = new SyncListString();
     
@@ -44,6 +43,8 @@ public class NetworkAnchor : NetworkBehaviour
         this.syncedVisType = (int)visType;
     }
     
+
+    // ........................................................................ Helper Methods
 
     public string[] GetAttributesAsStrings()
     {

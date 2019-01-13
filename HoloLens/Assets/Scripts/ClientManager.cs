@@ -22,7 +22,7 @@ public class ClientManager : MonoBehaviour
         }
     }
 
-    public VisualizationFactory fact;
+    public VisualizationFactory vf;
     public Canvas canvas;
     public CanvasScaler scaler;
     public RectTransform canvasRect;
@@ -39,7 +39,7 @@ public class ClientManager : MonoBehaviour
 
         padding = 48;
 
-        var etvYearPopulationCrimePCP2D = fact.GenerateVisFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" }, VisType.PCP2D);
+        var etvYearPopulationCrimePCP2D = vf.GenerateVisFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (old)" }, VisType.PCP2D);
         etvYearPopulationCrimePCP2D.transform.parent = etvPosition.transform;
         Services.instance.clientManager.currentlyBoundETV = etvYearPopulationCrimePCP2D;
         
@@ -69,7 +69,5 @@ public class ClientManager : MonoBehaviour
         anchorSideLengthInCM = padding * scale * pixel2cm;
         etvWidthCM = (widthPix-2*padding) * scale * pixel2cm;
         etvHeightCM = (heightPix-2*padding) * scale * pixel2cm;
-
-        
     }
 }

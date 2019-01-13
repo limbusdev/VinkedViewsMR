@@ -1,12 +1,8 @@
 ﻿using HoloToolkit.Unity.InputModule;
 using HoloToolkit.Unity.Receivers;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using HoloToolkit.Unity.Buttons;
 using HoloToolkit.Unity.Collections;
-using System.Linq;
 using Model;
 
 /// <summary>
@@ -16,7 +12,6 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
 {
     public GameObject HoloButtonPrefab;
     public GameObject screenAnchor;
-    public DataProvider dataProvider;
     public GameObject newETVPlatform;
     public GameObject CubeIconVariablePrefab;
     public GameObject ObjectCollection;
@@ -175,7 +170,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     /// <param name="dbID"></param>
     private void Setup1DGalery(int dbID)
     {
-        DataSet ds = dataProvider.dataSets[dbID];
+        DataSet ds = Services.DataBase().dataSets[dbID];
 
         var ms = new List<AttributeStats>();
         ms.AddRange(ds.nominalStatistics.Values);
@@ -196,7 +191,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     /// <param name="dbID"></param>
     private void Setup2DGalery(int dbID)
     {
-        DataSet ds = dataProvider.dataSets[dbID];
+        DataSet ds = Services.DataBase().dataSets[dbID];
 
         var ms = new List<AttributeStats>();
         ms.AddRange(ds.nominalStatistics.Values);
@@ -237,7 +232,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     /// <param name="dbID"></param>
     private void Setup3DGalery(int dbID)
     {
-        DataSet ds = dataProvider.dataSets[dbID];
+        DataSet ds = Services.DataBase().dataSets[dbID];
         
         var ms = new List<AttributeStats>();
         ms.AddRange(ds.nominalStatistics.Values);
@@ -271,7 +266,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     /// <param name="dbID"></param>
     private void SetupNDGalery(int dbID)
     {
-        DataSet ds = dataProvider.dataSets[dbID];
+        DataSet ds = Services.DataBase().dataSets[dbID];
 
         // 1 Icon for all variables
         var allVars = new List<string>();

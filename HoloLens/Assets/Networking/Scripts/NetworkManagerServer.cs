@@ -21,13 +21,14 @@ public class NetworkManagerServer : NetworkManager
 
     private void Start()
     {
-        // Initialize dependent Services
-        VisualizationFactory.onServer = true;
-        Services.Persistence().Load();
-
         StartServer();
         GetComponent<NetworkDiscovery>().Initialize();
         GetComponent<NetworkDiscovery>().StartAsServer();
+
+
+        // Initialize dependent Services
+        VisualizationFactory.onServer = true;
+        Services.Persistence().Load();
     }
 
     // Called on the server when a new client connects.

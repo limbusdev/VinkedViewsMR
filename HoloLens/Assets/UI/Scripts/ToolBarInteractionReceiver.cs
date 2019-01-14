@@ -136,8 +136,8 @@ public class ToolBarInteractionReceiver : InteractionReceiver
                 Targets[0].SetActive(false); // Disable ETV
                 try
                 {
-                    GameObject tools = Targets[2];
-                    tools.SetActive(!tools.activeSelf);
+                    GameObject vis = Targets[2];
+                    vis.transform.GetChild(0).gameObject.SetActive(!vis.transform.GetChild(0).gameObject.activeSelf);
                 } catch(Exception e)
                 {
                     Debug.Log(e);

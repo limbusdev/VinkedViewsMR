@@ -45,6 +45,26 @@ namespace VisBridges
                 this.branch = branch;
                 this.offset = offset;
             }
+
+            public void Hide()
+            {
+                SetLayer(LayerMask.NameToLayer("Invisible"));
+            }
+
+            public void Show()
+            {
+                SetLayer(LayerMask.NameToLayer("Default"));
+            }
+
+            private void SetLayer(int layer)
+            {
+                foreach(var g in new MonoBehaviour[]{ trunk, branch, offset })
+                {
+                    g.gameObject.layer = layer;
+                    foreach(var t in g.GetComponentsInChildren<Transform>())
+                        t.gameObject.layer = layer;
+                }
+            }
         }
 
         public AETV ID;
@@ -229,9 +249,13 @@ namespace VisBridges
             if(observable.gameObject.activeSelf)
             {
                 layer = LayerMask.NameToLayer("Default");
+                foreach(var p in paths.Values)
+                    p.Show();
             } else
             {
                 layer = LayerMask.NameToLayer("Invisible");
+                foreach(var p in paths.Values)
+                    p.Hide();
             }
 
             gameObject.layer = layer;

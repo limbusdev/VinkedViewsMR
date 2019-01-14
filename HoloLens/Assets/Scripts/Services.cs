@@ -17,8 +17,7 @@ public class Services : MonoBehaviour
     public Graphical2DPrimitiveFactory Factory2DPrimitives;
     public ETV3DFactory Factory3DETV;                      
     public ETV2DFactory Factory2DETV;
-    public VisualizationFactory visualizationFactory;       
-    public AETVManager etvManager;
+    public VisualizationFactory visualizationFactory;
     public AMetaVisSystem metaVisSystem;
     public AMetaVisFactory FactoryMetaVis;
     public AVisBridgeSystem VisBridgeSystem;
@@ -80,11 +79,6 @@ public class Services : MonoBehaviour
     {
         instance.visualizationFactory.Initialize();
         return instance.visualizationFactory;
-    }
-
-    public static AETVManager ETVMan()
-    {
-        return instance.etvManager;
     }
 
     public static APersistenceManager Persistence()

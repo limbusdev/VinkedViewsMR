@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-using GraphicalPrimitive;
 using System;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -44,14 +43,11 @@ public class ARVisTools : NetworkBehaviour
 
         switch(GlobalSettings.scenario)
         {
-            case GlobalSettings.Scenario.TEST_MetaVis:
-                TESTMetaVis();
+            case GlobalSettings.Scenario.DEBUG_MetaVis:
+                DebugMetaVis();
                 break;
-            case GlobalSettings.Scenario.TEST_BostonPD:
-                TESTSetupBostonPD();
-                break;
-            case GlobalSettings.Scenario.TEST_Playground:
-                TESTPlayground();
+            case GlobalSettings.Scenario.DEBUG_VisBridges:
+                DebugVisBridges();
                 break;
             default:
                 // Nothing;
@@ -70,7 +66,7 @@ public class ARVisTools : NetworkBehaviour
 
     // ........................................................................ TEST SETUPS
 
-    private void TESTPlayground()
+    private void DebugVisBridges()
     {
         try
         {
@@ -283,48 +279,9 @@ public class ARVisTools : NetworkBehaviour
         }
     }
 
+    
 
-    private void TESTSetupBostonPD()
-    {
-        try
-        {
-            var factory = Services.VisFactory();
-
-            var etvMan = Services.instance.etvManager;
-
-            var ypPCP = factory.GenerateVisFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" }, VisType.PCP2D, false);
-            etvMan.AutoPlaceETV(ypPCP);
-
-            var ypvcPCP3D = factory.GenerateVisFrom(0, new string[] { "Year", "Population", "Violent crime", "Rape (legacy)" }, VisType.PCP3D, false);
-            etvMan.AutoPlaceETV(ypvcPCP3D);
-
-            var ymuSP = factory.GenerateVisFrom(0, new string[] { "Year", "Murder/MS." }, VisType.ScatterPlot2D, false);
-            etvMan.AutoPlaceETV(ymuSP);
-
-            var yemuvcSP3D = factory.GenerateVisFrom(0, new string[] { "Year", "Murder/MS.", "Violent crime" }, VisType.ScatterPlot3D, false);
-            etvMan.AutoPlaceETV(yemuvcSP3D);
-
-            var yerlLC = factory.GenerateVisFrom(0, new string[] { "Year", "Rape (legacy)" }, VisType.LineChart2D, false);
-            etvMan.AutoPlaceETV(yerlLC);
-
-            var yemuLC = factory.GenerateVisFrom(0, new string[] { "Year", "Murder/MS." }, VisType.LineChart2D, false);
-            etvMan.AutoPlaceETV(yemuLC);
-
-            var muSA = factory.GenerateVisFrom(0, "Year", VisType.SingleAxis3D, false);
-            muSA.transform.position = new Vector3(1, 0, -3);
-
-            var poSA = factory.GenerateVisFrom(0, "Population", VisType.SingleAxis3D, false);
-            poSA.transform.position = new Vector3(1.5f, 0, -3);
-
-        }
-        catch(Exception e)
-        {
-            Debug.LogError("TESTSetupFBI failed.");
-            Debug.LogException(e);
-        }
-    }
-
-    private void TESTMetaVis()
+    private void DebugMetaVis()
     {
         try
         {
@@ -747,57 +704,5 @@ public class ARVisTools : NetworkBehaviour
             Debug.LogException(e);
         }
     }
-
-    private void TESTPlaceAxes()
-    {
-        var dataProvider = Services.DataBase();
-
-        var etvMan = Services.instance.etvManager;
-        var fact2 = Services.instance.Factory2DETV;
-        var prim2Dfactory = Services.instance.Factory2DPrimitives;
-
-        var a1 = prim2Dfactory.CreateAutoTickedAxis("Year", AxisDirection.X, dataProvider.dataSets[0]);
-        var ae1 = fact2.PutETVOnAnchor(a1);
-
-        etvMan.AutoPlaceETV(ae1);
-
-        var a2 = prim2Dfactory.CreateAutoTickedAxis("Population", AxisDirection.X, dataProvider.dataSets[0]);
-        var ae2 = fact2.PutETVOnAnchor(a2);
-
-        etvMan.AutoPlaceETV(ae2);
-
-        var a3 = prim2Dfactory.CreateAutoTickedAxis("Crime", AxisDirection.X, dataProvider.dataSets[1]);
-        var ae3 = fact2.PutETVOnAnchor(a3);
-
-        etvMan.AutoPlaceETV(ae3);
-
-        var a4 = prim2Dfactory.CreateAutoTickedAxis("Weapon", AxisDirection.X, dataProvider.dataSets[1]);
-        var ae4 = fact2.PutETVOnAnchor(a4);
-
-        etvMan.AutoPlaceETV(ae4);
-
-        var fact3 = Services.instance.Factory3DETV;
-        var prim3Dfactory = Services.instance.Factory3DPrimitives;
-        var a3d1 = prim3Dfactory.CreateAutoTickedAxis("Year", AxisDirection.X, dataProvider.dataSets[0]);
-        var a3de1 = fact3.PutETVOnAnchor(a3d1);
-
-        etvMan.AutoPlaceETV(a3de1);
-
-        var a3d2 = prim3Dfactory.CreateAutoTickedAxis("Population", AxisDirection.X, dataProvider.dataSets[0]);
-        var a3de2 = fact3.PutETVOnAnchor(a3d2);
-
-        etvMan.AutoPlaceETV(a3de2);
-
-        var a3d3 = prim3Dfactory.CreateAutoTickedAxis("Crime", AxisDirection.X, dataProvider.dataSets[1]);
-        var a3de3 = fact3.PutETVOnAnchor(a3d3);
-
-        etvMan.AutoPlaceETV(a3de3);
-
-        var a3d4 = prim3Dfactory.CreateAutoTickedAxis("Weapon", AxisDirection.X, dataProvider.dataSets[1]);
-        var a3de4 = fact3.PutETVOnAnchor(a3d4);
-
-        etvMan.AutoPlaceETV(a3de4);
-
-
-    }
+    
 }

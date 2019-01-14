@@ -3,7 +3,7 @@
     // Only RELEASE enables persistence
     public enum Scenario
     {
-        TEST_BostonPD, TEST_FBI, TEST_Exoplanets, TEST_MetaVis, TEST_Playground, TEST_empty, RELEASE
+       DEBUG_MetaVis, DEBUG_VisBridges, RELEASE
     }
 
     public static bool onHoloLens = false;

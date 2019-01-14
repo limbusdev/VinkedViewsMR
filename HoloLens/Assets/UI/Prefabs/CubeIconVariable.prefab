@@ -508,6 +508,9 @@ MonoBehaviour:
   HoloButtonPrefab: {fileID: 1939813369693594, guid: c400ce6d5ae4bed449c92ada8113292e,
     type: 2}
   visButtonsAnchor: {fileID: 1219269144864310}
+  highlightMaterial: {fileID: 2100000, guid: b8589c0cb3fc0ab48be207d3f249a87c, type: 2}
+  defaultMaterial: {fileID: 2100000, guid: 6b5aaec7325f4ae4e834f656353249d2, type: 2}
+  selected: 0
   IconType: 0
   varNames: []
   varTypes: 

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using HoloToolkit.Unity.Collections;
 using Model;
+using System.Linq;
+using static CubeIconVariable;
+using HoloToolkit.Unity.Buttons;
 
 /// <summary>
 /// Handles interaction of the VisualizationFactory's buttons.
@@ -15,8 +18,11 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     public GameObject newETVPlatform;
     public GameObject CubeIconVariablePrefab;
     public GameObject ObjectCollection;
+    public GameObject VisTypeChoicePanel;
 
-    private int currentlyChosenDataBase = 0;
+    public IDictionary<string, GameObject> currentlyChosenAttributes = new Dictionary<string, GameObject>();
+    public int currentlyChosenDataBase = 0;
+    public IList<GameObject> currentlyActiveVisChoicePanelButtons = new List<GameObject>();
 
     protected override void InputDown(GameObject obj, InputEventData eventData)
     {
@@ -68,8 +74,26 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
                 HideAllIconSubButtons();
                 if(obj.GetComponent<CubeIconVariable>() != null)
                 {
-                    obj.GetComponent<CubeIconVariable>().ShowVisTypeButtons();
+                    var cubecon = obj.GetComponent<CubeIconVariable>();
+                    cubecon.Select();
+
+                    if(cubecon.selected)
+                    {
+                        currentlyChosenAttributes.Add(cubecon.varNames[0], obj);
+                    }else
+                    {
+                        currentlyChosenAttributes.Remove(cubecon.varNames[0]);
+                    }
+
+                    ShowVisTypeButtons();
                 }
+                break;
+            case "VisTypeButton":
+                Services.VisFactory().GenerateVisFrom(
+                    currentlyChosenDataBase,
+                    currentlyChosenAttributes.Keys.ToArray(),
+                    obj.GetComponent<VisTypeButton>().visType
+                    );
                 break;
             case "ButtonQuitApp":
                 Debug.Log("Quitting Application");
@@ -85,14 +109,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
     /// </summary>
     private void HideAllIconSubButtons()
     {
-        for(int i = 0; i < ObjectCollection.transform.childCount; i++)
-        {
-            var g = ObjectCollection.transform.GetChild(i);
-            if(g.gameObject.GetComponent<CubeIconVariable>() != null)
-            {
-                g.gameObject.GetComponent<CubeIconVariable>().HideButtons();
-            }
-        }
+        VisTypeChoicePanel.SetActive(false);
     }
 
     /// <summary>
@@ -389,6 +406,52 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         return etvIcon;
     }
 
+    /// <summary>
+    /// Initializes the sub buttons to choose possible visualization type from.
+    /// </summary>
+    public void ShowVisTypeButtons()
+    {
+        foreach(var b in currentlyActiveVisChoicePanelButtons)
+        {
+            interactables.Remove(b);
+            Destroy(b);
+        }
+
+        currentlyActiveVisChoicePanelButtons.Clear();
+
+        if(currentlyChosenAttributes.Count == 0)
+        {
+            // Nothing selected, remove buttons, if there are any
+            VisTypeChoicePanel.SetActive(false);
+
+        } else
+        {
+            // Show matching buttons
+            var suitableVisTypes = Services.VisFactory().ListPossibleVisualizations(currentlyChosenDataBase, currentlyChosenAttributes.Keys.ToArray());
+            VisTypeChoicePanel.SetActive(true);
+            
+            for(int i = 0; i < suitableVisTypes.Length; i++)
+            {
+                var visType = suitableVisTypes[i];
+                var button = Instantiate(HoloButtonPrefab);
+
+                button.AddComponent<VisTypeButton>().visType = visType;
+
+                button.name = visType.ToString();
+                button.GetComponent<CompoundButtonText>().Text = visType.ToString();
+
+                button.transform.parent = VisTypeChoicePanel.transform;
+                button.transform.localPosition = new Vector3(.15f * i - suitableVisTypes.Length*.15f/2f, 0, 0);
+                button.transform.localRotation = Quaternion.Euler(Vector3.zero);
+                
+                interactables.Add(button);
+                currentlyActiveVisChoicePanelButtons.Add(button);
+            }
+        }
+    }
+
+
+    // ........................................................................ Inner Classes
 
     private class IconKey2D
     {

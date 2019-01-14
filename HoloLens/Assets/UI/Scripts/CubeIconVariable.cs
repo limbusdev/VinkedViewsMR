@@ -1,14 +1,10 @@
-﻿using HoloToolkit.Unity.Buttons;
-using HoloToolkit.Unity.InputModule;
-using HoloToolkit.Unity.Receivers;
-using Model;
-using System.Collections.Generic;
+﻿using Model;
 using UnityEngine;
 
 /// <summary>
 /// Script for cubic variable icons. Used in the visualization factory shelf.
 /// </summary>
-public class CubeIconVariable : InteractionReceiver
+public class CubeIconVariable : MonoBehaviour
 {
     // ........................................................................ Inner Classes
     public class VisTypeButton : MonoBehaviour
@@ -25,10 +21,13 @@ public class CubeIconVariable : InteractionReceiver
     public GameObject[] IconValues;
     public GameObject HoloButtonPrefab;
     public GameObject visButtonsAnchor;
+    public Material highlightMaterial;
+    public Material defaultMaterial;
 
 
     // ........................................................................ Public Properties
 
+    public bool selected = false;
     public int IconType = 0;
     public string[] varNames;
     public LoM[] varTypes;
@@ -37,22 +36,6 @@ public class CubeIconVariable : InteractionReceiver
 
 
     // ........................................................................ Private Properties
-
-    private static readonly string[] IconKeys = {
-        "1DOrdinal",
-        "1DNominal",
-        "2DOrdinal",
-        "2DNominal",
-        "2DMixed",
-        "3DOrdinal",
-        "3DNominal",
-        "3D2Ord1Nom",
-        "3D1Ord2Nom",
-        "MultiD"
-    };
-    
-    private bool clicked = false;       // whether the icon has been clicked
-    private bool initialized = false;   // whether the sub buttons have been initialized already
 
     /// <summary>
     /// Initializer for ND-Visualizations
@@ -140,76 +123,29 @@ public class CubeIconVariable : InteractionReceiver
         text.text = name;
     }
 
-    /// <summary>
-    /// Initializes the sub buttons to choose possible visualization type from.
-    /// </summary>
-    public void ShowVisTypeButtons()
+    
+    public void Select()
     {
-        if(!clicked && !initialized)
+        selected = !selected;
+
+        if(selected)
         {
-            var lr = visButtonsAnchor.GetComponent<LineRenderer>();
-
-            lr.startWidth = .01f;
-            lr.endWidth = .01f;
-            
-            visButtonsAnchor.SetActive(true);
-            var suitableVisTypes = Services.VisFactory().ListPossibleVisualizations(dataSetID, varNames);
-
-            lr.positionCount = suitableVisTypes.Length * 2;
-            var buttonPositions = new List<Vector3>();
-            
-            for(int i = 0; i < suitableVisTypes.Length; i++)
-            {
-                var visType = suitableVisTypes[i];
-                var button = Instantiate(HoloButtonPrefab);
-
-                button.AddComponent<VisTypeButton>().visType = visType;
-
-                button.name = visType.ToString();
-                button.GetComponent<CompoundButtonText>().Text = visType.ToString();
-
-                button.transform.parent = visButtonsAnchor.transform;
-                button.transform.localPosition = new Vector3(.15f * i, 0, 0);
-                button.transform.localRotation = Quaternion.Euler(Vector3.zero);
-                
-                buttonPositions.Add(button.transform.position);
-                buttonPositions.Add(BasePlatform.position);
-
-                interactables.Add(button);
-            }
-
-            lr.SetPositions(buttonPositions.ToArray());
-
-            clicked = true;
-            initialized = true;
-        } else if(!clicked && initialized)
+            text.text = varNames[0] + "\n(Selected)";
+            Highlight();
+        } else
         {
-            visButtonsAnchor.SetActive(true);
+            text.text = varNames[0];
+            Unhighlight();
         }
     }
 
-    /// <summary>
-    /// Hides the sub buttons.
-    /// </summary>
-    public void HideButtons()
+    public void Highlight()
     {
-        clicked = false;
-        visButtonsAnchor.SetActive(false);
+        BasePlatform.GetComponent<MeshRenderer>().material = highlightMaterial;
     }
 
-    /// <summary>
-    /// Button interaction callback.
-    /// </summary>
-    /// <param name="obj"></param>
-    /// <param name="eventData"></param>
-    protected override void InputDown(GameObject obj, InputEventData eventData)
+    public void Unhighlight()
     {
-        Debug.Log("InputDown: " + obj.name);
-
-        Services.VisFactory().GenerateVisFrom(
-            dataSetID, 
-            varNames, 
-            obj.GetComponent<VisTypeButton>().visType);
+        BasePlatform.GetComponent<MeshRenderer>().material = defaultMaterial;
     }
-    
 }

@@ -123,45 +123,37 @@ public class ClientController : NetworkBehaviour
             if(networkAnchor != null && !networkAnchor.tag.Equals("VisFactory"))
             {
                 // Eject currently bound ETV, if there is any
-                if(currentlyBoundETV != null)
-                {
-                    var pos = currentlyBoundETV.transform.position;
-                    pos = new Vector3(pos.x, pos.y, pos.z);
-                    currentlyBoundETV.transform.parent = GameObject.FindGameObjectWithTag("RootWorldAnchor").transform;
-                    currentlyBoundETV.transform.localPosition = positionAtTimeOfBinding;
-                    currentlyBoundETV.transform.localRotation = Quaternion.identity;
-                    currentlyBoundETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation = rotationAtTimeOfBinding;
-                    currentlyBoundNetworkAnchor.GetComponent<BoxCollider>().enabled = true;
+                EjectBoundETV();
 
-                    foreach(var t in currentlyBoundETV.transform.GetComponentsInChildren<Transform>())
-                    {
-                        t.gameObject.layer = LayerMask.NameToLayer("Default");
-                    }
-                }
-                currentlyBoundETV = networkAnchor.ETV.gameObject;
-                positionAtTimeOfBinding = currentlyBoundETV.transform.position;
-                rotationAtTimeOfBinding = currentlyBoundETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation;
-                currentlyBoundNetworkAnchor = networkAnchor.gameObject;
-                currentlyBoundNetworkAnchor.GetComponent<BoxCollider>().enabled = false;
-
-                // Disable the visualization in HoloLens and align it with pETV
-                Debug.Log("Collision detected");
-
-                //otherAnchor.VisAnchor.SetActive(false);
-                currentlyBoundETV.transform.parent = Anchor.transform;
-                currentlyBoundETV.layer = LayerMask.NameToLayer("Invisible");
-
-                foreach(var t in currentlyBoundETV.transform.GetComponentsInChildren<Transform>())
-                {
-                    t.gameObject.layer = 9;
-                }
-
-                currentlyBoundETV.transform.localPosition = new Vector3(1.75f, 1.75f, .5f);
-                currentlyBoundETV.transform.localRotation = Quaternion.identity;
-                currentlyBoundETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation = Quaternion.identity;
-
+                // Bind the ETV of colliding NetworkAnchor
+                BindETV(networkAnchor);
             }
         }
+    }
+
+    private void BindETV(NetworkAnchor networkAnchor)
+    {
+        currentlyBoundETV = networkAnchor.ETV.gameObject;
+        positionAtTimeOfBinding = currentlyBoundETV.transform.position;
+        rotationAtTimeOfBinding = currentlyBoundETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation;
+        currentlyBoundNetworkAnchor = networkAnchor.gameObject;
+        currentlyBoundNetworkAnchor.GetComponent<BoxCollider>().enabled = false;
+
+        // Disable the visualization in HoloLens and align it with pETV
+        Debug.Log("Collision detected");
+
+        //otherAnchor.VisAnchor.SetActive(false);
+        currentlyBoundETV.transform.parent = Anchor.transform;
+        currentlyBoundETV.layer = LayerMask.NameToLayer("Invisible");
+
+        foreach(var t in currentlyBoundETV.transform.GetComponentsInChildren<Transform>())
+        {
+            t.gameObject.layer = 9;
+        }
+
+        currentlyBoundETV.transform.localPosition = new Vector3(1.75f, 1.75f, .5f);
+        currentlyBoundETV.transform.localRotation = Quaternion.identity;
+        currentlyBoundETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation = Quaternion.identity;
     }
 
     private void EjectBoundETV()

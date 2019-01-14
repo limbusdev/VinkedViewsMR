@@ -53,10 +53,10 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
                 SetupGalery(currentlyChosenDataBase);
                 break;
             case "ButtonDataSet3":
-                currentlyChosenDataBase = 2;
-                DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 3,4,5 });
-                SetupGalery(currentlyChosenDataBase);
+                //currentlyChosenDataBase = 2;
+                //DeactivateAllInteractibles();
+                //ActivateInteractables(new int[] { 3,4,5 });
+                //SetupGalery(currentlyChosenDataBase);
                 break;
             case "CubeIconVariable":
                 HideAllIconSubButtons();
@@ -279,9 +279,9 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
                     default: cb.IconName = "Anchor"; break;
                 }
 
-                
 
-                button.name = visType.ToString();
+
+                button.name = "VisTypeButton";
                 button.GetComponent<CompoundButtonText>().Text = visType.ToString();
 
                 button.transform.parent = VisTypeChoicePanel.transform;

@@ -23,26 +23,35 @@ namespace GraphicalPrimitive
     public abstract class ABar : AGraphicalPrimitive
     {
         public GameObject bar;
+        private Vector3 unhighlightedScale;
+        
 
-        public abstract void SetSize(float width, float height, float depth);
+        public virtual void SetSize(float width, float height, float depth)
+        {
+            unhighlightedScale = new Vector3(width, height, depth);
+        }
 
         public void SetLabelText(string newText)
         {
             label.GetComponent<TextMesh>().text = newText;
         }
-
-        private Vector3 unhighlightedScale;
+        
 
         public override void Highlight()
         {
             base.Highlight();
-            unhighlightedScale = bar.transform.localScale;
             bar.transform.localScale = unhighlightedScale * 1.2f;
         }
 
         public override void Unhighlight()
         {
             base.Unhighlight();
+            bar.transform.localScale = unhighlightedScale;
+        }
+
+        public override void Unbrush()
+        {
+            base.Unbrush();
             bar.transform.localScale = unhighlightedScale;
         }
     }

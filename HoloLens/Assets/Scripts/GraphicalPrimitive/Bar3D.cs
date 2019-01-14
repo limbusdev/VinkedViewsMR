@@ -31,6 +31,7 @@ namespace GraphicalPrimitive
 
         public override void SetSize(float width, float height, float depth)
         {
+            base.SetSize(width, height, depth);
             bar.transform.localScale = new Vector3(width, height, depth);
             var textMesh = label.GetComponent<TextMesh>();
             textMesh.anchor = (height < 0) ? TextAnchor.UpperCenter : TextAnchor.LowerCenter;

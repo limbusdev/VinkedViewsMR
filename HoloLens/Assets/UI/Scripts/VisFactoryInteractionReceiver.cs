@@ -35,6 +35,8 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
                 ActivateInteractables(new int[] { 1,2,3,4,5 });
                 break;
             case "Back":
+                ClearSelection();
+                ClearVisTypeButtons();
                 DeactivateAllInteractibles();
                 ActivateInteractables(new int[] { 0, 5 });
                 break;
@@ -208,10 +210,12 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         return etvIcon;
     }
 
-    /// <summary>
-    /// Initializes the sub buttons to choose possible visualization type from.
-    /// </summary>
-    public void ShowVisTypeButtons()
+    private void ClearSelection()
+    {
+        currentlyChosenAttributes.Clear();
+    }
+
+    private void ClearVisTypeButtons()
     {
         foreach(var b in currentlyActiveVisChoicePanelButtons)
         {
@@ -220,13 +224,16 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         }
 
         currentlyActiveVisChoicePanelButtons.Clear();
+    }
 
-        if(currentlyChosenAttributes.Count == 0)
-        {
-            // Nothing selected, remove buttons, if there are any
-            VisTypeChoicePanel.SetActive(false);
+    /// <summary>
+    /// Initializes the sub buttons to choose possible visualization type from.
+    /// </summary>
+    public void ShowVisTypeButtons()
+    {
+        ClearVisTypeButtons();
 
-        } else
+        if(currentlyChosenAttributes.Count > 0)
         {
             // Show matching buttons
             var suitableVisTypes = Services.VisFactory().ListPossibleVisualizations(currentlyChosenDataBase, currentlyChosenAttributes.Keys.ToArray());

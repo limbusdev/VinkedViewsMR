@@ -163,4 +163,28 @@ public class ClientController : NetworkBehaviour
             }
         }
     }
+
+    private void EjectBoundETV()
+    {
+        if(currentlyBoundETV != null)
+        {
+            var pos = currentlyBoundETV.transform.position;
+            pos = new Vector3(pos.x, pos.y, pos.z);
+            currentlyBoundETV.transform.parent = GameObject.FindGameObjectWithTag("RootWorldAnchor").transform;
+            currentlyBoundETV.transform.localPosition = positionAtTimeOfBinding;
+            currentlyBoundETV.transform.localRotation = Quaternion.identity;
+            currentlyBoundETV.GetComponent<ETVAnchor>().Rotatable.transform.localRotation = rotationAtTimeOfBinding;
+            currentlyBoundNetworkAnchor.GetComponent<BoxCollider>().enabled = true;
+
+            foreach(var t in currentlyBoundETV.transform.GetComponentsInChildren<Transform>())
+            {
+                t.gameObject.layer = LayerMask.NameToLayer("Default");
+            }
+        }
+    }
+
+    void OnDestroy()
+    {
+        EjectBoundETV();
+    }
 }

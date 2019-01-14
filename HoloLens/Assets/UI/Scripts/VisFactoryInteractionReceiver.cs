@@ -26,7 +26,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
         {
             case "ButtonDataSets":
                 DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 1, 2, 3, 4, 10 });
+                ActivateInteractables(new int[] { 1, 2, 4, 10 });
                 break;
             case "Back":
                 DeactivateAllInteractibles();
@@ -40,7 +40,7 @@ public class VisFactoryInteractionReceiver : InteractionReceiver
             case "ButtonDataSet2":
                 currentlyChosenDataBase = 1;
                 DeactivateAllInteractibles();
-                ActivateInteractables(new int[] { 5, 6, 7, 8, 9, 10 });
+                ActivateInteractables(new int[] { 5, 6, 8, 9, 10 });
                 break;
             case "ButtonDataSet3":
                 currentlyChosenDataBase = 2;

@@ -110,7 +110,7 @@ namespace VisBridges
                 var centroid = Services.PrimFactory3D().CreateBoxPrimitive();
                 centroid.SetColor(color, color);
                 centroid.transform.parent = center.transform;
-                centroid.transform.localPosition = new Vector3(0, VisBridgeSystem.offsetDist * 10 * index, 0);
+                centroid.transform.localPosition = new Vector3(0, VisBridgeSystem.offsetDist * 10 * index + .25f, 0);
                 centroid.transform.localScale = new Vector3(1, VisBridgeSystem.offsetDist * 10, 1);
                 centroids.Add(o, centroid);
 

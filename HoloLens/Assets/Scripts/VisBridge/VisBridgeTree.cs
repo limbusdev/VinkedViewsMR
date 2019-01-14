@@ -58,11 +58,12 @@ namespace VisBridges
 
             private void SetLayer(int layer)
             {
-                foreach(var g in new MonoBehaviour[]{ trunk, branch, offset })
+                foreach(var g in new MonoBehaviour[] { trunk, branch, offset })
                 {
                     g.gameObject.layer = layer;
                     foreach(var t in g.GetComponentsInChildren<Transform>())
                         t.gameObject.layer = layer;
+
                 }
             }
         }
@@ -199,6 +200,7 @@ namespace VisBridges
 
         public void Dispose()
         {
+            ID.Unsubscribe(this);
             foreach(var o in observers)
                 o.OnDispose(this);
             observers.Clear();
@@ -257,13 +259,18 @@ namespace VisBridges
                 foreach(var p in paths.Values)
                     p.Hide();
             }
-
+            
             gameObject.layer = layer;
 
             foreach(var t in transform.GetComponentsInChildren<Transform>())
             {
                 t.gameObject.layer = layer;
             }
+        }
+
+        void OnDestroy()
+        {
+            Dispose();
         }
     }
 }

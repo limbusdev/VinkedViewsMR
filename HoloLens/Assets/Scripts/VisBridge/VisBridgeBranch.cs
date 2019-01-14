@@ -139,30 +139,7 @@ namespace VisBridges
             return optimum;
         }
 
-
-
-        //public override bool Equals(object other)
-        //{
-        //    if(other is VisBridgeBranch)
-        //    {
-        //        VisBridgeBranch otherBridge = (other as VisBridgeBranch);
-        //        return ((otherBridge.origin.Equals(origin) && otherBridge.target.Equals(target)) ||
-        //                (otherBridge.origin.Equals(target) && otherBridge.target.Equals(origin)));
-        //    } else
-        //    {
-        //        return false;
-        //    }
-        //}
-
-        //public override int GetHashCode()
-        //{
-        //    var hashCode = -1493433867;
-        //    hashCode = hashCode + EqualityComparer<AGraphicalPrimitive>.Default.GetHashCode(origin);
-        //    hashCode = hashCode + EqualityComparer<AGraphicalPrimitive>.Default.GetHashCode(target);
-        //    return hashCode;
-        //}
-
-
+        
         // .................................................................... IPrimitiveObserver
         public void Observe(AGraphicalPrimitive observable)
         {

@@ -29,7 +29,7 @@ namespace VisBridges
     /// the VisBridgeCenter and the single branches, which connect the local center
     /// with the brushed primitives of the same ETV.
     /// </summary>
-    public class VisBridgeTree : MonoBehaviour, IObserver<VisBridgeBranch>, IObservable<VisBridgeTree>
+    public class VisBridgeTree : MonoBehaviour, IObserver<VisBridgeBranch>, IObservable<VisBridgeTree>, IObserver<AETV>
     {
         private struct BridgePath
         {
@@ -61,6 +61,7 @@ namespace VisBridges
         {
             root = visBridge;
             this.ID = ID;
+            Observe(ID);
         }
 
         public Vector3 GetKartesianCenterOfPrims()
@@ -200,6 +201,45 @@ namespace VisBridges
         {
             if(observers.Contains(observer))
                 observers.Remove(observer);
+        }
+
+
+
+        // .................................................................... IObserver<AETV>
+
+        public void Observe(AETV observable)
+        {
+            observable.Subscribe(this);
+        }
+
+        public void Ignore(AETV observable)
+        {
+            // Nothing
+        }
+
+        public void OnDispose(AETV observable)
+        {
+            // Nothing
+        }
+
+        public void OnChange(AETV observable)
+        {
+            int layer = 0;
+            // Check if visible
+            if(observable.gameObject.activeSelf)
+            {
+                layer = LayerMask.NameToLayer("Default");
+            } else
+            {
+                layer = LayerMask.NameToLayer("Invisible");
+            }
+
+            gameObject.layer = layer;
+
+            foreach(var t in transform.GetComponentsInChildren<Transform>())
+            {
+                t.gameObject.layer = layer;
+            }
         }
     }
 }

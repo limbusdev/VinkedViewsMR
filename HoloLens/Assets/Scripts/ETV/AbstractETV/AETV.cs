@@ -23,7 +23,7 @@ using UnityEngine;
 
 namespace ETV
 {
-    public abstract class AETV : MonoBehaviour, IEuclideanTransformableView
+    public abstract class AETV : MonoBehaviour, IEuclideanTransformableView, IObservable<AETV>
     {
         [SerializeField]
         public Transform Anchor;
@@ -195,8 +195,44 @@ namespace ETV
             {
                 prim.Dispose();
             }
+
+            foreach(var o in observers)
+            {
+                o.OnDispose(this);
+            }
             
             Destroy(gameObject);
+        }
+
+
+        // .................................................................... IObservable<AETV>
+        private IList<IObserver<AETV>> observers
+            = new List<IObserver<AETV>>();
+
+        public void Subscribe(IObserver<AETV> observer)
+        {
+            if(!observers.Contains(observer))
+                observers.Add(observer);
+        }
+
+        public void Unsubscribe(IObserver<AETV> observer)
+        {
+            if(observers.Contains(observer))
+                observers.Remove(observer);
+        }
+
+
+
+        void OnEnable()
+        {
+            foreach(var o in observers)
+                o.OnChange(this);
+        }
+
+        void OnDisable()
+        {
+            foreach(var o in observers)
+                o.OnChange(this);
         }
     }
 }

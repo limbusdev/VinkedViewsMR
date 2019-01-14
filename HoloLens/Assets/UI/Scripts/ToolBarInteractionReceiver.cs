@@ -34,12 +34,14 @@ public class ToolBarInteractionReceiver : InteractionReceiver
 
         switch (obj.name)
         {
+            // Enables / Disables Toolbar
             case "HolographicButtonSwitchMode":
                 if(Targets[0] != null)
                 {
                     Targets[0].SetActive(!Targets[0].activeSelf); // Toggle Toolbar
                 }
                 break;
+            // Enables free translation tool
             case "HolographicButtonTranslateFreely":
                 Targets[0].SetActive(false); // Disable Toolbar
                 try
@@ -53,6 +55,7 @@ public class ToolBarInteractionReceiver : InteractionReceiver
                     Debug.Log(e);
                 }
                 break;
+            // Enables constrained translation tool
             case "HolographicButtonTranslate":
                 Targets[0].SetActive(false); // Disable Toolbar
                 try
@@ -65,6 +68,7 @@ public class ToolBarInteractionReceiver : InteractionReceiver
                     Debug.Log(e);
                 }
                 break;
+            // Enables constrained rotation tool
             case "HolographicButtonRotate":
                 Targets[0].SetActive(false); // Disable Toolbar
                 try
@@ -78,6 +82,7 @@ public class ToolBarInteractionReceiver : InteractionReceiver
                     Debug.Log(e);
                 }
                 break;
+            // Enables responsive visualization scaling tool
             case "HolographicButtonScale":
                 Targets[0].SetActive(false); // Disable Toolbar
                 try
@@ -91,6 +96,7 @@ public class ToolBarInteractionReceiver : InteractionReceiver
                     Debug.Log(e);
                 }
                 break;
+            // Resets ETVs rotation
             case "HolographicButtonReset":
                 Targets[0].SetActive(false); // Disable Toolbar
                 try
@@ -111,6 +117,7 @@ public class ToolBarInteractionReceiver : InteractionReceiver
                     Debug.Log(e);
                 }
                 break;
+            // Disables toolbar
             case "HolographicButtonClose":
                 Targets[0].SetActive(false); // Disable Toolbar
                 try
@@ -124,6 +131,7 @@ public class ToolBarInteractionReceiver : InteractionReceiver
                     Debug.Log(e);
                 }
                 break;
+            // Deactivates anchored visualization
             case "HolographicButtonDeactivate":
                 Targets[0].SetActive(false); // Disable ETV
                 try

@@ -67,6 +67,7 @@ namespace Gestures
 
         public bool hasFocus = false;
         public bool isTapped = false;
+        public float translationFactor = 3f;
         
         
         // .................................................................... Unity Methods
@@ -126,7 +127,7 @@ namespace Gestures
                         break;
                 }
 
-                hostTransform.localPosition = manipulationOriginalPosition + cumulativeUpdate;
+                hostTransform.localPosition = manipulationOriginalPosition + cumulativeUpdate*translationFactor;
                 eventData.Use();
             }
         }

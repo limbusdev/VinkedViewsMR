@@ -288,6 +288,90 @@
 	
 	
 	<!-- Baltimore Police Department DataBase .............................. -->
+	<!-- Manual Histogram Heatmap 3D -->
+	<SerializedETV dataSetID="1" visType="SingleAxis3D">
+		<position>
+			<float>-3</float>
+			<float>0</float>
+			<float>-2</float>
+		</position>
+		<rotation>
+			<float>90</float>
+			<float>0</float>
+			<float>90</float>
+		</rotation>
+		<variables>
+			<string>Crime</string>
+		</variables>
+	</SerializedETV>
+	
+	<SerializedETV dataSetID="1" visType="SingleAxis3D">
+		<position>
+			<float>-3</float>
+			<float>0</float>
+			<float>-2</float>
+		</position>
+		<rotation>
+			<float>-90</float>
+			<float>0</float>
+			<float>180</float>
+		</rotation>
+		<variables>
+			<string>Weapon</string>
+		</variables>
+	</SerializedETV>
+	
+	<SerializedETV dataSetID="1" visType="Histogram3D">
+		<position>
+			<float>-3</float>
+			<float>0</float>
+			<float>-2.5</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>180</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Inside/Outside</string>
+		</variables>
+	</SerializedETV>
+	
+	<SerializedETV dataSetID="1" visType="Histogram2D">
+		<position>
+			<float>-2.6</float>
+			<float>0</float>
+			<float>-2</float>
+		</position>
+		<rotation>
+			<float>-90</float>
+			<float>0</float>
+			<float>-90</float>
+		</rotation>
+		<variables>
+			<string>District</string>
+		</variables>
+	</SerializedETV>
+	
+	<!-- Far Away Histogram3D -->
+	<SerializedETV dataSetID="1" visType="ScatterPlot2D">
+		<position>
+			<float>1.5</float>
+			<float>0</float>
+			<float>-6</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>180</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>District</string>
+			<string>Weapon</string>
+		</variables>
+	</SerializedETV>
+	
+	
 	
 	<!-- Open Exoplanet Catalogue .......................................... -->
   

@@ -111,7 +111,7 @@ public class VisualizationFactory : MonoBehaviour
             Services.Persistence().PersistETV(vis, dataSetID, variables, visType);
 
             vis.transform.parent = GameObject.FindGameObjectWithTag("RootWorldAnchor").transform;
-            vis.transform.localPosition = NewETVPlaceHolder.position - GameObject.FindGameObjectWithTag("RootWorldAnchor").transform.position;
+            vis.transform.position = NewETVPlaceHolder.position;
 
             return vis;
         } catch(Exception e)

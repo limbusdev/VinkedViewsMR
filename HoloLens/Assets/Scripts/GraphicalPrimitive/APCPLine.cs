@@ -28,7 +28,7 @@ namespace GraphicalPrimitive
         {
             get
             {
-                if(lr == null)
+                if(lr == null && gameObject != null)
                 {
                     lr = GetNewProperLineRenderer();
                     lr.transform.parent = transform;

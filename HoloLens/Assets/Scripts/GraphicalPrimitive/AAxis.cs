@@ -414,9 +414,12 @@ namespace GraphicalPrimitive
         
         private void OnDisable()
         {
-            foreach(var obs in observers)
+            if(!this.enabled)
             {
-                obs.OnChange(this);
+                foreach(var obs in observers)
+                {
+                    obs.OnChange(this);
+                }
             }
         }
 

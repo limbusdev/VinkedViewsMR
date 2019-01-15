@@ -230,17 +230,23 @@ namespace ETV
 
         public virtual void SetVisibility(bool visible)
         {
-            int layer = visible ? LayerMask.NameToLayer("Default") : LayerMask.NameToLayer("Invisible");
+            if(gameObject != null)
+            {
+                int layer = visible ? LayerMask.NameToLayer("Default") : LayerMask.NameToLayer("Invisible");
 
-            gameObject.layer = layer;
-            foreach(var t in gameObject.GetComponentsInChildren<Transform>())
-                t.gameObject.layer = layer;
+                gameObject.layer = layer;
+                foreach(var t in gameObject.GetComponentsInChildren<Transform>())
+                    t.gameObject.layer = layer;
+            }
         }
 
         void OnDisable()
         {
-            foreach(var o in observers)
-                o.OnChange(this);
+            if(!this.enabled)
+            {
+                foreach(var o in observers)
+                    o.OnChange(this);
+            }
         }
     }
 }

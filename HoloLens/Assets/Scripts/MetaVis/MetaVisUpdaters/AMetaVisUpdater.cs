@@ -175,8 +175,11 @@ public abstract class AMetaVisUpdater : MonoBehaviour, IAxisObserver, IDisposabl
 
     private void UpdateVisibility()
     {
-        visible = spanningAxes.A.isActiveAndEnabled && spanningAxes.B.isActiveAndEnabled;
-        metaVisualization.SetVisibility(visible);
+        if(metaVisualization.gameObject != null)
+        {
+            visible = spanningAxes.A.isActiveAndEnabled && spanningAxes.B.isActiveAndEnabled;
+            metaVisualization.SetVisibility(visible);
+        }
     }
 
     private void UpdateSignedAngleBetweenAxes()

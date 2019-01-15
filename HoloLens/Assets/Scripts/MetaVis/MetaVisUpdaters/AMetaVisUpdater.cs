@@ -44,6 +44,7 @@ public abstract class AMetaVisUpdater : MonoBehaviour, IAxisObserver, IDisposabl
     private bool disposed = false;
     private bool initialized = false;
     private bool valid = true;
+    private bool visible = true;
     private IDictionary<AAxis, AAxis> shadowAxes = new Dictionary<AAxis, AAxis>();
 
     // ........................................................................ Abstract Methods
@@ -63,6 +64,8 @@ public abstract class AMetaVisUpdater : MonoBehaviour, IAxisObserver, IDisposabl
         // change.
         if(!disposed && initialized)
         {
+            UpdateVisibility();
+
             CheckValidity();
             if(valid)
             {
@@ -168,6 +171,12 @@ public abstract class AMetaVisUpdater : MonoBehaviour, IAxisObserver, IDisposabl
     {
         valid = AMetaVisSystem.CheckIfNearEnough(spanningAxes)
             && Type().Equals(AMetaVisSystem.WhichMetaVis(spanningAxes, dataSetID));
+    }
+
+    private void UpdateVisibility()
+    {
+        visible = spanningAxes.A.isActiveAndEnabled && spanningAxes.B.isActiveAndEnabled;
+        metaVisualization.SetVisibility(visible);
     }
 
     private void UpdateSignedAngleBetweenAxes()

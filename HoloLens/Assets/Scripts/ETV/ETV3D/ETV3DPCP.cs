@@ -73,7 +73,7 @@ namespace ETV
             PCPAxesFront = new Dictionary<string, AAxis>();
             PCPAxesBack = new Dictionary<string, AAxis>();
 
-            var axesFront = GenerateAxes(true, PCPAxesFront);
+            var axesFront = GenerateAxes(false, PCPAxesFront);
             axesFront.transform.parent = Anchor.transform;
 
             var axesBack = GenerateAxes(false, PCPAxesBack);

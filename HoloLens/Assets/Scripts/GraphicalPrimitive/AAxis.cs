@@ -35,9 +35,9 @@ namespace GraphicalPrimitive
     public abstract class AAxis : MonoBehaviour, IObservableAxis, IDisposable, IETVComponent
     {
         private AETV etv;
-
+        
         private ISet<IObserver<AAxis>> observers = new HashSet<IObserver<AAxis>>();
-
+        
         protected Vector3 direction = Vector3.up;
         public string labelVariableText { get; set; }
 
@@ -410,6 +410,22 @@ namespace GraphicalPrimitive
         public AETV Base()
         {
             return etv;
+        }
+        
+        private void OnDisable()
+        {
+            foreach(var obs in observers)
+            {
+                obs.OnChange(this);
+            }
+        }
+
+        private void OnEnable()
+        {
+            foreach(var obs in observers)
+            {
+                obs.OnChange(this);
+            }
         }
     }
 }

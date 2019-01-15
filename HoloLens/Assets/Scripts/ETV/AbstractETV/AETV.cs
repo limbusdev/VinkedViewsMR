@@ -221,12 +221,20 @@ namespace ETV
                 observers.Remove(observer);
         }
 
-
-
+        
         void OnEnable()
         {
             foreach(var o in observers)
                 o.OnChange(this);
+        }
+
+        public virtual void SetVisibility(bool visible)
+        {
+            int layer = visible ? LayerMask.NameToLayer("Default") : LayerMask.NameToLayer("Invisible");
+
+            gameObject.layer = layer;
+            foreach(var t in gameObject.GetComponentsInChildren<Transform>())
+                t.gameObject.layer = layer;
         }
 
         void OnDisable()

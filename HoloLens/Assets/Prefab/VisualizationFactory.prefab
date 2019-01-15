@@ -7089,7 +7089,7 @@ TextMesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1109648088461522}
-  m_Text: FBI Crime
+  m_Text: Baltimore PD
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -7110,7 +7110,7 @@ TextMesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1986061066060514}
-  m_Text: Boston PD
+  m_Text: FBI
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -7668,6 +7668,7 @@ MonoBehaviour:
   HoldMat: {fileID: 2100000, guid: b8589c0cb3fc0ab48be207d3f249a87c, type: 2}
   hasFocus: 0
   isTapped: 0
+  translationFactor: 3
 --- !u!114 &114453442420292706
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7686,6 +7687,7 @@ MonoBehaviour:
   HoldMat: {fileID: 2100000, guid: b8589c0cb3fc0ab48be207d3f249a87c, type: 2}
   hasFocus: 0
   isTapped: 0
+  translationFactor: 3
 --- !u!114 &114491404316906812
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -7979,6 +7981,7 @@ MonoBehaviour:
   HoldMat: {fileID: 2100000, guid: b8589c0cb3fc0ab48be207d3f249a87c, type: 2}
   hasFocus: 0
   isTapped: 0
+  translationFactor: 3
 --- !u!114 &114782806728110880
 MonoBehaviour:
   m_ObjectHideFlags: 1

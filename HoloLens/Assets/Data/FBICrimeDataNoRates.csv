@@ -1,4 +1,4 @@
-Year,Population,Violent crime,Murder,Rape (new),Rape (old),Robbery,Aggr. assault,Property crime,Burglary,Larceny-theft,Motor vehicle theft
+Year,Population,Violent crime,Murder,Rape (new),Rape (old),Robbery,Aggr. assault,Property crime,Burglary,Larceny-theft,Vehicle theft
 interval+year,ratio,ratio,ratio,ratio,ratio,ratio,ratio,ratio,ratio,ratio,ratio
 1997,267783607,1636096,18208,,96153,498534,1023201,11558475,2460526,7743760,1354189
 1998,270248003,1533887,16974,,93144,447186,976583,10951827,2332735,7376311,1242781

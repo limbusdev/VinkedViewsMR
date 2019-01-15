@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Setup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <visFactory>
+    <position>
+      <float>-0.9006874</float>
+      <float>0.4674858</float>
+      <float>0</float>
+    </position>
+    <rotation>
+      <float>-0</float>
+      <float>0</float>
+      <float>0</float>
+    </rotation>
+  </visFactory>
+  <ETVs>
+	<!-- FBI Crime DataBase ................................................ -->
+	<!-- Manual PCP -->
+	<SerializedETV dataSetID="0" visType="SingleAxis3D">
+		<position>
+			<float>0</float>
+			<float>0</float>
+			<float>0</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>-10</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Year</string>
+		</variables>
+	</SerializedETV>
+	<SerializedETV dataSetID="0" visType="SingleAxis3D">
+		<position>
+			<float>.5</float>
+			<float>0</float>
+			<float>.2</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>0</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Violent crime</string>
+		</variables>
+	</SerializedETV>
+	<SerializedETV dataSetID="0" visType="SingleAxis3D">
+		<position>
+			<float>1</float>
+			<float>0</float>
+			<float>.2</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>0</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Murder</string>
+		</variables>
+	</SerializedETV>
+	<SerializedETV dataSetID="0" visType="SingleAxis3D">
+		<position>
+			<float>1.5</float>
+			<float>0</float>
+			<float>0</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>10</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Rape (old)</string>
+		</variables>
+	</SerializedETV>
+	
+	<!-- Auto Accordion PCP -->
+	<SerializedETV dataSetID="0" visType="PCP3D">
+		<position>
+			<float>2</float>
+			<float>0</float>
+			<float>-.5</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>70</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Year</string>
+			<string>Population</string>
+			<string>Property crime</string>
+			<string>Burglary</string>
+		</variables>
+	</SerializedETV>
+	
+	<!-- MetaVis ScatterPlot2D -->
+	<SerializedETV dataSetID="0" visType="SingleAxis3D">
+		<position>
+			<float>2.25</float>
+			<float>-.1</float>
+			<float>-1.3</float>
+		</position>
+		<rotation>
+			<float>-90</float>
+			<float>90</float>
+			<float>-90</float>
+		</rotation>
+		<variables>
+			<string>Year</string>
+		</variables>
+	</SerializedETV>
+	
+	<!-- Auto ScatterPlot3D -->
+	<SerializedETV dataSetID="0" visType="ScatterPlot3D">
+		<position>
+			<float>-1</float>
+			<float>0</float>
+			<float>-1</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>-90</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Year</string>
+			<string>Violent crime</string>
+			<string>Property crime</string>
+		</variables>
+	</SerializedETV>
+	
+	<!-- Far away visualization -->
+	<SerializedETV dataSetID="0" visType="ScatterPlot2D">
+		<position>
+			<float>3</float>
+			<float>0</float>
+			<float>-6</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>180</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Violent crime</string>
+			<string>Murder</string>
+		</variables>
+	</SerializedETV>
+	
+	<SerializedETV dataSetID="0" visType="SingleAxis3D">
+		<position>
+			<float>3.35</float>
+			<float>0</float>
+			<float>-6</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>180</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Year</string>
+		</variables>
+	</SerializedETV>
+	<SerializedETV dataSetID="0" visType="SingleAxis3D">
+		<position>
+			<float>3</float>
+			<float>.835</float>
+			<float>-6</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>180</float>
+			<float>-90</float>
+		</rotation>
+		<variables>
+			<string>Year</string>
+		</variables>
+	</SerializedETV>
+	
+	<!-- Flexible Linked Axes -->
+	<!-- ROW 1 -->
+	<SerializedETV dataSetID="0" visType="ScatterPlot2D">
+		<position>
+			<float>4</float>
+			<float>0</float>
+			<float>-2</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>90</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Year</string>
+			<string>Population</string>
+		</variables>
+	</SerializedETV>
+	
+	<SerializedETV dataSetID="0" visType="ScatterPlot2D">
+		<position>
+			<float>4</float>
+			<float>0</float>
+			<float>-2.85</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>90</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Year</string>
+			<string>Violent crime</string>
+		</variables>
+	</SerializedETV>
+	
+	<SerializedETV dataSetID="0" visType="ScatterPlot2D">
+		<position>
+			<float>4</float>
+			<float>0</float>
+			<float>-3.7</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>90</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Year</string>
+			<string>Property crime</string>
+		</variables>
+	</SerializedETV>
+	
+	<!-- ROW 2 -->
+	<SerializedETV dataSetID="0" visType="ScatterPlot2D">
+		<position>
+			<float>4</float>
+			<float>.85</float>
+			<float>-2</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>90</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Population</string>
+			<string>Year</string>
+		</variables>
+	</SerializedETV>
+	
+	<SerializedETV dataSetID="0" visType="ScatterPlot2D">
+		<position>
+			<float>4</float>
+			<float>.85</float>
+			<float>-2.85</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>90</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Murder</string>
+			<string>Violent crime</string>
+		</variables>
+	</SerializedETV>
+	
+	<SerializedETV dataSetID="0" visType="ScatterPlot2D">
+		<position>
+			<float>4</float>
+			<float>.85</float>
+			<float>-3.7</float>
+		</position>
+		<rotation>
+			<float>0</float>
+			<float>90</float>
+			<float>0</float>
+		</rotation>
+		<variables>
+			<string>Burglary</string>
+			<string>Property crime</string>
+		</variables>
+	</SerializedETV>
+	
+	
+	<!-- Baltimore Police Department DataBase .............................. -->
+	
+	<!-- Open Exoplanet Catalogue .......................................... -->
+  
+  </ETVs>
+</Setup>

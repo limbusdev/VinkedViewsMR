@@ -166,6 +166,7 @@ public class Graphical2DPrimitiveFactory : AGraphicalPrimitiveFactory
             var lineRend = tick.GetComponent<LineRenderer>();
             lineRend.SetPosition(0, Vector3.zero);
             lineRend.SetPosition(1, axisDir * length);
+            //lineRend.alignment = LineAlignment.View;
 
             tick.transform.parent = grid.transform;
             tick.transform.localPosition = expansionDir * (tickCounter * tickResolution) / (max-min);

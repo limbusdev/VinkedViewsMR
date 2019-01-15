@@ -47,9 +47,12 @@ namespace ETV
 
             secondXAxis.transform.localPosition = new Vector3(0, 1, 0);
             secondYAxis.transform.localPosition = new Vector3(1, 0, 0);
-
+            
             secondXAxis.transform.localRotation = Quaternion.Euler(180, 0, 0);
             secondYAxis.transform.localRotation = Quaternion.Euler(0, 180, 0);
+
+            secondXAxis.GetComponent<AAxis>().Clean();
+            secondYAxis.GetComponent<AAxis>().Clean();
         }
 
         public override void DrawGraph()

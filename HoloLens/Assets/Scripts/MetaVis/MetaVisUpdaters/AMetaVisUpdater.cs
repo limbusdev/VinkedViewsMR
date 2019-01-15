@@ -60,25 +60,35 @@ public abstract class AMetaVisUpdater : MonoBehaviour, IAxisObserver, IDisposabl
     /// <param name="observable"></param>
     public void OnChange(AAxis observable)
     {
-        // Update meta-visualization, when spanning axes
-        // change.
-        if(!disposed && initialized)
+        try
         {
-            UpdateVisibility();
+            if(observable == null || observable.gameObject == null)
+                return;
 
-            CheckValidity();
-            if(valid)
+
+            // Update meta-visualization, when spanning axes
+            // change.
+            if(!disposed && initialized)
             {
-                metaVisualization.UpdateETV();
-                TryHidingCloseAxes();
-                UpdatePosition();
-                UpdateSignedAngleBetweenAxes();
-                UpdateNormalVector();
-                UpdateRotation();
-            } else
-            {
-                Dispose();
+                UpdateVisibility();
+
+                CheckValidity();
+                if(valid)
+                {
+                    metaVisualization.UpdateETV();
+                    TryHidingCloseAxes();
+                    UpdatePosition();
+                    UpdateSignedAngleBetweenAxes();
+                    UpdateNormalVector();
+                    UpdateRotation();
+                } else
+                {
+                    Dispose();
+                }
             }
+        } catch(Exception e)
+        {
+            Debug.Log("Already destroyed");
         }
     }
 
@@ -175,7 +185,7 @@ public abstract class AMetaVisUpdater : MonoBehaviour, IAxisObserver, IDisposabl
 
     private void UpdateVisibility()
     {
-        if(metaVisualization.gameObject != null)
+        if(metaVisualization != null && metaVisualization.gameObject != null)
         {
             visible = spanningAxes.A.isActiveAndEnabled && spanningAxes.B.isActiveAndEnabled;
             metaVisualization.SetVisibility(visible);

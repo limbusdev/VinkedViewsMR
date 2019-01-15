@@ -55,6 +55,10 @@ namespace ETV
             secondYAxis.transform.localRotation = Quaternion.Euler(0, 180, 0);
             secondZAxis.transform.localRotation = Quaternion.Euler(0, 0, 180);
 
+            secondXAxis.GetComponent<AAxis>().Clean();
+            secondYAxis.GetComponent<AAxis>().Clean();
+            secondZAxis.GetComponent<AAxis>().Clean();
+
             var thirdXAxis = AddAxis(attributeA, AxisDirection.X);
             var thirdYAxis = AddAxis(attributeB, AxisDirection.Y);
             var thirdZAxis = AddAxis(attributeC, AxisDirection.Z);
@@ -62,6 +66,10 @@ namespace ETV
             thirdXAxis.transform.localPosition = new Vector3(0, 0, 1);
             thirdYAxis.transform.localPosition = new Vector3(0, 0, 1);
             thirdZAxis.transform.localPosition = new Vector3(0, 1, 0);
+
+            thirdXAxis.GetComponent<AAxis>().Clean();
+            thirdYAxis.GetComponent<AAxis>().Clean();
+            thirdZAxis.GetComponent<AAxis>().Clean();
 
             var fourthXAxis = AddAxis(attributeA, AxisDirection.X);
             var fourthYAxis = AddAxis(attributeB, AxisDirection.Y);
@@ -74,6 +82,10 @@ namespace ETV
             fourthXAxis.transform.localRotation = Quaternion.Euler(180, 0, 0);
             fourthYAxis.transform.localRotation = Quaternion.Euler(0, 180, 0);
             fourthZAxis.transform.localRotation = Quaternion.Euler(0, 0, 180);
+
+            fourthXAxis.GetComponent<AAxis>().Clean();
+            fourthYAxis.GetComponent<AAxis>().Clean();
+            fourthZAxis.GetComponent<AAxis>().Clean();
 
         }
 

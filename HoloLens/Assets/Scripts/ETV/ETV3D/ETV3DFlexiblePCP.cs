@@ -18,7 +18,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using GraphicalPrimitive;
 using Model;
+using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace ETV
 {
@@ -79,6 +81,7 @@ namespace ETV
         {
             foreach(var key in infoObject2primitive.Keys)
             {
+                if(infoObject2primitive[key] != null && infoObject2primitive[key].gameObject != null)
                 APCPLineGenerator.UpdatePolyline((APCPLine)infoObject2primitive[key], axes, true);
             }
         }
@@ -87,9 +90,15 @@ namespace ETV
         {
             base.SetVisibility(visible);
 
-            foreach(var key in infoObject2primitive.Keys)
+            try
             {
-                ((APCPLine)infoObject2primitive[key]).LR.enabled = visible;
+                foreach(var key in infoObject2primitive.Keys)
+                {
+                    ((APCPLine)infoObject2primitive[key]).LR.enabled = visible;
+                }
+            } catch(Exception e)
+            {
+                Debug.Log("Already destroyed");
             }
         }
 

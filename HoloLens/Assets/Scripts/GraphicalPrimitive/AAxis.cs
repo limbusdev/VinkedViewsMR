@@ -81,6 +81,36 @@ namespace GraphicalPrimitive
             }
         }
 
+        public void Init(string name, bool clean, AxisDirection dir = AxisDirection.Y)
+        {
+            if(clean)
+            {
+                this.attributeName = name;
+                this.observers = new HashSet<IObserver<AAxis>>();
+                axisDirection = dir;
+
+                switch(dir)
+                {
+                    case AxisDirection.X:
+                        direction = Vector3.right;
+                        break;
+                    case AxisDirection.Y:
+                        direction = Vector3.up;
+                        break;
+                    default:
+                        direction = Vector3.forward;
+                        break;
+                }
+
+                this.tipped = false;
+                this.ticked = false;
+
+            } else
+            {
+                Init(name, dir);
+            }
+        }
+
         /// <summary>
         /// Generic axis initializer.
         /// </summary>
@@ -411,16 +441,24 @@ namespace GraphicalPrimitive
         {
             return etv;
         }
+
+        // Removes ticks and labels
+        public void Clean()
+        {
+            foreach(var t in ticks)
+            {
+                t.gameObject.SetActive(false);
+            }
+
+            labelVariable.SetActive(false);
+        }
         
         private void OnDisable()
         {
-            if(!this.enabled)
-            {
                 foreach(var obs in observers)
                 {
                     obs.OnChange(this);
                 }
-            }
         }
 
         private void OnEnable()

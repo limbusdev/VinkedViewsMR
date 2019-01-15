@@ -83,6 +83,18 @@ namespace ETV
             }
         }
 
+        public override void SetVisibility(bool visible)
+        {
+            base.SetVisibility(visible);
+
+            foreach(var key in infoObject2primitive.Keys)
+            {
+                ((APCPLine)infoObject2primitive[key]).LR.enabled = visible;
+            }
+        }
+
+
+
 
 
         // .................................................................... Useless in this MetaVis

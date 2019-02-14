@@ -1,21 +1,24 @@
 ﻿/*
-Vinked Views
-Copyright(C) 2018  Georg Eckert
+Copyright 2019 Georg Eckert (MIT License)
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.
 */
-
 using GraphicalPrimitive;
 using Model;
 using System.Collections.Generic;
@@ -37,7 +40,7 @@ namespace ETV
         // ........................................................................ Private properties
 
         private string attributeName;
-        private int attributeID;
+        //private int attributeID;
 
         private LoM lom;
         string[] uniqueVals;
@@ -48,8 +51,7 @@ namespace ETV
 
         private int[] absMapValues;
         private float[] barHeights;
-        private IDictionary<int, string> dict1;
-        private IDictionary<string, int> dict2;
+        private IDictionary<string, int> dict;
 
         float max;
         private float length;
@@ -60,13 +62,12 @@ namespace ETV
         {
             base.Init(data, isMetaVis);
             this.attributeName = attributeName;
-            this.attributeID = data.IDOf(attributeName);
+            //this.attributeID = data.IDOf(attributeName);
             this.lom = data.TypeOf(attributeName);
             this.max = 0;
             this.length = 1f;
-
-            dict1 = new Dictionary<int, string>();
-            dict2 = new Dictionary<string, int>();
+            
+            dict = new Dictionary<string, int>();
 
             SetUpAxes();
 
@@ -76,15 +77,13 @@ namespace ETV
                 case LoM.NOMINAL:
                     var mN = data.nominalStatistics[attributeName];
                     uniqueVals = mN.uniqueValues;
-                    dict1 = mN.idValues;
-                    dict2 = mN.valueIDs;
+                    dict = mN.valueIDs;
                     max = mN.distMax;
                     break;
                 case LoM.ORDINAL:
                     var mO = data.ordinalStatistics[attributeName];
                     uniqueVals = mO.uniqueValues;
-                    dict1 = mO.orderedValueIDs;
-                    dict2 = mO.orderedIDValues;
+                    dict = mO.orderedIDValues;
                     max = mO.distMax;
                     break;
                 default:
@@ -132,7 +131,7 @@ namespace ETV
 
                     if(!missing)
                     {
-                        ABar bar = bars[dict2[o.NomValueOf(attributeName)]];
+                        ABar bar = bars[dict[o.NomValueOf(attributeName)]];
                         RememberRelationOf(o, bar);
                     }
                 }

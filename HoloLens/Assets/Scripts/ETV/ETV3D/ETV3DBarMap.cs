@@ -1,21 +1,24 @@
 ﻿/*
-Vinked Views
-Copyright(C) 2018  Georg Eckert
+Copyright 2019 Georg Eckert (MIT License)
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.
 */
-
 using System.Collections.Generic;
 using GraphicalPrimitive;
 using Model;
@@ -40,15 +43,13 @@ namespace ETV
         int attributeIDA, attributeIDB;
         private LoM lomA, lomB;
         string[] uniqueValsA, uniqueValsB;
-        int[] distributionA, distributionB;
         int dimA, dimB;
 
         private Bar3D[,] bars;
 
         private int[,] absMapValues;
         private float[,] barHeights;
-        private IDictionary<int, string> dictA1, dictB1;
-        private IDictionary<string, int> dictA2, dictB2;
+        private IDictionary<string, int> dictA, dictB;
 
         float max;
         private float lengthA, lengthB;
@@ -77,27 +78,23 @@ namespace ETV
             this.max = 0;
             this.lengthA = lengthA;
             this.lengthB = lengthB;
-
-            dictA1 = new Dictionary<int, string>();
-            dictB1 = new Dictionary<int, string>();
-            dictA2 = new Dictionary<string, int>();
-            dictB2 = new Dictionary<string, int>();
+            
+            dictA = new Dictionary<string, int>();
+            dictB = new Dictionary<string, int>();
 
             switch(lomA)
             {
                 case LoM.NOMINAL:
                     var mN = data.nominalStatistics[attributeNameX];
                     uniqueValsA = mN.uniqueValues;
-                    distributionA = mN.GetDistributionValues();
-                    dictA1 = mN.idValues;
-                    dictA2 = mN.valueIDs;
+                    //distributionA = mN.GetDistributionValues();
+                    dictA = mN.valueIDs;
                     break;
                 case LoM.ORDINAL:
                     var mO = data.ordinalStatistics[attributeNameX];
                     uniqueValsA = mO.uniqueValues;
-                    distributionA = mO.GetDistributionValues();
-                    dictA1 = mO.orderedValueIDs;
-                    dictA2 = mO.orderedIDValues;
+                    //distributionA = mO.GetDistributionValues();
+                    dictA = mO.orderedIDValues;
                     break;
                 default:
                     throw new Exception("Illegal LoM");
@@ -108,16 +105,16 @@ namespace ETV
                 case LoM.NOMINAL:
                     var mN = data.nominalStatistics[attributeNameY];
                     uniqueValsB = mN.uniqueValues;
-                    distributionB = mN.GetDistributionValues();
-                    dictB1 = mN.idValues;
-                    dictB2 = mN.valueIDs;
+                    //distributionB = mN.GetDistributionValues();
+                    //dictB1 = mN.idValues;
+                    //dictB2 = mN.valueIDs;
                     break;
                 case LoM.ORDINAL:
                     var mO = data.ordinalStatistics[attributeNameY];
                     uniqueValsB = mO.uniqueValues;
-                    distributionB = mO.GetDistributionValues();
-                    dictB1 = mO.orderedValueIDs;
-                    dictB2 = mO.orderedIDValues;
+                    //distributionB = mO.GetDistributionValues();
+                    //dictB1 = mO.orderedValueIDs;
+                    //dictB2 = mO.orderedIDValues;
                     break;
                 default:
                     throw new Exception("Illegal LoM");
@@ -150,17 +147,17 @@ namespace ETV
                     } else if(lomA == LoM.ORDINAL && lomB == LoM.ORDINAL)
                     {
                         count = AttributeProcessor.Ordinal.CountObjectsMatchingTwoCattegories(
-                            data.infoObjects, attributeIDA, attributeIDB, dictA2[v1], dictB2[v2]);
+                            data.infoObjects, attributeIDA, attributeIDB, dictA[v1], dictB[v2]);
 
                     } else if(lomA == LoM.NOMINAL && lomB == LoM.ORDINAL)
                     {
                         count = AttributeProcessor.Categorial.CountObjectsMatchingTwoCategoriesNomOrd(
-                            data.infoObjects, attributeNameX, attributeNameY, v1, dictB2[v2]);
+                            data.infoObjects, attributeNameX, attributeNameY, v1, dictB[v2]);
 
                     } else if(lomA == LoM.ORDINAL && lomB == LoM.NOMINAL)
                     {
                         count = AttributeProcessor.Categorial.CountObjectsMatchingTwoCategoriesNomOrd(
-                            data.infoObjects, attributeNameY, attributeNameX, v2, dictA2[v1]);
+                            data.infoObjects, attributeNameY, attributeNameX, v2, dictA[v1]);
 
                     } else
                     {
@@ -202,8 +199,8 @@ namespace ETV
                         if(lomA == LoM.NOMINAL && lomB == LoM.NOMINAL)
                         {
                             bar = bars[
-                                dictA2[o.NomValueOf(attributeNameA)],
-                                dictB2[o.NomValueOf(attributeNameB)]
+                                dictA[o.NomValueOf(attributeNameA)],
+                                dictB[o.NomValueOf(attributeNameB)]
                                 ];
 
                         } else if(lomA == LoM.ORDINAL && lomB == LoM.ORDINAL)
@@ -216,7 +213,7 @@ namespace ETV
                         } else if(lomA == LoM.NOMINAL && lomB == LoM.ORDINAL)
                         {
                             bar = bars[
-                                dictA2[o.NomValueOf(attributeNameA)],
+                                dictA[o.NomValueOf(attributeNameA)],
                                 o.OrdValueOf(attributeNameB)
                                 ];
 
@@ -224,7 +221,7 @@ namespace ETV
                         {
                             bar = bars[
                                 o.OrdValueOf(attributeNameA),
-                                dictB2[o.NomValueOf(attributeNameB)]
+                                dictB[o.NomValueOf(attributeNameB)]
                                 ];
 
                         } else

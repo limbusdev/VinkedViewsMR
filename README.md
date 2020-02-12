@@ -6,7 +6,7 @@ Vinks are visually drawn connection lines (from **v**isual l**ink**) between two
 
 ![](./Documents/Images/icon96.png)
 
-![](./Documents/Images/eckert2018_proto_01.png)
+![](./Documents/Images/eckert2018_proto_01.jpg)
 
 ## VisBridges
 

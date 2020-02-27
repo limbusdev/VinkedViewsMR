@@ -8,6 +8,21 @@ Vinks are visually drawn connection lines (from **v**isual l**ink**) between two
 
 ![](./Documents/Images/eckert2018_proto_01.jpg)
 
+# Citing
+
+If you plan to use this software for your research or if you base your own software upon it please use the following BibTex entry to cite it:
+
+```
+@Manual{,
+title = {Vinked Views: An augmented reality app for immersive analytics},
+author = {{Georg Eckert}},
+organization = {limbusdev},
+address = {Dresden, Germany},
+year = 2019,
+url = {https://github.com/limbusdev/VinkedViewsMR}
+} 
+```
+
 ## VisBridges
 
 A *VisBridge* connects graphical primitives of two or more visualizations. The connected primitives have to be in a relation - be it directy (graphical primitives represent the same *Information Object*) or indirectly (the value, the graphical primitive represents, contains the connected information objects value in some way (sum, mean, ...)).

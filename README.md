@@ -10,7 +10,7 @@ Vinks are visually drawn connection lines (from **v**isual l**ink**) between two
 
 # Citing
 
-If you plan to use this software for your research or if you base your own software upon it please use the following BibTex entry to cite it:
+If you plan to use this software for your research or if you base your own software upon it, you have to give proper credit. Use the following BibTex entry to cite it:
 
 ```
 @Manual{,

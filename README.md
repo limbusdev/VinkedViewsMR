@@ -10,7 +10,9 @@ Vinks are visually drawn connection lines (from **v**isual l**ink**) between two
 
 # Citing
 
-If you plan to use this software for your research or if you base your own software upon it, you have to give proper credit. Use the following BibTex entry to cite it:
+VinkedViews is licensed under MIT with attribution. So you are free to use this software in any way you want, but you have to give proper credit.
+
+If you plan to use this software for your research or if you base your own software upon it, you can use the following BibTex entry to cite it:
 
 ```
 @Manual{,

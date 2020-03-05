@@ -2,7 +2,7 @@
 
 Vinks are visually drawn connection lines (from **v**isual l**ink**) between two or more visualizations. They connect graphical primitives. Visualizations can be connected in different ways. *VinkedViews* supports three of them: Brushing & Linking, VisBridges and Meta-Visualizations.
 
-**VinkedViews** has been developed during a master thesis at the *Dresden University of Technology* (Technische Universität Dresden). It has since been further developed there at the *[Interactive Media Lab Dresden](https://www.imld.de/en/)*.
+**VinkedViews** has been developed as part of a master thesis at the *Dresden University of Technology* (Technische Universität Dresden). It has since been further developed there at the *[Interactive Media Lab Dresden](https://www.imld.de/en/)*.
 
 ![](./Documents/Images/icon96.png)
 
@@ -174,7 +174,7 @@ Note: this order is completely random and is only there to give an example.
 Provide both files to the DataProvider, and everything is fine.
 
 
-## Dependencies
+## Dependencies & Sources
 
 Vinked Views is made of three components:
 

@@ -8,9 +8,9 @@ Vinks are visually drawn connection lines (from **v**isual l**ink**) between two
 
 ![](./Documents/Images/eckert2018_proto_01.jpg)
 
-# Citing
+# License / Citing
 
-VinkedViews is licensed under MIT with attribution. So you are free to use this software in any way you want, but you have to give proper credit.
+VinkedViews is licensed under MIT with attribution. So you are free to use this software in any way you want, but you have to give proper credit. Please not that only my own files are under this license. Content from other projects (like Microsoft's MRTK, Unity3D) may have different licenses.
 
 If you plan to use this software for your research or if you base your own software upon it, you can use the following BibTex entry to cite it:
 

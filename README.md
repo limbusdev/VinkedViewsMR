@@ -181,7 +181,7 @@ Provide both files to the DataProvider, and everything is fine.
 Vinked Views is made of three components:
 
 + the Vinked Views Code
-+ Mixed Reality Toolkit
-+ Unity
++ Microsoft Mixed Reality Toolkit / Holo Toolkit
++ Unity 3D
 
 To see which Assets from the Unity Asset Store are used, see [StoreAssets](./HoloLens/StoreAssets.md).

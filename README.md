@@ -38,10 +38,18 @@ Meta-Visualizations connect two or more visualizations with a new visualization.
 
 ![](./Documents/Images/eckert2018_29.png)
 
+
+## Immersive Interaction
+
+To allow precise yet natural interaction, I designed a 3D toolbar made from cubes. That toolbar is attached to every anchor and allows switching between transformation tools and other functions.
+
+![](./Documents/Images/ETVAnchor_ImmersiveToolbar.png)
+
+
+
 ## Visualization Setup
 
 Setups of visualization can be written in code (hard coded), defined in an XML file or put up manually in the App by using the *Visualization Factory*. 
-
 
 ### Setup with XML
 
